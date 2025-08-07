@@ -2,6 +2,7 @@
 export * from './styled-system/css/index.d.ts'
 export * from './styled-system/jsx/index.d.mjs'
 export * from './styled-system/helpers.mjs'
+export * from './styled-system/recipes/index.d.ts'
 
 // Re-export specific utilities with their types
 // export { cva } from './styled-system/css/cva.d.ts'

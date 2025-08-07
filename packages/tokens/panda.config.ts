@@ -1,4 +1,5 @@
 import { defineConfig } from "@pandacss/dev";
+import { button } from "./recipes";
 
 export default defineConfig({
   preflight: true,
@@ -96,8 +97,14 @@ export default defineConfig({
           md: { value: '0 3px 6px 0 oklch(0% 0 0 / 0.12)' },
           lg: { value: '0 8px 16px 0 oklch(0% 0 0 / 0.16)' }
         },
+      },
+      recipes: {
+        button
       }
     },
+  },
+  staticCss: {
+    recipes: '*'
   },
   conditions: {
     dark: "[data-theme='dark'] &"

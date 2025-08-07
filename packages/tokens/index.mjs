@@ -2,6 +2,8 @@
 export * from './styled-system/css/index.mjs'
 export * from './styled-system/jsx/index.mjs'
 export * from './styled-system/helpers.mjs'
+export * from './styled-system/recipes/index.mjs'
+
 
 // Re-export specific utilities
 // export { cva } from './styled-system/css/cva.mjs'
