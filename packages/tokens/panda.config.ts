@@ -1,5 +1,5 @@
 import { defineConfig } from "@pandacss/dev";
-import { button } from "./recipes";
+import { button, stack } from "./recipes";
 
 export default defineConfig({
   preflight: true,
@@ -99,7 +99,10 @@ export default defineConfig({
         },
       },
       recipes: {
-        button
+        button,
+        // TODO: explore changing these names stack? stack and button
+        // as there are some warnings when I run panda codegen.
+        stack,
       }
     },
   },
