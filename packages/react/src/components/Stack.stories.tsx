@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { Stack, HStack, VStack } from './Stack'
-import type { StackVariantProps } from '@maverick/tokens/styled-system/recipes/stack'
+import type { StackVariantProps } from '@maverick/tokens'
 
 const meta = {
   title: 'Components/Stack',

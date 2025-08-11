@@ -1,6 +1,4 @@
-import { mergeConfig } from 'vite'
 import type { StorybookConfig } from '@storybook/react-vite'
-import path from 'path'
 
 const config: StorybookConfig = {
   framework: {
@@ -8,22 +6,21 @@ const config: StorybookConfig = {
     options: {}
   },
   stories: ['../../../packages/react/src/**/*.stories.@(ts|tsx)'],
-  addons: ['@storybook/addon-essentials', '@storybook/addon-a11y'],
- 
-  viteFinal: async (config, { configType }) => {
-    return mergeConfig(config, {
-      resolve: {
-        alias: {
-          '@maverick/react': path.resolve(__dirname, '../../../packages/react/src'),
-          '@maverick/tokens': path.resolve(__dirname, '../../../packages/tokens'),
-        }
-      },
-      server: {
-        fs: {
-          allow: ["../../../packages"]
-        }
-      }
-    })
+  // Storybook 9 bundles many essentials by default. Keep addons minimal.
+  addons: [],
+  viteFinal: async (config) => {
+    const repoRoot = process.cwd()
+    console.log({repoRoot})
+    config.resolve = config.resolve || {}
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@maverick/react': `${repoRoot}/packages/react/src`,
+      '@maverick/tokens': `${repoRoot}/packages/tokens`,
+      //'@maverick/tokens/styled-system': `${repoRoot}/packages/tokens/styled-system`
+    }
+    config.server = config.server || {}
+    config.server.fs = { allow: [repoRoot, `${repoRoot}/packages`] }
+    return config
   }
 }
 

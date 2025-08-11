@@ -1,11 +1,9 @@
-import { forwardRef } from 'react'
+import { ElementType, forwardRef } from 'react'
 import { button } from '../../../tokens/styled-system/recipes'
+import type { ButtonVariantProps } from '@maverick/tokens'
 
-type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
-  visual?: 'solid' | 'outline'
-  size?: 'sm' | 'md'
-  as?: React.ElementType
-}
+type ButtonProps = React.ComponentPropsWithoutRef<'button'> & ButtonVariantProps & 
+{ as?: ElementType }
 
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(

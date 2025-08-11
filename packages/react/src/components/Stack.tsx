@@ -1,5 +1,5 @@
 import { ComponentPropsWithoutRef, ElementType, forwardRef } from 'react'
-import { stack } from '@maverick/tokens/styled-system/recipes'
+import { stack } from '../../../tokens/styled-system/recipes'
 import { RecipeVariantProps } from '@maverick/tokens/styled-system/types'
 import type { StackVariantProps } from '@maverick/tokens/styled-system/recipes/stack'
 

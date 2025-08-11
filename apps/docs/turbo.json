@@ -1,9 +1,10 @@
 {
-    "extends": ["//"],
-    "tasks": {
-      "build:storybook": {
-        "dependsOn": ["^build:storybook"],
-        "outputs": ["storybook-static/**"]
-      }
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build:storybook": {
+      "dependsOn": ["^build:storybook"],
+      "outputs": ["storybook-static/**"]
     }
   }
+}

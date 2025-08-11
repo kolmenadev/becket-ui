@@ -1,16 +1,7 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "types": [
-      "vite/client"
-    ],
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "jsx": "react-jsx"
+    "types": ["vite/client", "node"]
   },
-  "include": [
-    "./.storybook/**/*",
-    "./**/*.ts",
-    "./**/*.tsx"
-  ]
+  "include": [".storybook/**/*", "**/*.ts", "**/*.tsx"]
 }

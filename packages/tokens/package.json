@@ -11,7 +11,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.13.1",
   "devDependencies": {
-    "@pandacss/dev": "0.54.0"
+    "@pandacss/dev": "^1.0.0"
   },
   "exports": {
     ".": {

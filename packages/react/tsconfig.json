@@ -6,7 +6,9 @@
       "declarationMap": true,
       "emitDeclarationOnly": true,
       "outDir": "dist",
-      "rootDir": "src"
+    "rootDir": "src",
+    "jsx": "react-jsx",
+    "moduleResolution": "Bundler"
     },
     "include": ["src"]
 }

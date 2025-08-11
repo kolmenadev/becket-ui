@@ -1,10 +1,10 @@
-import { defineConfig } from 'vite'
-
-export default defineConfig({
+const config = {
   resolve: {
     alias: {
       '@maverick/react': '../../../packages/react/src',
-      '@maverick/tokens': '../../../packages/tokens/styled-system',
+      '@maverick/tokens': '../../../packages/tokens/styled-system'
     }
   }
-})
+}
+
+export default config
