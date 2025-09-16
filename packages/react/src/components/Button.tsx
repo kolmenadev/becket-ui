@@ -1,6 +1,6 @@
 import { ElementType, forwardRef } from 'react'
-import { button } from '../../../tokens/styled-system/recipes'
-import type { ButtonVariantProps } from '@maverick/tokens'
+import { button } from '@maverick/tokens/recipes'
+import type { ButtonVariantProps } from '@maverick/tokens/recipes'
 
 type ButtonProps = React.ComponentPropsWithoutRef<'button'> & ButtonVariantProps & 
 { as?: ElementType }

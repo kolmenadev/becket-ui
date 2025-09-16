@@ -4,6 +4,7 @@ export const button = defineRecipe({
     className: 'button',
     description: 'The styles for the Button component',
     base: {
+      cursor: 'pointer',
       fontWeight: 'bold',         
       borderRadius: 'md',             
       px: 4,                        

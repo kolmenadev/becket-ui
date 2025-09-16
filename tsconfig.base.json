@@ -8,9 +8,5 @@
     "skipLibCheck": true,
     "strict": true,
     "baseUrl": ".",
-    "paths": {
-      "@maverick/tokens": ["packages/tokens"],
-      "@maverick/tokens/*": ["packages/tokens/*"]
-    }
   }
 }

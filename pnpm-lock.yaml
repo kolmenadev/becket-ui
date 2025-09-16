@@ -17,12 +17,9 @@ importers:
 
   apps/docs:
     dependencies:
-      react:
-        specifier: 19.1.0
-        version: 19.1.0
-      react-dom:
-        specifier: 19.1.0
-        version: 19.1.0(react@19.1.0)
+      '@maverick/tokens':
+        specifier: workspace:*
+        version: link:../../packages/tokens
     devDependencies:
       '@chromatic-com/storybook':
         specifier: ^4.1.0
@@ -48,6 +45,9 @@ importers:
 
   packages/react:
     dependencies:
+      '@maverick/tokens':
+        specifier: workspace:*
+        version: link:../tokens
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -55,9 +55,6 @@ importers:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
     devDependencies:
-      '@maverick/tokens':
-        specifier: workspace:*
-        version: link:../tokens
       '@pandacss/dev':
         specifier: ^1.0.0
         version: 1.0.1(typescript@5.8.3)

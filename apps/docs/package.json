@@ -22,7 +22,7 @@
     "vite": "^5.4.0"
   },
   "dependencies": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "@maverick/tokens": "workspace:*",
+    "@maverick/react": "workspace:*"
   }
 }

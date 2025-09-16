@@ -1,5 +1,5 @@
 import { defineConfig } from "@pandacss/dev";
-import { button, stack } from "./recipes";
+import { button } from "./recipes";
 
 export default defineConfig({
   preflight: true,
@@ -57,6 +57,14 @@ export default defineConfig({
           13: { value: '3.25rem' },
           21: { value: '5.25rem' },
           34: { value: '8.5rem' },
+
+          // semantic aliases so patterns can use md, etc.
+          xs:  { value: '{spacing.1}' },
+          sm:  { value: '{spacing.2}' },
+          md:  { value: '{spacing.3}' },
+          lg:  { value: '{spacing.5}' },
+          xl:  { value: '{spacing.8}' },
+          '2xs': { value: '{spacing.13}' },
         },
       
         radii: {
@@ -100,14 +108,18 @@ export default defineConfig({
       },
       recipes: {
         button,
-        // TODO: explore changing these names stack? stack and button
-        // as there are some warnings when I run panda codegen.
-        stack,
       }
     },
   },
   staticCss: {
-    recipes: '*'
+    recipes: '*',
+    css: [
+      {
+        properties: {
+          gap: ['xs', 'sm', 'md', 'lg', 'xl', '2xs'],
+        },
+      },
+    ],
   },
   conditions: {
     dark: "[data-theme='dark'] &"
