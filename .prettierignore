@@ -1,0 +1,23 @@
+# Build outputs
+**/dist/
+**/.next/
+**/storybook-static/
+
+# Panda CSS generated artifacts
+**/packages/tokens/styled-system/
+**/packages/tokens/index.mjs
+**/packages/tokens/index.d.ts
+**/packages/tokens/styles.css
+
+# Node and tooling
+**/node_modules/
+**/.turbo/
+**/.pnpm-store/
+**/.cache/
+
+# Logs & lockfiles
+**/*.log
+pnpm-lock.yaml
+
+# Misc
+.DS_Store

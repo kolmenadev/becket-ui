@@ -1,14 +1,14 @@
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-      "composite": true,
-      "declaration": true,
-      "declarationMap": true,
-      "emitDeclarationOnly": true,
-      "outDir": "dist",
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist",
     "rootDir": "src",
     "jsx": "react-jsx",
     "moduleResolution": "Bundler"
-    },
-    "include": ["src"]
+  },
+  "include": ["src"]
 }

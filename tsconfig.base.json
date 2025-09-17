@@ -7,6 +7,6 @@
     "declaration": true,
     "skipLibCheck": true,
     "strict": true,
-    "baseUrl": ".",
+    "baseUrl": "."
   }
 }

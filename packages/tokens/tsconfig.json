@@ -1,10 +1,10 @@
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-        "@maverick/tokens": ["."],
-        "@maverick/tokens/*": ["styled-system/*"]
-      }
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@maverick/tokens": ["."],
+      "@maverick/tokens/*": ["styled-system/*"]
     }
   }
+}
