@@ -58,3 +58,9 @@ storybook-static
 ## Panda
 packages/tokens/styled-system
 packages/tokens/styled-system-studio
+
+## Cursor
+.cursor/
+
+## Turbo
+.turbo/

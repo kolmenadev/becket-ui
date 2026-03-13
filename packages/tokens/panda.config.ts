@@ -119,6 +119,13 @@ export default defineConfig({
           gap: ['xs', 'sm', 'md', 'lg', 'xl', '2xs'],
         },
       },
+      {
+        properties: {
+          justifyContent: ['start', 'center', 'end', 'space-between', 'space-around', 'space-evenly'],
+          alignItems: ['start', 'center', 'end', 'stretch', 'baseline'],
+          flexWrap: ['wrap', 'nowrap', 'wrap-reverse'],
+        },
+      },
     ],
   },
   conditions: {

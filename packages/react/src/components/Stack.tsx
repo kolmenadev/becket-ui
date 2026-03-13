@@ -5,6 +5,19 @@ type StackOptions = NonNullable<Parameters<typeof stack>[0]>;
 type AlignVariant = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 type JustifyVariant = 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
 
+const ALIGN_MAP: Partial<Record<AlignVariant, string>> = {
+  start: 'flex-start',
+  end: 'flex-end',
+};
+
+const JUSTIFY_MAP: Partial<Record<JustifyVariant, string>> = {
+  start: 'flex-start',
+  end: 'flex-end',
+  between: 'space-between',
+  around: 'space-around',
+  evenly: 'space-evenly',
+};
+
 export const Stack = forwardRef<
   HTMLDivElement,
   ComponentPropsWithoutRef<'div'> & {
@@ -27,20 +40,8 @@ export const Stack = forwardRef<
     },
     ref,
   ) => {
-    const alignCss = align === 'start' ? 'flex-start' : align === 'end' ? 'flex-end' : align;
-
-    const justifyCss =
-      justify === 'start'
-        ? 'flex-start'
-        : justify === 'end'
-          ? 'flex-end'
-          : justify === 'between'
-            ? 'space-between'
-            : justify === 'around'
-              ? 'space-around'
-              : justify === 'evenly'
-                ? 'space-evenly'
-                : justify;
+    const alignCss = ALIGN_MAP[align as AlignVariant] ?? align;
+    const justifyCss = JUSTIFY_MAP[justify as JustifyVariant] ?? justify;
 
     return (
       <Component
