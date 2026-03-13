@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.mjs",
   "scripts": {
+    "build": "panda codegen && panda cssgen",
+    "prepare": "pnpm build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
