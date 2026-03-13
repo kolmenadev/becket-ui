@@ -84,6 +84,20 @@ export default defineConfig({
           '2xs': { value: '{spacing.13}' },
         },
 
+        // Fibonacci-based sizes (same scale as spacing) so h/w/minW/maxW use our tokens, not Panda defaults
+        sizes: {
+          0: { value: '0rem' },
+          1: { value: '0.25rem' },
+          2: { value: '0.5rem' },
+          3: { value: '0.75rem' },
+          5: { value: '1.25rem' },
+          8: { value: '2rem' },
+          13: { value: '3.25rem' },
+          21: { value: '5.25rem' },
+          34: { value: '8.5rem' },
+          55: { value: '13.75rem' },
+        },
+
         radii: {
           none: { value: '0px' },
           sm: { value: '4px' },
@@ -141,6 +155,11 @@ export default defineConfig({
           justifyContent: ['start', 'center', 'end', 'space-between', 'space-around', 'space-evenly'],
           alignItems: ['start', 'center', 'end', 'stretch', 'baseline'],
           flexWrap: ['wrap', 'nowrap', 'wrap-reverse'],
+        },
+      },
+      {
+        properties: {
+          truncate: ['true'],
         },
       },
     ],

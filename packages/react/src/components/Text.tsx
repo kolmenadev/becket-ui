@@ -8,12 +8,16 @@ type TextProps<T extends ElementType = BaseElement> = React.ComponentPropsWithou
     as?: T;
   };
 
+function mergeClassName(...classes: (string | undefined)[]): string {
+  return classes.filter(Boolean).join(' ');
+}
+
 export const Text = forwardRef<HTMLElement, TextProps>(
   ({ as, children, css: cssProp, className, ...rest }, ref) => {
     const Component = (as ?? 'p') as ElementType;
-    const classNames = css(rest as JsxStyleProps);
+    const styleClassName = css(rest as JsxStyleProps);
     return (
-      <Component ref={ref as any} className={classNames}>
+      <Component ref={ref as any} className={mergeClassName(styleClassName, className)}>
         {children}
       </Component>
     );

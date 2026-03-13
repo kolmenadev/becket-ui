@@ -5,26 +5,34 @@ type StackOptions = NonNullable<Parameters<typeof stack>[0]>;
 type AlignVariant = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 type JustifyVariant = 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
 
-const ALIGN_MAP: Partial<Record<AlignVariant, string>> = {
-  start: 'flex-start',
-  end: 'flex-end',
+const ALIGN_MAP: Record<AlignVariant, string> = {
+  start: 'start',
+  center: 'center',
+  end: 'end',
+  stretch: 'stretch',
+  baseline: 'baseline',
 };
 
-const JUSTIFY_MAP: Partial<Record<JustifyVariant, string>> = {
-  start: 'flex-start',
-  end: 'flex-end',
+const JUSTIFY_MAP: Record<JustifyVariant, string> = {
+  start: 'start',
+  center: 'center',
+  end: 'end',
   between: 'space-between',
   around: 'space-around',
   evenly: 'space-evenly',
 };
+
+function mergeClassName(...classes: (string | undefined)[]): string {
+  return classes.filter(Boolean).join(' ');
+}
 
 export const Stack = forwardRef<
   HTMLDivElement,
   ComponentPropsWithoutRef<'div'> & {
     direction?: StackOptions['direction'];
     gap?: StackOptions['gap'];
-    align?: AlignVariant | StackOptions['align'];
-    justify?: JustifyVariant | StackOptions['justify'];
+    align?: AlignVariant;
+    justify?: JustifyVariant;
     as?: ElementType;
   }
 >(
@@ -40,14 +48,18 @@ export const Stack = forwardRef<
     },
     ref,
   ) => {
-    const alignCss = ALIGN_MAP[align as AlignVariant] ?? align;
-    const justifyCss = JUSTIFY_MAP[justify as JustifyVariant] ?? justify;
+    const recipeClassName = stack({
+      direction,
+      gap,
+      ...(align && { align: ALIGN_MAP[align] }),
+      ...(justify && { justify: JUSTIFY_MAP[justify] }),
+    });
 
     return (
       <Component
         ref={ref}
-        className={stack({ direction, gap, align: alignCss, justify: justifyCss })}
         {...props}
+        className={mergeClassName(recipeClassName, className)}
       />
     );
   },
@@ -58,8 +70,8 @@ Stack.displayName = 'Stack';
 type StackProps = ComponentPropsWithoutRef<'div'> & {
   direction?: StackOptions['direction'];
   gap?: StackOptions['gap'];
-  align?: AlignVariant | StackOptions['align'];
-  justify?: JustifyVariant | StackOptions['justify'];
+  align?: AlignVariant;
+  justify?: JustifyVariant;
   as?: ElementType;
 };
 
