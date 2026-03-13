@@ -8,6 +8,8 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     visual: { control: { type: 'select' }, options: buttonRecipe.variantMap.visual },
     size: { control: { type: 'select' }, options: buttonRecipe.variantMap.size },
+    withGradient: { control: { type: 'boolean' } },
+    className: { control: { type: 'text' }, description: 'Custom class to override styles' },
   },
 };
 export default meta;
@@ -15,5 +17,23 @@ export default meta;
 type Story = StoryObj<typeof Button>;
 
 export const Default: Story = {
-  args: { children: 'Click me', visual: 'solid', size: 'sm' },
+  args: { children: 'Click me', visual: 'primary', size: 'sm', withGradient: false },
+};
+
+/**
+ * Custom CSS can override the default button styles. Pass `className` to merge
+ * your own classes (e.g. from Panda's `css()`) or use the `style` prop for
+ * inline overrides.
+ */
+export const WithCssOverride: Story = {
+  args: {
+    children: 'Overridden styles',
+    visual: 'primary',
+    style: {
+      background: 'rebeccapurple',
+      borderRadius: '9999px',
+      color: 'white',
+      padding: '0.75rem 1.5rem',
+    },
+  },
 };
