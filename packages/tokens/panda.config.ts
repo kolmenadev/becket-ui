@@ -17,7 +17,7 @@ export default defineConfig({
             innovationTeal: { value: 'oklch(0.70 0.15 190)' }, // Fresh, tech-forward teal
           },
           primary: { value: '{colors.brand.maverickBlue}' },
-          primaryAccent: { value: '{colors.brand.rebelMagenta}' },
+          secondary: { value: '{colors.brand.rebelMagenta}' },
           primaryHover: { value: 'oklch(0.60 0.22 265)' },
 
           neutral: {
@@ -36,7 +36,6 @@ export default defineConfig({
           black: { value: 'oklch(20% 0 0)' },
           white: { value: 'oklch(99% 0 0)' },
           background: { value: '{colors.white}' },
-          surface: { value: '{colors.neutral.50}' },
           border: { value: '{colors.neutral.200}' },
 
           danger: { value: 'oklch(0.62 0.20 25)' },
@@ -45,6 +44,25 @@ export default defineConfig({
 
           text: { value: '{colors.neutral.900}' },
           muted: { value: '{colors.neutral.600}' },
+        },
+
+        gradients: {
+          primary: {
+            value:
+              'linear-gradient(to right, oklch(0.58 0.20 260), oklch(0.65 0.23 340))',
+          },
+          primaryHover: {
+            value:
+              'linear-gradient(to right, oklch(0.60 0.22 265), oklch(0.65 0.23 340))',
+          },
+          secondary: {
+            value:
+              'linear-gradient(to right, oklch(0.65 0.23 340), oklch(0.82 0.18 340))',
+          },
+          neutral: {
+            value:
+              'linear-gradient(to right, oklch(0.94 0.005 260), oklch(0.89 0.005 260))',
+          },
         },
 
         spacing: {
@@ -58,7 +76,6 @@ export default defineConfig({
           21: { value: '5.25rem' },
           34: { value: '8.5rem' },
 
-          // semantic aliases so patterns can use md, etc.
           xs: { value: '{spacing.1}' },
           sm: { value: '{spacing.2}' },
           md: { value: '{spacing.3}' },
