@@ -41,6 +41,11 @@ export const Truncate: Story = {
     children:
       'This is a very long line of text that will demonstrate truncation behavior when the truncate prop is enabled and the container has a constrained width.',
   },
+  render: (args) => (
+    <Text {...args}>
+      {args.children}
+    </Text>
+  ),
 };
 
 

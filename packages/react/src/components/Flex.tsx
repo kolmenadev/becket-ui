@@ -6,28 +6,34 @@ type AlignVariant = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 type JustifyVariant = 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
 type GapVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xs';
 
-// Use logical values (start, end) that match Panda's generated CSS classes.
-// Mapping to flex-start/flex-end produces jc_flex-end etc., which aren't in the pre-generated CSS.
-const ALIGN_MAP: Partial<Record<AlignVariant, string>> = {
+const ALIGN_MAP: Record<AlignVariant, string> = {
   start: 'start',
+  center: 'center',
   end: 'end',
+  stretch: 'stretch',
+  baseline: 'baseline',
 };
 
-const JUSTIFY_MAP: Partial<Record<JustifyVariant, string>> = {
+const JUSTIFY_MAP: Record<JustifyVariant, string> = {
   start: 'start',
+  center: 'center',
   end: 'end',
   between: 'space-between',
   around: 'space-around',
   evenly: 'space-evenly',
 };
 
+function mergeClassName(...classes: (string | undefined)[]): string {
+  return classes.filter(Boolean).join(' ');
+}
+
 export const Flex = forwardRef<
   HTMLDivElement,
   ComponentPropsWithoutRef<'div'> & {
     direction?: FlexOptions['direction'];
     gap?: GapVariant | FlexOptions['gap'];
-    align?: AlignVariant | FlexOptions['align'];
-    justify?: JustifyVariant | FlexOptions['justify'];
+    align?: AlignVariant;
+    justify?: JustifyVariant;
     wrap?: FlexOptions['wrap'];
     basis?: FlexOptions['basis'];
     grow?: FlexOptions['grow'];
@@ -53,24 +59,24 @@ export const Flex = forwardRef<
     },
     ref,
   ) => {
-    const alignCss = ALIGN_MAP[align as AlignVariant] ?? align;
-    const justifyCss = JUSTIFY_MAP[justify as JustifyVariant] ?? justify;
+
+    const recipeClassName = flex({
+      direction,
+      gap,
+      ...(align && { align: ALIGN_MAP[align] }),
+      ...(justify && { justify: JUSTIFY_MAP[justify] }),
+      ...(wrap && { wrap }),
+      ...(basis && { basis }),
+      ...(grow && { grow }),
+      ...(shrink && { shrink }),
+      ...(inline && { display: 'inline-flex' }),
+    });
 
     return (
       <Component
         ref={ref}
-        className={flex({
-          direction,
-          gap,
-          align: alignCss,
-          justify: justifyCss,
-          wrap,
-          basis,
-          grow,
-          shrink,
-          ...(inline && { display: 'inline-flex' }),
-        })}
         {...props}
+        className={mergeClassName(recipeClassName, className)}
       />
     );
   },
