@@ -1,8 +1,10 @@
-import { ElementType, forwardRef } from 'react';
+import { forwardRef } from 'react';
+import type { ElementType } from 'react';
 import { button } from '@maverick/tokens/recipes';
 
 type ButtonVisual = 'outline' | 'primary' | 'secondary' | 'neutral';
 type ButtonSize = 'sm' | 'md';
+type ButtonBorderRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
 const VISUAL_TO_RECIPE: Record<ButtonVisual, ButtonVisual> = {
   primary: 'primary',
@@ -14,6 +16,7 @@ const VISUAL_TO_RECIPE: Record<ButtonVisual, ButtonVisual> = {
 type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
   visual?: ButtonVisual;
   size?: ButtonSize;
+  borderRadius?: ButtonBorderRadius;
   withGradient?: boolean;
   as?: ElementType;
 };
@@ -27,6 +30,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     {
       visual = 'outline',
       size = 'md',
+      borderRadius = 'md',
       withGradient = false,
       as: ButtonComponent = 'button',
       className,
@@ -37,6 +41,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const recipeClassName = (button)({
       visual: VISUAL_TO_RECIPE[visual],
       size,
+      borderRadius,
       withGradient,
     });
 

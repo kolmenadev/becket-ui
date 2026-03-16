@@ -1,5 +1,5 @@
 import { defineConfig } from '@pandacss/dev';
-import { button } from './recipes';
+import { button, heading } from './recipes';
 
 export default defineConfig({
   preflight: true,
@@ -18,7 +18,10 @@ export default defineConfig({
           },
           primary: { value: '{colors.brand.maverickBlue}' },
           secondary: { value: '{colors.brand.rebelMagenta}' },
-          primaryHover: { value: 'oklch(0.60 0.22 265)' },
+          tertiary: { value: '{colors.brand.innovationTeal}' },
+          primaryHover: {
+            value: 'color-mix(in oklch, {colors.brand.maverickBlue} 88%, white)',
+          },
 
           neutral: {
             50: { value: 'oklch(0.97 0.005 260)' },
@@ -47,21 +50,23 @@ export default defineConfig({
         },
 
         gradients: {
+          /** maverickBlue → rebelMagenta */
           primary: {
             value:
-              'linear-gradient(to right, oklch(0.58 0.20 260), oklch(0.65 0.23 340))',
+              'linear-gradient(to right, {colors.brand.maverickBlue}, {colors.brand.rebelMagenta})',
           },
           primaryHover: {
             value:
-              'linear-gradient(to right, oklch(0.60 0.22 265), oklch(0.65 0.23 340))',
+              'linear-gradient(to right, {colors.primaryHover}, {colors.brand.rebelMagenta})',
           },
+          /** maverickBlue → light innovationTeal */
           secondary: {
             value:
-              'linear-gradient(to right, oklch(0.65 0.23 340), oklch(0.82 0.18 340))',
+              'linear-gradient(to right, {colors.brand.maverickBlue}, {colors.brand.innovationTeal})',
           },
           neutral: {
             value:
-              'linear-gradient(to right, oklch(0.94 0.005 260), oklch(0.89 0.005 260))',
+              'linear-gradient(to right, {colors.neutral.100}, {colors.neutral.200})',
           },
         },
 
@@ -119,6 +124,9 @@ export default defineConfig({
           xl: { value: '1.5rem' },
           '2xl': { value: '2rem' },
           '3xl': { value: '3rem' },
+          '4xl': { value: '3.75rem' },
+          '5xl': { value: '4.5rem' },
+          '6xl': { value: '6rem' },
         },
         fontWeights: {
           normal: { value: '400' },
@@ -139,6 +147,7 @@ export default defineConfig({
       },
       recipes: {
         button,
+        heading,
       },
     },
   },

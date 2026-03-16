@@ -6,7 +6,6 @@ export const button = defineRecipe({
   base: {
     cursor: 'pointer',
     fontWeight: 'bold',
-    borderRadius: 'md',
     px: 4,
     py: 2,
     transition: 'all 0.2s',
@@ -47,6 +46,14 @@ export const button = defineRecipe({
       sm: { fontSize: 'sm', px: 3, py: 1 },
       md: { fontSize: 'md', px: 4, py: 2 },
     },
+    borderRadius: {
+      none: { borderRadius: 'none' },
+      sm: { borderRadius: 'sm' },
+      md: { borderRadius: 'md' },
+      lg: { borderRadius: 'lg' },
+      xl: { borderRadius: 'xl' },
+      full: { borderRadius: 'full' },
+    },
     withGradient: {
       false: {},
       true: {},
@@ -63,16 +70,6 @@ export const button = defineRecipe({
         _hover: {
           backgroundImage: '{gradients.primaryHover}',
         },
-      },
-    },
-    {
-      visual: 'secondary',
-      withGradient: true,
-      css: {
-        bg: 'transparent',
-        color: 'white',
-        backgroundImage: '{gradients.secondary}',
-        borderColor: 'transparent',
       },
     },
     {
@@ -110,6 +107,7 @@ export const button = defineRecipe({
   defaultVariants: {
     visual: 'outline',
     size: 'md',
+    borderRadius: 'sm',
     withGradient: false,
   },
 });

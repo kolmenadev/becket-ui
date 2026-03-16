@@ -8,6 +8,10 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     visual: { control: { type: 'select' }, options: buttonRecipe.variantMap.visual },
     size: { control: { type: 'select' }, options: buttonRecipe.variantMap.size },
+    borderRadius: {
+      control: { type: 'select' },
+      options: buttonRecipe.variantMap.borderRadius,
+    },
     withGradient: { control: { type: 'boolean' } },
     className: { control: { type: 'text' }, description: 'Custom class to override styles' },
   },
@@ -17,7 +21,13 @@ export default meta;
 type Story = StoryObj<typeof Button>;
 
 export const Default: Story = {
-  args: { children: 'Click me', visual: 'primary', size: 'sm', withGradient: false },
+  args: {
+    children: 'Click me',
+    visual: 'primary',
+    size: 'md',
+    borderRadius: 'md',
+    withGradient: false,
+  },
 };
 
 /**

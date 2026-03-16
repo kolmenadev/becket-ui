@@ -26,6 +26,12 @@ importers:
       '@maverick/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
+      react:
+        specifier: 19.1.0
+        version: 19.1.0
+      react-dom:
+        specifier: 19.1.0
+        version: 19.1.0(react@19.1.0)
     devDependencies:
       '@chromatic-com/storybook':
         specifier: ^4.1.0
