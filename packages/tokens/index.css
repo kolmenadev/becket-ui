@@ -5,6 +5,5 @@
 @layer base {
   body {
     background-color: var(--mavui--colors-background);
-    color: var(--mavui--colors-text);
   }
 }
