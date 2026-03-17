@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { css } from '@maverick/tokens';
 import { Stack, HStack, VStack } from './Stack';
 
+const gradientBorderOptions = ['primary', 'secondary', 'neutral'] as const;
+
 const meta = {
   title: 'Components/Stack',
   component: Stack,
@@ -16,15 +18,20 @@ const meta = {
       control: { type: 'select' },
       options: ['start', 'center', 'end', 'between', 'around', 'evenly'],
     },
+    border: {
+      control: { type: 'select' },
+      options: gradientBorderOptions,
+    },
   },
 } satisfies Meta<typeof Stack>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const boxClass200 = css({ bg: 'neutral.200', p: 2, w: 21, h: 8 });
-const boxClass300 = css({ bg: 'neutral.300', p: 2, w: 21, h: 8 });
-const boxClass400 = css({ bg: 'neutral.400', p: 2, w: 21, h: 8 });
+const boxClass200 = css({ bg: 'neutral.500', p: 2, w: 21, h: 8 });
+const boxClass300 = css({ bg: 'neutral.600', p: 2, w: 21, h: 8 });
+const boxClass400 = css({ bg: 'neutral.700', p: 2, w: 21, h: 8 });
+const gradientContainerClass = css({ p: 'md', borderRadius: 'md' });
 
 export const Basic: Story = {
   args: { direction: 'column', gap: 'sm', align: 'start', justify: 'center' },
@@ -57,6 +64,35 @@ export const Vertical: Story = {
       <div className={boxClass200}>Item 1</div>
       <div className={boxClass300}>Item 2</div>
       <div className={boxClass400}>Item 3</div>
+    </VStack>
+  ),
+};
+
+export const WithGradientBorder: Story = {
+  args: { direction: 'column', gap: 'md', align: 'start', justify: 'start', border: 'primary' },
+  render: (args: Story['args']) => (
+    <Stack {...args} className={gradientContainerClass}>
+      <div className={boxClass200}>Item 1</div>
+      <div className={boxClass300}>Item 2</div>
+      <div className={boxClass400}>Item 3</div>
+    </Stack>
+  ),
+};
+
+export const GradientBorderVariants: Story = {
+  render: () => (
+    <VStack gap="md" className={css({ maxW: 55 })}>
+      {gradientBorderOptions.map((border) => (
+        <Stack
+          key={border}
+          border={border}
+          gap="sm"
+          className={gradientContainerClass}
+        >
+          <div className={boxClass200}>{border}</div>
+          <div className={boxClass300}>Item 2</div>
+        </Stack>
+      ))}
     </VStack>
   ),
 };

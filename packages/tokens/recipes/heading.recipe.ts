@@ -7,6 +7,9 @@ export const heading = defineRecipe({
     fontFamily: 'sans',
     fontWeight: 'bold',
     color: 'text',
+    light: {
+      color: 'neutral.900',
+    },
     lineHeight: 'tight',
   },
   variants: {

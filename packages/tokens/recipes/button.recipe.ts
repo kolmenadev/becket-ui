@@ -86,12 +86,15 @@ export const button = defineRecipe({
       withGradient: true,
       css: {
         position: 'relative',
-        bg: 'background',
+        bg: 'neutral.900',
         backgroundClip: 'padding-box',
         borderWidth: '2px',
         borderStyle: 'solid',
         borderColor: 'transparent',
         color: 'secondary',
+        light: {
+          bg: 'background',
+        },
         _before: {
           content: '""',
           position: 'absolute',
