@@ -5,14 +5,14 @@ export type GradientBorderToken = Exclude<GradientToken, 'primaryHover'>;
 
 const baseGradientBorderStyles = {
   position: 'relative',
-  bg: 'neutral.900',
+  bg: 'background',
+  _light: {
+    bgColor: 'lightBackground',
+  },
   backgroundClip: 'padding-box',
   borderWidth: '2px',
   borderStyle: 'solid',
   borderColor: 'transparent',
-  light: {
-    bg: 'background',
-  },
 } as const;
 
 const gradientBorderClassMap: Record<GradientBorderToken, string> = {

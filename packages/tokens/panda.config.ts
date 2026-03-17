@@ -39,6 +39,7 @@ export default defineConfig({
           black: { value: 'oklch(20% 0 0)' },
           white: { value: 'oklch(99% 0 0)' },
           background: { value: '{colors.neutral.900}' },
+          lightBackground: { value: '{colors.neutral.50}' },
           border: { value: '{colors.neutral.200}' },
 
           danger: { value: 'oklch(0.62 0.20 25)' },
@@ -46,6 +47,7 @@ export default defineConfig({
           success: { value: 'oklch(0.68 0.18 140)' },
 
           text: { value: '{colors.neutral.50}' },
+          lightText: { value: '{colors.neutral.900}' },
           muted: { value: '{colors.neutral.300}' },
         },
 
@@ -174,6 +176,9 @@ export default defineConfig({
     ],
   },
   conditions: {
-    light: "[data-theme='light'] &",
+    extend: {
+      light: "[data-theme='light'] &",
+      dark: "[data-theme='dark'] &",
+    },
   },
 });
