@@ -21,6 +21,15 @@ Purpose: This is the single source of truth for creating production‑ready comp
 - If a component needs assets (icons, etc.), colocate them in a same‑name folder:
   - `packages/react/src/components/ComponentName/ComponentName.tsx`
   - `packages/react/src/components/ComponentName/asset-name.svg`
+- `packages/react/src/components/` is for React components only:
+  - Files here should export a UI component (or tightly coupled component subcomponents) and their local Storybook stories.
+  - Keep the folder focused on rendering/API surface, accessibility behavior, and component composition.
+  - Do not place cross-component styling engines, token-mapping helpers, parsing helpers, or generic utility modules in this folder.
+- `packages/react/src/helpers/` is for shared non-component logic:
+  - Use this folder for reusable helpers consumed by multiple components (for example, shared gradient-border logic).
+  - Helpers should not render JSX or define UI components; they should expose typed utilities, guards, mappings, and class/style generators.
+  - If logic starts in one component but is reused (or expected to be reused) by another component, promote it to `src/helpers`.
+  - This keeps component files small, avoids duplicated behavior, and centralizes design-system mechanics in one place.
 
 Follow the “prefer ≥3 items per folder” and “prefer colocation” guidelines. Do not nest deeper than necessary.
 
@@ -42,6 +51,7 @@ Follow the “prefer ≥3 items per folder” and “prefer colocation” guidel
 - Provide an optional `as?: ElementType` prop for element substitution.
 - Extend the intrinsic HTML props for the base element (`React.ComponentPropsWithoutRef<'button'>`, etc.).
 - Pull visual props from the recipe variant types, e.g. `ButtonVariantProps` from `@maverick/tokens/recipes`.
+- Pass **only defined props** into the pattern (conditional spread); do not pass `undefined` for omitted props.
 - No business logic in UI components; UI state is allowed when it directly affects visuals/interaction.
 
 Component template (consumption of a Panda recipe):
@@ -68,6 +78,21 @@ export const SomeComponent = forwardRef<HTMLDivElement, SomeProps>(
 
 SomeComponent.displayName = 'SomeComponent';
 ```
+
+### Layout / pattern-based components (Flex, Stack): only pass defined props
+
+When a component uses a Panda **pattern** (e.g. `flex`) with many optional props, pass into the pattern **only props that are actually defined**. Do not pass `undefined` for omitted props; use conditional spread so the recipe/pattern receives only the keys the consumer set.
+
+- **Rule**: For each optional prop (e.g. `align`, `justify`, `wrap`, `border`), include it in the pattern call only when it is defined, e.g. `...(align && { align: ALIGN_MAP[align] })`, `...(wrap && { wrap })`.
+- **Reason**: Keeps generated class names and style props predictable and avoids polluting the pattern with undefined values.
+
+When the component API uses different values than the pattern (e.g. `between` → `space-between`), define a **variant map** (e.g. `JUSTIFY_MAP`, `ALIGN_MAP`) and use it when passing the single prop into the pattern.
+
+- **Type extraction**: Derive option types from the pattern: `type FlexOptions = NonNullable<Parameters<typeof flex>[0]>`. Use this for `border` and other pattern-native props; extend with custom tokens (e.g. `GradientBorderToken`) where the API accepts more than the pattern.
+- **ClassName merging**: Merge in a fixed order: recipe class, then optional helper-derived class (e.g. gradient border from `getGradientBorderClassName`), then consumer `className`. Use a small `mergeClassName(...)` helper that filters out falsy values and joins with a space.
+- **Destructuring**: Destructure all component-specific props (with defaults where needed), then `className`, `style`, `...props`. Forward `...props` and `style` to the root element so HTML attributes and inline style are preserved; apply merged `className` to the root.
+
+Reference implementation: `packages/react/src/components/Flex.tsx`.
 
 ---
 
@@ -97,6 +122,26 @@ Use `@maverick/tokens/jsx` primitives (e.g., `VisuallyHidden`) when needed for a
 - Define styles via recipes in `@maverick/tokens` and consume them in components.
 - Do not inline literal color values in components; use tokens (e.g., `primary`, `neutral.600`).
 - Variants (e.g., `visual`, `size`) come from recipes. Use `variantMap` to drive Storybook controls.
+- Shared style behavior that is reused by multiple React components should live in `packages/react/src/helpers`, not under `packages/react/src/components`.
+
+### Shared gradient border helper (Flex/Stack pattern)
+
+- Shared helper location: `packages/react/src/helpers/gradientBorder.ts`.
+- This helper is the single source of truth for gradient border styles and exports:
+  - `GradientBorderToken` (currently excludes `primaryHover`)
+  - `isGradientBorderToken(value)`
+  - `getGradientBorderClassName(token)`
+- The helper must use Panda `css()` and Maverick tokens (`{gradients.primary}`, etc.), not hardcoded global CSS class definitions in token CSS files.
+
+### Border prop behavior for layout components
+
+- For layout components based on Panda patterns (e.g., `Flex`, `Stack`), `border` must support:
+  - Normal border values from the pattern style prop typing (`FlexOptions['border']`, `StackOptions['border']`), including color-token strings like `1px solid primary`.
+  - Gradient border tokens from the shared helper (`GradientBorderToken`), such as `primary`, `secondary`, `neutral`.
+- Implementation rule:
+  - If `border` is a `GradientBorderToken`, apply shared gradient border className from the helper.
+  - Otherwise, pass `border` through the Panda pattern call as a regular border style prop.
+- Do not overload `border` with prefixed values like `gradients.primary` in component APIs; use direct gradient token values for DX consistency.
 
 Recipe template (add in `packages/tokens/recipes/<component>.recipe.ts` and export from `packages/tokens/recipes/index.ts`):
 
