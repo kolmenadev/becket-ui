@@ -1,3 +1,10 @@
 @layer reset, base, tokens, recipes, utilities;
 
 @import './styled-system/styles.css';
+
+@layer base {
+  body {
+    background-color: var(--mavui--colors-background);
+    color: var(--mavui--colors-text);
+  }
+}

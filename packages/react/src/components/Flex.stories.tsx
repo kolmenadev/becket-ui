@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { css } from '@maverick/tokens';
 import { Flex } from './Flex';
 
+const gradientBorderOptions = ['primary', 'secondary', 'neutral'] as const;
+
 const meta = {
   title: 'Components/Flex',
   component: Flex,
@@ -20,6 +22,10 @@ const meta = {
       control: { type: 'select' },
       options: ['wrap', 'nowrap', 'wrap-reverse'],
     },
+    border: {
+      control: { type: 'select' },
+      options: gradientBorderOptions,
+    },
     inline: { control: { type: 'boolean' } },
   },
 } satisfies Meta<typeof Flex>;
@@ -32,10 +38,14 @@ const containerClass = css({
   borderColor: 'border',
   p: 'md',
 });
+const gradientContainerClass = css({
+  p: 'md',
+  borderRadius: 'md',
+});
 
-const boxClass200 = css({ bg: 'neutral.200', p: 2, minW: 13, h: 8 });
-const boxClass300 = css({ bg: 'neutral.300', p: 2, minW: 13, h: 8 });
-const boxClass400 = css({ bg: 'neutral.400', p: 2, minW: 13, h: 8 });
+const boxClass200 = css({ bg: 'neutral.500', p: 2, minW: 13, h: 8 });
+const boxClass300 = css({ bg: 'neutral.600', p: 2, minW: 13, h: 8 });
+const boxClass400 = css({ bg: 'neutral.700', p: 2, minW: 13, h: 8 });
 
 export const Default: Story = {
   args: { direction: 'row', gap: 'md', align: 'start', justify: 'start' },
@@ -67,9 +77,9 @@ export const Direction: Story = {
 };
 
 const boxClassHeights = {
-  sm: css({ bg: 'neutral.200', p: 2, minW: 13, h: 8 }),
-  md: css({ bg: 'neutral.200', p: 2, minW: 13, h: 13 }),
-  lg: css({ bg: 'neutral.200', p: 2, minW: 13, h: 21 }),
+  sm: css({ bg: 'neutral.500', p: 2, minW: 13, h: 8 }),
+  md: css({ bg: 'neutral.500', p: 2, minW: 13, h: 13 }),
+  lg: css({ bg: 'neutral.500', p: 2, minW: 13, h: 21 }),
 };
 
 export const Align: Story = {
@@ -83,7 +93,7 @@ export const Align: Story = {
   ),
 };
 
-const boxClassWide = css({ bg: 'neutral.200', p: 2, minW: 13, h: 8, w: 21 });
+const boxClassWide = css({ bg: 'neutral.500', p: 2, minW: 13, h: 8, w: 21 });
 
 export const Justify: Story = {
   args: { gap: 'md', justify: 'center' },
@@ -106,7 +116,7 @@ export const Justify: Story = {
   ),
 };
 
-const boxClassWrap = css({ bg: 'neutral.200', p: 2, h: 8, w: 21 });
+const boxClassWrap = css({ bg: 'neutral.500', p: 2, h: 8, w: 21 });
 
 export const Wrap: Story = {
   args: { gap: 'md', wrap: 'wrap' },
@@ -150,6 +160,44 @@ export const Gaps: Story = {
           <div className={boxClass200}>Item 1</div>
           <div className={boxClass200}>Item 2</div>
           <div className={boxClass200}>Item 3</div>
+        </Flex>
+      ))}
+    </Flex>
+  ),
+};
+
+export const WithGradientBorder: Story = {
+  args: {
+    direction: 'row',
+    gap: 'md',
+    align: 'center',
+    justify: 'between',
+    border: 'primary',
+  },
+  render: (args: Story['args']) => (
+    <Flex {...args} className={gradientContainerClass}>
+      <div className={boxClass200}>Item 1</div>
+      <div className={boxClass300}>Item 2</div>
+      <div className={boxClass400}>Item 3</div>
+    </Flex>
+  ),
+};
+
+export const GradientBorderVariants: Story = {
+  render: () => (
+    <Flex direction="column" gap="md">
+      {gradientBorderOptions.map((border) => (
+        <Flex
+          key={border}
+          border={border}
+          gap="md"
+          align="center"
+          justify="between"
+          className={gradientContainerClass}
+        >
+          <div className={boxClass200}>{border}</div>
+          <div className={boxClass300}>Item 2</div>
+          <div className={boxClass400}>Item 3</div>
         </Flex>
       ))}
     </Flex>

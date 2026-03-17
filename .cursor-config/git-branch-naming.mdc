@@ -1,0 +1,82 @@
+## Maverick Git Branch Naming Convention (MDC Rules)
+
+Purpose: Keep branch names predictable, searchable, and aligned with UI library work in this monorepo.
+
+Applies to all branches created for pull requests into `main`.
+
+---
+
+## Branch format
+
+Use this format:
+
+`<type>/<scope>/<short-description>`
+
+Rules:
+- Use lowercase only.
+- Use hyphens (`-`) between words.
+- Do not use spaces, underscores, or special characters.
+- Keep the description concise and action-oriented.
+
+---
+
+## Allowed branch types
+
+- `feat` - New component, variant, token, or capability.
+- `fix` - Bug fix or regression fix.
+- `refactor` - Internal code change with no intended behavior change.
+- `docs` - Documentation and Storybook docs-only updates.
+- `test` - Tests only.
+- `chore` - Tooling, dependency, or maintenance work.
+- `build` - Build/release/configuration pipeline changes.
+- `ci` - CI workflow and automation updates.
+
+---
+
+## Scope guidance (UI library)
+
+Scope should identify the main area affected:
+- Component scope: `button`, `heading`, `flex`, `stack`
+- Package scope: `react`, `tokens`, `docs`
+- Infra scope: `storybook`, `turbo`, `release`
+
+If multiple areas are touched, use the dominant area (`react` or `tokens`) instead of listing many scopes.
+
+---
+
+## Examples
+
+Valid:
+- `feat/heading/add-size-variants`
+- `feat/button/add-loading-state`
+- `fix/flex/gradient-border-overflow`
+- `fix/tokens/missing-semantic-color`
+- `docs/storybook/improve-button-usage`
+- `chore/react/update-storybook-deps`
+- `ci/release/add-pr-checks`
+
+Invalid:
+- `feature/Heading/new-styles` (wrong type + uppercase scope)
+- `fix/short-description` (missing scope)
+- `feat/button/add_new_styles` (underscore)
+- `feat/button/` (missing description)
+
+---
+
+## Optional ticket integration
+
+When using task IDs, append them at the end of scope or start of description:
+- `feat/button/1234-add-loading-state`
+- `fix/tokens/jira-482-missing-color-token`
+
+Keep the same lowercase + hyphen rules.
+
+---
+
+## Workflow expectations
+
+- Create short-lived topic branches from `main`.
+- Open PRs early and keep them focused on one concern.
+- Delete merged branches to keep the repo clean.
+
+This convention is the default for Maverick contributions unless a release or hotfix process requires a temporary exception.

@@ -1,9 +1,15 @@
 import { ComponentPropsWithoutRef, ElementType, forwardRef } from 'react';
 import { stack } from '@maverick/tokens/patterns';
+import {
+  getGradientBorderClassName,
+  isGradientBorderToken,
+  type GradientBorderToken,
+} from '../helpers/gradientBorder';
 
 type StackOptions = NonNullable<Parameters<typeof stack>[0]>;
 type AlignVariant = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 type JustifyVariant = 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
+type BorderProp = StackOptions['border'] | GradientBorderToken;
 
 const ALIGN_MAP: Record<AlignVariant, string> = {
   start: 'start',
@@ -33,6 +39,7 @@ export const Stack = forwardRef<
     gap?: StackOptions['gap'];
     align?: AlignVariant;
     justify?: JustifyVariant;
+    border?: BorderProp;
     as?: ElementType;
   }
 >(
@@ -42,24 +49,38 @@ export const Stack = forwardRef<
       gap = 'md',
       align,
       justify,
+      border,
       as: Component = 'div',
       className,
+      style,
       ...props
     },
     ref,
   ) => {
+    const isGradientBorder = isGradientBorderToken(border);
+
     const recipeClassName = stack({
       direction,
       gap,
       ...(align && { align: ALIGN_MAP[align] }),
       ...(justify && { justify: JUSTIFY_MAP[justify] }),
+      ...(border && !isGradientBorder && { border }),
     });
+
+    const gradientBorderClassName = isGradientBorder
+      ? getGradientBorderClassName(border)
+      : undefined;
 
     return (
       <Component
         ref={ref}
         {...props}
-        className={mergeClassName(recipeClassName, className)}
+        style={style}
+        className={mergeClassName(
+          recipeClassName,
+          gradientBorderClassName,
+          className,
+        )}
       />
     );
   },
@@ -72,6 +93,7 @@ type StackProps = ComponentPropsWithoutRef<'div'> & {
   gap?: StackOptions['gap'];
   align?: AlignVariant;
   justify?: JustifyVariant;
+  border?: BorderProp;
   as?: ElementType;
 };
 

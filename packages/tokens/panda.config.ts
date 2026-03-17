@@ -38,15 +38,15 @@ export default defineConfig({
 
           black: { value: 'oklch(20% 0 0)' },
           white: { value: 'oklch(99% 0 0)' },
-          background: { value: '{colors.white}' },
+          background: { value: '{colors.neutral.900}' },
           border: { value: '{colors.neutral.200}' },
 
           danger: { value: 'oklch(0.62 0.20 25)' },
           warning: { value: 'oklch(0.80 0.19 80)' },
           success: { value: 'oklch(0.68 0.18 140)' },
 
-          text: { value: '{colors.neutral.900}' },
-          muted: { value: '{colors.neutral.600}' },
+          text: { value: '{colors.neutral.50}' },
+          muted: { value: '{colors.neutral.300}' },
         },
 
         gradients: {
@@ -174,6 +174,6 @@ export default defineConfig({
     ],
   },
   conditions: {
-    dark: "[data-theme='dark'] &",
+    light: "[data-theme='light'] &",
   },
 });
