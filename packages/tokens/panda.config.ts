@@ -1,5 +1,14 @@
 import { defineConfig } from '@pandacss/dev';
-import { button, heading } from './recipes';
+import {
+  badge,
+  button,
+  card,
+  heading,
+  switchRecipe,
+  tag,
+  textFieldRecipe,
+  tooltip,
+} from './recipes';
 
 export default defineConfig({
   preflight: true,
@@ -147,9 +156,23 @@ export default defineConfig({
           lg: { value: '0 8px 16px 0 oklch(0% 0 0 / 0.16)' },
         },
       },
+      /** Chakra-aligned breakpoints (mobile-first, rem). */
+      breakpoints: {
+        sm: '30rem',
+        md: '48rem',
+        lg: '62rem',
+        xl: '80rem',
+        '2xl': '96rem',
+      },
       recipes: {
         button,
         heading,
+        tag,
+        badge,
+        card,
+        switchRecipe,
+        textFieldRecipe,
+        tooltip,
       },
     },
   },
@@ -158,7 +181,26 @@ export default defineConfig({
     css: [
       {
         properties: {
-          gap: ['xs', 'sm', 'md', 'lg', 'xl', '2xs'],
+          // Fibonacci (0,1,2,3,5,8,13,21,34) + semantic + leftover Panda numeric keys still in CSS vars
+          gap: [
+            '0',
+            '1',
+            '2',
+            '3',
+            '5',
+            '8',
+            '13',
+            '21',
+            '34',
+            '4',
+            '6',
+            'xs',
+            'sm',
+            'md',
+            'lg',
+            'xl',
+            '2xs',
+          ],
         },
       },
       {
@@ -172,6 +214,37 @@ export default defineConfig({
         properties: {
           truncate: ['true'],
         },
+      },
+      {
+        properties: {
+          gridTemplateColumns: [
+            'repeat(1, minmax(0, 1fr))',
+            'repeat(2, minmax(0, 1fr))',
+            'repeat(3, minmax(0, 1fr))',
+            'repeat(4, minmax(0, 1fr))',
+            'repeat(auto-fit, minmax(8rem, 1fr))',
+            'repeat(auto-fit, minmax(10rem, 1fr))',
+            'repeat(auto-fit, minmax(12rem, 1fr))',
+            'repeat(auto-fit, minmax(16rem, 1fr))',
+          ],
+        },
+      },
+      {
+        properties: {
+          gridTemplateColumns: [
+            'repeat(1, minmax(0, 1fr))',
+            'repeat(2, minmax(0, 1fr))',
+            'repeat(3, minmax(0, 1fr))',
+            'repeat(4, minmax(0, 1fr))',
+          ],
+        },
+        conditions: ['sm', 'md', 'lg'],
+      },
+      {
+        properties: {
+          gap: ['0', '1', '2', '3', '5', '8', 'sm', 'md', 'lg', 'xl'],
+        },
+        conditions: ['sm', 'md', 'lg'],
       },
     ],
   },
