@@ -1,9 +1,9 @@
-import { ElementType, forwardRef } from 'react';
-import { css, type JsxStyleProps } from '@maverick/tokens';
+import { forwardRef, type ElementType } from 'react';
+import { css, type JsxStyleProps } from '@becket-ui/tokens';
 
 type BaseElement = 'p' | 'span' | 'div' | 'strong' | 'em' | 'label';
 
-type TextProps<T extends ElementType = BaseElement> = React.ComponentPropsWithoutRef<T> &
+export type TextProps<T extends ElementType = BaseElement> = React.ComponentPropsWithoutRef<T> &
   JsxStyleProps & {
     as?: T;
   };

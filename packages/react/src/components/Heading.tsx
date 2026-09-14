@@ -1,9 +1,9 @@
-import { ElementType, forwardRef } from 'react';
-import { heading as headingRecipe } from '@maverick/tokens/recipes';
+import { forwardRef, type ElementType } from 'react';
+import { heading as headingRecipe } from '@becket-ui/tokens/recipes';
 
 type HeadingSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl';
 
-type HeadingProps = React.ComponentPropsWithoutRef<'h2'> & {
+export type HeadingProps = React.ComponentPropsWithoutRef<'h2'> & {
   size?: HeadingSize;
   withGradient?: boolean;
   as?: ElementType;

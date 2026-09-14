@@ -1,15 +1,16 @@
-import { ComponentPropsWithoutRef, ElementType, forwardRef } from 'react';
-import { flex } from '@maverick/tokens/patterns';
+import { forwardRef, type ComponentPropsWithoutRef, type ElementType } from 'react';
+import { css } from '@becket-ui/tokens/css';
+import { flex } from '@becket-ui/tokens/patterns';
 import {
   getGradientBorderClassName,
   isGradientBorderToken,
   type GradientBorderToken,
 } from '../helpers/gradientBorder';
+import { normalizeGapValue, normalizeResponsiveValue, type GapValue, type ResponsiveValue } from '../helpers/responsive';
 
 type FlexOptions = NonNullable<Parameters<typeof flex>[0]>;
 type AlignVariant = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 type JustifyVariant = 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
-type GapVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xs';
 type BorderProp = FlexOptions['border'] | GradientBorderToken;
 
 const ALIGN_MAP: Record<AlignVariant, string> = {
@@ -33,22 +34,22 @@ function mergeClassName(...classes: (string | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
-export const Flex = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<'div'> & {
-    direction?: FlexOptions['direction'];
-    gap?: GapVariant | FlexOptions['gap'];
-    align?: AlignVariant;
-    justify?: JustifyVariant;
-    wrap?: FlexOptions['wrap'];
-    basis?: FlexOptions['basis'];
-    grow?: FlexOptions['grow'];
-    shrink?: FlexOptions['shrink'];
-    inline?: boolean;
-    border?: BorderProp;
-    as?: ElementType;
-  }
->(
+export type FlexProps = ComponentPropsWithoutRef<'div'> & {
+  direction?: FlexOptions['direction'];
+  gap?: GapValue;
+  align?: AlignVariant;
+  justify?: JustifyVariant;
+  wrap?: FlexOptions['wrap'];
+  basis?: FlexOptions['basis'];
+  grow?: FlexOptions['grow'];
+  shrink?: FlexOptions['shrink'];
+  inline?: boolean;
+  border?: BorderProp;
+  order?: ResponsiveValue<number>;
+  as?: ElementType;
+};
+
+export const Flex = forwardRef<HTMLDivElement, FlexProps>(
   (
     {
       direction = 'row',
@@ -61,6 +62,7 @@ export const Flex = forwardRef<
       shrink,
       inline = false,
       border,
+      order,
       as: Component = 'div',
       className,
       style,
@@ -69,18 +71,24 @@ export const Flex = forwardRef<
     ref,
   ) => {
     const isGradientBorder = isGradientBorderToken(border);
+    const resolvedGap = normalizeGapValue(gap);
+    const resolvedDirection = normalizeResponsiveValue(direction);
+    const resolvedOrder = order != null ? normalizeResponsiveValue(order) : undefined;
 
-    const recipeClassName = flex({
-      direction,
-      gap,
-      ...(align && { align: ALIGN_MAP[align] }),
-      ...(justify && { justify: JUSTIFY_MAP[justify] }),
-      ...(wrap && { wrap }),
-      ...(basis && { basis }),
-      ...(grow && { grow }),
-      ...(shrink && { shrink }),
-      ...(border && !isGradientBorder && { border }),
-      ...(inline && { display: 'inline-flex' }),
+    const recipeClassName = css({
+      ...flex.raw({
+        direction: resolvedDirection as FlexOptions['direction'],
+        gap: resolvedGap as FlexOptions['gap'],
+        ...(align && { align: ALIGN_MAP[align] }),
+        ...(justify && { justify: JUSTIFY_MAP[justify] }),
+        ...(wrap != null && { wrap }),
+        ...(basis != null && { basis }),
+        ...(grow != null && { grow }),
+        ...(shrink != null && { shrink }),
+        ...(border && !isGradientBorder && { border }),
+        ...(inline && { display: 'inline-flex' }),
+      }),
+      ...(resolvedOrder != null && { order: resolvedOrder }),
     });
 
     const gradientBorderClassName = isGradientBorder

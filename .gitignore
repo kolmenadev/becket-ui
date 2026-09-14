@@ -64,3 +64,6 @@ packages/tokens/styled-system-studio
 
 ## Turbo
 .turbo/
+
+## Vitest
+.vitest/

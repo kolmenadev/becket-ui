@@ -1,4 +1,4 @@
-// Main exports for the @maverick/tokens package
+// Main exports for the @becket-ui/tokens package
 export * from './styled-system/css/index.mjs'
 export * from './styled-system/jsx/index.mjs'
 export * from './styled-system/helpers.mjs'

@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Heading } from './Heading';
-import { heading as headingRecipe } from '@maverick/tokens/recipes';
+import { Heading, type HeadingProps } from './Heading';
+import { heading as headingRecipe } from '@becket-ui/tokens/recipes';
+import { knobs } from '../helpers/storybookControls';
 
 const meta: Meta<typeof Heading> = {
-  title: 'Components/Heading',
+  title: 'Typography/Heading',
   component: Heading,
   argTypes: {
     size: {
@@ -15,14 +16,16 @@ const meta: Meta<typeof Heading> = {
       control: { type: 'select' },
       options: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
     },
+    children: { control: { type: 'text' } },
   },
+  parameters: knobs(['size', 'withGradient', 'as', 'children']),
 };
 export default meta;
 
-type Story = StoryObj<typeof Heading>;
+type Story = StoryObj<HeadingProps>;
 
 export const Default: Story = {
-  args: { children: "I'm a Heading", size: 'xl' },
+  args: { children: "I'm a Heading", size: 'xl', withGradient: false },
 };
 
 export const Sizes: Story = {

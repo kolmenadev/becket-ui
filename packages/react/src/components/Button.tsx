@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import type { ElementType } from 'react';
-import { button } from '@maverick/tokens/recipes';
+import { button } from '@becket-ui/tokens/recipes';
 
 type ButtonVisual = 'outline' | 'primary' | 'secondary' | 'neutral';
 type ButtonSize = 'sm' | 'md';
@@ -13,7 +13,7 @@ const VISUAL_TO_RECIPE: Record<ButtonVisual, ButtonVisual> = {
   outline: 'outline',
 };
 
-type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
+export type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
   visual?: ButtonVisual;
   size?: ButtonSize;
   borderRadius?: ButtonBorderRadius;

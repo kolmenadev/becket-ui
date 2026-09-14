@@ -8,9 +8,8 @@ const config: StorybookConfig = {
     options: {},
   },
   stories: [`${repoRoot}/packages/react/src/**/*.stories.@(ts|tsx)`],
-  addons: [],
+  addons: ['@storybook/addon-a11y', '@chromatic-com/storybook'],
   viteFinal: async (config) => {
-    console.log({ repoRoot });
     config.resolve = config.resolve || {};
     config.resolve.dedupe = [...(config.resolve.dedupe || []), 'react', 'react-dom'];
     config.resolve.alias = {

@@ -3,12 +3,16 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "storybook-static/**"]
+      "outputs": ["dist/**", "styled-system/**", "index.css", ".next/**", "storybook-static/**"]
     },
     "dev": {
       "cache": false
     },
     "lint": {
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
       "outputs": []
     }
   }

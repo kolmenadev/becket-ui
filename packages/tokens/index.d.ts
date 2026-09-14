@@ -1,4 +1,4 @@
-// Main TypeScript declarations for @maverick/tokens
+// Main TypeScript declarations for @becket-ui/tokens
 export * from './styled-system/css/index.d.ts'
 export * from './styled-system/jsx/index.d.ts'
 export * from './styled-system/helpers.mjs'

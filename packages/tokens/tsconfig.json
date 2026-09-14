@@ -1,10 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "@maverick/tokens": ["."],
-      "@maverick/tokens/*": ["styled-system/*"]
+      "@becket-ui/tokens": ["./"],
+      "@becket-ui/tokens/*": ["./styled-system/*"]
     }
   }
 }
