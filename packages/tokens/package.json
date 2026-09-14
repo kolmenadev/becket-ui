@@ -1,24 +1,52 @@
 {
-  "name": "@maverick/tokens",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.mjs",
-  "scripts": {
-    "build": "panda codegen && panda cssgen",
-    "prepare": "pnpm build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "@becket-ui/tokens",
+  "version": "0.1.0",
+  "description": "Becket design tokens, Panda recipes, and prebuilt CSS",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kolmena",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kolmenadev/becket-ui.git",
+    "directory": "packages/tokens"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.13.1",
-  "devDependencies": {
-    "@pandacss/dev": "^1.0.0"
+  "homepage": "https://github.com/kolmenadev/becket-ui#readme",
+  "bugs": {
+    "url": "https://github.com/kolmenadev/becket-ui/issues"
+  },
+  "keywords": [
+    "design-system",
+    "panda-css",
+    "tokens",
+    "css"
+  ],
+  "main": "index.mjs",
+  "types": "index.d.ts",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist",
+    "styled-system",
+    "index.css",
+    "index.mjs",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "build": "panda codegen && panda cssgen && node scripts/bundle-css.mjs && tsup && node scripts/emit-preset-dts.mjs",
+    "prepare": "pnpm build",
+    "prepack": "pnpm build",
+    "test": "echo \"No tests in @becket-ui/tokens\""
   },
   "exports": {
     ".": {
       "import": "./index.mjs",
       "types": "./index.d.ts"
+    },
+    "./preset": {
+      "types": "./dist/preset.d.ts",
+      "import": "./dist/preset.js",
+      "default": "./dist/preset.js"
     },
     "./recipes": {
       "import": "./styled-system/recipes/index.mjs",
@@ -44,6 +72,25 @@
       "import": "./styled-system/jsx/index.mjs",
       "types": "./styled-system/jsx/index.d.ts"
     },
-    "./styles.css": "./styled-system/styles.css"
+    "./styles.css": "./styled-system/styles.css",
+    "./index.css": "./index.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@pandacss/dev": "^1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@pandacss/dev": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@pandacss/dev": "^1.12.1",
+    "@typescript/typescript6": "^6.0.2",
+    "rollup": "^4.34.8",
+    "rollup-plugin-dts": "^6.5.1",
+    "tsup": "^8.5.1"
   }
 }

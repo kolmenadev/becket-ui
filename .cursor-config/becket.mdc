@@ -1,15 +1,16 @@
-## Maverick React Component Authoring (MDC Rules)
+## Becket React Component Authoring (MDC Rules)
 
-Purpose: This is the single source of truth for creating production‑ready components for the Maverick React library built on PandaCSS. It unifies our coding style and folder structure, and sets strict rules for API design, accessibility, UX, styling, and Storybook coverage.
+Purpose: This is the single source of truth for creating production‑ready components for the Becket React library built on PandaCSS. It unifies our coding style and folder structure, and sets strict rules for API design, accessibility, UX, styling, and Storybook coverage.
 
-- Repo context: monorepo with `@maverick/react` (components) and `@maverick/tokens` (PandaCSS tokens/recipes).
-- Tech assumptions: React 19, TypeScript 5, PandaCSS v1, Storybook 9.
-- Styling: use PandaCSS recipes/patterns/tokens from `@maverick/tokens`.
+- Repo context: monorepo with `@becket-ui/react` (components) and `@becket-ui/tokens` (PandaCSS tokens/recipes).
+- Tech assumptions: React 19, TypeScript 7, PandaCSS v1, Storybook 10.
+- Styling: use PandaCSS recipes/patterns/tokens from `@becket-ui/tokens`.
 
 ### Golden rules
+- **Publishable & product-agnostic**: Becket ships as a public library. Export only reusable primitives. Do **not** export consumer-product presets, className strings for specific dashboards, or Magma Opus / trading domain names.
 - **Accessibility first**: Every interactive component must be accessible by keyboard and screen readers. Provide correct semantics, labelling, focus states, and ARIA when needed.
 - **Consistent API**: Follow the `as` prop pattern, forward refs, and surface HTML props of the base element.
-- **Use Panda recipes**: Variants and sizes live in `@maverick/tokens` recipes. Components consume recipes; they do not hardcode styles.
+- **Use Panda recipes**: Variants and sizes live in `@becket-ui/tokens` recipes. Components consume recipes; they do not hardcode styles.
 - **Colocation & clarity**: Keep files near their usage, name things clearly, reduce nesting, prefer inline logic, and avoid premature abstraction.
 
 ---
@@ -50,7 +51,7 @@ Follow the “prefer ≥3 items per folder” and “prefer colocation” guidel
 - Use `forwardRef` and expose the underlying element ref.
 - Provide an optional `as?: ElementType` prop for element substitution.
 - Extend the intrinsic HTML props for the base element (`React.ComponentPropsWithoutRef<'button'>`, etc.).
-- Pull visual props from the recipe variant types, e.g. `ButtonVariantProps` from `@maverick/tokens/recipes`.
+- Pull visual props from the recipe variant types, e.g. `ButtonVariantProps` from `@becket-ui/tokens/recipes`.
 - Pass **only defined props** into the pattern (conditional spread); do not pass `undefined` for omitted props.
 - No business logic in UI components; UI state is allowed when it directly affects visuals/interaction.
 
@@ -58,8 +59,8 @@ Component template (consumption of a Panda recipe):
 
 ```tsx
 import { ElementType, forwardRef } from 'react';
-import { someRecipe } from '@maverick/tokens/recipes';
-import type { SomeRecipeVariantProps } from '@maverick/tokens/recipes';
+import { someRecipe } from '@becket-ui/tokens/recipes';
+import type { SomeRecipeVariantProps } from '@becket-ui/tokens/recipes';
 
 type SomeProps = React.ComponentPropsWithoutRef<'div'> &
   SomeRecipeVariantProps & { as?: ElementType };
@@ -113,16 +114,24 @@ Reference implementation: `packages/react/src/components/Flex.tsx`.
 - Announcements:
   - Use `aria-live` only when necessary; keep noise low.
 
-Use `@maverick/tokens/jsx` primitives (e.g., `VisuallyHidden`) when needed for accessible labelling.
+Use `@becket-ui/tokens/jsx` primitives (e.g., `VisuallyHidden`) when needed for accessible labelling.
 
 ---
 
 ## Styling with PandaCSS
 
-- Define styles via recipes in `@maverick/tokens` and consume them in components.
+- Define styles via recipes in `@becket-ui/tokens` and consume them in components.
 - Do not inline literal color values in components; use tokens (e.g., `primary`, `neutral.600`).
 - Variants (e.g., `visual`, `size`) come from recipes. Use `variantMap` to drive Storybook controls.
 - Shared style behavior that is reused by multiple React components should live in `packages/react/src/helpers`, not under `packages/react/src/components`.
+
+### Brand vs status colors
+
+Brand tokens are identity: `becketYellow`, `hiveSage`, `combAmber`, plus aliases `primary` / `secondary` / `tertiary`. Status tokens are semantic: `danger`, `warning`, `success`.
+
+- Never point `danger` / `warning` / `success` at a brand color or alias.
+- Never reuse a brand hue for status. If they sit too close, retune **status**, not brand.
+- Filled brand surfaces (primary/secondary buttons, badges, tags) use `text` (warm near-white), not `lightText`.
 
 ### Shared gradient border helper (Flex/Stack pattern)
 
@@ -131,7 +140,7 @@ Use `@maverick/tokens/jsx` primitives (e.g., `VisuallyHidden`) when needed for a
   - `GradientBorderToken` (currently excludes `primaryHover`)
   - `isGradientBorderToken(value)`
   - `getGradientBorderClassName(token)`
-- The helper must use Panda `css()` and Maverick tokens (`{gradients.primary}`, etc.), not hardcoded global CSS class definitions in token CSS files.
+- The helper must use Panda `css()` and Becket tokens (`{gradients.primary}`, etc.), not hardcoded global CSS class definitions in token CSS files.
 
 ### Border prop behavior for layout components
 
@@ -170,14 +179,16 @@ export const checkbox = defineRecipe({
 });
 ```
 
-Note: When adding new recipes, regenerate Panda artifacts for `@maverick/tokens` per PandaCSS docs so `styled-system` is updated and exported to consumers.
+Note: When adding new recipes, regenerate Panda artifacts for `@becket-ui/tokens` per PandaCSS docs so `styled-system` is updated and exported to consumers.
 
 ---
 
 ## Storybook rules
 
 - Stories colocate with components and export `Meta`/`StoryObj`.
+- Group titles like Chakra's component overview: Layout, Typography, Buttons, Forms, Overlays, Disclosure, Feedback, Data Display (e.g. `Forms/Textarea`, `Layout/Flex`).
 - Add controls for all recipe variant props using `variantMap`.
+- Panda `ConditionalValue` props (gap, wrap, grow, direction, style props) infer as Storybook **object** controls. Override with select / boolean / number, and set `parameters.controls.include` to the knobs for that component. Do not leave "Set object" editors for layout props.
 - Provide at least these stories: Default, Disabled, Sizes, States (hover/focus via pseudo‑class style if demonstrable), and With label/description if applicable.
 
 Story template:
@@ -185,10 +196,10 @@ Story template:
 ```tsx
 import type { Meta, StoryObj } from '@storybook/react';
 import { Component } from './Component';
-import { someRecipe } from '@maverick/tokens/recipes';
+import { someRecipe } from '@becket-ui/tokens/recipes';
 
 const meta: Meta<typeof Component> = {
-  title: 'Components/Component',
+  title: 'Forms/Component',
   component: Component,
   argTypes: {
     // Map controls from variantMap
@@ -206,7 +217,7 @@ export const Default: Story = { args: {} };
 
 ## Example blueprint: Checkbox component
 
-Goal: Mimic native checkbox semantics and behavior, styled with Maverick tokens.
+Goal: Mimic native checkbox semantics and behavior, styled with Becket tokens.
 
 Requirements:
 - Render an actual `<input type="checkbox">` for semantics and accessibility.
@@ -221,8 +232,8 @@ React template:
 
 ```tsx
 import { forwardRef, useId } from 'react';
-import { checkbox as checkboxRecipe } from '@maverick/tokens/recipes';
-import type { CheckboxVariantProps } from '@maverick/tokens/recipes';
+import { checkbox as checkboxRecipe } from '@becket-ui/tokens/recipes';
+import type { CheckboxVariantProps } from '@becket-ui/tokens/recipes';
 
 type CheckboxProps = Omit<React.ComponentPropsWithoutRef<'input'>, 'type'> &
   CheckboxVariantProps & {
@@ -265,10 +276,10 @@ Story template:
 ```tsx
 import type { Meta, StoryObj } from '@storybook/react';
 import { Checkbox } from './Checkbox';
-import { checkbox as checkboxRecipe } from '@maverick/tokens/recipes';
+import { checkbox as checkboxRecipe } from '@becket-ui/tokens/recipes';
 
 const meta: Meta<typeof Checkbox> = {
-  title: 'Components/Checkbox',
+  title: 'Forms/Checkbox',
   component: Checkbox,
   argTypes: {
     size: { control: { type: 'select' }, options: checkboxRecipe.variantMap.size },
@@ -299,8 +310,8 @@ export const Disabled: Story = {
 
 ## When adding a new component, do this
 
-1) Add/extend a Panda recipe in `@maverick/tokens` if needed, export it, and regenerate Panda artifacts.
-2) Implement the React component in `@maverick/react` using the API rules and recipe.
+1) Add/extend a Panda recipe in `@becket-ui/tokens` if needed, export it, and regenerate Panda artifacts.
+2) Implement the React component in `@becket-ui/react` using the API rules and recipe.
 3) Add a Storybook file with controls for all variants and key states.
 4) Verify accessibility manually (keyboard, screen reader labels, focus ring, contrast).
 5) Keep names and imports consistent; avoid mutations; use tokens over literals.

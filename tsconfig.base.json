@@ -6,7 +6,6 @@
     "jsx": "react-jsx",
     "declaration": true,
     "skipLibCheck": true,
-    "strict": true,
-    "baseUrl": "."
+    "strict": true
   }
 }

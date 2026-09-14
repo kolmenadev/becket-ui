@@ -1,0 +1,17 @@
+/**
+ * Becket themed body colors.
+ * Bundled into index.css after Panda cssgen — do not @import styles.css
+ * (Vite CSS @import inlining can drop numeric gap utilities).
+ */
+@layer base {
+  html[data-theme='dark'] body,
+  html:not([data-theme='light']) body {
+    background-color: var(--beckui--colors-background);
+    color: var(--beckui--colors-text);
+  }
+
+  html[data-theme='light'] body {
+    background-color: var(--beckui--colors-light-background);
+    color: var(--beckui--colors-light-text);
+  }
+}

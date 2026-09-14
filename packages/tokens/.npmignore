@@ -1,0 +1,11 @@
+# Presence of this file means pack does not inherit .gitignore,
+# so generated styled-system/ can ship. `files` in package.json is the whitelist.
+
+*.tsbuildinfo
+tsconfig.json
+tsup.config.ts
+panda.config.ts
+scripts/
+theme-base.css
+recipes/
+preset/

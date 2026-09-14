@@ -1,4 +1,4 @@
-## Maverick Git Branch Naming Convention (MDC Rules)
+## Becket Git Branch Naming Convention (MDC Rules)
 
 Purpose: Keep branch names predictable, searchable, and aligned with UI library work in this monorepo.
 
@@ -79,4 +79,4 @@ Keep the same lowercase + hyphen rules.
 - Open PRs early and keep them focused on one concern.
 - Delete merged branches to keep the repo clean.
 
-This convention is the default for Maverick contributions unless a release or hotfix process requires a temporary exception.
+This convention is the default for Becket contributions unless a release or hotfix process requires a temporary exception.

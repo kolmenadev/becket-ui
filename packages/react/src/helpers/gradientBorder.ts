@@ -1,57 +1,26 @@
-import { css } from '@maverick/tokens';
-import type { GradientToken } from '@maverick/tokens/tokens';
+import { css } from '@becket-ui/tokens';
+import type { GradientToken } from '@becket-ui/tokens/tokens';
 
 export type GradientBorderToken = Exclude<GradientToken, 'primaryHover'>;
 
-const baseGradientBorderStyles = {
-  position: 'relative',
-  bg: 'background',
-  _light: {
-    bgColor: 'lightBackground',
-  },
-  backgroundClip: 'padding-box',
-  borderWidth: '2px',
-  borderStyle: 'solid',
-  borderColor: 'transparent',
-} as const;
+/** Double-layer border-box fill so left/right caps match the radius (no ::before sliver). */
+const outlineGradientBorder = (image: `{gradients.${GradientBorderToken}}`) =>
+  css({
+    borderWidth: '2px',
+    borderStyle: 'solid',
+    borderColor: 'transparent',
+    backgroundImage: `linear-gradient({colors.background}, {colors.background}), ${image}`,
+    backgroundOrigin: 'border-box',
+    backgroundClip: 'padding-box, border-box',
+    _light: {
+      backgroundImage: `linear-gradient({colors.lightBackground}, {colors.lightBackground}), ${image}`,
+    },
+  });
 
 const gradientBorderClassMap: Record<GradientBorderToken, string> = {
-  primary: css({
-    ...baseGradientBorderStyles,
-    _before: {
-      content: '""',
-      position: 'absolute',
-      inset: 0,
-      margin: '-2px',
-      zIndex: -1,
-      borderRadius: 'inherit',
-      backgroundImage: '{gradients.primary}',
-    },
-  }),
-  secondary: css({
-    ...baseGradientBorderStyles,
-    _before: {
-      content: '""',
-      position: 'absolute',
-      inset: 0,
-      margin: '-2px',
-      zIndex: -1,
-      borderRadius: 'inherit',
-      backgroundImage: '{gradients.secondary}',
-    },
-  }),
-  neutral: css({
-    ...baseGradientBorderStyles,
-    _before: {
-      content: '""',
-      position: 'absolute',
-      inset: 0,
-      margin: '-2px',
-      zIndex: -1,
-      borderRadius: 'inherit',
-      backgroundImage: '{gradients.neutral}',
-    },
-  }),
+  primary: outlineGradientBorder('{gradients.primary}'),
+  secondary: outlineGradientBorder('{gradients.secondary}'),
+  neutral: outlineGradientBorder('{gradients.neutral}'),
 };
 
 export function isGradientBorderToken(value: unknown): value is GradientBorderToken {

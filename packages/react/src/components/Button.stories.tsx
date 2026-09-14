@@ -1,10 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './Button';
-import { button as buttonRecipe } from '@maverick/tokens/recipes';
+import { Button, type ButtonProps } from './Button';
+import { button as buttonRecipe } from '@becket-ui/tokens/recipes';
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
+  title: 'Buttons/Button',
   component: Button,
+  args: {
+    children: 'Click me',
+    visual: 'primary',
+    size: 'md',
+    borderRadius: 'md',
+    withGradient: false,
+  },
   argTypes: {
     visual: { control: { type: 'select' }, options: buttonRecipe.variantMap.visual },
     size: { control: { type: 'select' }, options: buttonRecipe.variantMap.size },
@@ -13,20 +20,26 @@ const meta: Meta<typeof Button> = {
       options: buttonRecipe.variantMap.borderRadius,
     },
     withGradient: { control: { type: 'boolean' } },
-    className: { control: { type: 'text' }, description: 'Custom class to override styles' },
+    disabled: { control: { type: 'boolean' } },
+    children: { control: { type: 'text' } },
+  },
+  parameters: {
+    controls: {
+      include: ['visual', 'size', 'borderRadius', 'withGradient', 'disabled', 'children'],
+    },
   },
 };
 export default meta;
 
-type Story = StoryObj<typeof Button>;
+type Story = StoryObj<ButtonProps>;
 
-export const Default: Story = {
+export const Default: Story = {};
+
+export const WithGradient: Story = {
   args: {
-    children: 'Click me',
+    children: 'Gradient',
     visual: 'primary',
-    size: 'md',
-    borderRadius: 'md',
-    withGradient: false,
+    withGradient: true,
   },
 };
 

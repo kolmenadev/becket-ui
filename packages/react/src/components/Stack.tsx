@@ -1,10 +1,12 @@
-import { ComponentPropsWithoutRef, ElementType, forwardRef } from 'react';
-import { stack } from '@maverick/tokens/patterns';
+import { forwardRef, type ComponentPropsWithoutRef, type ElementType } from 'react';
+import { css } from '@becket-ui/tokens/css';
+import { stack } from '@becket-ui/tokens/patterns';
 import {
   getGradientBorderClassName,
   isGradientBorderToken,
   type GradientBorderToken,
 } from '../helpers/gradientBorder';
+import { normalizeGapValue, normalizeResponsiveValue, type GapValue, type ResponsiveValue } from '../helpers/responsive';
 
 type StackOptions = NonNullable<Parameters<typeof stack>[0]>;
 type AlignVariant = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
@@ -32,17 +34,18 @@ function mergeClassName(...classes: (string | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
-export const Stack = forwardRef<
-  HTMLDivElement,
-  ComponentPropsWithoutRef<'div'> & {
-    direction?: StackOptions['direction'];
-    gap?: StackOptions['gap'];
-    align?: AlignVariant;
-    justify?: JustifyVariant;
-    border?: BorderProp;
-    as?: ElementType;
-  }
->(
+export type StackProps = ComponentPropsWithoutRef<'div'> & {
+  direction?: StackOptions['direction'];
+  gap?: GapValue;
+  align?: AlignVariant;
+  justify?: JustifyVariant;
+  border?: BorderProp;
+  /** Flex/grid order — responsive object supported (KAN-120). */
+  order?: ResponsiveValue<number>;
+  as?: ElementType;
+};
+
+export const Stack = forwardRef<HTMLDivElement, StackProps>(
   (
     {
       direction = 'column',
@@ -50,6 +53,7 @@ export const Stack = forwardRef<
       align,
       justify,
       border,
+      order,
       as: Component = 'div',
       className,
       style,
@@ -58,13 +62,19 @@ export const Stack = forwardRef<
     ref,
   ) => {
     const isGradientBorder = isGradientBorderToken(border);
+    const resolvedGap = normalizeGapValue(gap);
+    const resolvedDirection = normalizeResponsiveValue(direction);
+    const resolvedOrder = order != null ? normalizeResponsiveValue(order) : undefined;
 
-    const recipeClassName = stack({
-      direction,
-      gap,
-      ...(align && { align: ALIGN_MAP[align] }),
-      ...(justify && { justify: JUSTIFY_MAP[justify] }),
-      ...(border && !isGradientBorder && { border }),
+    const recipeClassName = css({
+      ...stack.raw({
+        direction: resolvedDirection as StackOptions['direction'],
+        gap: resolvedGap as StackOptions['gap'],
+        ...(align && { align: ALIGN_MAP[align] }),
+        ...(justify && { justify: JUSTIFY_MAP[justify] }),
+        ...(border && !isGradientBorder && { border }),
+      }),
+      ...(resolvedOrder != null && { order: resolvedOrder }),
     });
 
     const gradientBorderClassName = isGradientBorder
@@ -87,15 +97,6 @@ export const Stack = forwardRef<
 );
 
 Stack.displayName = 'Stack';
-
-type StackProps = ComponentPropsWithoutRef<'div'> & {
-  direction?: StackOptions['direction'];
-  gap?: StackOptions['gap'];
-  align?: AlignVariant;
-  justify?: JustifyVariant;
-  border?: BorderProp;
-  as?: ElementType;
-};
 
 export const HStack = forwardRef<HTMLDivElement, Omit<StackProps, 'direction'>>((props, ref) => (
   <Stack ref={ref} direction="row" {...props} />

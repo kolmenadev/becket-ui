@@ -1,4 +1,5 @@
 import { defineRecipe } from '@pandacss/dev';
+import { filledGradient, outlineGradient } from './gradientStyles';
 
 export const button = defineRecipe({
   className: 'button',
@@ -15,22 +16,30 @@ export const button = defineRecipe({
   variants: {
     visual: {
       primary: {
-        bg: 'primary',
-        color: 'white',
-        _hover: { bg: 'primaryHover' },
+        backgroundColor: 'primary',
+        color: 'text',
+        _hover: { backgroundColor: 'primaryHover' },
       },
       secondary: {
-        bg: 'secondary',
-        color: 'white',
+        backgroundColor: 'secondary',
+        color: 'text',
         _hover: {
-          bg: 'secondary',
+          backgroundColor: 'secondary',
         },
       },
       neutral: {
-        bg: 'neutral.100',
+        // Dark: elevated surface + light text (neutral.100 + text was unreadable).
+        backgroundColor: 'neutral.600',
         color: 'text',
         _hover: {
-          bg: 'neutral.200',
+          backgroundColor: 'neutral.500',
+        },
+        _light: {
+          backgroundColor: 'neutral.200',
+          color: 'lightText',
+          _hover: {
+            backgroundColor: 'neutral.300',
+          },
         },
       },
       outline: {
@@ -38,8 +47,11 @@ export const button = defineRecipe({
         borderStyle: 'solid',
         borderColor: 'secondary',
         color: 'secondary',
-        bg: 'transparent',
-        _hover: { bg: 'blue.50' },
+        backgroundColor: 'transparent',
+        _hover: { backgroundColor: 'neutral.800' },
+        _light: {
+          _hover: { backgroundColor: 'neutral.100' },
+        },
       },
     },
     size: {
@@ -64,53 +76,45 @@ export const button = defineRecipe({
       visual: 'primary',
       withGradient: true,
       css: {
-        bg: 'transparent',
-        color: 'white',
-        backgroundImage: '{gradients.primary}',
+        ...filledGradient('{gradients.primary}'),
+        color: 'text',
         _hover: {
           backgroundImage: '{gradients.primaryHover}',
         },
       },
     },
     {
+      visual: 'secondary',
+      withGradient: true,
+      css: {
+        ...filledGradient('{gradients.secondary}'),
+        color: 'text',
+      },
+    },
+    {
       visual: 'neutral',
       withGradient: true,
       css: {
-        bg: 'transparent',
+        ...filledGradient('{gradients.neutral}'),
         color: 'text',
-        backgroundImage: '{gradients.neutral}',
+        _light: {
+          color: 'lightText',
+        },
       },
     },
     {
       visual: 'outline',
       withGradient: true,
       css: {
-        position: 'relative',
-        bg: 'background',
-        _light: {
-          bgColor: 'lightBackground',
-        },
-        backgroundClip: 'padding-box',
-        borderWidth: '2px',
-        borderStyle: 'solid',
-        borderColor: 'transparent',
+        ...outlineGradient('{gradients.primary}'),
         color: 'secondary',
-        _before: {
-          content: '""',
-          position: 'absolute',
-          inset: 0,
-          margin: '-2px',
-          zIndex: -1,
-          borderRadius: 'inherit',
-          backgroundImage: '{gradients.primary}',
-        },
       },
     },
   ],
   defaultVariants: {
     visual: 'outline',
     size: 'md',
-    borderRadius: 'sm',
+    borderRadius: 'md',
     withGradient: false,
   },
 });

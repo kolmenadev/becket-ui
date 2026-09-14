@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Hover / focus tooltip (generic DS primitive).
  * Default placement top, open delay 200ms.
@@ -15,7 +17,7 @@ import {
   type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { tooltip as tooltipRecipe } from '@maverick/tokens/recipes';
+import { tooltip as tooltipRecipe } from '@becket-ui/tokens/recipes';
 
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 

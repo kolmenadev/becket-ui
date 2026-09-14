@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Text } from './Text';
+import { knobs } from '../helpers/storybookControls';
+import { Text, type TextProps } from './Text';
 
 const meta: Meta<typeof Text> = {
-  title: 'Components/Text',
+  title: 'Typography/Text',
   component: Text,
   argTypes: {
     as: { control: { type: 'select' }, options: ['p', 'span', 'div', 'strong', 'em', 'label'] },
@@ -11,11 +12,13 @@ const meta: Meta<typeof Text> = {
     color: { control: { type: 'text' } },
     lineHeight: { control: { type: 'select' }, options: ['xs', 'sm', 'md', 'lg', 'xl'] },
     truncate: { control: { type: 'boolean' } },
+    children: { control: { type: 'text' } },
   },
+  parameters: knobs(['as', 'fontSize', 'fontWeight', 'color', 'lineHeight', 'truncate', 'children']),
 };
 export default meta;
 
-type Story = StoryObj<typeof Text>;
+type Story = StoryObj<TextProps>;
 
 export const Default: Story = {
   args: { children: 'The quick brown fox jumps over the lazy dog.', as: 'p' },
@@ -41,7 +44,7 @@ export const Truncate: Story = {
     children:
       'This is a very long line of text that will demonstrate truncation behavior when the truncate prop is enabled and the container has a constrained width.',
   },
-  render: (args) => (
+  render: (args: TextProps) => (
     <Text {...args}>
       {args.children}
     </Text>

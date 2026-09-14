@@ -12,7 +12,6 @@ const preview: Preview = {
     },
   ],
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
     backgrounds: {
       default: 'dark',
       values: [
@@ -21,9 +20,20 @@ const preview: Preview = {
       ],
     },
     controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/,
+      exclude: /^(on[A-Z].*|dangerouslySetInnerHTML|suppressContentEditableWarning|suppressHydrationWarning)$/,
+    },
+    options: {
+      storySort: {
+        order: [
+          'Layout',
+          'Typography',
+          'Buttons',
+          'Forms',
+          'Overlays',
+          'Disclosure',
+          'Feedback',
+          'Data Display',
+        ],
       },
     },
   },
