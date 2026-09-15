@@ -19,6 +19,8 @@ pnpm install
 pnpm dev
 ```
 
+Public catalog: [kolmenadev.github.io/becket-ui](https://kolmenadev.github.io/becket-ui/) (GitHub Pages, `main`).
+
 Storybook (Storybook 10, `http://localhost:6006`):
 
 ```bash

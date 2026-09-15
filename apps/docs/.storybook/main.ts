@@ -9,7 +9,9 @@ const config: StorybookConfig = {
   },
   stories: [`${repoRoot}/packages/react/src/**/*.stories.@(ts|tsx)`],
   addons: ['@storybook/addon-a11y', '@chromatic-com/storybook'],
+  staticDirs: [path.join(repoRoot, 'apps/docs/public')],
   viteFinal: async (config) => {
+    config.base = process.env.STORYBOOK_BASE ?? '/';
     config.resolve = config.resolve || {};
     config.resolve.dedupe = [...(config.resolve.dedupe || []), 'react', 'react-dom'];
     const conditions = new Set([...(config.resolve.conditions || []), 'import', 'default']);

@@ -70,6 +70,7 @@ Requirements: **React 19+**.
 
 ## Docs
 
+- [Component catalog](https://kolmenadev.github.io/becket-ui/) — Storybook (temporary public docs)
 - [Theming](./docs/THEMING.md) — brand CSS variables vs instance `style` / `className` (no theme provider)
 
 ## Contributing
