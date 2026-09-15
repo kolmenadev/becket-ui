@@ -1,6 +1,6 @@
 {
   "name": "@becket-ui/tokens",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Becket design tokens, Panda recipes, and prebuilt CSS",
   "type": "module",
   "license": "MIT",
