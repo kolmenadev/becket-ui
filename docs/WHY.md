@@ -42,7 +42,7 @@ You are **not late to the idea**. You are early-to-mid on *shipping a library th
 | **“Import CSS and go” is a solved product** | [Mantine v7+](https://mantine.dev/changelog/7-0-0/) dropped Emotion for bundled CSS modules. [Radix Themes](https://www.radix-ui.com/themes/docs/overview/styling) is vanilla CSS + tokens. Bootstrap did this a decade ago. |
 | **Catalog** | Becket’s v1 kit is curated and incomplete (see backlog). Chakra / MUI / Mantine / shadcn ship dozens of primitives including overlays you have not built. |
 | **Publish** | Packages are 0.1.0 and **not on the public registry** until Phase D. You cannot promote an install that does not work yet. |
-| **Proof** | Phase C4 (Next App Router example, view-source with JS off) is still the SSR gate. The thesis is sound; the demo is not shipped. |
+| **Proof** | Phase C4 (`apps/next-example`, packed tarballs, view-source with JS off) is the SSR proof. G1 still needs public `becket-ui` (D0) and WCAG 2.2 AA ([MAV-29](https://kolmena.atlassian.net/browse/MAV-29)). Consumer theming code ([MAV-22](https://kolmena.atlassian.net/browse/MAV-22)–[MAV-28](https://kolmena.atlassian.net/browse/MAV-28), [MAV-5](https://kolmena.atlassian.net/browse/MAV-5)) is in repo. |
 | **Mindshare** | Tailwind is the skill people already have. Panda is a fraction of that. Promoting “powered by Panda” to Tailwind-native teams is a tax, not a feature, unless you lead with *they do not need Panda*. |
 
 **Verdict for promotion:** lead with *consumer simplicity and SSR*, not with “Panda.” Lead with *Chakra DX without Chakra’s runtime*, not with “we have more components.” Be explicit that v0.1 is a kit, not a 100-component ecosystem.
@@ -119,7 +119,7 @@ That last point is a 2026 feature: Server Components cannot use a client theme c
 
 Primary user: **a React app that needs a real UI this week**, not a Tailwind design system over the next month.
 
-That includes dogfooding (Magnum Opus and other personal/product apps). Dogfood is the correct reason to keep the library alive. A public kit that you do not use will rot; a kit you ship into your own products stays honest.
+That includes dogfooding in our own apps. Dogfood is the correct reason to keep the library alive. A public kit that you do not use will rot; a kit you ship into your own products stays honest.
 
 ### Tailwind already compiles CSS. It does not do this job.
 
@@ -248,7 +248,8 @@ Use these. They are defensible.
 | “The first compile-time design system.” | Mantine, Radix Themes, Braid, Park, Compiled, StyleX all exist. |
 | “Chakra without the downsides.” | You also lack Chakra’s catalog, a11y machines, and community. |
 | “Park UI but better.” | Park is better at complex a11y widgets *by design*. |
-| “RSC-ready” until C4 exists | Prove it with a Next example and JS-disabled screenshot. |
+| “RSC-ready” | C4 exists: `apps/next-example` on packed tarballs; view-source / JS off still has recipe classes + CSS. |
+| “Accessible” / “WCAG 2.2 AA” | Not true until [MAV-29](https://kolmena.atlassian.net/browse/MAV-29) **and** [MAV-45](https://kolmena.atlassian.net/browse/MAV-45) are Done. Native HTML is not the bar. |
 
 ---
 
@@ -296,11 +297,15 @@ Then show: view-source of a server-rendered page, Network panel with one CSS fil
 
 Do these before a loud launch (they are already on the backlog):
 
-1. **C4 Next example** — App Router, packed tarballs, JS disabled still styled, Switch/Dialog as islands.
+1. **C4 Next example** — landed (`apps/next-example`, packed tarballs, `pnpm example:build`).
 2. **C5 size budget** — CI on `index.css` gzip and `@becket-ui/react` dist. Quote numbers from CI, not from memory.
-3. **Finish the v1 kit** — Dialog, Select, Table, Tabs. A “compile-time kit” with a custom Tooltip and no Dialog is a preview, not a product.
-4. **Publish 0.1.0** — the pitch is an install command.
-5. **Optional: critical-path story** — document that `staticCss: '*'` ships unused variants; Panda preset is how large apps tree-shake.
+3. **Finish the v1 kit leftovers** — Field-wired Select/Textarea.
+4. **Consumer theming (G1)** — [MAV-22](https://kolmena.atlassian.net/browse/MAV-22)–[MAV-28](https://kolmena.atlassian.net/browse/MAV-28). CSS-var rebrand without Panda ([THEMING.md](./THEMING.md)). Code tickets are in repo; G1 still needs public `becket-ui` ([MAV-12](https://kolmena.atlassian.net/browse/MAV-12)).
+5. **A11y WCAG 2.2 AA (G1)** — [MAV-29](https://kolmena.atlassian.net/browse/MAV-29) (fixes) + [MAV-45](https://kolmena.atlassian.net/browse/MAV-45) (Vitest + axe-core, no Playwright/Chromatic). Required before 0.1.0. Do not claim “accessible” until both Done.
+6. **Publish 0.1.0** — public `becket-ui` (D0) then install command (D1). Blocked on 4–5.
+7. **Optional: critical-path story** — document that `staticCss: '*'` ships unused variants; Panda preset is how large apps tree-shake.
+8. **Optional: consumer MCP** — [MAV-36](https://kolmena.atlassian.net/browse/MAV-36). Helps AI implement *with* Becket. **Not** a 0.1.0 gate. Spec: [MCP.md](./MCP.md).
+9. **Optional: Figma library** — [MAV-49](https://kolmena.atlassian.net/browse/MAV-49). Mirrors `@becket-ui` in Figma. **Not** a 0.1.0 gate. Spec: [FIGMA.md](./FIGMA.md).
 
 ---
 

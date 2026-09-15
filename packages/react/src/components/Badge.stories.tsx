@@ -7,7 +7,7 @@ const meta: Meta<typeof Badge> = {
   title: 'Data Display/Badge',
   component: Badge,
   args: {
-    children: 'PASS',
+    children: 'New',
     visual: 'primary',
     size: 'md',
     borderRadius: 'full',
@@ -38,9 +38,9 @@ export const Default: Story = {};
 export const Sizes: Story = {
   render: () => (
     <HStack gap="sm" align="center">
-      <Badge size="sm">PASS</Badge>
-      <Badge size="md">FAIL</Badge>
-      <Badge size="lg">OPEN</Badge>
+      <Badge size="sm">New</Badge>
+      <Badge size="md">Beta</Badge>
+      <Badge size="lg">Draft</Badge>
     </HStack>
   ),
 };
@@ -58,7 +58,7 @@ export const Visuals: Story = {
 
 export const WithGradient: Story = {
   args: {
-    children: 'PASS',
+    children: 'New',
     visual: 'primary',
     withGradient: true,
   },
@@ -74,7 +74,7 @@ export const CustomColors: Story = {
           border: 'color-mix(in srgb, #22c55e 35%, transparent)',
         }}
       >
-        PASS
+        New
       </Badge>
       <Badge
         customColors={{
@@ -83,7 +83,7 @@ export const CustomColors: Story = {
           border: 'color-mix(in srgb, #ef4444 35%, transparent)',
         }}
       >
-        FAIL
+        Alert
       </Badge>
     </HStack>
   ),
@@ -92,7 +92,7 @@ export const CustomColors: Story = {
 export const Overflow: Story = {
   render: () => (
     <Stack gap="sm" style={{ maxWidth: '5rem' }}>
-      <Badge>CONNECTING</Badge>
+      <Badge>Notification</Badge>
     </Stack>
   ),
 };

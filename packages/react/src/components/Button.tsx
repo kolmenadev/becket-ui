@@ -18,6 +18,8 @@ export type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
   size?: ButtonSize;
   borderRadius?: ButtonBorderRadius;
   withGradient?: boolean;
+  /** Stretch to the parent width. Default is token `sizes.field` (12.5rem). */
+  fullWidth?: boolean;
   as?: ElementType;
 };
 
@@ -32,6 +34,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       size = 'md',
       borderRadius = 'md',
       withGradient = false,
+      fullWidth = false,
       as: ButtonComponent = 'button',
       className,
       ...props
@@ -43,11 +46,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       size,
       borderRadius,
       withGradient,
+      fullWidth,
     });
 
     return (
       <ButtonComponent
         ref={ref}
+        {...(ButtonComponent === 'button' ? { type: 'button' as const } : {})}
         {...props}
         className={mergeClassName(recipeClassName, className)}
       />

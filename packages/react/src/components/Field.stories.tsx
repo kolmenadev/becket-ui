@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { field as fieldRecipe } from '@becket-ui/tokens/recipes';
+import { defineBecketTheme } from '@becket-ui/tokens/theme';
 import {
   Field,
   FieldControl,
@@ -7,7 +9,11 @@ import {
   FieldLabel,
   type FieldProps,
 } from './Field';
-import { field as fieldRecipe } from '@becket-ui/tokens/recipes';
+import { Stack } from './Stack';
+
+const fieldDensityCss = defineBecketTheme({
+  density: { field: { md: { px: '0.35rem', py: '0.1rem' } } },
+});
 
 const meta: Meta<typeof Field> = {
   title: 'Forms/Field',
@@ -67,5 +73,26 @@ export const Sizes: Story = {
         <FieldControl defaultValue="lg" />
       </Field>
     </div>
+  ),
+};
+
+/**
+ * Field padding follows `--beckui-field-px-md`. Stack `gap="md"` does not.
+ */
+export const DensityOverride: Story = {
+  render: (args: FieldProps) => (
+    <>
+      <style>{fieldDensityCss}</style>
+      <Stack gap="md" align="start">
+        <Field {...args}>
+          <FieldLabel>Dense field</FieldLabel>
+          <FieldControl placeholder="md padding vars" />
+        </Field>
+        <Field {...args} size="sm">
+          <FieldLabel>sm (other vars)</FieldLabel>
+          <FieldControl placeholder="sm" />
+        </Field>
+      </Stack>
+    </>
   ),
 };

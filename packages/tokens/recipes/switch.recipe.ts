@@ -4,8 +4,19 @@ import { defineSlotRecipe } from '@pandacss/dev';
 export const switchRecipe = defineSlotRecipe({
   className: 'switch',
   description: 'Accessible switch control with track and thumb slots',
-  slots: ['root', 'track', 'thumb'],
+  slots: ['root', 'track', 'thumb', 'wrap', 'label'],
   base: {
+    wrap: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 'sm',
+    },
+    label: {
+      fontFamily: 'sans',
+      fontSize: 'md',
+      color: 'text',
+      cursor: 'pointer',
+    },
     root: {
       display: 'inline-flex',
       alignItems: 'center',
@@ -40,9 +51,6 @@ export const switchRecipe = defineSlotRecipe({
       bg: 'white',
       boxShadow: 'sm',
       transition: 'transform 0.15s ease',
-      _light: {
-        bg: 'white',
-      },
     },
   },
   variants: {
@@ -67,7 +75,6 @@ export const switchRecipe = defineSlotRecipe({
       true: {
         track: {
           bg: 'primary',
-          _light: { bg: 'primary' },
         },
       },
       false: {},

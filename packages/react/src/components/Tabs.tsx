@@ -78,15 +78,30 @@ export const TabList = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'
     const onListKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
       onKeyDown?.(event);
       if (event.defaultPrevented) return;
-      if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
-      const tabs = [...event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]:not([disabled])')];
+      const tabs = [
+        ...event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]:not([disabled])'),
+      ];
       if (tabs.length === 0) return;
-      event.preventDefault();
       const index = tabs.findIndex((tab) => tab === document.activeElement);
+      const focusTab = (nextIndex: number) => {
+        const next = tabs[(nextIndex + tabs.length) % tabs.length];
+        next?.focus();
+        next?.click();
+      };
+      if (event.key === 'Home') {
+        event.preventDefault();
+        focusTab(0);
+        return;
+      }
+      if (event.key === 'End') {
+        event.preventDefault();
+        focusTab(tabs.length - 1);
+        return;
+      }
+      if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+      event.preventDefault();
       const delta = event.key === 'ArrowRight' ? 1 : -1;
-      const next = tabs[(index + delta + tabs.length) % tabs.length];
-      next?.focus();
-      next?.click();
+      focusTab(index < 0 ? 0 : index + delta);
     };
 
     return (
@@ -94,6 +109,7 @@ export const TabList = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'
         ref={ref}
         role="tablist"
         {...props}
+        aria-orientation="horizontal"
         className={mergeClassName(styles.list, className)}
         onKeyDown={onListKeyDown}
       />

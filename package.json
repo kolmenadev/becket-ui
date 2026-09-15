@@ -12,10 +12,13 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "pack:check": "node scripts/pack-check.mjs"
+    "pack:check": "node scripts/pack-check.mjs",
+    "example:prepare": "node scripts/prepare-next-example.mjs",
+    "example:dev": "pnpm example:prepare && npm --prefix apps/next-example run dev",
+    "example:build": "pnpm example:prepare && npm --prefix apps/next-example run build"
   },
   "workspaces": [
-    "apps/*",
+    "apps/docs",
     "packages/*"
   ],
   "devDependencies": {

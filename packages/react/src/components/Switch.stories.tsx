@@ -13,9 +13,10 @@ const meta: Meta<typeof Switch> = {
     size: { control: { type: 'select' }, options: ['sm', 'md', 'lg'] },
     checked: { control: { type: 'boolean' } },
     disabled: { control: { type: 'boolean' } },
+    label: { control: { type: 'text' } },
   },
   parameters: {
-    controls: { include: ['size', 'checked', 'disabled'] },
+    controls: { include: ['size', 'checked', 'disabled', 'label'] },
   },
 };
 export default meta;
@@ -27,7 +28,7 @@ export const Default: Story = {
     size: 'md',
     disabled: false,
     defaultChecked: false,
-    'aria-label': 'Notifications',
+    label: 'Notifications',
   },
 };
 
@@ -35,7 +36,7 @@ export const Checked: Story = {
   args: {
     size: 'md',
     defaultChecked: true,
-    'aria-label': 'Enabled',
+    label: 'Enabled',
   },
 };
 
@@ -44,16 +45,16 @@ export const Disabled: Story = {
     size: 'md',
     defaultChecked: true,
     disabled: true,
-    'aria-label': 'Disabled switch',
+    label: 'Disabled switch',
   },
 };
 
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-      <Switch size="sm" defaultChecked aria-label="Small" />
-      <Switch size="md" defaultChecked aria-label="Medium" />
-      <Switch size="lg" defaultChecked aria-label="Large" />
+      <Switch size="sm" defaultChecked label="Small" />
+      <Switch size="md" defaultChecked label="Medium" />
+      <Switch size="lg" defaultChecked label="Large" />
     </div>
   ),
 };
@@ -66,7 +67,7 @@ export const Controlled: Story = {
         <Switch
           checked={on}
           onCheckedChange={setOn}
-          aria-label="Controlled"
+          label="Controlled"
         />
         <span>{on ? 'On' : 'Off'}</span>
       </div>

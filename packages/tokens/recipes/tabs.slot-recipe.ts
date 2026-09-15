@@ -34,13 +34,9 @@ export const tabs = defineSlotRecipe({
       borderBottomColor: 'transparent',
       mb: '-1px',
       _hover: { color: 'text' },
-      _light: {
-        _hover: { color: 'lightText' },
-      },
       '&[aria-selected="true"]': {
         color: 'text',
         borderBottomColor: 'primary',
-        _light: { color: 'lightText' },
       },
       _focusVisible: {
         outline: 'none',
@@ -55,7 +51,6 @@ export const tabs = defineSlotRecipe({
       fontFamily: 'sans',
       fontSize: 'md',
       color: 'text',
-      _light: { color: 'lightText' },
       _focusVisible: {
         outline: 'none',
         boxShadow: 'outline',

@@ -1,0 +1,4 @@
+{
+  "npm.exclude": ["**/apps/next-example", "**/apps/next-example/**"],
+  "prettier.prettierPath": "./node_modules/prettier"
+}

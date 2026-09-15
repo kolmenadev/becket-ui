@@ -1,15 +1,23 @@
 import { defineRecipe } from '@pandacss/dev';
+import { gradientRef } from '../preset/theme-tokens';
 import { filledGradient, outlineGradient } from './gradientStyles';
+import { buttonSizeStyles } from './density';
 
 export const button = defineRecipe({
   className: 'button',
   description: 'The styles for the Button component',
   base: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     cursor: 'pointer',
     fontWeight: 'bold',
-    px: 4,
-    py: 2,
+    paddingInline: 'var(--beckui-button-px-md)',
+    paddingBlock: 'var(--beckui-button-py-md)',
     transition: 'all 0.2s',
+    width: 'field',
+    maxWidth: '100%',
+    boxSizing: 'border-box',
     _focus: { outline: 'none', boxShadow: 'outline' },
     _disabled: { opacity: 0.6, cursor: 'not-allowed' },
   },
@@ -17,18 +25,17 @@ export const button = defineRecipe({
     visual: {
       primary: {
         backgroundColor: 'primary',
-        color: 'text',
+        color: 'neutral.50',
         _hover: { backgroundColor: 'primaryHover' },
       },
       secondary: {
         backgroundColor: 'secondary',
-        color: 'text',
+        color: 'neutral.50',
         _hover: {
           backgroundColor: 'secondary',
         },
       },
       neutral: {
-        // Dark: elevated surface + light text (neutral.100 + text was unreadable).
         backgroundColor: 'neutral.600',
         color: 'text',
         _hover: {
@@ -36,7 +43,6 @@ export const button = defineRecipe({
         },
         _light: {
           backgroundColor: 'neutral.200',
-          color: 'lightText',
           _hover: {
             backgroundColor: 'neutral.300',
           },
@@ -54,10 +60,7 @@ export const button = defineRecipe({
         },
       },
     },
-    size: {
-      sm: { fontSize: 'sm', px: 3, py: 1 },
-      md: { fontSize: 'md', px: 4, py: 2 },
-    },
+    size: buttonSizeStyles,
     borderRadius: {
       none: { borderRadius: 'none' },
       sm: { borderRadius: 'sm' },
@@ -70,16 +73,20 @@ export const button = defineRecipe({
       false: {},
       true: {},
     },
+    fullWidth: {
+      true: { width: '100%' },
+      false: { width: 'field', maxWidth: '100%' },
+    },
   },
   compoundVariants: [
     {
       visual: 'primary',
       withGradient: true,
       css: {
-        ...filledGradient('{gradients.primary}'),
-        color: 'text',
+        ...filledGradient(gradientRef('primary')),
+        color: 'neutral.50',
         _hover: {
-          backgroundImage: '{gradients.primaryHover}',
+          backgroundImage: gradientRef('primaryHover'),
         },
       },
     },
@@ -87,26 +94,23 @@ export const button = defineRecipe({
       visual: 'secondary',
       withGradient: true,
       css: {
-        ...filledGradient('{gradients.secondary}'),
-        color: 'text',
+        ...filledGradient(gradientRef('secondary')),
+        color: 'neutral.50',
       },
     },
     {
       visual: 'neutral',
       withGradient: true,
       css: {
-        ...filledGradient('{gradients.neutral}'),
+        ...filledGradient(gradientRef('neutral')),
         color: 'text',
-        _light: {
-          color: 'lightText',
-        },
       },
     },
     {
       visual: 'outline',
       withGradient: true,
       css: {
-        ...outlineGradient('{gradients.primary}'),
+        ...outlineGradient(gradientRef('primary')),
         color: 'secondary',
       },
     },
@@ -116,5 +120,6 @@ export const button = defineRecipe({
     size: 'md',
     borderRadius: 'md',
     withGradient: false,
+    fullWidth: false,
   },
 });

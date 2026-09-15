@@ -1,6 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button, type ButtonProps } from './Button';
 import { button as buttonRecipe } from '@becket-ui/tokens/recipes';
+import { defineBecketTheme } from '@becket-ui/tokens/theme';
+import { Button, type ButtonProps } from './Button';
+import { Stack } from './Stack';
+
+const brandThemeCss = defineBecketTheme({
+  colors: { primary: 'oklch(0.55 0.22 280)' },
+});
+
+const densityCss = defineBecketTheme({
+  density: { button: { md: { px: '0.4rem', py: '0.15rem' } } },
+});
 
 const meta: Meta<typeof Button> = {
   title: 'Buttons/Button',
@@ -11,6 +21,7 @@ const meta: Meta<typeof Button> = {
     size: 'md',
     borderRadius: 'md',
     withGradient: false,
+    fullWidth: false,
   },
   argTypes: {
     visual: { control: { type: 'select' }, options: buttonRecipe.variantMap.visual },
@@ -20,12 +31,21 @@ const meta: Meta<typeof Button> = {
       options: buttonRecipe.variantMap.borderRadius,
     },
     withGradient: { control: { type: 'boolean' } },
+    fullWidth: { control: { type: 'boolean' } },
     disabled: { control: { type: 'boolean' } },
     children: { control: { type: 'text' } },
   },
   parameters: {
     controls: {
-      include: ['visual', 'size', 'borderRadius', 'withGradient', 'disabled', 'children'],
+      include: [
+        'visual',
+        'size',
+        'borderRadius',
+        'withGradient',
+        'fullWidth',
+        'disabled',
+        'children',
+      ],
     },
   },
 };
@@ -43,14 +63,42 @@ export const WithGradient: Story = {
   },
 };
 
-/**
- * Custom CSS can override the default button styles. Pass `className` to merge
- * your own classes (e.g. from Panda's `css()`) or use the `style` prop for
- * inline overrides.
- */
-export const WithCssOverride: Story = {
+export const FullWidth: Story = {
   args: {
-    children: 'Overridden styles',
+    children: 'Full width',
+    fullWidth: true,
+  },
+};
+
+/**
+ * Product-wide rebrand: unlayered CSS variables after `index.css` (or
+ * `defineBecketTheme()`). Hover, focus, and gradients follow `primary`.
+ * This is not a React theme provider.
+ */
+export const BrandTheme: Story = {
+  render: (args) => (
+    <>
+      <style>{brandThemeCss}</style>
+      <Stack gap="md" align="start">
+        <Button {...args}>Brand primary</Button>
+        <Button {...args} withGradient>
+          Brand gradient
+        </Button>
+      </Stack>
+    </>
+  ),
+  args: {
+    visual: 'primary',
+  },
+};
+
+/**
+ * One control, one-off. `style` / `className` win on this instance only.
+ * Do not rebrand an app this way — use BrandTheme / CSS variables.
+ */
+export const InstanceOverride: Story = {
+  args: {
+    children: 'One-off override',
     visual: 'primary',
     style: {
       background: 'rebeccapurple',
@@ -58,5 +106,27 @@ export const WithCssOverride: Story = {
       color: 'white',
       padding: '0.75rem 1.5rem',
     },
+  },
+};
+
+/**
+ * Component density. `--beckui-button-px-md` shrinks this Button; Stack `gap="md"`
+ * still uses `--beckui--spacing-md`.
+ */
+export const DensityOverride: Story = {
+  render: (args) => (
+    <>
+      <style>{densityCss}</style>
+      <Stack gap="md" align="start">
+        <Button {...args}>Dense md</Button>
+        <Button {...args} size="sm">
+          Dense sm (unchanged vars)
+        </Button>
+      </Stack>
+    </>
+  ),
+  args: {
+    visual: 'primary',
+    size: 'md',
   },
 };

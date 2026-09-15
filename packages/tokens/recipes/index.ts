@@ -7,6 +7,7 @@ export * from './switch.recipe';
 export * from './field.slot-recipe';
 export * from './text-field.recipe';
 export * from './checkbox.recipe';
+export * from './radio.recipe';
 export * from './select.recipe';
 export * from './textarea.recipe';
 export * from './dialog.slot-recipe';

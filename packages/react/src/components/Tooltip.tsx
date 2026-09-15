@@ -6,7 +6,10 @@
  */
 
 import {
+  Children,
+  cloneElement,
   forwardRef,
+  isValidElement,
   useCallback,
   useEffect,
   useId,
@@ -14,7 +17,11 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type FocusEventHandler,
+  type MouseEventHandler,
+  type ReactElement,
   type ReactNode,
+  type Ref,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { tooltip as tooltipRecipe } from '@becket-ui/tokens/recipes';
@@ -33,8 +40,57 @@ export type TooltipProps = {
 
 const OFFSET_PX = 8;
 
+const NATIVE_FOCUSABLE = new Set(['a', 'button', 'input', 'select', 'summary', 'textarea']);
+
+type TriggerProps = {
+  ref?: Ref<HTMLElement>;
+  tabIndex?: number;
+  href?: string;
+  onMouseEnter?: MouseEventHandler<HTMLElement>;
+  onMouseLeave?: MouseEventHandler<HTMLElement>;
+  onFocus?: FocusEventHandler<HTMLElement>;
+  onBlur?: FocusEventHandler<HTMLElement>;
+  'aria-describedby'?: string;
+};
+
 function mergeClassName(...classes: (string | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
+}
+
+function assignRef<T>(ref: Ref<T> | undefined, value: T | null) {
+  if (typeof ref === 'function') {
+    ref(value);
+  } else if (ref) {
+    ref.current = value;
+  }
+}
+
+function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
+  return (node: T | null) => {
+    for (const ref of refs) {
+      assignRef(ref, node);
+    }
+  };
+}
+
+function chain<E>(their?: (event: E) => void, ours?: (event: E) => void) {
+  return (event: E) => {
+    their?.(event);
+    ours?.(event);
+  };
+}
+
+function triggerNeedsTabIndex(element: ReactElement<TriggerProps>): boolean {
+  if (typeof element.type !== 'string') {
+    return false;
+  }
+  if (NATIVE_FOCUSABLE.has(element.type)) {
+    return false;
+  }
+  if (element.props.tabIndex != null) {
+    return false;
+  }
+  return true;
 }
 
 function computePosition(
@@ -80,7 +136,7 @@ function clampToViewport(top: number, left: number, tip: DOMRect): { top: number
   };
 }
 
-export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(
+export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
   (
     {
       content,
@@ -92,17 +148,16 @@ export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(
     ref,
   ) => {
     const tipId = useId();
-    const triggerRef = useRef<HTMLSpanElement | null>(null);
+    const triggerRef = useRef<HTMLElement | null>(null);
     const tipRef = useRef<HTMLDivElement | null>(null);
     const showTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [open, setOpen] = useState(false);
     const [coords, setCoords] = useState<{ top: number; left: number } | null>(null);
 
     const setTriggerRef = useCallback(
-      (node: HTMLSpanElement | null) => {
+      (node: HTMLElement | null) => {
         triggerRef.current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
+        assignRef(ref, node);
       },
       [ref],
     );
@@ -158,20 +213,53 @@ export const Tooltip = forwardRef<HTMLSpanElement, TooltipProps>(
       visibility: coords ? 'visible' : 'hidden',
     };
 
-    return (
-      <>
+    const describedByWhenOpen = open ? tipId : undefined;
+    const hoverHandlers = {
+      onMouseEnter: scheduleOpen,
+      onMouseLeave: close,
+      onFocus: scheduleOpen,
+      onBlur: close,
+    };
+
+    const childArray = Children.toArray(children);
+    const onlyChild = childArray.length === 1 ? childArray[0] : undefined;
+    let trigger: ReactNode;
+
+    if (isValidElement(onlyChild)) {
+      const child = onlyChild as ReactElement<TriggerProps>;
+      const childRef = (child as { ref?: Ref<HTMLElement> }).ref ?? child.props.ref;
+      const describedBy = [child.props['aria-describedby'], describedByWhenOpen]
+        .filter(Boolean)
+        .join(' ');
+      trigger = cloneElement(child, {
+        ref: mergeRefs(childRef, setTriggerRef),
+        onMouseEnter: chain(child.props.onMouseEnter, hoverHandlers.onMouseEnter),
+        onMouseLeave: chain(child.props.onMouseLeave, hoverHandlers.onMouseLeave),
+        onFocus: chain(child.props.onFocus, hoverHandlers.onFocus),
+        onBlur: chain(child.props.onBlur, hoverHandlers.onBlur),
+        'aria-describedby': describedBy || undefined,
+        ...(triggerNeedsTabIndex(child) ? { tabIndex: 0 } : {}),
+      });
+    } else {
+      trigger = (
         <span
           ref={setTriggerRef}
           tabIndex={0}
-          aria-describedby={open ? tipId : undefined}
-          onMouseEnter={scheduleOpen}
-          onMouseLeave={close}
-          onFocus={scheduleOpen}
-          onBlur={close}
+          aria-describedby={describedByWhenOpen}
+          onMouseEnter={hoverHandlers.onMouseEnter}
+          onMouseLeave={hoverHandlers.onMouseLeave}
+          onFocus={hoverHandlers.onFocus}
+          onBlur={hoverHandlers.onBlur}
           style={{ display: 'inline-flex', maxWidth: '100%', verticalAlign: 'middle' }}
         >
           {children}
         </span>
+      );
+    }
+
+    return (
+      <>
+        {trigger}
         {open && typeof document !== 'undefined'
           ? createPortal(
               <div

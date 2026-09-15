@@ -7,7 +7,7 @@ import {
   SEMANTIC_TO_BREAKPOINT,
 } from './responsive';
 
-describe('responsive breakpoints (KAN-120)', () => {
+describe('responsive breakpoints', () => {
   it('maps semantic aliases to Chakra token breakpoints', () => {
     expect(SEMANTIC_TO_BREAKPOINT.mobile).toBe('base');
     expect(SEMANTIC_TO_BREAKPOINT.tablet).toBe('md');

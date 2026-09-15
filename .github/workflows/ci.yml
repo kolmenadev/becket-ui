@@ -18,5 +18,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - run: pnpm --filter @becket-ui/react exec tsc --noEmit -p tsconfig.build.json
+      - run: pnpm --filter @becket-ui/a11y test
       - run: pnpm --filter @becket-ui/react test
+      - run: pnpm --filter @becket-ui/tokens test
       - run: pnpm pack:check
+      - run: pnpm example:build
+      - run: node scripts/assert-next-example.mjs

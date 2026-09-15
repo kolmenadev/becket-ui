@@ -49,9 +49,18 @@ try {
   const tokens = packedFiles('@becket-ui/tokens');
   assertIncludes(
     tokens,
-    ['styled-system/recipes', 'styled-system/css', 'index.css', 'dist/preset'],
+    [
+      'styled-system/recipes',
+      'styled-system/css',
+      'index.css',
+      'dist/preset',
+      'theme/index.mjs',
+      'theme/index.d.ts',
+      'theme.example.css',
+    ],
     '@becket-ui/tokens',
   );
+  assertNone(tokens, ['theme/index.test.mjs'], '@becket-ui/tokens');
 
   const react = packedFiles('@becket-ui/react');
   assertIncludes(react, ['dist/index.js', 'dist/index.d.ts'], '@becket-ui/react');

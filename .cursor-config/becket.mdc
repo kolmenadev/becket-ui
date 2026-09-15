@@ -7,8 +7,8 @@ Purpose: This is the single source of truth for creating production‑ready comp
 - Styling: use PandaCSS recipes/patterns/tokens from `@becket-ui/tokens`.
 
 ### Golden rules
-- **Publishable & product-agnostic**: Becket ships as a public library. Export only reusable primitives. Do **not** export consumer-product presets, className strings for specific dashboards, or Magma Opus / trading domain names.
-- **Accessibility first**: Every interactive component must be accessible by keyboard and screen readers. Provide correct semantics, labelling, focus states, and ARIA when needed.
+- **Publishable & product-agnostic**: Becket ships as a public library. Export only reusable primitives. Do **not** export consumer-product presets, className strings for specific dashboards, or domain-specific names.
+- **Always WCAG 2.2 AA**: Every interactive primitive must be fully accessible — keyboard, name/role/value, focus, and ARIA only when native HTML is not enough. This is not optional and does not wait for a later “a11y pass.” Bar: WCAG 2.2 **AA** + APG for overlays/disclosure (Dialog, Drawer, Menu, Tabs, Tooltip, Switch). Not AAA. Native HTML is the default, not a substitute for the bar. Fix epic: [MAV-29](https://kolmena.atlassian.net/browse/MAV-29). Test gate: [MAV-45](https://kolmena.atlassian.net/browse/MAV-45). Do not claim “accessible” / WCAG until both are Done.
 - **Consistent API**: Follow the `as` prop pattern, forward refs, and surface HTML props of the base element.
 - **Use Panda recipes**: Variants and sizes live in `@becket-ui/tokens` recipes. Components consume recipes; they do not hardcode styles.
 - **Colocation & clarity**: Keep files near their usage, name things clearly, reduce nesting, prefer inline logic, and avoid premature abstraction.
@@ -226,7 +226,7 @@ Requirements:
 - Forward ref to the native `input` element (`HTMLInputElement`).
 - Support `size` (sm, md) and optional `visual` variant via recipe.
 - Keyboard: Space toggles when focused; label click toggles.
-- a11y: Proper `id`/`htmlFor`, `aria-checked` mirrors `checked` when needed, visible focus ring.
+- a11y: WCAG 2.2 AA on the Default (and interactive) states. Proper `id`/`htmlFor`, `aria-checked` mirrors `checked` when needed, visible focus ring. Ship a Vitest axe test with the component (see **Accessibility tests** below).
 
 React template:
 
@@ -311,10 +311,29 @@ export const Disabled: Story = {
 ## When adding a new component, do this
 
 1) Add/extend a Panda recipe in `@becket-ui/tokens` if needed, export it, and regenerate Panda artifacts.
-2) Implement the React component in `@becket-ui/react` using the API rules and recipe.
-3) Add a Storybook file with controls for all variants and key states.
-4) Verify accessibility manually (keyboard, screen reader labels, focus ring, contrast).
+2) Implement the React component in `@becket-ui/react` using the API rules and recipe. Meet WCAG 2.2 AA before review.
+3) Add a Storybook file with controls for all variants and key states. `@storybook/addon-a11y` must be clean on Default (local; not CI).
+4) Add Vitest coverage: axe-core via the private `@becket-ui/a11y` helper ([MAV-45](https://kolmena.atlassian.net/browse/MAV-45) / [MAV-46](https://kolmena.atlassian.net/browse/MAV-46)) plus keyboard tests if the primitive has APG behavior. Do **not** add Playwright or Chromatic for this.
 5) Keep names and imports consistent; avoid mutations; use tokens over literals.
+
+---
+
+## Accessibility tests (mandatory)
+
+Interactive primitives **do not ship** without automated a11y tests. Manual Storybook checks are extra, not a substitute.
+
+| Layer | Tool | Where |
+| --- | --- | --- |
+| **CI gate** | axe-core in **Vitest + jsdom** + Testing Library | `@becket-ui/react` tests, helper `@becket-ui/a11y` (`private: true`) |
+| **Keyboard / APG** | `@testing-library/user-event` | Dialog, Drawer, Menu, Tabs, Tooltip, Switch (Tab, Escape, arrows) |
+| **Static** | Biome a11y rules or `eslint-plugin-jsx-a11y` when [MAV-9](https://kolmena.atlassian.net/browse/MAV-9) lands | lint |
+| **Local authoring** | `@storybook/addon-a11y` | Storybook panel only |
+
+**Out:** Playwright, Storybook test-runner, Chromatic, Cypress, Pa11y, Lighthouse-CI, a from-scratch WCAG engine, publishing `@becket-ui/a11y` on npm in 0.1.0.
+
+**jsdom cannot prove** color-contrast, 24×24 target size (2.5.8), or painted focus rings. Disable those axe rules in CI. They stay Storybook addon + a recorded keyboard/contrast pass (C3).
+
+Do not take stale `vitest-axe@0.1.0` as the long-term matcher — call `axe.run` from a thin helper we own.
 
 This MDC governs all component contributions. Always align with PandaCSS docs (`panda` recipes, patterns, tokens) and update recipes first when introducing new visual variants.
 

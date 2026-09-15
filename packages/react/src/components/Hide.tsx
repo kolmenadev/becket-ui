@@ -1,5 +1,5 @@
 /**
- * Chakra-style visibility helper (KAN-120).
+ * Chakra-style visibility helper.
  * Uses CSS media queries — no JS flash; single DOM for UI tests.
  */
 
@@ -40,7 +40,7 @@ export type HideProps = ComponentPropsWithoutRef<'div'> & {
  * Prefer over duplicating trees for mobile/desktop — keeps `data-testid` stable.
  *
  * @example
- * <Hide below="desktop">{candles}</Hide>
+ * <Hide below="desktop">{sidebar}</Hide>
  * <Hide from="desktop">{mobileOnlyNav}</Hide>
  */
 export const Hide = forwardRef<HTMLDivElement, HideProps>(

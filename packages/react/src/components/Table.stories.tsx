@@ -26,7 +26,7 @@ export const Default: Story = {
         <Tr>
           <Th>Name</Th>
           <Th>Status</Th>
-          <Th>Qty</Th>
+          <Th>Count</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -58,7 +58,7 @@ export const Sizes: Story = {
         <Thead>
           <Tr>
             <Th>Small</Th>
-            <Th>Qty</Th>
+            <Th>Count</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -72,7 +72,7 @@ export const Sizes: Story = {
         <Thead>
           <Tr>
             <Th>Medium</Th>
-            <Th>Qty</Th>
+            <Th>Count</Th>
           </Tr>
         </Thead>
         <Tbody>

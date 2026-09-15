@@ -20,12 +20,12 @@ export type LabelVisual = 'primary' | 'secondary' | 'neutral' | 'outline';
 const VISUAL_DEFAULTS: Record<LabelVisual, LabelCustomColors> = {
   primary: {
     background: 'var(--beckui--colors-primary)',
-    color: 'var(--beckui--colors-text)',
+    color: 'var(--beckui--colors-neutral-50)',
     border: 'transparent',
   },
   secondary: {
     background: 'var(--beckui--colors-secondary)',
-    color: 'var(--beckui--colors-text)',
+    color: 'var(--beckui--colors-neutral-50)',
     border: 'transparent',
   },
   neutral: {

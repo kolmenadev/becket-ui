@@ -14,7 +14,7 @@ export const tooltip = defineRecipe({
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: 'border',
-    bg: 'neutral.800',
+    bg: 'surface',
     color: 'text',
     fontSize: 'xs',
     fontWeight: 'medium',
@@ -25,7 +25,6 @@ export const tooltip = defineRecipe({
     textAlign: 'left',
     _light: {
       bg: 'neutral.100',
-      color: 'lightText',
       borderColor: 'neutral.300',
     },
   },

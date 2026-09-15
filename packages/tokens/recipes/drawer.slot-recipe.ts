@@ -11,12 +11,10 @@ export const drawer = defineSlotRecipe({
       overflow: 'auto',
       p: 'md',
       borderWidth: '0',
-      backgroundColor: 'neutral.800',
+      backgroundColor: 'surface',
       color: 'text',
       boxShadow: 'elevated',
       _light: {
-        backgroundColor: 'white',
-        color: 'lightText',
         boxShadow: 'lg',
       },
       '&::backdrop': {
@@ -44,9 +42,15 @@ export const drawer = defineSlotRecipe({
     },
     footer: {
       display: 'flex',
+      flexWrap: 'wrap',
       justifyContent: 'flex-end',
+      alignItems: 'center',
       gap: 'sm',
       mt: 'md',
+      '& > *': {
+        width: 'auto',
+        flex: '0 1 auto',
+      },
     },
     close: {
       appearance: 'none',
@@ -56,10 +60,14 @@ export const drawer = defineSlotRecipe({
       cursor: 'pointer',
       fontSize: 'xl',
       lineHeight: '1',
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minW: '24px',
+      minH: '24px',
       p: '1',
       borderRadius: 'sm',
       _hover: { color: 'text' },
-      _light: { _hover: { color: 'lightText' } },
       _focusVisible: {
         outline: 'none',
         boxShadow: 'outline',

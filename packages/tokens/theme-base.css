@@ -1,17 +1,35 @@
 /**
- * Becket themed body colors.
+ * Becket themed body colors + component density defaults.
  * Bundled into index.css after Panda cssgen — do not @import styles.css
  * (Vite CSS @import inlining can drop numeric gap utilities).
+ *
+ * Density vars use `--beckui-button-*` (one hyphen) so they are not
+ * `--beckui--spacing-*`. Overriding button padding must not shrink Stack gap.
  */
+@layer tokens {
+  :where(:root, :host) {
+    --beckui-button-px-sm: 0.75rem;
+    --beckui-button-py-sm: 0.25rem;
+    --beckui-button-px-md: 1rem;
+    --beckui-button-py-md: 0.5rem;
+    --beckui-field-px-sm: 0.5rem;
+    --beckui-field-py-sm: 0.25rem;
+    --beckui-field-px-md: 0.75rem;
+    --beckui-field-py-md: 0.5rem;
+    --beckui-field-px-lg: 0.75rem;
+    --beckui-field-py-lg: 0.75rem;
+    --beckui-tag-px-sm: 0.5rem;
+    --beckui-tag-py-sm: 0.25rem;
+    --beckui-tag-px-md: 0.75rem;
+    --beckui-tag-py-md: 0.25rem;
+    --beckui-tag-px-lg: 0.75rem;
+    --beckui-tag-py-lg: 0.5rem;
+  }
+}
+
 @layer base {
-  html[data-theme='dark'] body,
-  html:not([data-theme='light']) body {
+  html body {
     background-color: var(--beckui--colors-background);
     color: var(--beckui--colors-text);
-  }
-
-  html[data-theme='light'] body {
-    background-color: var(--beckui--colors-light-background);
-    color: var(--beckui--colors-light-text);
   }
 }
