@@ -18,12 +18,10 @@ export const field = defineSlotRecipe({
       fontSize: 'sm',
       fontWeight: 'medium',
       color: 'text',
-      _light: { color: 'lightText' },
     },
     helper: {
       fontSize: 'xs',
       color: 'muted',
-      _light: { color: 'neutral.600' },
     },
     error: {
       fontSize: 'xs',

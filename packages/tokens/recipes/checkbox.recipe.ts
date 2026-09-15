@@ -15,7 +15,6 @@ export const checkbox = defineSlotRecipe({
       gap: 'sm',
       cursor: 'pointer',
       color: 'text',
-      _light: { color: 'lightText' },
       _disabled: { opacity: 0.6, cursor: 'not-allowed' },
     },
     control: {
@@ -33,10 +32,6 @@ export const checkbox = defineSlotRecipe({
           backgroundColor: 'primary',
           borderColor: 'primary',
           backgroundImage: checkMark,
-          _light: {
-            backgroundColor: 'primary',
-            borderColor: 'primary',
-          },
         },
       },
       _focusVisible: {
@@ -79,7 +74,6 @@ export const checkbox = defineSlotRecipe({
       fontFamily: 'sans',
       color: 'muted',
       lineHeight: 'tight',
-      _light: { color: 'neutral.600' },
     },
   },
   variants: {

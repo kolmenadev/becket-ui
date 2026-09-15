@@ -21,11 +21,9 @@ export const menu = defineSlotRecipe({
       borderStyle: 'solid',
       borderColor: 'neutral.500',
       borderRadius: 'md',
-      backgroundColor: 'neutral.800',
+      backgroundColor: 'surface',
       color: 'text',
       _light: {
-        backgroundColor: 'white',
-        color: 'lightText',
         borderColor: 'neutral.400',
       },
       _focusVisible: {
@@ -45,10 +43,9 @@ export const menu = defineSlotRecipe({
       borderStyle: 'solid',
       borderColor: 'neutral.700',
       borderRadius: 'md',
-      backgroundColor: 'neutral.800',
+      backgroundColor: 'surface',
       boxShadow: 'elevated',
       _light: {
-        backgroundColor: 'white',
         borderColor: 'border',
         boxShadow: 'md',
       },
@@ -69,7 +66,6 @@ export const menu = defineSlotRecipe({
       cursor: 'pointer',
       _hover: { backgroundColor: 'neutral.700' },
       _light: {
-        color: 'lightText',
         _hover: { backgroundColor: 'neutral.100' },
       },
       _focusVisible: {

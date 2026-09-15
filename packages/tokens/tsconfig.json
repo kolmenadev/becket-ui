@@ -3,6 +3,7 @@
   "compilerOptions": {
     "paths": {
       "@becket-ui/tokens": ["./"],
+      "@becket-ui/tokens/theme": ["./theme/index.d.ts"],
       "@becket-ui/tokens/*": ["./styled-system/*"]
     }
   }

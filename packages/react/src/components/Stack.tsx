@@ -40,7 +40,7 @@ export type StackProps = ComponentPropsWithoutRef<'div'> & {
   align?: AlignVariant;
   justify?: JustifyVariant;
   border?: BorderProp;
-  /** Flex/grid order — responsive object supported (KAN-120). */
+  /** Flex/grid order — responsive object supported. */
   order?: ResponsiveValue<number>;
   as?: ElementType;
 };

@@ -22,10 +22,6 @@ export const link = defineRecipe({
         color: 'muted',
         textDecoration: 'none',
         _hover: { color: 'text', textDecoration: 'underline' },
-        _light: {
-          color: 'neutral.600',
-          _hover: { color: 'lightText' },
-        },
       },
     },
     visited: {

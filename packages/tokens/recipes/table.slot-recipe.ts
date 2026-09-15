@@ -11,7 +11,6 @@ export const table = defineSlotRecipe({
       fontFamily: 'sans',
       fontSize: 'sm',
       color: 'text',
-      _light: { color: 'lightText' },
     },
     caption: {
       captionSide: 'bottom',

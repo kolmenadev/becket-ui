@@ -12,9 +12,19 @@ const config: StorybookConfig = {
   viteFinal: async (config) => {
     config.resolve = config.resolve || {};
     config.resolve.dedupe = [...(config.resolve.dedupe || []), 'react', 'react-dom'];
-    config.resolve.alias = {
-      ...(config.resolve.alias || {}),
-    };
+    const conditions = new Set([...(config.resolve.conditions || []), 'import', 'default']);
+    config.resolve.conditions = [...conditions];
+    const aliases = config.resolve.alias;
+    const aliasList = Array.isArray(aliases)
+      ? aliases
+      : Object.entries(aliases || {}).map(([find, replacement]) => ({ find, replacement }));
+    config.resolve.alias = [
+      ...aliasList,
+      {
+        find: /^@becket-ui\/tokens\/theme$/,
+        replacement: path.join(repoRoot, 'packages/tokens/theme/index.mjs'),
+      },
+    ];
     config.server = config.server || {};
     config.server.fs = { allow: [repoRoot, `${repoRoot}/packages`] };
     config.optimizeDeps = config.optimizeDeps || {};
@@ -23,6 +33,7 @@ const config: StorybookConfig = {
       'react',
       'react-dom',
       'react-dom/client',
+      '@becket-ui/tokens/theme',
     ];
     return config;
   },

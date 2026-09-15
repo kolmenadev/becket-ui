@@ -4,7 +4,10 @@ Chakra-shaped React components whose styles are **compiled CSS**, not a CSS-in-J
 
 - [What Becket is](docs/ABOUT.md) — thesis, packages, consume model, public API
 - [Why this architecture](docs/WHY.md) — compile-time CSS, SSR, vs Tailwind / shadcn / Park / Chakra
+- [Theming](docs/THEMING.md) — brand CSS variables vs instance `style` / `className` (no theme provider)
 - [Backlog](docs/BACKLOG.md) — curated v1 kit
+- [Consumer MCP](docs/MCP.md) — AI agents implementing *with* Becket ([MAV-36](https://kolmena.atlassian.net/browse/MAV-36); not a 0.1.0 gate)
+- [Figma library](docs/FIGMA.md) — design file that mirrors `@becket-ui` ([MAV-49](https://kolmena.atlassian.net/browse/MAV-49); not a 0.1.0 gate)
 - [Publish](docs/PUBLISH.md) — npm + public GitHub checklist (do not publish before G1)
 
 Private SoT: [kolmenadev/becket](https://github.com/kolmenadev/becket). Public GitHub (npm metadata): [kolmenadev/becket-ui](https://github.com/kolmenadev/becket-ui) — not created yet.
@@ -19,7 +22,7 @@ Private SoT: [kolmenadev/becket](https://github.com/kolmenadev/becket). Public G
 
 ### Consume (npm — not published yet)
 
-Packages are **0.1.0** in-repo and are **not on the public registry until [publish gate G1](docs/PUBLISH.md)** (v1 kit + Next SSR example + public `becket-ui`). Until then, use this monorepo or a `file:` / workspace link.
+Packages are **0.1.0** in-repo and are **not on the public registry until [publish gate G1](docs/PUBLISH.md)** (v1 kit + Next SSR example + public `becket-ui` + consumer theming). A11y G1 ([MAV-29](https://kolmena.atlassian.net/browse/MAV-29) + [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)) is **Done in-repo** (Vitest + axe; contrast / 24×24 stay Storybook). Until npm exists, use this monorepo or a `file:` / workspace link.
 
 Intended install after publish:
 
@@ -54,6 +57,8 @@ export default defineConfig({
 
 Apps that only use components do **not** need Panda or a `panda.config.ts`.
 
+Rebrand without Panda: override public CSS variables after `index.css`, or `defineBecketTheme()` from `@becket-ui/tokens/theme`. No theme provider. See [docs/THEMING.md](docs/THEMING.md).
+
 ### Prerequisites
 
 - Node.js 22.12+
@@ -86,6 +91,21 @@ pnpm --filter @becket-ui/react storybook
 ```
 
 Storybook 10 starts at `http://localhost:6006`.
+
+### Next.js SSR example (C4)
+
+Consumes **packed tarballs** (not workspace `src/`). The example is outside the pnpm workspace and installs with npm so it cannot resolve the library from `packages/react/src`. Prepare, then dev or build:
+
+```bash
+pnpm example:dev
+```
+
+```bash
+pnpm example:build
+node scripts/assert-next-example.mjs
+```
+
+App Router example: `http://localhost:3002`. View-source / disable JS: layout, type, and buttons stay styled.
 
 ### Build
 
@@ -174,4 +194,4 @@ packages/
 
 ### License
 
-MIT © Kolmena
+MIT © Kolmena de Software

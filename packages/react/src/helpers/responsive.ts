@@ -13,7 +13,7 @@ import type { ConditionalValue } from '@becket-ui/tokens/types';
 export type Breakpoint = 'base' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 /**
- * Semantic aliases for product UIs (Magnum Opus, etc.).
+ * Semantic aliases for layout in consuming apps.
  * Map onto token breakpoints — do not invent separate media queries.
  */
 export type SemanticBreakpoint = 'mobile' | 'tablet' | 'desktop' | 'largeDesktop';

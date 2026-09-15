@@ -12,9 +12,6 @@ const outlineGradientBorder = (image: `{gradients.${GradientBorderToken}}`) =>
     backgroundImage: `linear-gradient({colors.background}, {colors.background}), ${image}`,
     backgroundOrigin: 'border-box',
     backgroundClip: 'padding-box, border-box',
-    _light: {
-      backgroundImage: `linear-gradient({colors.lightBackground}, {colors.lightBackground}), ${image}`,
-    },
   });
 
 const gradientBorderClassMap: Record<GradientBorderToken, string> = {

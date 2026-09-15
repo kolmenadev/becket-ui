@@ -6,6 +6,11 @@ export const dialog = defineSlotRecipe({
   slots: ['root', 'header', 'body', 'footer', 'title', 'close'],
   base: {
     root: {
+      // Panda preflight sets margin: 0, which removes UA dialog centering.
+      position: 'fixed',
+      inset: '0',
+      margin: 'auto',
+      height: 'fit-content',
       width: 'calc(100% - 2rem)',
       maxWidth: '28rem',
       maxHeight: 'calc(100% - 2rem)',
@@ -15,13 +20,11 @@ export const dialog = defineSlotRecipe({
       borderStyle: 'solid',
       borderColor: 'neutral.700',
       borderRadius: 'lg',
-      backgroundColor: 'neutral.800',
+      backgroundColor: 'surface',
       color: 'text',
       boxShadow: 'elevated',
       _light: {
         borderColor: 'border',
-        backgroundColor: 'white',
-        color: 'lightText',
         boxShadow: 'lg',
       },
       '&::backdrop': {
@@ -49,9 +52,15 @@ export const dialog = defineSlotRecipe({
     },
     footer: {
       display: 'flex',
+      flexWrap: 'wrap',
       justifyContent: 'flex-end',
+      alignItems: 'center',
       gap: 'sm',
       mt: 'md',
+      '& > *': {
+        width: 'auto',
+        flex: '0 1 auto',
+      },
     },
     close: {
       appearance: 'none',
@@ -61,12 +70,14 @@ export const dialog = defineSlotRecipe({
       cursor: 'pointer',
       fontSize: 'xl',
       lineHeight: '1',
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minW: '24px',
+      minH: '24px',
       p: '1',
       borderRadius: 'sm',
       _hover: { color: 'text' },
-      _light: {
-        _hover: { color: 'lightText' },
-      },
       _focusVisible: {
         outline: 'none',
         boxShadow: 'outline',

@@ -7,6 +7,7 @@ import {
   useState,
   type ButtonHTMLAttributes,
   type KeyboardEvent,
+  type ReactNode,
 } from 'react';
 import { switchRecipe } from '@becket-ui/tokens/recipes';
 
@@ -17,6 +18,8 @@ export type SwitchProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChang
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   size?: SwitchSize;
+  /** Visible name. Prefer this over a control-only `aria-label`. */
+  label?: ReactNode;
 };
 
 function mergeClassName(...classes: (string | undefined)[]): string {
@@ -33,6 +36,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
       disabled = false,
       className,
       id: idProp,
+      label,
       onClick,
       onKeyDown,
       ...props
@@ -60,7 +64,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
 
     const styles = switchRecipe({ size, checked });
 
-    return (
+    const control = (
       <button
         ref={ref}
         id={id}
@@ -87,6 +91,19 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(
           <span className={styles.thumb} />
         </span>
       </button>
+    );
+
+    if (label == null) {
+      return control;
+    }
+
+    return (
+      <span className={styles.wrap}>
+        {control}
+        <label className={styles.label} htmlFor={id}>
+          {label}
+        </label>
+      </span>
     );
   },
 );

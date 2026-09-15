@@ -1,0 +1,68 @@
+/**
+ * Becket public theme contract (copy, then import AFTER index.css).
+ *
+ *   import '@becket-ui/tokens/index.css';
+ *   import './becket-theme.css'; // this file, renamed
+ *
+ * Or generate the same vars with:
+ *   import { defineBecketTheme } from '@becket-ui/tokens/theme';
+ *
+ * Unlayered :root wins over @layer tokens. Do not depend on Panda leftover
+ * names (rose-500, spacing-11, sizes-md, …) — those are not public API.
+ *
+ * Light/dark: `background` / `text` / `muted` are semantic. Override them on
+ * :root (dark) and html[data-theme='light'] (light), or pass { dark, light }
+ * to defineBecketTheme. lightBackground / lightText still exist as aliases.
+ */
+
+:root {
+  /* Brand aliases — override these to recolor the kit */
+  /* --beckui--colors-primary: oklch(0.75 0.15 78); */
+  /* --beckui--colors-secondary: oklch(0.70 0.13 125); */
+  /* --beckui--colors-tertiary: oklch(0.60 0.16 48); */
+  /* --beckui--colors-primary-hover follows primary via color-mix */
+
+  /* Semantic surfaces (dark = :root default) */
+  /* --beckui--colors-background: var(--beckui--colors-neutral-900); */
+  /* --beckui--colors-text: var(--beckui--colors-neutral-50); */
+  /* --beckui--colors-muted: var(--beckui--colors-neutral-300); */
+  /* --beckui--colors-border: var(--beckui--colors-neutral-200); */
+
+  /* Neutral scale 50–900 */
+  /* --beckui--colors-neutral-50: oklch(0.96 0.012 78); */
+  /* --beckui--colors-neutral-900: oklch(0.22 0.015 60); */
+
+  /* Status — never aliases of primary */
+  /* --beckui--colors-danger: oklch(0.62 0.20 25); */
+  /* --beckui--colors-warning: oklch(0.78 0.14 95); */
+  /* --beckui--colors-success: oklch(0.68 0.16 145); */
+
+  /* Type + layout spacing (Stack gap). Do not use these to densify buttons. */
+  /* --beckui--fonts-sans: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif; */
+  /* --beckui--fonts-mono: 'JetBrains Mono', 'Menlo', 'Consolas', 'monospace'; */
+  /* --beckui--font-sizes-sm: 0.875rem; */
+  /* --beckui--font-sizes-md: 1rem; */
+  /* --beckui--spacing-xs: var(--beckui--spacing-1); */
+  /* --beckui--spacing-sm: var(--beckui--spacing-2); */
+  /* --beckui--spacing-md: var(--beckui--spacing-3); */
+  /* --beckui--spacing-lg: var(--beckui--spacing-5); */
+  /* --beckui--spacing-xl: var(--beckui--spacing-8); */
+  /* --beckui--radii-sm: 4px; */
+  /* --beckui--radii-md: 8px; */
+  /* --beckui--radii-lg: 12px; */
+  /* --beckui--sizes-field: 12.5rem; */
+
+  /* Component density (not Stack gap) */
+  /* --beckui-button-px-md: 1rem; */
+  /* --beckui-button-py-md: 0.5rem; */
+  /* --beckui-field-px-md: 0.75rem; */
+  /* --beckui-field-py-md: 0.5rem; */
+  /* --beckui-tag-px-md: 0.75rem; */
+  /* --beckui-tag-py-md: 0.25rem; */
+}
+
+html[data-theme='light'] {
+  /* --beckui--colors-background: var(--beckui--colors-neutral-50); */
+  /* --beckui--colors-text: var(--beckui--colors-neutral-900); */
+  /* --beckui--colors-muted: var(--beckui--colors-neutral-600); */
+}

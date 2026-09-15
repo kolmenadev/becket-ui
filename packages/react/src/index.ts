@@ -6,6 +6,7 @@ export { Stack, HStack, VStack } from './components/Stack';
 export { Tag } from './components/Tag';
 export { Badge } from './components/Badge';
 export { Switch } from './components/Switch';
+export type { SwitchProps } from './components/Switch';
 export {
   Field,
   FieldLabel,
@@ -19,6 +20,8 @@ export {
 export type { FieldSize, FieldContextValue } from './components/Field';
 export { TextField } from './components/TextField';
 export { Checkbox } from './components/Checkbox';
+export { Radio, RadioGroup } from './components/Radio';
+export type { RadioProps, RadioGroupProps } from './components/Radio';
 export { Select } from './components/Select';
 export { Textarea } from './components/Textarea';
 export {

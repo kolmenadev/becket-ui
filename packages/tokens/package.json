@@ -4,7 +4,7 @@
   "description": "Becket design tokens, Panda recipes, and prebuilt CSS",
   "type": "module",
   "license": "MIT",
-  "author": "Kolmena",
+  "author": "Kolmena de Software",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kolmenadev/becket-ui.git",
@@ -28,6 +28,9 @@
   "files": [
     "dist",
     "styled-system",
+    "theme/index.mjs",
+    "theme/index.d.ts",
+    "theme.example.css",
     "index.css",
     "index.mjs",
     "index.d.ts"
@@ -36,7 +39,7 @@
     "build": "panda codegen && panda cssgen && node scripts/bundle-css.mjs && tsup && node scripts/emit-preset-dts.mjs",
     "prepare": "pnpm build",
     "prepack": "pnpm build",
-    "test": "echo \"No tests in @becket-ui/tokens\""
+    "test": "node --test theme/index.test.mjs"
   },
   "exports": {
     ".": {
@@ -73,7 +76,16 @@
       "types": "./styled-system/jsx/index.d.ts"
     },
     "./styles.css": "./styled-system/styles.css",
-    "./index.css": "./index.css"
+    "./index.css": "./index.css",
+    "./theme.example.css": "./theme.example.css",
+    "./theme": {
+      "types": "./theme/index.d.ts",
+      "storybook": "./theme/index.mjs",
+      "module": "./theme/index.mjs",
+      "browser": "./theme/index.mjs",
+      "import": "./theme/index.mjs",
+      "default": "./theme/index.mjs"
+    }
   },
   "publishConfig": {
     "access": "public"

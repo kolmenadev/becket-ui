@@ -1,5 +1,7 @@
 import { defineRecipe } from '@pandacss/dev';
+import { colorRef, gradientRef } from '../preset/theme-tokens';
 import { filledGradient, outlineGradient } from './gradientStyles';
+import { tagSizeStyles } from './density';
 
 export const tag = defineRecipe({
   className: 'tag',
@@ -23,11 +25,7 @@ export const tag = defineRecipe({
     userSelect: 'none',
   },
   variants: {
-    size: {
-      sm: { fontSize: 'xs', px: '2', py: '1' },
-      md: { fontSize: 'sm', px: '3', py: '1' },
-      lg: { fontSize: 'md', px: '3', py: '2' },
-    },
+    size: tagSizeStyles,
     visual: {
       primary: {},
       secondary: {},
@@ -51,23 +49,22 @@ export const tag = defineRecipe({
     {
       withGradient: true,
       css: {
-        ...filledGradient('var(--mav-label-gradient, {gradients.primary})'),
+        ...filledGradient(`var(--mav-label-gradient, ${gradientRef('primary')})`),
       },
     },
     {
       visual: 'outline',
       withGradient: true,
       css: {
-        ...outlineGradient('var(--mav-label-gradient, {gradients.primary})'),
-        color: 'var(--mav-label-color, {colors.secondary})',
+        ...outlineGradient(`var(--mav-label-gradient, ${gradientRef('primary')})`),
+        color: `var(--mav-label-color, ${colorRef('secondary')})`,
       },
     },
     {
       visual: 'neutral',
       css: {
         _light: {
-          bg: 'var(--mav-label-bg, {colors.neutral.100})',
-          color: 'var(--mav-label-color, {colors.lightText})',
+          bg: `var(--mav-label-bg, ${colorRef('neutral', 100)})`,
         },
       },
     },

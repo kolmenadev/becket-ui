@@ -3,8 +3,11 @@
 import {
   createContext,
   forwardRef,
+  useCallback,
   useContext,
   useId,
+  useLayoutEffect,
+  useState,
   type ComponentPropsWithoutRef,
   type InputHTMLAttributes,
   type LabelHTMLAttributes,
@@ -23,10 +26,38 @@ export type FieldContextValue = {
   describedBy?: string;
 };
 
-const FieldContext = createContext<FieldContextValue | null>(null);
+type DescribedBySlot = 'helper' | 'error';
+
+type FieldContextInternal = FieldContextValue & {
+  registerDescribedBy: (slot: DescribedBySlot, present: boolean) => void;
+};
+
+const FieldContext = createContext<FieldContextInternal | null>(null);
+
+function toPublicField(ctx: FieldContextInternal): FieldContextValue {
+  const { registerDescribedBy: _register, ...publicCtx } = ctx;
+  return publicCtx;
+}
 
 export function useField(): FieldContextValue {
-  const ctx = useContext(FieldContext);
+  const ctx = useOptionalFieldInternal();
+  if (!ctx) {
+    throw new Error('useField must be used within Field');
+  }
+  return toPublicField(ctx);
+}
+
+function useOptionalFieldInternal(): FieldContextInternal | null {
+  return useContext(FieldContext);
+}
+
+export function useOptionalField(): FieldContextValue | null {
+  const ctx = useOptionalFieldInternal();
+  return ctx ? toPublicField(ctx) : null;
+}
+
+function useFieldInternal(): FieldContextInternal {
+  const ctx = useOptionalFieldInternal();
   if (!ctx) {
     throw new Error('useField must be used within Field');
   }
@@ -61,12 +92,17 @@ export const Field = forwardRef<HTMLDivElement, FieldProps>(
     const id = idProp ?? autoId;
     const helperId = `${id}-helper`;
     const errorId = `${id}-error`;
-    const describedBy = invalid ? errorId : helperId;
+    const [slots, setSlots] = useState({ helper: false, error: false });
+    const registerDescribedBy = useCallback((slot: DescribedBySlot, present: boolean) => {
+      setSlots((prev) => (prev[slot] === present ? prev : { ...prev, [slot]: present }));
+    }, []);
+    const describedBy =
+      invalid && slots.error ? errorId : slots.helper ? helperId : undefined;
     const styles = field({ size, fullWidth });
 
     return (
       <FieldContext.Provider
-        value={{ id, invalid, size, helperId, errorId, describedBy }}
+        value={{ id, invalid, size, helperId, errorId, describedBy, registerDescribedBy }}
       >
         <div ref={ref} {...props} className={mergeClassName(styles.root, className)}>
           {children}
@@ -96,8 +132,12 @@ type FieldHelperProps = ComponentPropsWithoutRef<'span'>;
 
 export const FieldHelper = forwardRef<HTMLSpanElement, FieldHelperProps>(
   ({ className, ...props }, ref) => {
-    const { size, helperId } = useField();
+    const { size, helperId, registerDescribedBy } = useFieldInternal();
     const styles = field({ size });
+    useLayoutEffect(() => {
+      registerDescribedBy('helper', true);
+      return () => registerDescribedBy('helper', false);
+    }, [registerDescribedBy]);
     return (
       <span
         ref={ref}
@@ -113,8 +153,12 @@ FieldHelper.displayName = 'FieldHelper';
 
 export const FieldError = forwardRef<HTMLSpanElement, FieldHelperProps>(
   ({ className, ...props }, ref) => {
-    const { size, errorId } = useField();
+    const { size, errorId, registerDescribedBy } = useFieldInternal();
     const styles = field({ size });
+    useLayoutEffect(() => {
+      registerDescribedBy('error', true);
+      return () => registerDescribedBy('error', false);
+    }, [registerDescribedBy]);
     return (
       <span
         ref={ref}

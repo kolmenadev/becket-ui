@@ -6,7 +6,7 @@ It is **inspired by Chakra UI’s API** (layout primitives, `as`, recipe variant
 
 **Who it is for:** small and mid React apps that need a UI this week — typed components, tokens, one CSS import — not a Tailwind design system they have to invent. Tailwind already compiles CSS; it does not give you a reusable `<Button visual="primary">`. Dogfooding in our own products is how the kit stays honest. Positioning vs Tailwind / shadcn / Park / Chakra / Mantine: [WHY.md](./WHY.md).
 
-Work remaining: [BACKLOG.md](./BACKLOG.md). First public npm release: [PUBLISH.md](./PUBLISH.md).
+Work remaining: [BACKLOG.md](./BACKLOG.md). First public npm release: [PUBLISH.md](./PUBLISH.md). Consumer AI agents: [MCP.md](./MCP.md) ([MAV-36](https://kolmena.atlassian.net/browse/MAV-36); does **not** block 0.1.0). Figma library: [FIGMA.md](./FIGMA.md) ([MAV-49](https://kolmena.atlassian.net/browse/MAV-49); does **not** block 0.1.0).
 
 ## Remotes
 
@@ -26,7 +26,7 @@ npm metadata on `@becket-ui/react` and `@becket-ui/tokens` points at **becket-ui
 | SSR-first | Prebuilt CSS. Components render class names. No style injection at runtime. |
 | Compile-time CSS | Panda recipes, patterns, and `staticCss` generate `index.css` in `@becket-ui/tokens`. |
 | Minimal runtime JS | Native elements first (`<button>`, `<input>`, `<dialog>`, `<select>`). JS only for behavior the platform does not give you. **Not** absolute-zero styling JS (Panda still maps variants → class names). |
-| Product-agnostic | Public API is generic primitives only. No Magnum Opus / trading names, no dashboard presets. |
+| Product-agnostic | Public API is generic primitives only. No consumer-product names, no app presets. |
 | Consumer simplicity | Install two packages, import CSS once, set `data-theme`. Panda and Tailwind are **not** required in the app. |
 
 **Do not** adopt Zag, Ark UI, or Chakra v3 machines. That would abandon the compile-time + native-HTML thesis.
@@ -67,6 +67,8 @@ Source of visual truth. Config: [`packages/tokens/panda.config.ts`](../packages/
 | Import | Purpose |
 | --- | --- |
 | `@becket-ui/tokens/index.css` | Full theme + utilities + recipes (what apps should import) |
+| `@becket-ui/tokens/theme` | `defineBecketTheme()` — emit unlayered `:root` CSS vars (no Panda) |
+| `@becket-ui/tokens/theme.example.css` | Copy-paste public variable contract |
 | `@becket-ui/tokens/styles.css` | Panda utilities only |
 | `@becket-ui/tokens/css` | `css`, `cva`, `sva` |
 | `@becket-ui/tokens/recipes` | Recipe functions + variant types |
@@ -101,9 +103,15 @@ import { Button, Stack, Card } from '@becket-ui/react';
 
 Prefer semantic spacing in apps (`gap="md"`). Numeric `gap={3}` is supported.
 
+Companies rebrand with CSS variables after `index.css` (or `defineBecketTheme()`). No theme provider. Panda is optional. Details: [THEMING.md](./THEMING.md).
+
 Consumers who **also** use Panda add `@becket-ui/tokens/preset` to their `panda.config.ts`. They should not copy `panda.config.ts` from this repo.
 
-**Today:** Dogfood via `file:` / workspace links. Phase A packaging is in place (pack `styled-system` + react `dist`, preset export). Packages are **not** on the public registry until [PUBLISH.md](./PUBLISH.md) gate G1. See [BACKLOG.md](./BACKLOG.md).
+**Today:** Dogfood via `file:` / workspace links. Phase A packaging is in place (pack `styled-system` + react `dist`, preset export). Packages are **not** on the public registry until [PUBLISH.md](./PUBLISH.md) gate G1 (kit + C4 + public `becket-ui` + theming + **WCAG 2.2 AA [MAV-29](https://kolmena.atlassian.net/browse/MAV-29)** + **a11y tests [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)**). See [BACKLOG.md](./BACKLOG.md).
+
+A **consumer MCP** ([MAV-36](https://kolmena.atlassian.net/browse/MAV-36)) is planned so AI agents can query install, catalog, props, and examples the way they already query Chakra. It is **not** a G1 gate. Spec: [MCP.md](./MCP.md).
+
+A **Figma library** ([MAV-49](https://kolmena.atlassian.net/browse/MAV-49)) is planned so design work uses the same tokens and v1 primitives as code. It is **not** a G1 gate. Spec: [FIGMA.md](./FIGMA.md).
 
 ---
 
@@ -111,7 +119,7 @@ Consumers who **also** use Panda add `@becket-ui/tokens/preset` to their `panda.
 
 **In:** reusable primitives another product would use without renaming.
 
-**Out:** app presets, className strings for a specific dashboard, trading/domain widgets (charts, order books, status maps). Those stay in the consuming app.
+**Out:** app presets, className strings for a specific product, domain widgets (charts, maps). Those stay in the consuming app.
 
 Test: *Would another product reuse this without a rename?* If no → keep it out of `@becket-ui/react`.
 
@@ -157,13 +165,15 @@ Defined under `theme.extend.tokens` in `panda.config.ts`:
 
 - **Brand:** `becketYellow`, `hiveSage`, `combAmber` (identity only — do not reuse as status)
 - **Aliases:** `primary`, `secondary`, `tertiary`, `primaryHover`
-- **Neutral:** 50–900 (warm honey-charcoal), plus `background`, `lightBackground`, `text`, `lightText`, `muted`, `border`
+- **Neutral:** 50–900 (warm honey-charcoal)
+- **Semantic (light/dark via `data-theme`):** `background`, `text`, `muted`, `surface`
+- **Static:** `border` (outline gray), deprecated `lightBackground` / `lightText` aliases
 - **Status:** `danger`, `warning`, `success` — independent hues from brand; never aliases of `primary` / `secondary` / `tertiary`
 - **Gradients:** `primary`, `primaryHover`, `secondary`, `neutral`
 - **Type:** Inter / JetBrains Mono; sizes `xs`–`6xl`; weights normal/medium/bold
 - **Radii / shadows:** sm–xl / sm–lg, plus `elevated` (dark card shadow with a 1px highlight ring)
 
-Light/dark is **not** a Panda `semanticTokens` layer yet. Recipes use `_light` / `_dark` conditions on `[data-theme]`, and `theme-base.css` sets body background/color. Promoting aliases to semantic tokens is Phase B.
+`background` / `text` / `muted` / `surface` are Panda `semanticTokens` keyed off `[data-theme]`. Body color uses those vars. Some recipes still fork `_light` for surfaces that are not the page background (Card subtle vs elevated, table rules). Companies rebrand via CSS variables after `index.css` — no theme provider, Panda not required. See [THEMING.md](./THEMING.md) and [BACKLOG.md](./BACKLOG.md) Phase E.
 
 `staticCss` pre-generates all recipes plus the layout utilities components actually use (gap scale, flex alignment, responsive grid columns). That is why a consumer can skip Panda codegen.
 
@@ -197,9 +207,10 @@ Overlay approach: native `<dialog>`, `popover`, styled `<select>`. Tooltip stays
 ## Authoring a new primitive
 
 1. Add/extend a Panda recipe in `packages/tokens/recipes/`, register it in `panda.config.ts`, regenerate.
-2. Implement in `packages/react/src/components/` (`forwardRef`, `as`, recipe variants, a11y).
+2. Implement in `packages/react/src/components/` (`forwardRef`, `as`, recipe variants, **WCAG 2.2 AA**).
 3. Colocate `ComponentName.stories.tsx` with controls for every variant.
-4. Export only a stable generic name from `packages/react/src/index.ts`.
+4. Add Vitest a11y coverage (axe-core via private `@becket-ui/a11y`; keyboard tests if APG applies). No Playwright/Chromatic.
+5. Export only a stable generic name from `packages/react/src/index.ts`.
 
 Shared non-UI logic lives in `packages/react/src/helpers/`, not under `components/`.
 
@@ -207,4 +218,4 @@ Shared non-UI logic lives in `packages/react/src/helpers/`, not under `component
 
 ## License
 
-MIT © Kolmena. Root `LICENSE` and both package `license` fields match.
+MIT © Kolmena de Software. Root `LICENSE` and both package `license` fields match.

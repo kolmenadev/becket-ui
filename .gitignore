@@ -62,8 +62,19 @@ packages/tokens/styled-system-studio
 ## Cursor
 .cursor/
 
+## Local reference materials
+.reference/
+
 ## Turbo
 .turbo/
 
+## Next example (packed tarballs + build)
+apps/next-example/vendor/
+apps/next-example/.next/
+
+
 ## Vitest
 .vitest/
+
+## TypeScript incremental
+*.tsbuildinfo

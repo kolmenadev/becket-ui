@@ -57,15 +57,15 @@ export const Anatomy: Story = {
     <Card {...args} visual={args.visual ?? 'elevated'}>
       <CardHeader>
         <Stack gap="1">
-          <CardTitle>Signal breakdown</CardTitle>
-          <CardDescription>Live edge components from the market stream.</CardDescription>
+          <CardTitle>Project overview</CardTitle>
+          <CardDescription>Summary of the latest activity.</CardDescription>
         </Stack>
       </CardHeader>
       <CardBody>
-        <Text>Body slot for tables, charts, and domain widgets.</Text>
+        <Text>Body slot for tables, lists, and nested content.</Text>
       </CardBody>
       <CardFooter>
-        <CardDescription>Updated via WebSocket</CardDescription>
+        <CardDescription>Updated 2 hours ago</CardDescription>
       </CardFooter>
     </Card>
   ),
@@ -84,7 +84,7 @@ export const Sizes: Story = {
       <Card size="md">
         <CardTitle>Medium</CardTitle>
         <CardBody>
-          <Text>Default dashboard padding</Text>
+          <Text>Default padding</Text>
         </CardBody>
       </Card>
       <Card size="lg">
@@ -126,11 +126,11 @@ export const WithGrid: Story = {
   render: () => (
     <Card fullWidth>
       <CardHeader>
-        <CardTitle>Stats</CardTitle>
+        <CardTitle>Overview</CardTitle>
       </CardHeader>
       <CardBody>
         <SimpleGrid minChildWidth="10rem" gap="md">
-          {['Countdown', 'WebSocket', 'Leading side', 'Edge score'].map((label) => (
+          {['Users', 'Projects', 'Storage', 'Uptime'].map((label) => (
             <Card key={label} size="sm" visual="outline" fullWidth>
               <CardBody>
                 <Text style={{ opacity: 0.72, fontSize: '0.875rem' }}>{label}</Text>
@@ -148,11 +148,11 @@ export const HeaderAction: Story = {
   render: (args: CardProps) => (
     <Card {...args}>
       <CardHeader>
-        <CardTitle>Order book</CardTitle>
-        <CardDescription>UP · DOWN</CardDescription>
+        <CardTitle>Team</CardTitle>
+        <CardDescription>3 members</CardDescription>
       </CardHeader>
       <CardBody>
-        <Text>Domain content stays in the app; Card supplies layout chrome.</Text>
+        <Text>Application content stays in the app; Card supplies layout chrome.</Text>
       </CardBody>
     </Card>
   ),

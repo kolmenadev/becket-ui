@@ -1,13 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { tag as tagRecipe } from '@becket-ui/tokens/recipes';
+import { defineBecketTheme } from '@becket-ui/tokens/theme';
 import { HStack, Stack } from './Stack';
 import { Tag, type TagProps } from './Tag';
-import { tag as tagRecipe } from '@becket-ui/tokens/recipes';
+
+const tagDensityCss = defineBecketTheme({
+  density: { tag: { md: { px: '0.35rem', py: '0.05rem' } } },
+});
 
 const meta: Meta<typeof Tag> = {
   title: 'Data Display/Tag',
   component: Tag,
   args: {
-    children: 'BTC',
+    children: 'Tag',
     visual: 'neutral',
     size: 'md',
     borderRadius: 'full',
@@ -38,9 +43,9 @@ export const Default: Story = {};
 export const Sizes: Story = {
   render: () => (
     <HStack gap="sm" align="center">
-      <Tag size="sm">5m</Tag>
-      <Tag size="md">BTC</Tag>
-      <Tag size="lg">ETH</Tag>
+      <Tag size="sm">sm</Tag>
+      <Tag size="md">md</Tag>
+      <Tag size="lg">lg</Tag>
     </HStack>
   ),
 };
@@ -86,8 +91,8 @@ export const CustomColors: Story = {
 export const MetadataRow: Story = {
   render: () => (
     <HStack gap="sm" align="center">
-      <Tag>BTC</Tag>
-      <Tag>5m</Tag>
+      <Tag>Docs</Tag>
+      <Tag>v1</Tag>
     </HStack>
   ),
 };
@@ -95,7 +100,26 @@ export const MetadataRow: Story = {
 export const Overflow: Story = {
   render: () => (
     <Stack gap="sm" style={{ maxWidth: '6rem' }}>
-      <Tag>Very-long-market-metadata-label</Tag>
+      <Tag>Very-long-label-that-truncates</Tag>
     </Stack>
+  ),
+};
+
+/**
+ * Tag padding follows `--beckui-tag-px-md`. Stack `gap="md"` does not.
+ */
+export const DensityOverride: Story = {
+  render: (args) => (
+    <>
+      <style>{tagDensityCss}</style>
+      <Stack gap="md" align="start">
+        <HStack gap="sm">
+          <Tag {...args}>Dense md</Tag>
+          <Tag {...args} size="sm">
+            sm
+          </Tag>
+        </HStack>
+      </Stack>
+    </>
   ),
 };
