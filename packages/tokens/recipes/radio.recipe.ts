@@ -50,6 +50,12 @@ export const radio = defineSlotRecipe({
           backgroundColor: 'primary',
           borderColor: 'primary',
           backgroundImage: radioDot,
+          // Same specificity as `_light` on indicator — restate so light does not
+          // keep the idle gray ring / white fill.
+          _light: {
+            backgroundColor: 'primary',
+            borderColor: 'primary',
+          },
         },
       },
       _focusVisible: {
@@ -60,6 +66,7 @@ export const radio = defineSlotRecipe({
       _invalid: {
         '& + *': {
           borderColor: 'danger',
+          _light: { borderColor: 'danger' },
         },
       },
     },

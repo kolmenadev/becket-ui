@@ -10,6 +10,7 @@ import {
   JUSTIFY_OPTIONS,
   knobs,
 } from '../helpers/storybookControls';
+import { demoChip, demoChipLg, demoChipMd, demoChipWide } from '../helpers/storybookDemoChip';
 import { Flex, type FlexProps } from './Flex';
 
 const meta: Meta<typeof Flex> = {
@@ -56,9 +57,9 @@ const gradientContainerClass = css({
   borderRadius: 'md',
 });
 
-const boxClass200 = css({ bg: 'neutral.500', p: 2, minW: 13, h: 8 });
-const boxClass300 = css({ bg: 'neutral.600', p: 2, minW: 13, h: 8 });
-const boxClass400 = css({ bg: 'neutral.700', p: 2, minW: 13, h: 8 });
+const boxClass200 = demoChip;
+const boxClass300 = demoChip;
+const boxClass400 = demoChip;
 
 export const Default: Story = {
   args: { direction: 'row', gap: 'md', align: 'start', justify: 'start' },
@@ -83,9 +84,9 @@ export const Direction: Story = {
 };
 
 const boxClassHeights = {
-  sm: css({ bg: 'neutral.500', p: 2, minW: 13, h: 8 }),
-  md: css({ bg: 'neutral.500', p: 2, minW: 13, h: 13 }),
-  lg: css({ bg: 'neutral.500', p: 2, minW: 13, h: 21 }),
+  sm: demoChip,
+  md: demoChipMd,
+  lg: demoChipLg,
 };
 
 export const Align: Story = {
@@ -99,7 +100,7 @@ export const Align: Story = {
   ),
 };
 
-const boxClassWide = css({ bg: 'neutral.500', p: 2, minW: 13, h: 8, w: 21 });
+const boxClassWide = demoChipWide;
 
 export const Justify: Story = {
   args: { gap: 'md', justify: 'center' },
@@ -112,7 +113,7 @@ export const Justify: Story = {
   ),
 };
 
-const boxClassWrap = css({ bg: 'neutral.500', p: 2, h: 8, w: 21 });
+const boxClassWrap = demoChipWide;
 
 export const Wrap: Story = {
   args: { gap: 'md', wrap: 'wrap' },

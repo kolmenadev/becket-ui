@@ -32,6 +32,19 @@ test('defineBecketTheme maps background { dark, light } onto one semantic var', 
   assert.doesNotMatch(css, /light-background/);
 });
 
+test('defineBecketTheme maps danger { dark, light } onto one semantic var', () => {
+  const css = defineBecketTheme({
+    colors: {
+      danger: { dark: 'oklch(0.76 0.16 25)', light: 'oklch(0.48 0.20 25)' },
+    },
+  });
+  assert.match(css, /:root \{[\s\S]*--beckui--colors-danger: oklch\(0\.76 0\.16 25\);/);
+  assert.match(
+    css,
+    /html\[data-theme='light'\] \{[\s\S]*--beckui--colors-danger: oklch\(0\.48 0\.20 25\);/,
+  );
+});
+
 test('defineBecketTheme density vars do not touch spacing tokens', () => {
   const css = defineBecketTheme({
     density: { button: { md: { px: '0.4rem', py: '0.1rem' } } },
@@ -43,8 +56,8 @@ test('defineBecketTheme density vars do not touch spacing tokens', () => {
 
 test('defineBecketTheme rejects unknown keys', () => {
   assert.throws(
-    () => defineBecketTheme({ colors: { accent: 'red' } }),
-    /Unknown Becket theme key "colors.accent"/,
+    () => defineBecketTheme({ colors: { highlight: 'red' } }),
+    /Unknown Becket theme key "colors.highlight"/,
   );
 });
 
@@ -56,6 +69,10 @@ test('generated index.css semantic text/background follow data-theme', () => {
   assert.match(css, /--beckui-button-px-md:\s*1rem/);
   assert.match(css, /--beckui-field-px-md:\s*0\.75rem/);
   assert.match(css, /--beckui-tag-px-md:\s*0\.75rem/);
+  assert.match(
+    css,
+    /--beckui--shadows-outline:\s*0 0 0 2px var\(--beckui--colors-background\), 0 0 0 4px var\(--beckui--colors-primary\)/,
+  );
 });
 
 test('package.json exports ./theme for Storybook and Vite conditions', () => {

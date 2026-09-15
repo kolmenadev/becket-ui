@@ -24,24 +24,25 @@ export const button = defineRecipe({
     visual: {
       primary: {
         backgroundColor: 'primary',
-        color: 'neutral.50',
+        color: 'neutral.900',
         _hover: { backgroundColor: 'primaryHover' },
       },
       secondary: {
         backgroundColor: 'secondary',
-        color: 'neutral.50',
+        color: 'neutral.900',
         _hover: {
           backgroundColor: 'secondary',
         },
       },
       neutral: {
-        backgroundColor: 'neutral.600',
-        color: 'text',
+        backgroundColor: 'neutral.800',
+        color: 'neutral.50',
         _hover: {
-          backgroundColor: 'neutral.500',
+          backgroundColor: 'neutral.700',
         },
         _light: {
           backgroundColor: 'neutral.200',
+          color: 'neutral.900',
           _hover: {
             backgroundColor: 'neutral.300',
           },
@@ -50,8 +51,8 @@ export const button = defineRecipe({
       outline: {
         borderWidth: '2px',
         borderStyle: 'solid',
-        borderColor: 'secondary',
-        color: 'secondary',
+        borderColor: 'accent',
+        color: 'accent',
         backgroundColor: 'transparent',
         _hover: { backgroundColor: 'neutral.800' },
         _light: {
@@ -83,7 +84,7 @@ export const button = defineRecipe({
       withGradient: true,
       css: {
         ...filledGradient('{gradients.primary}'),
-        color: 'neutral.50',
+        color: 'neutral.900',
         _hover: {
           backgroundImage: '{gradients.primaryHover}',
         },
@@ -94,7 +95,7 @@ export const button = defineRecipe({
       withGradient: true,
       css: {
         ...filledGradient('{gradients.secondary}'),
-        color: 'neutral.50',
+        color: 'neutral.900',
       },
     },
     {
@@ -102,7 +103,7 @@ export const button = defineRecipe({
       withGradient: true,
       css: {
         ...filledGradient('{gradients.neutral}'),
-        color: 'text',
+        color: 'neutral.900',
       },
     },
     {
@@ -110,7 +111,7 @@ export const button = defineRecipe({
       withGradient: true,
       css: {
         ...outlineGradient('{gradients.primary}'),
-        color: 'secondary',
+        color: 'accent',
       },
     },
   ],

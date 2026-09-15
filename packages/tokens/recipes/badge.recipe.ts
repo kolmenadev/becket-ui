@@ -54,7 +54,7 @@ export const badge = defineRecipe({
       withGradient: true,
       css: {
         ...filledGradient('var(--mav-label-gradient, {gradients.primary})'),
-        color: 'var(--mav-label-color, {colors.text})',
+        color: 'var(--mav-label-color, {colors.neutral.900})',
       },
     },
     {
@@ -62,16 +62,8 @@ export const badge = defineRecipe({
       withGradient: true,
       css: {
         ...outlineGradient('var(--mav-label-gradient, {gradients.primary})'),
-        color: 'var(--mav-label-color, {colors.secondary})',
+        color: 'var(--mav-label-color, {colors.accent})',
         textTransform: 'uppercase',
-      },
-    },
-    {
-      visual: 'neutral',
-      css: {
-        _light: {
-          bg: 'var(--mav-label-bg, {colors.neutral.100})',
-        },
       },
     },
   ],

@@ -9,11 +9,12 @@ export type BecketThemeColors = {
   text?: BecketColorValue;
   muted?: BecketColorValue;
   border?: BecketColorValue;
+  danger?: BecketColorValue;
+  accent?: BecketColorValue;
   /** @deprecated Prefer `background: { light }`. */
   lightBackground?: string;
   /** @deprecated Prefer `text: { light }`. */
   lightText?: string;
-  danger?: string;
   warning?: string;
   success?: string;
   neutral?: Partial<

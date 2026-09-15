@@ -32,6 +32,10 @@ export const checkbox = defineSlotRecipe({
           backgroundColor: 'primary',
           borderColor: 'primary',
           backgroundImage: checkMark,
+          _light: {
+            backgroundColor: 'primary',
+            borderColor: 'primary',
+          },
         },
       },
       _focusVisible: {
