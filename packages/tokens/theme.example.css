@@ -32,8 +32,9 @@
   /* --beckui--colors-neutral-50: oklch(0.96 0.012 78); */
   /* --beckui--colors-neutral-900: oklch(0.22 0.015 60); */
 
-  /* Status — never aliases of primary */
-  /* --beckui--colors-danger: oklch(0.62 0.20 25); */
+  /* Status — never aliases of primary. danger + accent are semantic (dark vs light). */
+  /* --beckui--colors-danger: oklch(0.76 0.16 25); */
+  /* --beckui--colors-accent: oklch(0.86 0.12 125); */
   /* --beckui--colors-warning: oklch(0.78 0.14 95); */
   /* --beckui--colors-success: oklch(0.68 0.16 145); */
 
@@ -65,4 +66,6 @@ html[data-theme='light'] {
   /* --beckui--colors-background: var(--beckui--colors-neutral-50); */
   /* --beckui--colors-text: var(--beckui--colors-neutral-900); */
   /* --beckui--colors-muted: var(--beckui--colors-neutral-600); */
+  /* --beckui--colors-danger: oklch(0.48 0.20 25); */
+  /* --beckui--colors-accent: oklch(0.38 0.14 125); */
 }

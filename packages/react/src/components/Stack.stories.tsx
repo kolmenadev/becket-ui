@@ -8,6 +8,7 @@ import {
   STACK_DIRECTION_OPTIONS,
   knobs,
 } from '../helpers/storybookControls';
+import { demoChipBlock } from '../helpers/storybookDemoChip';
 import { Stack, HStack, VStack, type StackProps } from './Stack';
 
 const meta: Meta<typeof Stack> = {
@@ -30,9 +31,9 @@ export default meta;
 
 type Story = StoryObj<StackProps>;
 
-const boxClass200 = css({ bg: 'neutral.500', p: 2, w: 21, h: 8 });
-const boxClass300 = css({ bg: 'neutral.600', p: 2, w: 21, h: 8 });
-const boxClass400 = css({ bg: 'neutral.700', p: 2, w: 21, h: 8 });
+const boxClass200 = demoChipBlock;
+const boxClass300 = demoChipBlock;
+const boxClass400 = demoChipBlock;
 const gradientContainerClass = css({ p: 'md', borderRadius: 'md' });
 
 export const Basic: Story = {

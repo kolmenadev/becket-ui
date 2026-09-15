@@ -3,9 +3,10 @@ import { button as buttonRecipe } from '@becket-ui/tokens/recipes';
 import { defineBecketTheme } from '@becket-ui/tokens/theme';
 import { Button, type ButtonProps } from './Button';
 import { Stack } from './Stack';
+import { Text } from './Text';
 
 const brandThemeCss = defineBecketTheme({
-  colors: { primary: 'oklch(0.55 0.22 280)' },
+  colors: { primary: 'oklch(0.82 0.14 280)' },
 });
 
 const densityCss = defineBecketTheme({
@@ -73,13 +74,18 @@ export const FullWidth: Story = {
 /**
  * Product-wide rebrand: unlayered CSS variables after `index.css` (or
  * `defineBecketTheme()`). Hover, focus, and gradients follow `primary`.
- * This is not a React theme provider.
+ * This is not a React theme provider. Violet is the demo override — default
+ * Becket primary stays `becketYellow`.
  */
 export const BrandTheme: Story = {
   render: (args) => (
     <>
       <style>{brandThemeCss}</style>
       <Stack gap="md" align="start">
+        <Text fontSize="sm" color="muted" maxW="34">
+          Injects <code>--beckui--colors-primary: oklch(0.82 0.14 280)</code> (violet)
+          so theming is obvious. Default primary is yellow.
+        </Text>
         <Button {...args}>Brand primary</Button>
         <Button {...args} withGradient>
           Brand gradient
@@ -111,13 +117,14 @@ export const InstanceOverride: Story = {
 
 /**
  * Component density. `--beckui-button-px-md` shrinks this Button; Stack `gap="md"`
- * still uses `--beckui--spacing-md`.
+ * still uses `--beckui--spacing-md`. Focus ring is a canvas + primary double
+ * stroke so it stays visible on yellow (Tab to this Button).
  */
 export const DensityOverride: Story = {
   render: (args) => (
     <>
       <style>{densityCss}</style>
-      <Stack gap="md" align="start">
+      <Stack gap="md" align="start" style={{ padding: '1rem' }}>
         <Button {...args}>Dense md</Button>
         <Button {...args} size="sm">
           Dense sm (unchanged vars)

@@ -56,15 +56,7 @@ export const tag = defineRecipe({
       withGradient: true,
       css: {
         ...outlineGradient('var(--mav-label-gradient, {gradients.primary})'),
-        color: 'var(--mav-label-color, {colors.secondary})',
-      },
-    },
-    {
-      visual: 'neutral',
-      css: {
-        _light: {
-          bg: 'var(--mav-label-bg, {colors.neutral.100})',
-        },
+        color: 'var(--mav-label-color, {colors.accent})',
       },
     },
   ],

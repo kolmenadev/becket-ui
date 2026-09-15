@@ -9,12 +9,11 @@ const COLOR_FLAT = [
   'primaryHover',
   'lightBackground',
   'lightText',
-  'danger',
   'warning',
   'success',
 ];
 
-const COLOR_THEMED = ['background', 'text', 'muted', 'border'];
+const COLOR_THEMED = ['background', 'text', 'muted', 'border', 'danger', 'accent'];
 const NEUTRAL_STEPS = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
 const RADII = ['none', 'sm', 'md', 'lg', 'xl', 'full'];
 const FONT_SIZES = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'];

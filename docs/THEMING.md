@@ -21,7 +21,7 @@ import { defineBecketTheme } from '@becket-ui/tokens/theme';
 ```ts
 const themeCss = defineBecketTheme({
   colors: {
-    primary: 'oklch(0.55 0.22 280)',
+    primary: 'oklch(0.82 0.14 280)',
     background: { dark: 'oklch(0.2 0.02 260)', light: 'oklch(0.98 0.01 260)' },
     text: { dark: 'oklch(0.96 0.01 260)', light: 'oklch(0.22 0.02 260)' },
   },
@@ -33,9 +33,9 @@ const themeCss = defineBecketTheme({
 
 Inject `themeCss` in a `<style>` tag, or copy [theme.example.css](../packages/tokens/theme.example.css) and import it **after** `index.css`.
 
-Unlayered `:root` wins over `@layer tokens`. Set `data-theme="dark" | "light"` on `<html>`. Dark is the default. `background` / `text` / `muted` are semantic: one name, two values via `data-theme`.
+Unlayered `:root` wins over `@layer tokens`. Set `data-theme="dark" | "light"` on `<html>`. Dark is the default. `background` / `text` / `muted` / `danger` are semantic: one name, two values via `data-theme`. Filled brand controls use `neutral.900` ink so yellow/sage fills stay AA. The violet in the Button **Brand Theme** story is a `defineBecketTheme({ colors: { primary } })` demo (hue 280), not the default primary.
 
-Public names: `primary` / `secondary` / `tertiary` / `primaryHover`, neutrals 50–900, `background` / `text` / `muted` / `border`, status, `radii.*`, `fontSizes.xs–6xl`, `spacing.xs–xl` (layout / Stack gap), `sizes.field`, `fonts.sans` / `mono`, plus component density `--beckui-button-px-md` / `--beckui-field-*` / `--beckui-tag-*`.
+Public names: `primary` / `secondary` / `tertiary` / `primaryHover`, neutrals 50–900, `background` / `text` / `muted` / `border` / `danger` / `accent`, status, `radii.*`, `fontSizes.xs–6xl`, `spacing.xs–xl` (layout / Stack gap), `sizes.field`, `fonts.sans` / `mono`, plus component density `--beckui-button-px-md` / `--beckui-field-*` / `--beckui-tag-*`.
 
 Setting `primary` retints hover, focus outline, and gradients. You do not also set `--beckui--colors-brand-becket-yellow`.
 

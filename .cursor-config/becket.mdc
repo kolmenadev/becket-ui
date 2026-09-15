@@ -132,7 +132,7 @@ Brand tokens are identity: `becketYellow`, `hiveSage`, `combAmber`, plus aliases
 
 - Never point `danger` / `warning` / `success` at a brand color or alias.
 - Never reuse a brand hue for status. If they sit too close, retune **status**, not brand.
-- Filled brand surfaces (primary/secondary buttons, badges, tags) use `text` (warm near-white), not `lightText`.
+- Filled brand surfaces (primary/secondary buttons, badges, tags) use `neutral.900` ink on the brand fill. Cream-on-yellow/sage fails WCAG 2.2 AA. Neutral chips use `neutral.800` + `neutral.50` in both themes (do not pair semantic `text` with a dark chip — light theme inverts `text` to dark).
 
 ### Shared gradient border helper (Flex/Stack pattern)
 

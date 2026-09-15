@@ -25,7 +25,6 @@ export const colors = {
   black: { value: 'oklch(20% 0 0)' },
   white: { value: 'oklch(99% 0 0)' },
   border: { value: '{colors.neutral.200}' },
-  danger: { value: 'oklch(0.62 0.20 25)' },
   warning: { value: 'oklch(0.78 0.14 95)' },
   success: { value: 'oklch(0.68 0.16 145)' },
   /** @deprecated Prefer semantic `text` / `background`. Kept as CSS-var aliases. */
@@ -57,6 +56,26 @@ export const semanticColors = {
     value: {
       base: '{colors.neutral.800}',
       _light: '{colors.white}',
+    },
+  },
+  /**
+   * Error text/borders. One red cannot pass 4.5:1 on both canvases — lighter on
+   * dark, darker on light. Never alias a brand hue.
+   */
+  danger: {
+    value: {
+      base: 'oklch(0.76 0.16 25)',
+      _light: 'oklch(0.48 0.20 25)',
+    },
+  },
+  /**
+   * Sage on canvas (outline Button / Badge / Tag). Filled secondary stays
+   * `colors.secondary` — one lightness cannot pass AA on both canvases.
+   */
+  accent: {
+    value: {
+      base: 'oklch(0.86 0.12 125)',
+      _light: 'oklch(0.38 0.14 125)',
     },
   },
 };
@@ -142,7 +161,8 @@ export const shadows = {
     value: '0 12px 32px oklch(0% 0 0 / 0.55), 0 0 0 1px oklch(100% 0 0 / 0.08)',
   },
   outline: {
-    value: '0 0 0 2px color-mix(in srgb, {colors.primary} 45%, transparent)',
+    value:
+      '0 0 0 2px var(--beckui--colors-background), 0 0 0 4px {colors.primary}',
   },
 };
 
