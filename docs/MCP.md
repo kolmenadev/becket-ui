@@ -9,7 +9,7 @@ stdio MCP so **consumer-side AI agents** (Cursor, Claude Code, VS Code Copilot) 
 ## Decision (locked 2026-09-14)
 
 - **v1 is consumer-only.** No tools to scaffold new Becket primitives. Library authoring stays [`.cursor-config/becket.mdc`](../.cursor-config/becket.mdc).
-- **Does not block 0.1.0.** G1 stays kit + C4 + public `becket-ui` + theming + a11y fixes ([MAV-29](https://kolmena.atlassian.net/browse/MAV-29)) + a11y tests ([MAV-45](https://kolmena.atlassian.net/browse/MAV-45)). Local stdio can ship in this monorepo before npm.
+- **Does not block 0.1.0.** G1 remaining is public `becket-ui` ([MAV-12](https://kolmena.atlassian.net/browse/MAV-12)). Kit + C4 + theming + a11y ([MAV-29](https://kolmena.atlassian.net/browse/MAV-29) / [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)) are Done in-repo. Local stdio can ship in this monorepo before npm.
 - **No consumer-product Jira.** Copy-paste `mcp.json` lives in this repo’s README. Product apps wire it themselves.
 
 ## Why
