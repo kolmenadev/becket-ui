@@ -15,7 +15,8 @@ Phased work to make Becket a **curated, installable** design system.
 - Stay on **Panda v1**. Static CSS is the primary consumer path. Also ship a preset.
 - No Zag / Ark / Chakra v3 machines
 - v1 kit: current primitives + the Phase B list. No charts or date pickers.
-- **ICP:** small/mid React apps that need a UI this week, including dogfood. Not “beat Tailwind at utilities.”
+- **ICP:** small/mid React apps that need a UI this week, including first-party dogfood. Not “beat Tailwind at utilities.”
+- **Dogfood:** Magnum Opus = **product** honesty (public API + local `file:` / vendor; Vite `src` alias is HMR-only). `apps/next-example` + `pnpm pack:check` = **distribution** honesty (packed tarballs, no aliases). Do not invert. After G1, point Magnum Opus at `^0.1.0` without restyling it as a fake external app. [ABOUT.md](./ABOUT.md#dogfood-two-jobs).
 - **JS bar:** no JS for styling; JS only for behavior the platform does not give you. Do **not** fold Panda `css()` with a consumer bundler plugin (kills “import CSS and go”).
 - **Publish gate:** G0 (pack) is met. G1 (kit + C4 SSR + public `becket-ui` + **consumer theming MAV-22–28 and MAV-5** + **WCAG 2.2 AA [MAV-29](https://kolmena.atlassian.net/browse/MAV-29)** + **a11y test gate [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)**) is required before `npm publish` unless PO waives for a tagged preview. See [PUBLISH.md](./PUBLISH.md).
 
@@ -236,7 +237,7 @@ Full WCAG 2.2 AA bar (**G1 / 0.1.0 required**, PO 2026-09-14): fix epic [MAV-29]
 
 ### C4. Next.js SSR example
 
-Add `apps/next-example` (App Router) that depends on **built** packages (or packed tarballs), not raw `src/`.
+Add `apps/next-example` (App Router) that depends on **built** packages (or packed tarballs), not raw `src/`. This is **distribution dogfood** — the clean-room consumer. Magnum Opus is **product dogfood** and must not be used as this replica.
 
 **Acceptance criteria**
 
@@ -334,7 +335,7 @@ Steps, accounts, and verify commands: **[PUBLISH.md](./PUBLISH.md)**. Do not `np
 **Acceptance criteria**
 
 - [ ] `pnpm add @becket-ui/react @becket-ui/tokens` works on a machine that is not this monorepo
-- [ ] A consuming app can switch from `file:` to the published range without Vite aliases
+- [ ] A consuming app (Magnum Opus) can switch from `file:` to the published range without Vite aliases. `apps/next-example` is the packed-tarball replica, not Magnum Opus.
 - [ ] `npm pack` contents match Phase A checks
 
 ### D2. Docs surface

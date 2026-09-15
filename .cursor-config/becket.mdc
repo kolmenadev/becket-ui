@@ -8,6 +8,7 @@ Purpose: This is the single source of truth for creating production‑ready comp
 
 ### Golden rules
 - **Publishable & product-agnostic**: Becket ships as a public library. Export only reusable primitives. Do **not** export consumer-product presets, className strings for specific dashboards, or domain-specific names.
+- **Dogfood is two jobs**: Magnum Opus consumes the public API in a real product (`file:` / vendor; Vite `src` alias is HMR-only). `apps/next-example` + `pnpm pack:check` prove packed tarballs with no aliases. Do not treat Magnum Opus as the clean-room npm consumer, and do not put Magnum Opus widgets into this library. After G1, Magnum Opus switches the specifier to `^0.1.0`. See `docs/ABOUT.md`.
 - **Always WCAG 2.2 AA**: Every interactive primitive must be fully accessible — keyboard, name/role/value, focus, and ARIA only when native HTML is not enough. This is not optional and does not wait for a later “a11y pass.” Bar: WCAG 2.2 **AA** + APG for overlays/disclosure (Dialog, Drawer, Menu, Tabs, Tooltip, Switch). Not AAA. Native HTML is the default, not a substitute for the bar. Fix epic: [MAV-29](https://kolmena.atlassian.net/browse/MAV-29). Test gate: [MAV-45](https://kolmena.atlassian.net/browse/MAV-45). Do not claim “accessible” / WCAG until both are Done.
 - **Consistent API**: Follow the `as` prop pattern, forward refs, and surface HTML props of the base element.
 - **Use Panda recipes**: Variants and sizes live in `@becket-ui/tokens` recipes. Components consume recipes; they do not hardcode styles.

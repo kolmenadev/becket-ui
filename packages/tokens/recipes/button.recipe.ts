@@ -1,5 +1,4 @@
 import { defineRecipe } from '@pandacss/dev';
-import { gradientRef } from '../preset/theme-tokens';
 import { filledGradient, outlineGradient } from './gradientStyles';
 import { buttonSizeStyles } from './density';
 
@@ -83,10 +82,10 @@ export const button = defineRecipe({
       visual: 'primary',
       withGradient: true,
       css: {
-        ...filledGradient(gradientRef('primary')),
+        ...filledGradient('{gradients.primary}'),
         color: 'neutral.50',
         _hover: {
-          backgroundImage: gradientRef('primaryHover'),
+          backgroundImage: '{gradients.primaryHover}',
         },
       },
     },
@@ -94,7 +93,7 @@ export const button = defineRecipe({
       visual: 'secondary',
       withGradient: true,
       css: {
-        ...filledGradient(gradientRef('secondary')),
+        ...filledGradient('{gradients.secondary}'),
         color: 'neutral.50',
       },
     },
@@ -102,7 +101,7 @@ export const button = defineRecipe({
       visual: 'neutral',
       withGradient: true,
       css: {
-        ...filledGradient(gradientRef('neutral')),
+        ...filledGradient('{gradients.neutral}'),
         color: 'text',
       },
     },
@@ -110,7 +109,7 @@ export const button = defineRecipe({
       visual: 'outline',
       withGradient: true,
       css: {
-        ...outlineGradient(gradientRef('primary')),
+        ...outlineGradient('{gradients.primary}'),
         color: 'secondary',
       },
     },

@@ -41,6 +41,7 @@ Turbo + pnpm monorepo.
 
 ```
 apps/docs              Storybook (local docs)
+apps/next-example      Packed-tarball consumer (distribution dogfood; not in the pnpm workspace)
 packages/tokens        @becket-ui/tokens — Panda theme, recipes, generated CSS
 packages/react         @becket-ui/react  — React components
 ```
@@ -107,7 +108,18 @@ Companies rebrand with CSS variables after `index.css` (or `defineBecketTheme()`
 
 Consumers who **also** use Panda add `@becket-ui/tokens/preset` to their `panda.config.ts`. They should not copy `panda.config.ts` from this repo.
 
-**Today:** Dogfood via `file:` / workspace links. Phase A packaging is in place (pack `styled-system` + react `dist`, preset export). Packages are **not** on the public registry until [PUBLISH.md](./PUBLISH.md) gate G1 (kit + C4 + public `becket-ui` + theming + **WCAG 2.2 AA [MAV-29](https://kolmena.atlassian.net/browse/MAV-29)** + **a11y tests [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)**). See [BACKLOG.md](./BACKLOG.md).
+**Today:** First-party apps dogfood via `file:` / vendor / workspace links. Phase A packaging is in place (pack `styled-system` + react `dist`, preset export). Packages are **not** on the public registry until [PUBLISH.md](./PUBLISH.md) gate G1 (kit + C4 + public `becket-ui` + theming + **WCAG 2.2 AA [MAV-29](https://kolmena.atlassian.net/browse/MAV-29)** + **a11y tests [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)**). See [BACKLOG.md](./BACKLOG.md).
+
+### Dogfood (two jobs)
+
+| Job | Where | What it proves |
+| --- | --- | --- |
+| **Product honesty** | First-party apps (Magnum Opus / `trading_bot/web`) | The public API, primitives, theming, and a11y survive a real product |
+| **Distribution honesty** | `apps/next-example` + `pnpm pack:check` | Packed tarballs work with **no** workspace `src/` and **no** Vite aliases |
+
+Magnum Opus must import `@becket-ui/react` and `@becket-ui/tokens` the way a customer would. Until G1 that is `file:` / `vendor/becket-ui`, with an optional local Vite alias to react `src` for HMR. That alias is a **dev override**; it can hide broken `exports` and is **not** packaging proof.
+
+Do **not** restyle Magnum Opus as a throwaway Next app to simulate npm. That replica is `apps/next-example` (packed `.tgz`, outside the pnpm workspace). After G1, point Magnum Opus at `^0.1.0` and keep a path override only as a *dev* escape hatch.
 
 A **consumer MCP** ([MAV-36](https://kolmena.atlassian.net/browse/MAV-36)) is planned so AI agents can query install, catalog, props, and examples the way they already query Chakra. It is **not** a G1 gate. Spec: [MCP.md](./MCP.md).
 

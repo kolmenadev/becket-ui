@@ -1,5 +1,4 @@
 import { defineRecipe } from '@pandacss/dev';
-import { colorRef, gradientRef } from '../preset/theme-tokens';
 import { filledGradient, outlineGradient } from './gradientStyles';
 
 export const badge = defineRecipe({
@@ -54,16 +53,16 @@ export const badge = defineRecipe({
     {
       withGradient: true,
       css: {
-        ...filledGradient(`var(--mav-label-gradient, ${gradientRef('primary')})`),
-        color: `var(--mav-label-color, ${colorRef('text')})`,
+        ...filledGradient('var(--mav-label-gradient, {gradients.primary})'),
+        color: 'var(--mav-label-color, {colors.text})',
       },
     },
     {
       visual: 'outline',
       withGradient: true,
       css: {
-        ...outlineGradient(`var(--mav-label-gradient, ${gradientRef('primary')})`),
-        color: `var(--mav-label-color, ${colorRef('secondary')})`,
+        ...outlineGradient('var(--mav-label-gradient, {gradients.primary})'),
+        color: 'var(--mav-label-color, {colors.secondary})',
         textTransform: 'uppercase',
       },
     },
@@ -71,7 +70,7 @@ export const badge = defineRecipe({
       visual: 'neutral',
       css: {
         _light: {
-          bg: `var(--mav-label-bg, ${colorRef('neutral', 100)})`,
+          bg: 'var(--mav-label-bg, {colors.neutral.100})',
         },
       },
     },
