@@ -2,7 +2,7 @@
 
 This file is for people who **clone this repository** to change the library. If you only want to use Button in an app, start at [README.md](./README.md) — you do not need Turbo, Storybook, or this monorepo.
 
-How private `becket` and public `becket-ui` are synced (and when it is allowed to push public): [docs/REMOTES.md](./docs/REMOTES.md).
+This GitHub repo is the **only** code remote: [kolmenadev/becket-ui](https://github.com/kolmenadev/becket-ui). Kolmena maintainers keep publish gates, roadmap, and first-party dogfood in the Confluence [Becket UI](https://kolmena.atlassian.net/wiki/spaces/BU) space (not in this tree).
 
 ## Prerequisites
 
@@ -77,4 +77,4 @@ Component authoring: [`.cursor-config/becket.mdc`](./.cursor-config/becket.mdc).
 pnpm changeset
 ```
 
-First public `0.1.0` and later cuts: [docs/PUBLISH.md](./docs/PUBLISH.md), [docs/RELEASING.md](./docs/RELEASING.md).
+Do not hand-edit package `version` fields. First public `0.1.0` and later cuts are a maintainer process (Changesets + `npm publish`, tokens then react). Turbo only **builds**; it does not publish to npm.

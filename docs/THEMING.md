@@ -1,6 +1,6 @@
 # Consumer theming
 
-Rebrand Becket **without Panda** and without a React theme provider. Spec: [MAV-22](https://kolmena.atlassian.net/browse/MAV-22).
+Rebrand Becket **without Panda** and without a React theme provider.
 
 ## Two knobs
 

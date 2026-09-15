@@ -1,22 +1,16 @@
-## Private vs public Git remotes
+## Git origin
 
-Purpose: Stop agents from treating `kolmenadev/becket-ui` like `origin`. Full policy: `docs/REMOTES.md`.
+Purpose: This public repo is the only GitHub we maintain. Internal runbooks live in Confluence space BU, not in `docs/`.
 
 ### Locked
 
-- One git tree, two remotes: `origin` → private `kolmenadev/becket` (SoT); `public` → public `kolmenadev/becket-ui` (consumer GitHub, npm metadata, tags).
-- Do **not** clone `becket-ui` into a second working folder to “keep them in sync.”
-- Do **not** strip Turbo, Panda, Storybook, or CI from the public tree. Hide Turbo from root `README.md` only. Contributor steps live in `CONTRIBUTING.md`.
+- `origin` is [kolmenadev/becket-ui](https://github.com/kolmenadev/becket-ui). npm packages are `@becket-ui/react` and `@becket-ui/tokens`.
+- Do **not** add a second remote for private `kolmenadev/becket` (archived). Do not invent a filtered public subtree.
+- Do **not** strip Turbo, Panda, Storybook, or CI from the tree. Hide Turbo from root `README.md` only. Contributor steps live in `CONTRIBUTING.md`.
 - Root `README.md` is **consumer voice**: install, CSS, `data-theme`, theming. No Jira, no first-party product names, no `pnpm dev` as the lead.
+- Do **not** re-add internal wikis (`docs/BACKLOG.md`, `docs/PUBLISH.md`, maintainer ABOUT) or first-party product names. Those belong in Confluence.
 
-### Public push (hard)
+### Publish
 
-- **Never** `git push public`, never push to `kolmenadev/becket-ui`, and never `--force` those remotes unless the **current user message** explicitly asks to update the public repo.
-- Merging to private `main`, green CI, or “D0 is done” is **not** permission.
-- Push **`origin/main`** (or a SHA the user named). Do not push feature branches to `public` unless named.
-- Before push: show SHA + `git log public/main..origin/main`, scan for secrets, confirm README is still consumer voice. Then wait for confirmation unless they already said “push it” in that request.
-
-### History
-
-- Do **not** rewrite / squash / orphan public history unless the user explicitly requested it (secrets or PO-approved clean root commit). Default is same SHAs as private `main`.
-- Cosmetic history (old `maverick` name, Magnum Opus in `docs/`) is **not** a reason to rewrite. Edit files instead.
+- Turbo runs `build` / `test`. Version + registry is Changesets + `npm publish` (tokens then react).
+- Do not `npm publish` from an ordinary feature merge. First 0.1.0 is a human D1 on this repo.

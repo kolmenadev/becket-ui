@@ -7,9 +7,9 @@ Purpose: This is the single source of truth for creating production‑ready comp
 - Styling: use PandaCSS recipes/patterns/tokens from `@becket-ui/tokens`.
 
 ### Golden rules
-- **Publishable & product-agnostic**: Becket ships as a public library. Export only reusable primitives. Do **not** export consumer-product presets, className strings for specific dashboards, or domain-specific names. Dual remotes and public-push verification: `docs/REMOTES.md` and `.cursor-config/remotes.mdc`.
-- **Dogfood is two jobs**: Magnum Opus consumes the public API in a real product (`file:` / vendor; Vite `src` alias is HMR-only). `apps/next-example` + `pnpm pack:check` prove packed tarballs with no aliases. Do not treat Magnum Opus as the clean-room npm consumer, and do not put Magnum Opus widgets into this library. After G1, Magnum Opus switches the specifier to `^0.1.0`. See `docs/ABOUT.md`.
-- **Always WCAG 2.2 AA**: Every interactive primitive must be fully accessible — keyboard, name/role/value, focus, and ARIA only when native HTML is not enough. This is not optional and does not wait for a later “a11y pass.” Bar: WCAG 2.2 **AA** + APG for overlays/disclosure (Dialog, Drawer, Menu, Tabs, Tooltip, Switch). Not AAA. Native HTML is the default, not a substitute for the bar. Fix epic: [MAV-29](https://kolmena.atlassian.net/browse/MAV-29). Test gate: [MAV-45](https://kolmena.atlassian.net/browse/MAV-45). Do not claim “accessible” / WCAG until both are Done.
+- **Publishable & product-agnostic**: Becket ships as a public library. Export only reusable primitives. Do **not** export consumer-product presets, className strings for specific dashboards, or domain-specific names. Git origin is `kolmenadev/becket-ui` only (`.cursor-config/remotes.mdc`).
+- **Dogfood is two jobs**: First-party apps consume the **public API** (`file:` / vendor until npm exists; a Vite `src` alias is HMR-only). `apps/next-example` + `pnpm pack:check` prove packed tarballs with no aliases. Do not treat a product app as the clean-room npm consumer, and do not put product widgets into this library.
+- **Always WCAG 2.2 AA**: Every interactive primitive must be fully accessible — keyboard, name/role/value, focus, and ARIA only when native HTML is not enough. This is not optional and does not wait for a later “a11y pass.” Bar: WCAG 2.2 **AA** + APG for overlays/disclosure (Dialog, Drawer, Menu, Tabs, Tooltip, Switch). Not AAA. Native HTML is the default, not a substitute for the bar. Do not claim “accessible” / WCAG on npm until contrast / 24×24 are recorded in Storybook (jsdom cannot prove them).
 - **Consistent API**: Follow the `as` prop pattern, forward refs, and surface HTML props of the base element.
 - **Use Panda recipes**: Variants and sizes live in `@becket-ui/tokens` recipes. Components consume recipes; they do not hardcode styles.
 - **Colocation & clarity**: Keep files near their usage, name things clearly, reduce nesting, prefer inline logic, and avoid premature abstraction.
@@ -314,7 +314,7 @@ export const Disabled: Story = {
 1) Add/extend a Panda recipe in `@becket-ui/tokens` if needed, export it, and regenerate Panda artifacts.
 2) Implement the React component in `@becket-ui/react` using the API rules and recipe. Meet WCAG 2.2 AA before review.
 3) Add a Storybook file with controls for all variants and key states. `@storybook/addon-a11y` must be clean on Default (local; not CI).
-4) Add Vitest coverage: axe-core via the private `@becket-ui/a11y` helper ([MAV-45](https://kolmena.atlassian.net/browse/MAV-45) / [MAV-46](https://kolmena.atlassian.net/browse/MAV-46)) plus keyboard tests if the primitive has APG behavior. Do **not** add Playwright or Chromatic for this.
+4) Add Vitest coverage: axe-core via the private `@becket-ui/a11y` helper plus keyboard tests if the primitive has APG behavior. Do **not** add Playwright or Chromatic for this.
 5) Keep names and imports consistent; avoid mutations; use tokens over literals.
 
 ---
@@ -327,7 +327,7 @@ Interactive primitives **do not ship** without automated a11y tests. Manual Stor
 | --- | --- | --- |
 | **CI gate** | axe-core in **Vitest + jsdom** + Testing Library | `@becket-ui/react` tests, helper `@becket-ui/a11y` (`private: true`) |
 | **Keyboard / APG** | `@testing-library/user-event` | Dialog, Drawer, Menu, Tabs, Tooltip, Switch (Tab, Escape, arrows) |
-| **Static** | Biome a11y rules or `eslint-plugin-jsx-a11y` when [MAV-9](https://kolmena.atlassian.net/browse/MAV-9) lands | lint |
+| **Static** | Biome a11y rules or `eslint-plugin-jsx-a11y` when repo lint lands | lint |
 | **Local authoring** | `@storybook/addon-a11y` | Storybook panel only |
 
 **Out:** Playwright, Storybook test-runner, Chromatic, Cypress, Pa11y, Lighthouse-CI, a from-scratch WCAG engine, publishing `@becket-ui/a11y` on npm in 0.1.0.
