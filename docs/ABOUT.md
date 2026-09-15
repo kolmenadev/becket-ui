@@ -6,14 +6,16 @@ It is **inspired by Chakra UI’s API** (layout primitives, `as`, recipe variant
 
 **Who it is for:** small and mid React apps that need a UI this week — typed components, tokens, one CSS import — not a Tailwind design system they have to invent. Tailwind already compiles CSS; it does not give you a reusable `<Button visual="primary">`. Dogfooding in our own products is how the kit stays honest. Positioning vs Tailwind / shadcn / Park / Chakra / Mantine: [WHY.md](./WHY.md).
 
-Work remaining: [BACKLOG.md](./BACKLOG.md). First public npm release: [PUBLISH.md](./PUBLISH.md). Consumer AI agents: [MCP.md](./MCP.md) ([MAV-36](https://kolmena.atlassian.net/browse/MAV-36); does **not** block 0.1.0). Figma library: [FIGMA.md](./FIGMA.md) ([MAV-49](https://kolmena.atlassian.net/browse/MAV-49); does **not** block 0.1.0).
+Work remaining: [BACKLOG.md](./BACKLOG.md). First public npm release: [PUBLISH.md](./PUBLISH.md). Later versions: [RELEASING.md](./RELEASING.md). Consumer AI agents: [MCP.md](./MCP.md) ([MAV-36](https://kolmena.atlassian.net/browse/MAV-36); does **not** block 0.1.0). Figma library: [FIGMA.md](./FIGMA.md) ([MAV-49](https://kolmena.atlassian.net/browse/MAV-49); does **not** block 0.1.0).
 
 ## Remotes
 
 | Role | Repo |
 | --- | --- |
-| Private source of truth (this repo) | [kolmenadev/becket](https://github.com/kolmenadev/becket) |
-| Public GitHub (npm `repository` / issues / homepage) | [kolmenadev/becket-ui](https://github.com/kolmenadev/becket-ui) — create and push before Phase D |
+| Private source of truth | [kolmenadev/becket](https://github.com/kolmenadev/becket) |
+| Public GitHub (npm `repository` / issues / homepage) | [kolmenadev/becket-ui](https://github.com/kolmenadev/becket-ui) |
+
+Same git tree, two remotes. Root README is consumer voice; Turbo stays in the tree for CI/contributors. **Do not push `public` without an explicit ask.** Full rules: [REMOTES.md](./REMOTES.md).
 
 npm metadata on `@becket-ui/react` and `@becket-ui/tokens` points at **becket-ui** so consumers are not sent to a private URL.
 
@@ -108,7 +110,7 @@ Companies rebrand with CSS variables after `index.css` (or `defineBecketTheme()`
 
 Consumers who **also** use Panda add `@becket-ui/tokens/preset` to their `panda.config.ts`. They should not copy `panda.config.ts` from this repo.
 
-**Today:** First-party apps dogfood via `file:` / vendor / workspace links. Phase A packaging is in place (pack `styled-system` + react `dist`, preset export). Packages are **not** on the public registry until [PUBLISH.md](./PUBLISH.md) gate G1 (kit + C4 + public `becket-ui` + theming + **WCAG 2.2 AA [MAV-29](https://kolmena.atlassian.net/browse/MAV-29)** + **a11y tests [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)**). See [BACKLOG.md](./BACKLOG.md).
+**Today:** First-party apps dogfood via `file:` / vendor / workspace links. Phase A packaging, C4, theming, and a11y G1 ([MAV-29](https://kolmena.atlassian.net/browse/MAV-29) + [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)) are in-repo. Packages are **not** on the public registry until [PUBLISH.md](./PUBLISH.md) D0 public `becket-ui` + D1 publish. Contrast / 24×24 stay Storybook + C3. See [BACKLOG.md](./BACKLOG.md).
 
 ### Dogfood (two jobs)
 

@@ -9,7 +9,7 @@ Put Becket in Figma as a **published team library**: variables, styles, and comp
 
 ## Decision (locked 2026-09-14)
 
-- **Does not block 0.1.0.** G1 stays kit + C4 + public `becket-ui` + theming + a11y fixes ([MAV-29](https://kolmena.atlassian.net/browse/MAV-29)) + a11y tests ([MAV-45](https://kolmena.atlassian.net/browse/MAV-45)). Do not add this epic to the G1 checklist.
+- **Does not block 0.1.0.** G1 remaining is public `becket-ui` ([MAV-12](https://kolmena.atlassian.net/browse/MAV-12)). Kit + C4 + theming + a11y ([MAV-29](https://kolmena.atlassian.net/browse/MAV-29) / [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)) are Done in-repo. Do not add this epic to the G1 checklist.
 - **Code is source of truth.** Figma **mirrors** existing tokens, recipes, and v1 primitives. Do not invent a second palette, type scale, or component API in Figma.
 - **Approach:** adapt Becket into Figma (not Untitled UI as the brand, not a from-scratch kit, not Magnum Opus screens). Community files/plugins are optional helpers.
 - **Product-agnostic library.** No trading names, no dashboard presets. Dogfood screenshots belong in the *inventory*, not the published library.

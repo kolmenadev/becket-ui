@@ -2538,18 +2538,6 @@
     font-size: var(--beckui--font-sizes-xs);
 }
 
-  .beckui--jc_start {
-    justify-content: start;
-}
-
-  .beckui--jc_center {
-    justify-content: center;
-}
-
-  .beckui--jc_end {
-    justify-content: end;
-}
-
   .beckui--jc_between {
     justify-content: between;
 }
@@ -2663,6 +2651,18 @@
     content: Hint;
 }
 
+  .beckui--jc_start {
+    justify-content: start;
+}
+
+  .beckui--jc_center {
+    justify-content: center;
+}
+
+  .beckui--jc_end {
+    justify-content: end;
+}
+
   .beckui--jc_space-between {
     justify-content: space-between;
 }
@@ -2693,6 +2693,14 @@
 
   .beckui--flex-wrap_wrap-reverse {
     flex-wrap: wrap-reverse;
+}
+
+  .beckui--flex-d_row-reverse {
+    flex-direction: row-reverse;
+}
+
+  .beckui--flex-d_column-reverse {
+    flex-direction: column-reverse;
 }
 
   .beckui--trunc_true {

@@ -5,7 +5,7 @@
 
 Short answer: **the architecture is on the winning side of 2026. The library is not uniquely first, and it is not a finished market product yet.** Promote the *model* loudly. Do not claim you invented compile-time CSS, beat Tailwind, or already out-catalog Chakra.
 
-Related: [ABOUT.md](./ABOUT.md) (what it is), [BACKLOG.md](./BACKLOG.md) (kit), [PUBLISH.md](./PUBLISH.md) (npm).
+Related: [ABOUT.md](./ABOUT.md) (what it is), [BACKLOG.md](./BACKLOG.md) (kit), [PUBLISH.md](./PUBLISH.md) (first npm), [RELEASING.md](./RELEASING.md) (later versions).
 
 ---
 
@@ -42,7 +42,7 @@ You are **not late to the idea**. You are early-to-mid on *shipping a library th
 | **“Import CSS and go” is a solved product** | [Mantine v7+](https://mantine.dev/changelog/7-0-0/) dropped Emotion for bundled CSS modules. [Radix Themes](https://www.radix-ui.com/themes/docs/overview/styling) is vanilla CSS + tokens. Bootstrap did this a decade ago. |
 | **Catalog** | Becket’s v1 kit is curated and incomplete (see backlog). Chakra / MUI / Mantine / shadcn ship dozens of primitives including overlays you have not built. |
 | **Publish** | Packages are 0.1.0 and **not on the public registry** until Phase D. You cannot promote an install that does not work yet. |
-| **Proof** | Phase C4 (`apps/next-example`, packed tarballs, view-source with JS off) is the SSR proof. G1 still needs public `becket-ui` (D0) and WCAG 2.2 AA ([MAV-29](https://kolmena.atlassian.net/browse/MAV-29)). Consumer theming code ([MAV-22](https://kolmena.atlassian.net/browse/MAV-22)–[MAV-28](https://kolmena.atlassian.net/browse/MAV-28), [MAV-5](https://kolmena.atlassian.net/browse/MAV-5)) is in repo. |
+| **Proof** | Phase C4 (`apps/next-example`, packed tarballs, view-source with JS off) is the SSR proof. Theming + a11y G1 code/tests are in-repo. G1 still needs public `becket-ui` (D0). Do not claim WCAG 2.2 AA in marketing: jsdom cannot prove contrast / 24×24 / focus rings. |
 | **Mindshare** | Tailwind is the skill people already have. Panda is a fraction of that. Promoting “powered by Panda” to Tailwind-native teams is a tax, not a feature, unless you lead with *they do not need Panda*. |
 
 **Verdict for promotion:** lead with *consumer simplicity and SSR*, not with “Panda.” Lead with *Chakra DX without Chakra’s runtime*, not with “we have more components.” Be explicit that v0.1 is a kit, not a 100-component ecosystem.
@@ -251,7 +251,7 @@ Use these. They are defensible.
 | “Chakra without the downsides.” | You also lack Chakra’s catalog, a11y machines, and community. |
 | “Park UI but better.” | Park is better at complex a11y widgets *by design*. |
 | “RSC-ready” | C4 exists: `apps/next-example` on packed tarballs; view-source / JS off still has recipe classes + CSS. |
-| “Accessible” / “WCAG 2.2 AA” | Not true until [MAV-29](https://kolmena.atlassian.net/browse/MAV-29) **and** [MAV-45](https://kolmena.atlassian.net/browse/MAV-45) are Done. Native HTML is not the bar. |
+| “Accessible” / “WCAG 2.2 AA” | [MAV-29](https://kolmena.atlassian.net/browse/MAV-29) + [MAV-45](https://kolmena.atlassian.net/browse/MAV-45) are Done in-repo (axe on Default renders). Still do not say WCAG 2.2 AA in marketing: jsdom cannot prove contrast, 24×24 hit targets, or painted focus rings. |
 
 ---
 
@@ -301,10 +301,10 @@ Do these before a loud launch (they are already on the backlog):
 
 1. **C4 Next example** — landed (`apps/next-example`, packed tarballs, `pnpm example:build`).
 2. **C5 size budget** — CI on `index.css` gzip and `@becket-ui/react` dist. Quote numbers from CI, not from memory.
-3. **Finish the v1 kit leftovers** — Field-wired Select/Textarea.
-4. **Consumer theming (G1)** — [MAV-22](https://kolmena.atlassian.net/browse/MAV-22)–[MAV-28](https://kolmena.atlassian.net/browse/MAV-28). CSS-var rebrand without Panda ([THEMING.md](./THEMING.md)). Code tickets are in repo; G1 still needs public `becket-ui` ([MAV-12](https://kolmena.atlassian.net/browse/MAV-12)).
-5. **A11y WCAG 2.2 AA (G1)** — [MAV-29](https://kolmena.atlassian.net/browse/MAV-29) (fixes) + [MAV-45](https://kolmena.atlassian.net/browse/MAV-45) (Vitest + axe-core, no Playwright/Chromatic). Required before 0.1.0. Do not claim “accessible” until both Done.
-6. **Publish 0.1.0** — public `becket-ui` (D0) then install command (D1). Blocked on 4–5.
+3. **Finish the v1 kit leftovers** — Field-wired Select/Textarea **landed**.
+4. **Consumer theming (G1)** — [MAV-22](https://kolmena.atlassian.net/browse/MAV-22)–[MAV-28](https://kolmena.atlassian.net/browse/MAV-28) **Done in-repo**. Remaining G1 remote: public `becket-ui` ([MAV-12](https://kolmena.atlassian.net/browse/MAV-12)).
+5. **A11y G1** — [MAV-29](https://kolmena.atlassian.net/browse/MAV-29) + [MAV-45](https://kolmena.atlassian.net/browse/MAV-45) **Done in-repo**. Do not claim full WCAG 2.2 AA in marketing (contrast / 24×24 stay Storybook + C3).
+6. **Publish 0.1.0** — public `becket-ui` (D0) then install command (D1). Blocked on D0.
 7. **Optional: critical-path story** — document that `staticCss: '*'` ships unused variants; Panda preset is how large apps tree-shake.
 8. **Optional: consumer MCP** — [MAV-36](https://kolmena.atlassian.net/browse/MAV-36). Helps AI implement *with* Becket. **Not** a 0.1.0 gate. Spec: [MCP.md](./MCP.md).
 9. **Optional: Figma library** — [MAV-49](https://kolmena.atlassian.net/browse/MAV-49). Mirrors `@becket-ui` in Figma. **Not** a 0.1.0 gate. Spec: [FIGMA.md](./FIGMA.md).

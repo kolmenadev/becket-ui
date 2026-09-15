@@ -40,6 +40,7 @@ export default defineConfig({
           justifyContent: ['start', 'center', 'end', 'space-between', 'space-around', 'space-evenly'],
           alignItems: ['start', 'center', 'end', 'stretch', 'baseline'],
           flexWrap: ['wrap', 'nowrap', 'wrap-reverse'],
+          flexDirection: ['row', 'column', 'row-reverse', 'column-reverse'],
         },
       },
       {
