@@ -70,13 +70,11 @@ Requirements: **React 19+**.
 
 ## Docs
 
-- [What Becket is](./docs/ABOUT.md)
-- [Why this architecture](./docs/WHY.md)
-- [Theming](./docs/THEMING.md)
+- [Theming](./docs/THEMING.md) — brand CSS variables vs instance `style` / `className` (no theme provider)
 
 ## Contributing
 
-Clone, Storybook, tests, and Turbo: [CONTRIBUTING.md](./CONTRIBUTING.md). Dual remotes (private SoT vs this public GitHub): [docs/REMOTES.md](./docs/REMOTES.md).
+Clone, Storybook, tests, and Turbo: [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 
