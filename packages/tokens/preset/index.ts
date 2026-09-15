@@ -42,8 +42,6 @@ import {
 /** Class / CSS-variable prefix. Set `prefix` on the consumer `defineConfig` to match. */
 export const BECKET_PREFIX = 'beckui-';
 
-export { colorRef, gradientRef, spacingRef } from './theme-tokens';
-
 export const becketPreset = definePreset({
   name: '@becket-ui/tokens',
   conditions: {

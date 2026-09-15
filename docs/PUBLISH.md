@@ -46,7 +46,7 @@ Treat this as the “solid preview kit” bar. AC is testable.
 
 ### Quality (Phase C — minimum for G1)
 
-- [x] **C4** `apps/next-example`: App Router consumes **packed tarballs** (not `src/`)
+- [x] **C4** `apps/next-example`: App Router consumes **packed tarballs** (not `src/`) — this is distribution dogfood; Magnum Opus is product dogfood and stays on `file:` / vendor until G1
   - Server page: Button, Stack, Heading, Card content
   - Client island: Switch (Dialog when it exists)
   - View-source / JS disabled: layout + type + buttons still styled
@@ -179,7 +179,7 @@ import { Button } from '@becket-ui/react';
 **AC**
 
 - [ ] Install works on a clean machine
-- [ ] A consuming app can switch from `file:` to `^0.1.0` without Vite aliases
+- [ ] A consuming app (Magnum Opus) can switch from `file:` to `^0.1.0` without Vite aliases. `apps/next-example` stays the packed-tarball replica and is **not** Magnum Opus.
 - [ ] Packed contents still match `pnpm pack:check`
 
 ---
@@ -214,7 +214,7 @@ import { Button } from '@becket-ui/react';
 1. **A11y G1** — [MAV-29](https://kolmena.atlassian.net/browse/MAV-29) and [MAV-45](https://kolmena.atlassian.net/browse/MAV-45) are **Done in-repo**. Contrast / 24×24 stay Storybook + C3. Can parallel 2.
 2. D0 public `becket-ui` ([MAV-12](https://kolmena.atlassian.net/browse/MAV-12)). Code theming tickets are Done; public repo is the remaining theming-adjacent G1 remote.
 3. npm org + first `npm publish` (tokens, then react) — **blocked on 1 + 2**
-4. Point dogfood apps at `^0.1.0`
+4. Point first-party **product** dogfood (Magnum Opus) at `^0.1.0`. Keep a local path override only as a *dev* escape hatch. Do **not** restyle Magnum Opus as a throwaway Next app — `apps/next-example` already is the packed-tarball consumer.
 5. C1 tests / C2 lint / C5 size-limit can land in the same week as 3–4
 6. Consumer MCP ([MAV-36](https://kolmena.atlassian.net/browse/MAV-36)) can parallel any of the above. It does **not** block step 3.
 7. Figma library ([MAV-49](https://kolmena.atlassian.net/browse/MAV-49)) can parallel any of the above. It does **not** block step 3.

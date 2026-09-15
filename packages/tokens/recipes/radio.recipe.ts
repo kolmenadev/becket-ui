@@ -1,7 +1,7 @@
 import { defineSlotRecipe } from '@pandacss/dev';
-import { colorRef } from '../preset/theme-tokens';
 
-const radioDot = `radial-gradient(circle, ${colorRef('white')} 32%, transparent 34%)`;
+const radioDot =
+  'radial-gradient(circle, {colors.white} 32%, transparent 34%)';
 
 export const radio = defineSlotRecipe({
   className: 'radio',

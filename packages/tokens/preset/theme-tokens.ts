@@ -1,123 +1,67 @@
-/**
- * Becket token trees plus `{path.to.token}` helpers.
- * Cmd-click a helper key (`colorRef('primary')`) to jump to that token.
- */
-
-export const brandColors = {
-  becketYellow: { value: 'oklch(0.75 0.15 78)' },
-  hiveSage: { value: 'oklch(0.70 0.13 125)' },
-  combAmber: { value: 'oklch(0.60 0.16 48)' },
-} as const;
-
-function brandColor<K extends keyof typeof brandColors>(key: K) {
-  return `{colors.brand.${key}}` as `{colors.brand.${K}}`;
-}
-
-export const neutralColors = {
-  50: { value: 'oklch(0.96 0.012 78)' },
-  100: { value: 'oklch(0.94 0.012 78)' },
-  200: { value: 'oklch(0.89 0.012 75)' },
-  300: { value: 'oklch(0.84 0.012 72)' },
-  400: { value: 'oklch(0.75 0.012 70)' },
-  500: { value: 'oklch(0.65 0.012 65)' },
-  600: { value: 'oklch(0.55 0.014 62)' },
-  700: { value: 'oklch(0.45 0.014 60)' },
-  800: { value: 'oklch(0.35 0.015 60)' },
-  900: { value: 'oklch(0.22 0.015 60)' },
-} as const;
-
-function neutralColor<K extends keyof typeof neutralColors>(key: K) {
-  return `{colors.neutral.${key}}` as `{colors.neutral.${K}}`;
-}
-
-const colorAliases = {
-  primary: { value: brandColor('becketYellow') },
-  secondary: { value: brandColor('hiveSage') },
-  tertiary: { value: brandColor('combAmber') },
-} as const;
-
-function colorAlias<K extends keyof typeof colorAliases>(key: K) {
-  return `{colors.${key}}` as `{colors.${K}}`;
-}
-
 export const colors = {
-  brand: brandColors,
-  ...colorAliases,
-  primaryHover: {
-    value: `color-mix(in oklch, ${colorAlias('primary')} 88%, white)`,
+  brand: {
+    becketYellow: { value: 'oklch(0.75 0.15 78)' },
+    hiveSage: { value: 'oklch(0.70 0.13 125)' },
+    combAmber: { value: 'oklch(0.60 0.16 48)' },
   },
-  neutral: neutralColors,
+  primary: { value: '{colors.brand.becketYellow}' },
+  secondary: { value: '{colors.brand.hiveSage}' },
+  tertiary: { value: '{colors.brand.combAmber}' },
+  primaryHover: {
+    value: 'color-mix(in oklch, {colors.primary} 88%, white)',
+  },
+  neutral: {
+    50: { value: 'oklch(0.96 0.012 78)' },
+    100: { value: 'oklch(0.94 0.012 78)' },
+    200: { value: 'oklch(0.89 0.012 75)' },
+    300: { value: 'oklch(0.84 0.012 72)' },
+    400: { value: 'oklch(0.75 0.012 70)' },
+    500: { value: 'oklch(0.65 0.012 65)' },
+    600: { value: 'oklch(0.55 0.014 62)' },
+    700: { value: 'oklch(0.45 0.014 60)' },
+    800: { value: 'oklch(0.35 0.015 60)' },
+    900: { value: 'oklch(0.22 0.015 60)' },
+  },
   black: { value: 'oklch(20% 0 0)' },
   white: { value: 'oklch(99% 0 0)' },
-  border: { value: neutralColor(200) },
+  border: { value: '{colors.neutral.200}' },
   danger: { value: 'oklch(0.62 0.20 25)' },
   warning: { value: 'oklch(0.78 0.14 95)' },
   success: { value: 'oklch(0.68 0.16 145)' },
   /** @deprecated Prefer semantic `text` / `background`. Kept as CSS-var aliases. */
-  lightBackground: { value: neutralColor(50) },
-  lightText: { value: neutralColor(900) },
+  lightBackground: { value: '{colors.neutral.50}' },
+  lightText: { value: '{colors.neutral.900}' },
 };
-
-type ColorGroup = 'brand' | 'neutral';
-type ColorLeaf = Exclude<keyof typeof colors, ColorGroup>;
-
-function colorLeafRef<K extends ColorLeaf>(key: K) {
-  return `{colors.${key}}` as `{colors.${K}}`;
-}
 
 export const semanticColors = {
   background: {
     value: {
-      base: neutralColor(900),
-      _light: neutralColor(50),
+      base: '{colors.neutral.900}',
+      _light: '{colors.neutral.50}',
     },
   },
   text: {
     value: {
-      base: neutralColor(50),
-      _light: neutralColor(900),
+      base: '{colors.neutral.50}',
+      _light: '{colors.neutral.900}',
     },
   },
   muted: {
     value: {
-      base: neutralColor(300),
-      _light: neutralColor(600),
+      base: '{colors.neutral.300}',
+      _light: '{colors.neutral.600}',
     },
   },
   /** Overlay / control fill (dialog, field, menu). Cards keep their own surfaces. */
   surface: {
     value: {
-      base: neutralColor(800),
-      _light: colorLeafRef('white'),
+      base: '{colors.neutral.800}',
+      _light: '{colors.white}',
     },
   },
 };
 
-type SemanticColorKey = keyof typeof semanticColors;
-
-/** Panda `{colors.*}` ref. Cmd-click the key to jump to the token. */
-export function colorRef<K extends ColorLeaf | SemanticColorKey>(
-  key: K,
-): `{colors.${K}}`;
-export function colorRef<K extends keyof typeof brandColors>(
-  group: 'brand',
-  key: K,
-): `{colors.brand.${K}}`;
-export function colorRef<K extends keyof typeof neutralColors>(
-  group: 'neutral',
-  key: K,
-): `{colors.neutral.${K}}`;
-export function colorRef(
-  groupOrKey: string,
-  nestedKey?: string | number,
-): `{colors.${string}}` {
-  if (nestedKey !== undefined) {
-    return `{colors.${groupOrKey}.${nestedKey}}`;
-  }
-  return `{colors.${groupOrKey}}`;
-}
-
-const spacingScale = {
+export const spacing = {
   0: { value: '0rem' },
   1: { value: '0.25rem' },
   2: { value: '0.5rem' },
@@ -127,21 +71,12 @@ const spacingScale = {
   13: { value: '3.25rem' },
   21: { value: '5.25rem' },
   34: { value: '8.5rem' },
-} as const;
-
-/** Panda `{spacing.*}` ref. Cmd-click the key to jump to the token. */
-export function spacingRef<K extends keyof typeof spacingScale>(key: K) {
-  return `{spacing.${key}}` as `{spacing.${K}}`;
-}
-
-export const spacing = {
-  ...spacingScale,
-  xs: { value: spacingRef(1) },
-  sm: { value: spacingRef(2) },
-  md: { value: spacingRef(3) },
-  lg: { value: spacingRef(5) },
-  xl: { value: spacingRef(8) },
-  '2xs': { value: spacingRef(13) },
+  xs: { value: '{spacing.1}' },
+  sm: { value: '{spacing.2}' },
+  md: { value: '{spacing.3}' },
+  lg: { value: '{spacing.5}' },
+  xl: { value: '{spacing.8}' },
+  '2xs': { value: '{spacing.13}' },
 };
 
 export const sizes = {
@@ -207,29 +142,24 @@ export const shadows = {
     value: '0 12px 32px oklch(0% 0 0 / 0.55), 0 0 0 1px oklch(100% 0 0 / 0.08)',
   },
   outline: {
-    value: `0 0 0 2px color-mix(in srgb, ${colorRef('primary')} 45%, transparent)`,
+    value: '0 0 0 2px color-mix(in srgb, {colors.primary} 45%, transparent)',
   },
 };
 
 export const gradients = {
   primary: {
-    value: `linear-gradient(to right, ${colorRef('primary')}, ${colorRef('tertiary')})`,
+    value: 'linear-gradient(to right, {colors.primary}, {colors.tertiary})',
   },
   primaryHover: {
-    value: `linear-gradient(to right, ${colorRef('primaryHover')}, ${colorRef('tertiary')})`,
+    value: 'linear-gradient(to right, {colors.primaryHover}, {colors.tertiary})',
   },
   secondary: {
-    value: `linear-gradient(to right, ${colorRef('primary')}, ${colorRef('secondary')})`,
+    value: 'linear-gradient(to right, {colors.primary}, {colors.secondary})',
   },
   neutral: {
-    value: `linear-gradient(to right, ${colorRef('neutral', 100)}, ${colorRef('neutral', 200)})`,
+    value: 'linear-gradient(to right, {colors.neutral.100}, {colors.neutral.200})',
   },
 };
-
-/** Panda `{gradients.*}` ref. Cmd-click the key to jump to the token. */
-export function gradientRef<K extends keyof typeof gradients>(key: K) {
-  return `{gradients.${key}}` as `{gradients.${K}}`;
-}
 
 export const keyframes = {
   spin: {

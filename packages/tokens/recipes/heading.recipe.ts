@@ -1,5 +1,4 @@
 import { defineRecipe } from '@pandacss/dev';
-import { gradientRef } from '../preset/theme-tokens';
 
 export const heading = defineRecipe({
   className: 'heading',
@@ -33,7 +32,7 @@ export const heading = defineRecipe({
       css: {
         display: 'inline',
         color: 'transparent',
-        backgroundImage: gradientRef('primary'),
+        backgroundImage: '{gradients.primary}',
         backgroundClip: 'text',
         WebkitBackgroundClip: 'text',
       },

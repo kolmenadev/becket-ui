@@ -24,6 +24,8 @@ Private SoT: [kolmenadev/becket](https://github.com/kolmenadev/becket). Public G
 
 Packages are **0.1.0** in-repo and are **not on the public registry until [publish gate G1](docs/PUBLISH.md)** (v1 kit + Next SSR example + public `becket-ui` + consumer theming). A11y G1 ([MAV-29](https://kolmena.atlassian.net/browse/MAV-29) + [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)) is **Done in-repo** (Vitest + axe; contrast / 24×24 stay Storybook). Until npm exists, use this monorepo or a `file:` / workspace link.
 
+**Dogfood:** first-party apps (Magnum Opus) consume the **public API** locally (`file:` / vendor; optional Vite `src` alias for HMR). Packed-tarball / “install like a stranger” proof is **`apps/next-example`**, not Magnum Opus. After G1, point Magnum Opus at `^0.1.0`. Details: [docs/ABOUT.md](docs/ABOUT.md#dogfood-two-jobs).
+
 Intended install after publish:
 
 ```bash
@@ -94,7 +96,7 @@ Storybook 10 starts at `http://localhost:6006`.
 
 ### Next.js SSR example (C4)
 
-Consumes **packed tarballs** (not workspace `src/`). The example is outside the pnpm workspace and installs with npm so it cannot resolve the library from `packages/react/src`. Prepare, then dev or build:
+**Distribution dogfood.** Consumes **packed tarballs** (not workspace `src/`). The example is outside the pnpm workspace and installs with npm so it cannot resolve the library from `packages/react/src`. Magnum Opus is **product** dogfood and is not this replica. Prepare, then dev or build:
 
 ```bash
 pnpm example:dev
@@ -187,6 +189,7 @@ From `packages/react`:
 ```
 apps/
   docs/             # Storybook app
+  next-example/     # Packed-tarball consumer (distribution dogfood; not in the pnpm workspace)
 packages/
   react/            # React components and stories
   tokens/           # Panda CSS exports and artifacts

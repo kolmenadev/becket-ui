@@ -121,6 +121,8 @@ Primary user: **a React app that needs a real UI this week**, not a Tailwind des
 
 That includes dogfooding in our own apps. Dogfood is the correct reason to keep the library alive. A public kit that you do not use will rot; a kit you ship into your own products stays honest.
 
+Split the job. **Product honesty** is Magnum Opus (public `@becket-ui/*` API in a real dashboard; local `file:` / vendor until G1). **Distribution honesty** is `apps/next-example` (packed tarballs, no source aliases). Do not make the product app pretend it is a stranger’s npm install — that slows the dashboard and still will not prove packing. Details: [ABOUT.md](./ABOUT.md#dogfood-two-jobs).
+
 ### Tailwind already compiles CSS. It does not do this job.
 
 Tailwind is a **styling language**. Compile-time? Yes — same delivery model as Panda (utilities extracted to a stylesheet). What it does *not* give a small project:

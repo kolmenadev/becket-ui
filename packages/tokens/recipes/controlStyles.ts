@@ -1,4 +1,3 @@
-import { colorRef } from '../preset/theme-tokens';
 import { fieldSizeStyles } from './density';
 
 /** Shared chrome for native text input, select, and textarea. */
@@ -16,7 +15,7 @@ export const controlChrome = {
   _placeholder: { color: 'muted' },
   _focusVisible: {
     borderColor: 'primary',
-    boxShadow: `0 0 0 2px color-mix(in srgb, ${colorRef('primary')} 45%, transparent)`,
+    boxShadow: '0 0 0 2px color-mix(in srgb, {colors.primary} 45%, transparent)',
   },
   _disabled: {
     opacity: 0.6,
@@ -26,7 +25,7 @@ export const controlChrome = {
     borderColor: 'neutral.400',
     _focusVisible: {
       borderColor: 'primary',
-      boxShadow: `0 0 0 2px color-mix(in srgb, ${colorRef('primary')} 35%, transparent)`,
+      boxShadow: '0 0 0 2px color-mix(in srgb, {colors.primary} 35%, transparent)',
     },
   },
 } as const;
