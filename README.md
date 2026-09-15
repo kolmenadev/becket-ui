@@ -1,36 +1,22 @@
-## Becket UI Monorepo
+# Becket UI
 
-Chakra-shaped React components whose styles are **compiled CSS**, not a CSS-in-JS runtime. Install two packages, import one stylesheet, start building. Aimed at **small and mid React apps** (including our own) that should not have to invent a Tailwind design system first.
+Chakra-shaped React components whose styles are **compiled CSS**, not a CSS-in-JS runtime. Install two packages, import one stylesheet, set `data-theme`, start building.
 
-- [What Becket is](docs/ABOUT.md) — thesis, packages, consume model, public API
-- [Why this architecture](docs/WHY.md) — compile-time CSS, SSR, vs Tailwind / shadcn / Park / Chakra
-- [Theming](docs/THEMING.md) — brand CSS variables vs instance `style` / `className` (no theme provider)
-- [Backlog](docs/BACKLOG.md) — curated v1 kit
-- [Consumer MCP](docs/MCP.md) — AI agents implementing *with* Becket ([MAV-36](https://kolmena.atlassian.net/browse/MAV-36); not a 0.1.0 gate)
-- [Figma library](docs/FIGMA.md) — design file that mirrors `@becket-ui` ([MAV-49](https://kolmena.atlassian.net/browse/MAV-49); not a 0.1.0 gate)
-- [Publish](docs/PUBLISH.md) — npm + public GitHub checklist (do not publish before G1)
+Aimed at small and mid React apps that should not have to invent a Tailwind design system first.
 
-Private SoT: [kolmenadev/becket](https://github.com/kolmenadev/becket). Public GitHub (npm metadata): [kolmenadev/becket-ui](https://github.com/kolmenadev/becket-ui) — not created yet.
+**Source:** [github.com/kolmenadev/becket-ui](https://github.com/kolmenadev/becket-ui)
 
-### Packages
+## Install
 
-- `packages/tokens` — Panda CSS build output and helpers exposed as `@becket-ui/tokens` (css,
-  patterns, recipes, JSX factory, tokens, types, and `styles.css`).
-- `packages/react` — React components that consume `@becket-ui/tokens`. Storybook stories live
-  alongside components.
-- `apps/docs` — Storybook app used to develop and showcase the React components.
+Packages are versioned **0.1.0** in this repo. They are **not on the public npm registry yet**.
 
-### Consume (npm — not published yet)
-
-Packages are **0.1.0** in-repo and are **not on the public registry until [publish gate G1](docs/PUBLISH.md)** (v1 kit + Next SSR example + public `becket-ui` + consumer theming). A11y G1 ([MAV-29](https://kolmena.atlassian.net/browse/MAV-29) + [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)) is **Done in-repo** (Vitest + axe; contrast / 24×24 stay Storybook). Until npm exists, use this monorepo or a `file:` / workspace link.
-
-**Dogfood:** first-party apps (Magnum Opus) consume the **public API** locally (`file:` / vendor; optional Vite `src` alias for HMR). Packed-tarball / “install like a stranger” proof is **`apps/next-example`**, not Magnum Opus. After G1, point Magnum Opus at `^0.1.0`. Details: [docs/ABOUT.md](docs/ABOUT.md#dogfood-two-jobs).
-
-Intended install after publish:
+Intended install once `0.1.0` is published:
 
 ```bash
 pnpm add @becket-ui/react @becket-ui/tokens
 ```
+
+Until then, depend on this GitHub repo or a `file:` / packed tarball of `@becket-ui/react` and `@becket-ui/tokens`.
 
 ```ts
 import '@becket-ui/tokens/index.css';
@@ -41,11 +27,11 @@ import { Button } from '@becket-ui/react';
 <html data-theme="dark">
 ```
 
-Bump versions with `pnpm changeset` (see [`.changeset/README.md`](.changeset/README.md)).
+Apps that only use components do **not** need Panda, Tailwind, or a theme provider.
 
-Storybook in this repo resolves `@becket-ui/react` from **workspace source** (`src/`), not `dist/`. Published tarballs ship compiled `dist/` only.
+Rebrand with CSS variables after `index.css`, or `defineBecketTheme()` from `@becket-ui/tokens/theme`. See [docs/THEMING.md](./docs/THEMING.md).
 
-Panda apps that want to extend tokens:
+### Optional: Panda already in the app
 
 ```ts
 import { becketPreset, BECKET_PREFIX } from '@becket-ui/tokens/preset';
@@ -57,144 +43,41 @@ export default defineConfig({
 });
 ```
 
-Apps that only use components do **not** need Panda or a `panda.config.ts`.
+Do not copy this repo’s `panda.config.ts` into the app.
 
-Rebrand without Panda: override public CSS variables after `index.css`, or `defineBecketTheme()` from `@becket-ui/tokens/theme`. No theme provider. See [docs/THEMING.md](docs/THEMING.md).
+### Panda CSS exports
 
-### Prerequisites
+Most apps only need `index.css` + `@becket-ui/react`. Advanced imports:
 
-- Node.js 22.12+
-- pnpm 12+ (repo uses `packageManager: pnpm@12.4.1`)
+| Import | Purpose |
+| --- | --- |
+| `@becket-ui/tokens/index.css` | Theme + utilities + recipes (default) |
+| `@becket-ui/tokens/styles.css` | Panda utilities only |
+| `@becket-ui/tokens/css` | `css`, `cva`, `sva` |
+| `@becket-ui/tokens/recipes` | Recipe functions + variant types |
+| `@becket-ui/tokens/patterns` | Layout patterns |
+| `@becket-ui/tokens/jsx` | Panda JSX factory |
+| `@becket-ui/tokens/preset` | `definePreset` + `BECKET_PREFIX` |
 
-### Install
+Numeric `gap` on layout primitives uses the Fibonacci spacing scale: `0, 1, 2, 3, 5, 8, 13, 21, 34` (plus `xs`–`xl`). Prefer semantic tokens (`gap="md"`).
 
-```bash
-pnpm install
-```
+## Packages
 
-### Develop
+- `@becket-ui/react` — React components
+- `@becket-ui/tokens` — tokens, recipes, prebuilt CSS
 
-- Run everything in dev mode via Turbo:
+Requirements: **React 19+**.
 
-```bash
-pnpm dev
-```
+## Docs
 
-- Or run Storybook directly from the docs app:
+- [What Becket is](./docs/ABOUT.md)
+- [Why this architecture](./docs/WHY.md)
+- [Theming](./docs/THEMING.md)
 
-```bash
-pnpm --filter docs storybook
-```
+## Contributing
 
-- Or from the React package (reuses docs Storybook config):
+Clone, Storybook, tests, and Turbo: [CONTRIBUTING.md](./CONTRIBUTING.md). Dual remotes (private SoT vs this public GitHub): [docs/REMOTES.md](./docs/REMOTES.md).
 
-```bash
-pnpm --filter @becket-ui/react storybook
-```
-
-Storybook 10 starts at `http://localhost:6006`.
-
-### Next.js SSR example (C4)
-
-**Distribution dogfood.** Consumes **packed tarballs** (not workspace `src/`). The example is outside the pnpm workspace and installs with npm so it cannot resolve the library from `packages/react/src`. Magnum Opus is **product** dogfood and is not this replica. Prepare, then dev or build:
-
-```bash
-pnpm example:dev
-```
-
-```bash
-pnpm example:build
-node scripts/assert-next-example.mjs
-```
-
-App Router example: `http://localhost:3002`. View-source / disable JS: layout, type, and buttons stay styled.
-
-### Build
-
-Build all packages and apps:
-
-```bash
-pnpm build
-```
-
-### Formatting
-
-This repo ships with a Prettier configuration. To format the codebase, first install Prettier if you
-haven't already:
-
-```bash
-pnpm add -D prettier
-```
-
-Then run:
-
-```bash
-pnpm prettier --write .
-```
-
-### Using Panda CSS
-
-This repository exposes Panda CSS artifacts through `@becket-ui/tokens`:
-
-- `@becket-ui/tokens/css` — `css` function and `cva/sva` utilities
-- `@becket-ui/tokens/patterns` — layout and UI patterns
-- `@becket-ui/tokens/recipes` — recipe utilities (e.g., button)
-- `@becket-ui/tokens/jsx` — JSX factory (e.g., `Stack`, `HStack`, etc.)
-- `@becket-ui/tokens/styles.css` — global styles generated by Panda CSS
-
-Import examples:
-
-```ts
-import { css } from "@becket-ui/tokens/css";
-import { Stack } from "@becket-ui/tokens/jsx";
-import { button } from "@becket-ui/tokens/recipes";
-```
-
-Add the global stylesheet once in your app or Storybook preview:
-
-```ts
-import "@becket-ui/tokens/index.css";
-```
-
-`index.css` is generated at build time as `styles.css` + theme base (no CSS `@import` — Vite can strip numeric gap utilities when inlining nested CSS). For utilities only, import `@becket-ui/tokens/styles.css`.
-
-Numeric `gap` on layout primitives (`Stack` / `Flex` / `SimpleGrid`) uses the Fibonacci spacing scale: `0, 1, 2, 3, 5, 8, 13, 21, 34` (plus semantic `xs|sm|md|lg|xl`). Prefer semantic tokens in examples; `gap={3}` is supported.
-
-#### Helpful links
-
-- [Panda CSS docs](https://panda-css.com/docs)
-- [Storybook docs](https://storybook.js.org/docs)
-- [TurboRepo docs](https://turbo.build/repo/docs)
-
-### Repository scripts
-
-From the repo root (`package.json`):
-
-- `pnpm dev` → `turbo run dev`
-- `pnpm build` → `turbo run build`
-- `pnpm lint` → `turbo run lint`
-
-From `apps/docs`:
-
-- `pnpm --filter docs storybook`
-- `pnpm --filter docs build-storybook`
-
-From `packages/react`:
-
-- `pnpm --filter @becket-ui/react storybook`
-- `pnpm --filter @becket-ui/react build-storybook`
-
-### Project structure
-
-```
-apps/
-  docs/             # Storybook app
-  next-example/     # Packed-tarball consumer (distribution dogfood; not in the pnpm workspace)
-packages/
-  react/            # React components and stories
-  tokens/           # Panda CSS exports and artifacts
-```
-
-### License
+## License
 
 MIT © Kolmena de Software

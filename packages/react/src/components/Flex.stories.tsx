@@ -72,19 +72,12 @@ export const Default: Story = {
 };
 
 export const Direction: Story = {
-  args: { gap: 'md' },
+  args: { direction: 'row', gap: 'md' },
   render: (args: FlexProps) => (
-    <Flex direction="column" gap="lg">
-      <Flex {...args} direction="row" className={containerClass}>
-        <div className={boxClass200}>row 1</div>
-        <div className={boxClass200}>row 2</div>
-        <div className={boxClass200}>row 3</div>
-      </Flex>
-      <Flex {...args} direction="column" className={containerClass}>
-        <div className={boxClass200}>column 1</div>
-        <div className={boxClass200}>column 2</div>
-        <div className={boxClass200}>column 3</div>
-      </Flex>
+    <Flex {...args} className={containerClass}>
+      <div className={boxClass200}>1</div>
+      <div className={boxClass300}>2</div>
+      <div className={boxClass400}>3</div>
     </Flex>
   ),
 };
@@ -111,20 +104,10 @@ const boxClassWide = css({ bg: 'neutral.500', p: 2, minW: 13, h: 8, w: 21 });
 export const Justify: Story = {
   args: { gap: 'md', justify: 'center' },
   render: (args: FlexProps) => (
-    <Flex direction="column" gap="lg">
-      <Flex {...args} justify="start" className={containerClass}>
-        <div className={boxClassWide}>start</div>
-      </Flex>
-      <Flex {...args} justify="center" className={containerClass}>
-        <div className={boxClassWide}>center</div>
-      </Flex>
-      <Flex {...args} justify="end" className={containerClass}>
-        <div className={boxClassWide}>end</div>
-      </Flex>
-      <Flex {...args} justify="between" className={containerClass}>
-        <div className={boxClassWide}>between</div>
-        <div className={boxClassWide}>Item 2</div>
-      </Flex>
+    <Flex {...args} className={containerClass}>
+      <div className={boxClassWide}>1</div>
+      <div className={boxClassWide}>2</div>
+      <div className={boxClassWide}>3</div>
     </Flex>
   ),
 };
@@ -165,6 +148,7 @@ export const Inline: Story = {
 const gapLabelClass = css({ w: 8, fontSize: 'xs' });
 
 export const Gaps: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <Flex direction="column" gap="lg">
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((gap) => (
@@ -197,6 +181,7 @@ export const WithGradientBorder: Story = {
 };
 
 export const GradientBorderVariants: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <Flex direction="column" gap="md">
       {GRADIENT_BORDER_OPTIONS.map((border) => (

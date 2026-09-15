@@ -4,7 +4,9 @@ Phased work to make Becket a **curated, installable** design system.
 
 - Thesis / API: [ABOUT.md](./ABOUT.md)
 - Positioning (small projects, compile-time vs Tailwind, JS bar): [WHY.md](./WHY.md)
-- npm / GitHub release steps: [PUBLISH.md](./PUBLISH.md)
+- First npm / GitHub publish: [PUBLISH.md](./PUBLISH.md)
+- Private vs public remotes (README voice, no auto-push): [REMOTES.md](./REMOTES.md)
+- Later versions + GitHub Releases list: [RELEASING.md](./RELEASING.md)
 - Consumer MCP (AI agents): [MCP.md](./MCP.md) — [MAV-36](https://kolmena.atlassian.net/browse/MAV-36); **not** a 0.1.0 gate
 - Figma library: [FIGMA.md](./FIGMA.md) — [MAV-49](https://kolmena.atlassian.net/browse/MAV-49); **not** a 0.1.0 gate
 
@@ -20,7 +22,7 @@ Phased work to make Becket a **curated, installable** design system.
 - **JS bar:** no JS for styling; JS only for behavior the platform does not give you. Do **not** fold Panda `css()` with a consumer bundler plugin (kills “import CSS and go”).
 - **Publish gate:** G0 (pack) is met. G1 (kit + C4 SSR + public `becket-ui` + **consumer theming MAV-22–28 and MAV-5** + **WCAG 2.2 AA [MAV-29](https://kolmena.atlassian.net/browse/MAV-29)** + **a11y test gate [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)**) is required before `npm publish` unless PO waives for a tagged preview. See [PUBLISH.md](./PUBLISH.md).
 
-**Status today (2026-09-14):** Phase A packaging + preset + Field + Phase B forms/overlays (including Radio) are in-repo. C4 Next example is in-repo. `pnpm pack:check` is green. `npm install @becket-ui/react` from the public registry still waits on G1 (public GitHub + **theming MAV-22–28 / MAV-5** + **a11y MAV-29** + **a11y tests MAV-45**).
+**Status today (2026-09-14):** Phase A packaging + preset + Field + Phase B (including Radio) are in-repo. C4 Next example, consumer theming ([MAV-22](https://kolmena.atlassian.net/browse/MAV-22)), and a11y G1 ([MAV-29](https://kolmena.atlassian.net/browse/MAV-29) + [MAV-45](https://kolmena.atlassian.net/browse/MAV-45)) are **Done in-repo**. `pnpm pack:check` is green. `npm install @becket-ui/react` still waits on **D0 public GitHub** ([MAV-12](https://kolmena.atlassian.net/browse/MAV-12)) then D1 publish. Contrast / 24×24 stay Storybook + C3.
 
 CSS budget snapshot (C5 — record, no CI limit yet):
 
@@ -210,9 +212,10 @@ Promote flat aliases (`primary`, `text`, `background`, …) to Panda `semanticTo
 
 **Acceptance criteria**
 
-- [x] `pnpm --filter @becket-ui/react test` runs in CI (helper tests only today)
-- [ ] Testing Library coverage for Field / Switch / Dialog / Checkbox as those land
-- [ ] Root `pnpm test` (or Turbo `test`) is not a no-op
+- [x] `pnpm --filter @becket-ui/react test` runs in CI (Field, Switch, Dialog, overlays, axe defaults — not helpers-only)
+- [x] Testing Library coverage for Field / Switch / Dialog
+- [ ] Checkbox keyboard coverage
+- [x] Root `pnpm test` (Turbo: react + tokens + a11y) is not a no-op
 
 ### C2. Lint
 
@@ -310,20 +313,21 @@ PO 2026-09-14: maintain WCAG 2.2 AA with **automated tests**. No Playwright. No 
 
 ## Phase D — first public release
 
-Steps, accounts, and verify commands: **[PUBLISH.md](./PUBLISH.md)**. Do not `npm publish` until G1 (kit + C4 + public repo + theming MAV-22–28 / MAV-5 + **a11y MAV-29** + **a11y tests MAV-45**) unless PO waives for a tagged preview.
+Steps, accounts, and verify commands: **[PUBLISH.md](./PUBLISH.md)**. Code G1 (kit + C4 + theming + a11y) is in-repo. Do not `npm publish` until D0 public GitHub ([MAV-12](https://kolmena.atlassian.net/browse/MAV-12)) unless PO waives for a tagged preview.
 
 ### D0. Public GitHub repo
 
+Policy: [REMOTES.md](./REMOTES.md) (same tree, consumer README, verify before `git push public`).
+
 - Private SoT stays [kolmenadev/becket](https://github.com/kolmenadev/becket)
-- Create **public** [kolmenadev/becket-ui](https://github.com/kolmenadev/becket-ui) under the same org
-- Push a publishable tree there (or mirror). CI/publish run from the public repo if provenance requires a public remote
+- Public [kolmenadev/becket-ui](https://github.com/kolmenadev/becket-ui) exists; mirror `main` there. Do not auto-push.
 - Package `repository` / `homepage` / `bugs` already target `becket-ui`
 
 **Acceptance criteria**
 
-- [ ] `https://github.com/kolmenadev/becket-ui` exists and is public
-- [ ] A clone without GitHub auth can read README + source
-- [ ] npm `repository` URLs resolve (no 404)
+- [x] `https://github.com/kolmenadev/becket-ui` exists and is public
+- [ ] A clone without GitHub auth can read a **consumer** README + source
+- [x] npm `repository` URLs resolve (no 404)
 
 ### D1. Publish 0.1.0
 
@@ -347,7 +351,7 @@ Steps, accounts, and verify commands: **[PUBLISH.md](./PUBLISH.md)**. Do not `np
 **Acceptance criteria**
 
 - [ ] A new consumer can go from README → working Button in < 5 minutes
-- [ ] Changelog exists (Changesets)
+- [ ] Changelog exists (Changesets) and is the GitHub Releases list — [RELEASING.md](./RELEASING.md)
 
 ---
 
@@ -454,7 +458,7 @@ After D1: install from npm in a fresh Vite or Next app; import CSS; render `<But
 
 1. **A11y G1** — [MAV-29](https://kolmena.atlassian.net/browse/MAV-29) and [MAV-45](https://kolmena.atlassian.net/browse/MAV-45) are **Done in-repo**. Contrast / 24×24 / focus rings stay Storybook addon + C3. Can parallel 2.
 2. D0 public `becket-ui` + npm org ([MAV-12](https://kolmena.atlassian.net/browse/MAV-12)). Code theming tickets are **Done**.
-3. D1 publish tokens then react ([PUBLISH.md](./PUBLISH.md)) — only after **a11y MAV-29** + **tests MAV-45** + public repo
+3. D1 publish tokens then react ([PUBLISH.md](./PUBLISH.md)) — only after public repo ([MAV-12](https://kolmena.atlassian.net/browse/MAV-12)); a11y G1 is Done in-repo
 4. C1 RTL tests / C2 lint / C5 size-limit CI in the same window as 3
 5. **Consumer MCP** — [MAV-36](https://kolmena.atlassian.net/browse/MAV-36); start [MAV-37](https://kolmena.atlassian.net/browse/MAV-37). Can parallel any G1 work. **Does not block publish.**
 6. **Figma library** — [MAV-49](https://kolmena.atlassian.net/browse/MAV-49); start [MAV-50](https://kolmena.atlassian.net/browse/MAV-50). Can parallel any G1 work. **Does not block publish.**
