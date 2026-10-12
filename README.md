@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./logo.jpg" alt="Becket UI" width="352" />
+</p>
+
 # Becket UI
 
 Chakra-shaped React components whose styles are **compiled CSS**, not a CSS-in-JS runtime. Install two packages, import one stylesheet, set `data-theme`, start building.
