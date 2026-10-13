@@ -1,6 +1,6 @@
 ## Building with Becket UI — read this first
 
-**Setup.** No provider or theme wrapper — Becket components are styled by compiled CSS, not context. Link `styles.css` once and mount components from `window.Becket`.
+**Setup.** No provider or theme wrapper — Becket components are styled by compiled CSS, not context. Link `styles.css` once and mount components from `window.Becket`. The generic note further down about Storybook decorators and theme/i18n providers does not apply to Becket: its only decorator paints the preview card's background, so never wrap a design in a provider.
 
 **Theme (dark default, light opt-in).** Put the theme on the root element: `document.documentElement.setAttribute('data-theme', 'light')` (or `'dark'`). `data-theme` only re-colors the element it's on and its descendants, and `styles.css` paints `<body>` from the root's theme. So:
 - Never put `data-theme` on an inner wrapper and leave the page around it unpainted — that gives light text and cards on a dark page (or the reverse).
@@ -24,7 +24,7 @@
 - Forms: inside a labeled field use `Field` + `FieldControl` / `FieldSelect` / `FieldTextarea`. Standalone: `TextField`, `Select`, `Textarea` (`label`, `helperText`, `size="sm|md|lg"`, `invalid`). Choices: `Checkbox` and `Switch` take `label` (`Switch size="sm|md|lg"`); radios are `<RadioGroup name legend defaultValue><Radio value label description /></RadioGroup>`.
 - Display: `Tag` / `Badge` with `visual="primary|secondary|neutral|outline"` and `size="sm|md|lg"`; `Table` (`size="sm|md"`) with `TableHeader`, `TableBody`, `TableRow`, `TableColumnHeader`, `TableCell`, `TableCaption` (short aliases `Thead`, `Tbody`, `Tr`, `Th`, `Td`). Loading: `Spinner size="sm|md|lg"`.
 - Disclosure: `<Tabs defaultValue="a"><TabList><Tab value="a">…</Tab></TabList><TabPanel value="a">…</TabPanel></Tabs>`.
-- Overlays: `Drawer` mirrors Dialog (`DrawerHeader`, `DrawerTitle`, `DrawerBody`, `DrawerFooter`, `DrawerClose`; `placement="start|end"`); `<Menu label="Actions"><MenuItem>…</MenuItem></Menu>`; `<Tooltip content="…" placement="top">` around one focusable trigger. Their cards show the closed trigger; the open panel is real and renders when used.
+- Overlays: `Drawer` mirrors Dialog (`DrawerHeader`, `DrawerTitle`, `DrawerBody`, `DrawerFooter`, `DrawerClose`; `placement="start|end"`); `<Menu label="Actions"><MenuItem>…</MenuItem></Menu>`; `<Tooltip content="…" placement="top">` around one focusable trigger. Dialog, Drawer and Menu cards show the open panel (`open` / `onOpenChange` for Dialog and Drawer; Menu is a native `<details>`). The Tooltip card shows only its trigger; the bubble appears on hover or focus.
 
 **Idiomatic example.**
 

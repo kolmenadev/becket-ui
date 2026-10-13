@@ -50,3 +50,30 @@ export const Start: Story = {
   ...Default,
   args: { placement: 'start' },
 };
+
+/** Starts open so catalogs and design tools show the panel, not only the trigger. */
+export const Open: Story = {
+  render: function OpenDrawerDemo(args: DrawerProps) {
+    const [open, setOpen] = useState(true);
+    return (
+      <>
+        <Button visual="primary" onClick={() => setOpen(true)}>
+          Open drawer
+        </Button>
+        <Drawer
+          {...args}
+          open={open}
+          onOpenChange={setOpen}
+          title="Filters"
+          footer={
+            <Button visual="primary" onClick={() => setOpen(false)}>
+              Done
+            </Button>
+          }
+        >
+          <Text>Same a11y as Dialog: Escape, backdrop, focus return. Placement is CSS.</Text>
+        </Drawer>
+      </>
+    );
+  },
+};

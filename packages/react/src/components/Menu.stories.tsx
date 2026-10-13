@@ -33,3 +33,16 @@ export const Default: Story = {
     );
   },
 };
+
+/** Native `<details open>`: shows the item list without a click. */
+export const Open: Story = {
+  render: function OpenMenuDemo(args: MenuProps) {
+    return (
+      <Menu {...args} open>
+        <MenuItem>Edit</MenuItem>
+        <MenuItem>Duplicate</MenuItem>
+        <MenuItem>Delete</MenuItem>
+      </Menu>
+    );
+  },
+};
