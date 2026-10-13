@@ -60,7 +60,9 @@ packages/tokens/styled-system
 packages/tokens/styled-system-studio
 
 ## Cursor
-.cursor/
+.cursor/*
+!.cursor/skills/
+!.cursor/skills/**
 
 ## Local reference materials
 .reference/

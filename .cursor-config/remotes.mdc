@@ -12,5 +12,6 @@ Purpose: This public repo is the only GitHub we maintain. Internal runbooks live
 
 ### Publish
 
-- Turbo runs `build` / `test`. Version + registry is Changesets + `npm publish` (tokens then react).
-- Do not `npm publish` from an ordinary feature merge. First 0.1.0 is a human D1 on this repo.
+- Turbo runs `build` / `test`. Version + registry is Changesets on `registry.npmjs.org`. `@becket-ui/react` and `@becket-ui/tokens` are a fixed group (same version). Publish tokens, then react.
+- Do not `npm publish` from a feature branch or a laptop. GitHub Releases (`@becket-ui/<pkg>@x.y.z`) are created by the release workflow, not by the Packages tab. Runbook: `.cursor/skills/publish-becket/SKILL.md`.
+- Do not publish to GitHub Packages. Do not publish `@becket-ui/a11y`.
