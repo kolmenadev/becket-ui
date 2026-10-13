@@ -12,15 +12,9 @@ Aimed at small and mid React apps that should not have to invent a Tailwind desi
 
 ## Install
 
-Packages are versioned **0.1.0** in this repo. They are **not on the public npm registry yet**.
-
-Intended install once `0.1.0` is published:
-
 ```bash
 pnpm add @becket-ui/react @becket-ui/tokens
 ```
-
-Until then, depend on this GitHub repo or a `file:` / packed tarball of `@becket-ui/react` and `@becket-ui/tokens`.
 
 ```ts
 import '@becket-ui/tokens/index.css';

@@ -75,8 +75,6 @@ Component authoring: [`.cursor-config/becket.mdc`](./.cursor-config/becket.mdc).
 
 ## Versions
 
-```bash
-pnpm changeset
-```
+Record a consumer-facing bump on the feature branch with a file in `.changeset/`. Do not hand-edit package `version` fields. `@becket-ui/react` and `@becket-ui/tokens` always ship the same version.
 
-Do not hand-edit package `version` fields. First public `0.1.0` and later cuts are a maintainer process (Changesets + `npm publish`, tokens then react). Turbo only **builds**; it does not publish to npm.
+That file does not publish. npm and the GitHub Releases sidebar come from the release workflow. Runbook: [`.cursor/skills/publish-becket/SKILL.md`](./.cursor/skills/publish-becket/SKILL.md). Turbo only **builds**.
