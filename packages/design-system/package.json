@@ -1,0 +1,20 @@
+{
+  "name": "@becket-ui/design-system",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Private generator for the Becket UI Claude Design design system. Not published to npm.",
+  "type": "module",
+  "license": "MIT",
+  "files": [],
+  "scripts": {
+    "spike": "node scripts/spike.mjs"
+  },
+  "devDependencies": {
+    "@becket-ui/react": "workspace:*",
+    "@becket-ui/tokens": "workspace:*",
+    "esbuild": "^0.28.2",
+    "jsdom": "^26.1.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
+}
