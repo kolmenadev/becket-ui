@@ -1,5 +1,11 @@
 # @becket-ui/tokens
 
+## 0.1.2
+
+### Patch Changes
+
+- c27c70b: Separate the warning and success colors from brand yellow and sage.
+
 ## 0.1.1
 
 ### Patch Changes
