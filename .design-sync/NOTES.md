@@ -1,7 +1,7 @@
 # design-sync notes — Becket UI
 
 ## Scope
-- 2026-10-13: first sync is a pilot of 5 components (Button, Field, Dialog, Card, Stack) at Miguel's request. The other 21 are excluded via `titleMap: {Name: null}` in config.json. Remove those entries to sync the full kit.
+- 2026-10-13: full kit synced (the 5-component pilot plus Flex, Tag, Radio, TextField, Badge, Checkbox, Switch, SimpleGrid, Heading, Select, Textarea, Separator, Link, Text, Hide, Drawer, Tooltip, Spinner, Table, Menu, Tabs). The pilot's `titleMap` null exclusions were removed.
 
 ## Repo facts
 - Monorepo (pnpm). DS package `packages/react` (@becket-ui/react); `main`/`exports` point at `src/index.ts` in the workspace, so the converter uses `--entry packages/react/dist/index.js` (unbundled ESM from tsup; tokens/recipes resolve from `@becket-ui/tokens`).
@@ -19,10 +19,16 @@
 - `[CSS_FROM_STORYBOOK]`: `_ds_bundle.css` is scraped from sb-reference (minified Panda output). The real stylesheet `@becket-ui/tokens/index.css` also ships via `[TOKENS_PKG]` as `tokens/index.css`, first in `styles.css`. `cfg.cssEntry` can't point at it (bounded to packages/react).
 - [GENERAL] Preview cards paint `body{background:#fff}` (converter card chrome, app-contract - not forkable), so dark-theme text (labels, helper text) was white-on-white -> the Storybook decorator in `apps/docs/.storybook/preview.ts` now wraps every story in a div painted with `--beckui--colors-background` / `--beckui--colors-text` (+0.75rem padding). Do NOT switch to `cfg.provider` for this: it would write "Wrap the tree in <X>" into every prompt.md, and Becket needs no provider.
 - Sheet thumbnails downscale 1px borders and can make them look brighter - check raw/ PNGs before grading a border as a mismatch.
+- Switch: Sizes row is wider than a grid cell -> `[GRID_OVERFLOW] wide` -> `cfg.overrides.Switch.cardMode: "column"`. No other component flagged `[GRID_OVERFLOW]` or `[PORTAL?]`.
+- Drawer, Menu, Tooltip: stories render the closed trigger (Drawer/Menu start closed; Tooltip only appears on hover), same as Dialog. Both panels match that resting state. No open surface is in the stories, so no `cardMode: "single"` — there is nothing to contain. An open-state story would need `cardMode: "single"` on the next sync.
+- Hide: compare captures below the `lg` breakpoint, so `below="desktop"` content is hidden on both sides and Hide Below Desktop shows only the mobile line. Both panels agree. The desktop-visible branch is not in these shots.
 
 ## Re-sync risks
-- Pilot scope: 21 components excluded via `titleMap: null`; remove them to sync the full kit.
-- Dialog stories (Default, Alert) only render the closed trigger, so the Dialog card never shows an open dialog. An open-state story (MAV-39 examples) would make the card useful; add it in Storybook, then re-sync (Dialog will need `cardMode: "single"`).
+- Dialog, Drawer, and Menu stories only render the closed trigger, and Tooltip stories never show the bubble (hover). The cards match Storybook and do not show the open overlay. Add an open-state story, then re-sync; Dialog/Drawer/Menu/Tooltip will need `cardMode: "single"`.
+- Hide grades cover the below-desktop viewport only. A desktop-width capture would show the other branch.
+- Switch uses `cardMode: "column"` so the Sizes row is not cropped. Presentation-only; grades carry.
+- No owned previews. Every new component graded from the generated story wrappers.
+- No accepted `close`s.
 - Card "elevated" shadows spill outside the decorator surface onto white card chrome (framing, graded match).
 - Fonts come from `@fontsource/*@5.3.0` devDeps of apps/docs; bumping them changes shipped font bytes (zero-regrade, re-upload).
 - Cambria serif substitute pending Miguel's OK (unused by Becket).

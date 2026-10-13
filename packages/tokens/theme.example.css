@@ -35,8 +35,8 @@
   /* Status — never aliases of primary. danger + accent are semantic (dark vs light). */
   /* --beckui--colors-danger: oklch(0.76 0.16 25); */
   /* --beckui--colors-accent: oklch(0.86 0.12 125); */
-  /* --beckui--colors-warning: oklch(0.78 0.14 95); */
-  /* --beckui--colors-success: oklch(0.68 0.16 145); */
+  /* --beckui--colors-warning: oklch(0.72 0.16 42); */
+  /* --beckui--colors-success: oklch(0.68 0.14 165); */
 
   /* Type + layout spacing (Stack gap). Do not use these to densify buttons. */
   /* --beckui--fonts-sans: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif; */

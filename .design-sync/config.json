@@ -6,28 +6,8 @@
   "storybookConfigDir": "apps/docs/.storybook",
   "storybookStatic": ".design-sync/sb-reference",
   "buildCmd": "pnpm -F \"@becket-ui/react...\" build && (cd apps/docs && STORYBOOK_BASE=./ npx storybook build -c .storybook -o ../../.design-sync/sb-reference)",
-  "titleMap": {
-    "Flex": null,
-    "Tag": null,
-    "Radio": null,
-    "TextField": null,
-    "Badge": null,
-    "Checkbox": null,
-    "Switch": null,
-    "SimpleGrid": null,
-    "Heading": null,
-    "Select": null,
-    "Textarea": null,
-    "Separator": null,
-    "Link": null,
-    "Text": null,
-    "Hide": null,
-    "Drawer": null,
-    "Tooltip": null,
-    "Spinner": null,
-    "Table": null,
-    "Menu": null,
-    "Tabs": null
+  "overrides": {
+    "Switch": { "cardMode": "column" }
   },
   "readmeHeader": ".design-sync/conventions.md"
 }
