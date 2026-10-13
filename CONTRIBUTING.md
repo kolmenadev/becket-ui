@@ -13,6 +13,10 @@ This GitHub repo is the **only** code remote: [kolmenadev/becket-ui](https://git
 pnpm install
 ```
 
+## Code style
+
+Follow [docs/CODING-STYLE.md](./docs/CODING-STYLE.md) for all code, and [Writing app code with Becket](./packages/react/guides/building-with-becket.md) for code that uses Becket components. Library rules are in `.cursor-config/becket.mdc`.
+
 ## Develop
 
 ```bash
