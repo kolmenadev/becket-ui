@@ -2,6 +2,12 @@
 
 **Setup.** No provider or theme wrapper — Becket components are styled by compiled CSS, not context. Link `styles.css` once and mount components from `window.Becket`. The generic note further down about Storybook decorators and theme/i18n providers does not apply to Becket: its only decorator paints the preview card's background, so never wrap a design in a provider.
 
+**Code style: read `guidelines/guides/building-with-becket.md` before writing any screen.** It's Becket's coding guide (the same file ships as `@becket-ui/react/guides/building-with-becket.md`). The short version:
+- Use a Becket component whenever one exists: layout is `VStack`/`HStack`/`Flex`/`SimpleGrid`, text is `Heading`/`Text`, dividers are `Separator`. Never a flex `div`, `h1`–`h6`, `p`/`span` with font styles, or a 1px divider `div`.
+- Style with props, then tokens. No pixel spacing, no hex, no `.beckui--*` classes. An inline `style` (with tokens) is only for a known gap, marked `// TODO (MAV-90)` for the page `Container`.
+- Write markup inline; extract a local helper only on the third copy, built from Becket components.
+- Before finishing, run the guide's checklist.
+
 **Theme (dark default, light opt-in).** Put the theme on the root element: `document.documentElement.setAttribute('data-theme', 'light')` (or `'dark'`). `data-theme` only re-colors the element it's on and its descendants, and `styles.css` paints `<body>` from the root's theme. So:
 - Never put `data-theme` on an inner wrapper and leave the page around it unpainted — that gives light text and cards on a dark page (or the reverse).
 - If you must scope a theme to a subtree (a side-by-side light/dark demo), that element must paint itself: `style={{ background: 'var(--beckui--colors-background)', color: 'var(--beckui--colors-text)' }}`.
@@ -54,4 +60,4 @@ const { Button, Card, CardBody, CardFooter, CardHeader, CardTitle, Field, FieldC
 **Shipping the design (handoff to Claude Code).** `window.Becket` exists only in this design canvas. When this design is handed off, the app code must:
 - Import every component from `@becket-ui/react` (`import { Button, Card, Tabs } from '@becket-ui/react'`) and load `@becket-ui/tokens/index.css` once at the app entry. Install with `pnpm add @becket-ui/react @becket-ui/tokens`.
 - Keep the theme on `<html data-theme="dark|light">`; no provider, no theme wrapper.
-- Map each element of this design to the same Becket component and props, never to raw `<button>`/`<input>`/`<select>`, hex colors or copied `.beckui--*` classes. Custom CSS uses `var(--beckui--*)` tokens.
+- Follow `@becket-ui/react/guides/building-with-becket.md` (in `node_modules`): map each element of this design to the same Becket component and props, never to raw layout or text elements, raw `<button>`/`<input>`/`<select>`, hex colors or copied `.beckui--*` classes.

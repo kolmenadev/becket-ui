@@ -24,7 +24,8 @@
   "types": "./src/index.ts",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "guides"
   ],
   "exports": {
     ".": {

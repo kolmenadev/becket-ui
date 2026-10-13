@@ -309,6 +309,12 @@ export const Disabled: Story = {
 
 ---
 
+## Code that uses Becket (examples, compositions, apps)
+
+Anything written *with* Becket rather than *in* it, like `*.examples.tsx`, compositions, `apps/*`, and screens built by Claude Design, Claude Code or the MCP, follows `packages/react/guides/building-with-becket.md`. That file ships in the npm package and syncs to Claude Design, so keep it the single source: change the rule there, not in copies. Stories should follow it too, except where a story deliberately shows a raw element.
+
+---
+
 ## When adding a new component, do this
 
 1) Add/extend a Panda recipe in `@becket-ui/tokens` if needed, export it, and regenerate Panda artifacts.
