@@ -64,7 +64,7 @@ try {
 
   const react = packedFiles('@becket-ui/react');
   assertIncludes(react, ['dist/index.js', 'dist/index.d.ts', 'guides/building-with-becket.md'], '@becket-ui/react');
-  assertNone(react, ['.test.ts', '.stories.tsx', 'src/components'], '@becket-ui/react');
+  assertNone(react, ['.test.', '.stories.', 'src/components'], '@becket-ui/react');
 
   console.log('pack-check ok');
   console.log(`  tokens: ${tokens.length} files`);
