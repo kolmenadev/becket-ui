@@ -7,6 +7,7 @@
 - Monorepo (pnpm). DS package `packages/react` (@becket-ui/react); `main`/`exports` point at `src/index.ts` in the workspace, so the converter uses `--entry packages/react/dist/index.js` (unbundled ESM from tsup; tokens/recipes resolve from `@becket-ui/tokens`).
 - Storybook config lives in `apps/docs/.storybook` (not next to the package); stories are `packages/react/src/components/*.stories.tsx`.
 - React 19.3. Styles are compiled Panda CSS in `@becket-ui/tokens/index.css`; dark is default via `data-theme` on `<html>`.
+- [GENERAL] Contributors sync into their own Claude Design project (guide: `docs/CLAUDE-DESIGN.md`). They delete `projectId` locally and mark `config.json` skip-worktree, so a run with no `projectId` here is a first sync into a new project, not a lost pin. Never commit a contributor's `projectId`; the committed one is Kolmena's project.
 
 ## Fixes
 - [GENERAL] `[FONT_MISSING]` Inter / JetBrains Mono -> Becket's font stacks name them but no package ships font files (Storybook didn't load them either) -> Miguel chose to ship them for the sync: `@fontsource/inter` + `@fontsource/jetbrains-mono` are devDependencies of `apps/docs`, loaded by Storybook via `apps/docs/.storybook/fonts.ts` (`previewAnnotations` in main.ts). The converter harvests them from the reference Storybook's CSS (`[CSS_FROM_STORYBOOK]`). Becket's npm packages stay font-free.
@@ -20,7 +21,7 @@
 - [GENERAL] Preview cards paint `body{background:#fff}` (converter card chrome, app-contract - not forkable), so dark-theme text (labels, helper text) was white-on-white -> the Storybook decorator in `apps/docs/.storybook/preview.ts` now wraps every story in a div painted with `--beckui--colors-background` / `--beckui--colors-text` (+0.75rem padding). Do NOT switch to `cfg.provider` for this: it would write "Wrap the tree in <X>" into every prompt.md, and Becket needs no provider.
 - Sheet thumbnails downscale 1px borders and can make them look brighter - check raw/ PNGs before grading a border as a mismatch.
 - Switch: Sizes row is wider than a grid cell -> `[GRID_OVERFLOW] wide` -> `cfg.overrides.Switch.cardMode: "column"`. No other component flagged `[GRID_OVERFLOW]` or `[PORTAL?]`.
-- Drawer, Menu, Tooltip: stories render the closed trigger (Drawer/Menu start closed; Tooltip only appears on hover), same as Dialog. Both panels match that resting state. No open surface is in the stories, so no `cardMode: "single"` — there is nothing to contain. An open-state story would need `cardMode: "single"` on the next sync.
+- Dialog, Drawer, Menu: the original stories start closed, so cards showed only the trigger -> added an `Open` story to each + `cardMode: "single"`, `primaryStory: "Open"`. compare.mjs crops the Storybook side to `#storybook-root`, which excludes top-layer overlays (`<dialog>` modal, `<details>` popup), so grade Open stories against a full-viewport Storybook capture at 900x700. Tooltip has no open prop; its stories stay resting triggers.
 - Hide: compare captures below the `lg` breakpoint, so `below="desktop"` content is hidden on both sides and Hide Below Desktop shows only the mobile line. Both panels agree. The desktop-visible branch is not in these shots.
 
 ## Re-sync risks
