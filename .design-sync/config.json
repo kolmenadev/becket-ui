@@ -7,7 +7,21 @@
   "storybookStatic": ".design-sync/sb-reference",
   "buildCmd": "pnpm -F \"@becket-ui/react...\" build && (cd apps/docs && STORYBOOK_BASE=./ npx storybook build -c .storybook -o ../../.design-sync/sb-reference)",
   "overrides": {
-    "Switch": { "cardMode": "column" }
+    "Switch": {
+      "cardMode": "column"
+    },
+    "Dialog": {
+      "cardMode": "single",
+      "primaryStory": "Open"
+    },
+    "Drawer": {
+      "cardMode": "single",
+      "primaryStory": "Open"
+    },
+    "Menu": {
+      "cardMode": "single",
+      "primaryStory": "Open"
+    }
   },
   "readmeHeader": ".design-sync/conventions.md"
 }

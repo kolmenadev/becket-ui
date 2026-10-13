@@ -15,7 +15,7 @@
 - Claude Design's checker also lists custom properties under `::placeholder` and ~66 "unsorted" tokens: both come from Panda's generated CSS (`tokens/index.css`); not fixable without editing generated output. Advisory only.
 - [GENERAL] `! preview decorator bundle failed: No loader ... .woff2` -> font CSS imported from `preview.ts` pulls woff2 binaries into the converter's decorator bundle -> keep font imports in `.storybook/fonts.ts`, never in `preview.ts`.
 - [GENERAL] Storybook decorator forced `data-theme="dark"` whenever no background global was selected, which would override the Claude Design card's own theme switch -> decorator now sets `data-theme` only when a background is explicitly picked; `:root` is dark by default anyway.
-- `[FONT_MISSING]` "Cambria" (`--beckui--fonts-serif`) is left over from `@pandacss/preset-panda`; no Becket recipe or component uses the serif stack. Substitute accepted pending Miguel's OK.
+- `[FONT_MISSING]` "Cambria" (`--beckui--fonts-serif`) is left over from `@pandacss/preset-panda`; no Becket recipe or component uses the serif stack. Substitute accepted by Miguel 2026-10-13.
 - `[CSS_FROM_STORYBOOK]`: `_ds_bundle.css` is scraped from sb-reference (minified Panda output). The real stylesheet `@becket-ui/tokens/index.css` also ships via `[TOKENS_PKG]` as `tokens/index.css`, first in `styles.css`. `cfg.cssEntry` can't point at it (bounded to packages/react).
 - [GENERAL] Preview cards paint `body{background:#fff}` (converter card chrome, app-contract - not forkable), so dark-theme text (labels, helper text) was white-on-white -> the Storybook decorator in `apps/docs/.storybook/preview.ts` now wraps every story in a div painted with `--beckui--colors-background` / `--beckui--colors-text` (+0.75rem padding). Do NOT switch to `cfg.provider` for this: it would write "Wrap the tree in <X>" into every prompt.md, and Becket needs no provider.
 - Sheet thumbnails downscale 1px borders and can make them look brighter - check raw/ PNGs before grading a border as a mismatch.
@@ -24,12 +24,13 @@
 - Hide: compare captures below the `lg` breakpoint, so `below="desktop"` content is hidden on both sides and Hide Below Desktop shows only the mobile line. Both panels agree. The desktop-visible branch is not in these shots.
 
 ## Re-sync risks
-- Dialog, Drawer, and Menu stories only render the closed trigger, and Tooltip stories never show the bubble (hover). The cards match Storybook and do not show the open overlay. Add an open-state story, then re-sync; Dialog/Drawer/Menu/Tooltip will need `cardMode: "single"`.
+- Dialog, Drawer, and Menu have an `Open` story (starts open) and use `cardMode: "single"` + `primaryStory: "Open"`, so their cards show the panel. Other stories still start closed. Tooltip has no open prop, so its card shows only triggers; showing the bubble needs a library API (e.g. `defaultOpen`), which is a DS-owner decision.
+- The converter's README always adds a "decorators ... theme/i18n providers" note when `.storybook/preview` has decorators. `emit.mjs` can't be forked and `cfg.provider` would be wrong (Becket has no provider), so `conventions.md` Setup explicitly says that note doesn't apply.
 - Hide grades cover the below-desktop viewport only. A desktop-width capture would show the other branch.
 - Switch uses `cardMode: "column"` so the Sizes row is not cropped. Presentation-only; grades carry.
 - No owned previews. Every new component graded from the generated story wrappers.
 - No accepted `close`s.
 - Card "elevated" shadows spill outside the decorator surface onto white card chrome (framing, graded match).
 - Fonts come from `@fontsource/*@5.3.0` devDeps of apps/docs; bumping them changes shipped font bytes (zero-regrade, re-upload).
-- Cambria serif substitute pending Miguel's OK (unused by Becket).
+- Cambria serif substitute accepted by Miguel 2026-10-13 (unused by Becket).
 - Converter toolchain: design-sync skill bundled with Claude Code 2.1.295; Storybook 10; React 19.3.

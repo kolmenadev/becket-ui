@@ -77,3 +77,34 @@ export const Alert: Story = {
     );
   },
 };
+
+/** Starts open so catalogs and design tools show the panel, not only the trigger. */
+export const Open: Story = {
+  render: function OpenDialogDemo() {
+    const [open, setOpen] = useState(true);
+    return (
+      <>
+        <Button visual="primary" onClick={() => setOpen(true)}>
+          Open dialog
+        </Button>
+        <Dialog
+          open={open}
+          onOpenChange={setOpen}
+          title="Invite teammate"
+          footer={
+            <>
+              <Button visual="outline" onClick={() => setOpen(false)}>
+                Cancel
+              </Button>
+              <Button visual="primary" onClick={() => setOpen(false)}>
+                Send invite
+              </Button>
+            </>
+          }
+        >
+          <Text>They get an email with a link to join this workspace.</Text>
+        </Dialog>
+      </>
+    );
+  },
+};
