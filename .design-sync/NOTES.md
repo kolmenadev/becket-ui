@@ -9,6 +9,9 @@
 - React 19.3. Styles are compiled Panda CSS in `@becket-ui/tokens/index.css`; dark is default via `data-theme` on `<html>`.
 - [GENERAL] Contributors sync into their own Claude Design project (guide: `docs/CLAUDE-DESIGN.md`). They delete `projectId` locally and mark `config.json` skip-worktree, so a run with no `projectId` here is a first sync into a new project, not a lost pin. Never commit a contributor's `projectId`; the committed one is Kolmena's project.
 
+- [GENERAL] App-code guide: `packages/react/guides/building-with-becket.md` is synced via `cfg.guidelinesGlob: ["guides/**/*.md"]` and lands at `guidelines/guides/building-with-becket.md`; `conventions.md` points the design agent at that path. The same file ships in the npm package (`files: ["dist", "guides"]`, enforced by `pack:check`). Editing it changes only `aux` on re-sync (grades carry).
+- Always fetch `_ds_sync.json` from the project right before running the driver; a stale `.cache/remote-sync.json` makes unchanged components look changed.
+
 ## Fixes
 - [GENERAL] `[FONT_MISSING]` Inter / JetBrains Mono -> Becket's font stacks name them but no package ships font files (Storybook didn't load them either) -> Miguel chose to ship them for the sync: `@fontsource/inter` + `@fontsource/jetbrains-mono` are devDependencies of `apps/docs`, loaded by Storybook via `apps/docs/.storybook/fonts.ts` (`previewAnnotations` in main.ts). The converter harvests them from the reference Storybook's CSS (`[CSS_FROM_STORYBOOK]`). Becket's npm packages stay font-free.
 - [GENERAL] **Build sb-reference with `STORYBOOK_BASE=./`** (relative asset URLs). With the default `/` base the scraped CSS has `url(/assets/...)` font paths the converter can't resolve, so it ships dead @font-face rules (Claude Design's checker flags them). Do NOT also set `cfg.extraFonts` - that ships a second copy of every face.

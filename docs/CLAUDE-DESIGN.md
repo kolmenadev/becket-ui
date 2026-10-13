@@ -112,6 +112,10 @@ for your app, hand it off to Claude Code:
    import "@becket-ui/tokens/index.css";
    ```
 
+   Tell Claude Code to follow Becket's coding guide, which ships with the package. For example, add
+   this line to your app's `CLAUDE.md`: "UI code follows
+   `node_modules/@becket-ui/react/guides/building-with-becket.md`."
+
 2. In Claude Design, open **Export** and choose **Hand off to Claude Code**. It packages the design
    (screens, component choices, intent) and gives you a command or link for Claude Code, local or on
    the web.

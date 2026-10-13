@@ -23,5 +23,8 @@
       "primaryStory": "Open"
     }
   },
-  "readmeHeader": ".design-sync/conventions.md"
+  "readmeHeader": ".design-sync/conventions.md",
+  "guidelinesGlob": [
+    "guides/**/*.md"
+  ]
 }
