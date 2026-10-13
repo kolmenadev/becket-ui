@@ -78,6 +78,8 @@ Requirements: **React 19+**.
   Max plan)
 - [Writing app code with Becket](./packages/react/guides/building-with-becket.md) — the coding guide
   for screens built with Becket (also used by Claude Design and coding agents)
+- [Coding style](./docs/CODING-STYLE.md) — how we write code in this repo (naming, abstraction,
+  React, TypeScript, tests)
 
 ## Contributing
 
