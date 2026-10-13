@@ -76,6 +76,7 @@ Requirements: **React 19+**.
 
 - [Component catalog](https://kolmenadev.github.io/becket-ui/) — Storybook (temporary public docs)
 - [Theming](./docs/THEMING.md) — brand CSS variables vs instance `style` / `className` (no theme provider)
+- [Claude Design](./docs/CLAUDE-DESIGN.md) — sync Becket into your own Claude Design project (Pro or Max plan)
 
 ## Contributing
 
