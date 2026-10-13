@@ -1,5 +1,16 @@
 # @becket-ui/react
 
+## 0.1.3
+
+### Patch Changes
+
+- 1b33772: Ship `guides/building-with-becket.md`, the coding guide for app code built with Becket,
+  inside the package so coding agents can read it from `node_modules/@becket-ui/react/guides/`.
+- 1a41420: Type `Button` by the element it renders: `<Button as="a" href="/docs">` now accepts
+  anchor props (`href`, `target`, `rel`, `download`), and `href` on a plain `<Button>` is a type
+  error. Runtime behavior is unchanged.
+- @becket-ui/tokens@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes
