@@ -13,6 +13,7 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "pack:check": "node scripts/pack-check.mjs",
+    "publish:check": "node scripts/check-publishable.mjs",
     "example:prepare": "node scripts/prepare-next-example.mjs",
     "example:dev": "pnpm example:prepare && npm --prefix apps/next-example run dev",
     "example:build": "pnpm example:prepare && npm --prefix apps/next-example run build"

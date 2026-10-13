@@ -16,6 +16,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm publish:check
       - run: pnpm build
       - run: pnpm --filter @becket-ui/react exec tsc --noEmit -p tsconfig.build.json
       - run: pnpm --filter @becket-ui/a11y test
