@@ -9,8 +9,8 @@
     "start": "next start --port 3002"
   },
   "dependencies": {
-    "@becket-ui/react": "file:./vendor/becket-ui-react-0.1.0.tgz",
-    "@becket-ui/tokens": "file:./vendor/becket-ui-tokens-0.1.0.tgz",
+    "@becket-ui/react": "file:./vendor/becket-ui-react.tgz",
+    "@becket-ui/tokens": "file:./vendor/becket-ui-tokens.tgz",
     "next": "^16.3.4",
     "react": "19.3.0",
     "react-dom": "19.3.0"
