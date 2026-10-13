@@ -18,6 +18,14 @@
 
 **Where the truth lives.** `styles.css` → `tokens/index.css` holds every token and recipe; each `components/<group>/<Name>/<Name>.prompt.md` has real usage, and `<Name>.d.ts` the exact props. Compound parts are separate exports: `FieldLabel`, `FieldControl`, `FieldHelper`, `FieldError`; `CardHeader`, `CardTitle`, `CardDescription`, `CardBody`, `CardFooter`; `DialogHeader`, `DialogTitle`, `DialogBody`, `DialogFooter`, `DialogClose`.
 
+**Pick the Becket component before writing markup.**
+- Typography: `Heading size="sm…6xl"` (`as="h1"…` for the level, `withGradient` for brand headings); `Text` takes style props (`fontSize="xs|sm|md|lg|xl|2xl"`, `color="muted"`) and `as`; `Link visual="default|muted"`.
+- Layout: `Stack`/`HStack`/`VStack` first; `Flex` (`direction`, `align`, `justify="between"`, `wrap`, `gap`) for the rest; `SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="md"` for card grids; `Separator orientation="horizontal|vertical"`; `Hide below="desktop"` / `from="tablet"` for responsive branches.
+- Forms: inside a labeled field use `Field` + `FieldControl` / `FieldSelect` / `FieldTextarea`. Standalone: `TextField`, `Select`, `Textarea` (`label`, `helperText`, `size="sm|md|lg"`, `invalid`). Choices: `Checkbox` and `Switch` take `label` (`Switch size="sm|md|lg"`); radios are `<RadioGroup name legend defaultValue><Radio value label description /></RadioGroup>`.
+- Display: `Tag` / `Badge` with `visual="primary|secondary|neutral|outline"` and `size="sm|md|lg"`; `Table` (`size="sm|md"`) with `TableHeader`, `TableBody`, `TableRow`, `TableColumnHeader`, `TableCell`, `TableCaption` (short aliases `Thead`, `Tbody`, `Tr`, `Th`, `Td`). Loading: `Spinner size="sm|md|lg"`.
+- Disclosure: `<Tabs defaultValue="a"><TabList><Tab value="a">…</Tab></TabList><TabPanel value="a">…</TabPanel></Tabs>`.
+- Overlays: `Drawer` mirrors Dialog (`DrawerHeader`, `DrawerTitle`, `DrawerBody`, `DrawerFooter`, `DrawerClose`; `placement="start|end"`); `<Menu label="Actions"><MenuItem>…</MenuItem></Menu>`; `<Tooltip content="…" placement="top">` around one focusable trigger. Their cards show the closed trigger; the open panel is real and renders when used.
+
 **Idiomatic example.**
 
 ```jsx
