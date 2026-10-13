@@ -137,3 +137,12 @@ export const DensityOverride: Story = {
     size: 'md',
   },
 };
+
+/** Call-to-action links: `as="a"` renders an anchor with button styling and anchor props. */
+export const AsLink: Story = {
+  render: () => (
+    <Button as="a" href="https://github.com/kolmenadev/becket-ui" visual="primary">
+      View on GitHub
+    </Button>
+  ),
+};

@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import type { ElementType } from 'react';
+import type { ComponentPropsWithRef, ComponentPropsWithoutRef, ElementType, ReactElement } from 'react';
 import { button } from '@becket-ui/tokens/recipes';
 
 type ButtonVisual = 'outline' | 'primary' | 'secondary' | 'neutral';
@@ -13,21 +13,33 @@ const VISUAL_TO_RECIPE: Record<ButtonVisual, ButtonVisual> = {
   outline: 'outline',
 };
 
-export type ButtonProps = React.ComponentPropsWithoutRef<'button'> & {
+type ButtonOwnProps = {
   visual?: ButtonVisual;
   size?: ButtonSize;
   borderRadius?: ButtonBorderRadius;
   withGradient?: boolean;
   /** Stretch to the parent width. Default is token `sizes.field` (12.5rem). */
   fullWidth?: boolean;
-  as?: ElementType;
 };
+
+/**
+ * Props follow the rendered element: `<Button as="a" href="/docs">` accepts anchor props,
+ * and plain `<Button>` accepts button props only.
+ */
+export type ButtonProps<T extends ElementType = 'button'> = ButtonOwnProps & {
+  as?: T;
+} & Omit<ComponentPropsWithoutRef<T>, keyof ButtonOwnProps | 'as'>;
+
+type PolymorphicButton = (<T extends ElementType = 'button'>(
+  props: ButtonProps<T> & { ref?: ComponentPropsWithRef<T>['ref'] },
+) => ReactElement | null) & { displayName?: string };
 
 function mergeClassName(...classes: (string | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+// forwardRef can't express a generic component; the cast restores the per-element prop types.
+export const Button = forwardRef<HTMLElement, ButtonOwnProps & { as?: ElementType; className?: string }>(
   (
     {
       visual = 'outline',
@@ -58,6 +70,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       />
     );
   },
-);
+) as PolymorphicButton;
 
 Button.displayName = 'Button';
