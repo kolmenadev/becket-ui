@@ -1,0 +1,39 @@
+{
+  "projectId": "d95bf78b-6853-4b84-b1a9-d3463cb01fc8",
+  "pkg": "@becket-ui/react",
+  "globalName": "Becket",
+  "shape": "storybook",
+  "storybookConfigDir": "apps/docs/.storybook",
+  "storybookStatic": ".design-sync/sb-reference",
+  "buildCmd": "pnpm -F \"@becket-ui/react...\" build",
+  "titleMap": {
+    "Flex": null,
+    "Tag": null,
+    "Radio": null,
+    "TextField": null,
+    "Badge": null,
+    "Checkbox": null,
+    "Switch": null,
+    "SimpleGrid": null,
+    "Heading": null,
+    "Select": null,
+    "Textarea": null,
+    "Separator": null,
+    "Link": null,
+    "Text": null,
+    "Hide": null,
+    "Drawer": null,
+    "Tooltip": null,
+    "Spinner": null,
+    "Table": null,
+    "Menu": null,
+    "Tabs": null
+  },
+  "extraFonts": [
+    "../../apps/docs/node_modules/@fontsource/inter/latin-400.css",
+    "../../apps/docs/node_modules/@fontsource/inter/latin-500.css",
+    "../../apps/docs/node_modules/@fontsource/inter/latin-700.css",
+    "../../apps/docs/node_modules/@fontsource/jetbrains-mono/latin-400.css"
+  ],
+  "readmeHeader": ".design-sync/conventions.md"
+}

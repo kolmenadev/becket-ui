@@ -9,6 +9,7 @@ const config: StorybookConfig = {
   },
   stories: [`${repoRoot}/packages/react/src/**/*.stories.@(ts|tsx)`],
   addons: ['@storybook/addon-a11y', '@chromatic-com/storybook'],
+  previewAnnotations: (entries = []) => [...entries, path.join(repoRoot, 'apps/docs/.storybook/fonts.ts')],
   staticDirs: [path.join(repoRoot, 'apps/docs/public')],
   managerHead: (head) => `${head}
     <meta property="og:title" content="Becket UI" />

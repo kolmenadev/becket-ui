@@ -86,3 +86,11 @@ CLAUDE.md
 ## Env files
 .env
 .env.*
+
+## Claude Design sync (design-sync): build artifacts, scratch, staged scripts
+.design-sync/sb-reference/
+.design-sync/learnings/
+.design-sync/.cache/
+.design-sync/node_modules
+.ds-sync/
+ds-bundle/
