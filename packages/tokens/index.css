@@ -822,6 +822,25 @@
       max-width: 100%;
 }
 
+    .beckui--box,.beckui--container {
+      box-sizing: border-box;
+}
+
+    .beckui--container {
+      margin-inline: auto;
+      width: 100%;
+}
+
+    .beckui--heading {
+      font-weight: var(--beckui--font-weights-bold);
+      line-height: var(--beckui--line-heights-tight);
+}
+
+    .beckui--heading,.beckui--textField {
+      font-family: var(--beckui--fonts-sans);
+      color: var(--beckui--colors-text);
+}
+
     .beckui--textField {
       border-width: 1px;
       border-style: solid;
@@ -829,8 +848,6 @@
       border-radius: var(--beckui--radii-md);
       outline: var(--beckui--borders-none);
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
-      font-family: var(--beckui--fonts-sans);
-      color: var(--beckui--colors-text);
       background-color: var(--beckui--colors-surface);
       width: 100%;
 }
@@ -939,13 +956,6 @@
     .beckui--textarea:is(:focus-visible, [data-focus-visible]) {
       border-color: var(--beckui--colors-primary);
       box-shadow: 0 0 0 2px color-mix(in srgb, var(--beckui--colors-primary) 45%, transparent);
-}
-
-    .beckui--heading {
-      font-family: var(--beckui--fonts-sans);
-      font-weight: var(--beckui--font-weights-bold);
-      color: var(--beckui--colors-text);
-      line-height: var(--beckui--line-heights-tight);
 }
 
     .beckui--link {
@@ -1156,6 +1166,145 @@
     border-radius: var(--beckui--radii-xl);
 }
 
+  .beckui--box--padding_md {
+    padding: var(--beckui--spacing-md);
+}
+
+  .beckui--box--radius_md {
+    border-radius: var(--beckui--radii-md);
+}
+
+  .beckui--box--background_subtle {
+    background: var(--beckui--colors-neutral-800);
+    color: var(--beckui--colors-text);
+}
+
+  [data-theme='light'] .beckui--box--background_subtle {
+    background: var(--beckui--colors-neutral-50);
+}
+
+  .beckui--box--padding_sm {
+    padding: var(--beckui--spacing-sm);
+}
+
+  .beckui--box--padding_lg {
+    padding: var(--beckui--spacing-lg);
+}
+
+  .beckui--box--background_surface {
+    background: var(--beckui--colors-surface);
+    color: var(--beckui--colors-text);
+}
+
+  .beckui--box--padding_xs {
+    padding: var(--beckui--spacing-xs);
+}
+
+  .beckui--box--padding_xl {
+    padding: var(--beckui--spacing-xl);
+}
+
+  .beckui--box--background_background {
+    background: var(--beckui--colors-background);
+    color: var(--beckui--colors-text);
+}
+
+  .beckui--box--radius_sm {
+    border-radius: var(--beckui--radii-sm);
+}
+
+  .beckui--box--radius_lg {
+    border-radius: var(--beckui--radii-lg);
+}
+
+  .beckui--box--radius_xl {
+    border-radius: var(--beckui--radii-xl);
+}
+
+  .beckui--box--radius_full {
+    border-radius: var(--beckui--radii-full);
+}
+
+  .beckui--container--size_lg {
+    max-width: var(--beckui--sizes-6xl);
+}
+
+  .beckui--container--padding_md {
+    padding-inline: var(--beckui--spacing-md);
+}
+
+  .beckui--container--size_md {
+    max-width: var(--beckui--sizes-5xl);
+}
+
+  .beckui--container--size_sm {
+    max-width: var(--beckui--sizes-3xl);
+}
+
+  .beckui--container--size_xl {
+    max-width: var(--beckui--sizes-7xl);
+}
+
+  .beckui--container--size_full {
+    max-width: none;
+}
+
+  .beckui--container--padding_none {
+    padding-inline: var(--beckui--spacing-0);
+}
+
+  .beckui--container--padding_xs {
+    padding-inline: var(--beckui--spacing-xs);
+}
+
+  .beckui--container--padding_sm {
+    padding-inline: var(--beckui--spacing-sm);
+}
+
+  .beckui--container--padding_lg {
+    padding-inline: var(--beckui--spacing-lg);
+}
+
+  .beckui--container--padding_xl {
+    padding-inline: var(--beckui--spacing-xl);
+}
+
+  .beckui--heading--size_xl {
+    font-size: var(--beckui--font-sizes-xl);
+}
+
+  .beckui--heading--size_sm {
+    font-size: var(--beckui--font-sizes-sm);
+}
+
+  .beckui--heading--size_md {
+    font-size: var(--beckui--font-sizes-md);
+}
+
+  .beckui--heading--size_lg {
+    font-size: var(--beckui--font-sizes-lg);
+}
+
+  .beckui--heading--size_2xl {
+    font-size: var(--beckui--font-sizes-2xl);
+}
+
+  .beckui--heading--size_3xl {
+    font-size: var(--beckui--font-sizes-3xl);
+}
+
+  .beckui--heading--size_4xl {
+    font-size: var(--beckui--font-sizes-4xl);
+}
+
+  .beckui--heading--size_5xl {
+    font-size: var(--beckui--font-sizes-5xl);
+}
+
+  .beckui--heading--size_6xl {
+    font-size: var(--beckui--font-sizes-6xl);
+}
+
   .beckui--textField--size_md {
     padding-inline: var(--beckui-field-px-md);
     padding-block: var(--beckui-field-py-md);
@@ -1241,42 +1390,6 @@
   .beckui--textarea--invalid_true:is(:focus-visible, [data-focus-visible]) {
     border-color: var(--beckui--colors-danger);
     box-shadow: var(--beckui--shadows-outline);
-}
-
-  .beckui--heading--size_sm {
-    font-size: var(--beckui--font-sizes-sm);
-}
-
-  .beckui--heading--size_md {
-    font-size: var(--beckui--font-sizes-md);
-}
-
-  .beckui--heading--size_lg {
-    font-size: var(--beckui--font-sizes-lg);
-}
-
-  .beckui--heading--size_xl {
-    font-size: var(--beckui--font-sizes-xl);
-}
-
-  .beckui--heading--size_2xl {
-    font-size: var(--beckui--font-sizes-2xl);
-}
-
-  .beckui--heading--size_3xl {
-    font-size: var(--beckui--font-sizes-3xl);
-}
-
-  .beckui--heading--size_4xl {
-    font-size: var(--beckui--font-sizes-4xl);
-}
-
-  .beckui--heading--size_5xl {
-    font-size: var(--beckui--font-sizes-5xl);
-}
-
-  .beckui--heading--size_6xl {
-    font-size: var(--beckui--font-sizes-6xl);
 }
 
   .beckui--link--visited_true:visited {
@@ -2528,28 +2641,16 @@
     flex-direction: column;
 }
 
-  .beckui--ai_start {
-    align-items: start;
-}
-
   .beckui--fs_sm {
     font-size: var(--beckui--font-sizes-sm);
 }
 
+  .beckui--ai_start {
+    align-items: start;
+}
+
   .beckui--c_muted {
     color: var(--beckui--colors-muted);
-}
-
-  .beckui--fs_xs {
-    font-size: var(--beckui--font-sizes-xs);
-}
-
-  .beckui--jc_between {
-    justify-content: between;
-}
-
-  .beckui--d_inline-flex {
-    display: inline-flex;
 }
 
   .beckui--d_inline {
@@ -2567,6 +2668,18 @@
 
   .beckui---webkit-background-clip_text {
     -webkit-background-clip: text;
+}
+
+  .beckui--fs_xs {
+    font-size: var(--beckui--font-sizes-xs);
+}
+
+  .beckui--jc_between {
+    justify-content: between;
+}
+
+  .beckui--d_inline-flex {
+    display: inline-flex;
 }
 
   .beckui--d_none {
