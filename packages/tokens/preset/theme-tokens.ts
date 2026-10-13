@@ -25,8 +25,10 @@ export const colors = {
   black: { value: 'oklch(20% 0 0)' },
   white: { value: 'oklch(99% 0 0)' },
   border: { value: '{colors.neutral.200}' },
-  warning: { value: 'oklch(0.78 0.14 95)' },
-  success: { value: 'oklch(0.68 0.16 145)' },
+  /** Lighter orange than combAmber, clear of brand gold. */
+  warning: { value: 'oklch(0.72 0.16 42)' },
+  /** Hue 165, clear of hiveSage at 125. */
+  success: { value: 'oklch(0.68 0.14 165)' },
   /** @deprecated Prefer semantic `text` / `background`. Kept as CSS-var aliases. */
   lightBackground: { value: '{colors.neutral.50}' },
   lightText: { value: '{colors.neutral.900}' },

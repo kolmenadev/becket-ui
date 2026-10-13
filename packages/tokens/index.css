@@ -519,8 +519,8 @@
     --beckui--colors-black: oklch(20% 0 0);
     --beckui--colors-white: oklch(99% 0 0);
     --beckui--colors-border: var(--beckui--colors-neutral-200);
-    --beckui--colors-warning: oklch(0.78 0.14 95);
-    --beckui--colors-success: oklch(0.68 0.16 145);
+    --beckui--colors-warning: oklch(0.72 0.16 42);
+    --beckui--colors-success: oklch(0.68 0.14 165);
     --beckui--colors-light-background: var(--beckui--colors-neutral-50);
     --beckui--colors-light-text: var(--beckui--colors-neutral-900);
     --beckui--gradients-primary: linear-gradient(to right, var(--beckui--colors-primary), var(--beckui--colors-tertiary));
