@@ -4,7 +4,7 @@
 
 **Code style: read `guidelines/guides/building-with-becket.md` before writing any screen.** It's Becket's coding guide (the same file ships as `@becket-ui/react/guides/building-with-becket.md`). The short version:
 - Use a Becket component whenever one exists: layout is `VStack`/`HStack`/`Flex`/`SimpleGrid`, text is `Heading`/`Text`, dividers are `Separator`. Never a flex `div`, `h1`–`h6`, `p`/`span` with font styles, or a 1px divider `div`.
-- Style with props, then tokens. No pixel spacing, no hex, no `.beckui--*` classes. An inline `style` (with tokens) is only for a known gap, marked `// TODO (MAV-90)` for the page `Container`.
+- Style with props, then tokens. No pixel spacing, no hex, no `.beckui--*` classes. An inline `style` (with tokens) is only for a known gap, with a `// TODO (MAV-…)` naming the ticket. Page wrappers are `Container as="main"`; plain padded or tinted blocks are `Box`.
 - Write markup inline; extract a local helper only on the third copy, built from Becket components.
 - Before finishing, run the guide's checklist.
 
@@ -26,7 +26,7 @@
 
 **Pick the Becket component before writing markup.**
 - Typography: `Heading size="sm…6xl"` (`as="h1"…` for the level, `withGradient` for brand headings); `Text` takes style props (`fontSize="xs|sm|md|lg|xl|2xl"`, `color="muted"`) and `as`; `Link visual="default|muted"`.
-- Layout: `Stack`/`HStack`/`VStack` first; `Flex` (`direction`, `align`, `justify="between"`, `wrap`, `gap`) for the rest; `SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="md"` for card grids; `Separator orientation="horizontal|vertical"`; `Hide below="desktop"` / `from="tablet"` for responsive branches.
+- Layout: `Container as="main" size="sm|md|lg|xl|full" padding` for page width and gutters; `Box padding background="surface|subtle" radius` for plain blocks; `Stack`/`HStack`/`VStack` first; `Flex` (`direction`, `align`, `justify="between"`, `wrap`, `gap`) for the rest; `SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} gap="md"` for card grids; `Separator orientation="horizontal|vertical"`; `Hide below="desktop"` / `from="tablet"` for responsive branches.
 - Forms: inside a labeled field use `Field` + `FieldControl` / `FieldSelect` / `FieldTextarea`. Standalone: `TextField`, `Select`, `Textarea` (`label`, `helperText`, `size="sm|md|lg"`, `invalid`). Choices: `Checkbox` and `Switch` take `label` (`Switch size="sm|md|lg"`); radios are `<RadioGroup name legend defaultValue><Radio value label description /></RadioGroup>`.
 - Display: `Tag` / `Badge` with `visual="primary|secondary|neutral|outline"` and `size="sm|md|lg"`; `Table` (`size="sm|md"`) with `TableHeader`, `TableBody`, `TableRow`, `TableColumnHeader`, `TableCell`, `TableCaption` (short aliases `Thead`, `Tbody`, `Tr`, `Th`, `Td`). Loading: `Spinner size="sm|md|lg"`.
 - Disclosure: `<Tabs defaultValue="a"><TabList><Tab value="a">…</Tab></TabList><TabPanel value="a">…</TabPanel></Tabs>`.

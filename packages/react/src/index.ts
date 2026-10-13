@@ -33,6 +33,10 @@ export {
   CardDescription,
 } from './components/Card';
 export { SimpleGrid } from './components/SimpleGrid';
+export { Container } from './components/Container';
+export type { ContainerProps } from './components/Container';
+export { Box } from './components/Box';
+export type { BoxProps } from './components/Box';
 export { Hide } from './components/Hide';
 export type { HideProps } from './components/Hide';
 export { Tooltip } from './components/Tooltip';
