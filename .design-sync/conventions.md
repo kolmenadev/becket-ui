@@ -51,4 +51,7 @@ const { Button, Card, CardBody, CardFooter, CardHeader, CardTitle, Field, FieldC
 </Card>
 ```
 
-**Shipping the design.** In app code, import from `@becket-ui/react` and load `@becket-ui/tokens/index.css` once — `window.Becket` exists only in this design canvas.
+**Shipping the design (handoff to Claude Code).** `window.Becket` exists only in this design canvas. When this design is handed off, the app code must:
+- Import every component from `@becket-ui/react` (`import { Button, Card, Tabs } from '@becket-ui/react'`) and load `@becket-ui/tokens/index.css` once at the app entry. Install with `pnpm add @becket-ui/react @becket-ui/tokens`.
+- Keep the theme on `<html data-theme="dark|light">`; no provider, no theme wrapper.
+- Map each element of this design to the same Becket component and props, never to raw `<button>`/`<input>`/`<select>`, hex colors or copied `.beckui--*` classes. Custom CSS uses `var(--beckui--*)` tokens.
