@@ -21,6 +21,9 @@
     "Menu": {
       "cardMode": "single",
       "primaryStory": "Open"
+    },
+    "Box": {
+      "cardMode": "column"
     }
   },
   "readmeHeader": ".design-sync/conventions.md",
