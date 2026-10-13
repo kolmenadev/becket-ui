@@ -1,5 +1,41 @@
 # @becket-ui/react
 
+## 0.2.0
+
+### Minor Changes
+
+- 93bc35d: Add `Container` and `Box`.
+
+  - `Container`: centered page-width wrapper. `size="sm|md|lg|xl|full"` (48, 64, 72, 80rem or none;
+    default `lg`), `padding="none|xs|sm|md|lg|xl"` for inline gutters (default `md`), and `as` for
+    landmarks such as `main`.
+  - `Box`: a block with token-only `padding`, `background="background|surface|subtle"` and `radius`,
+    plus `as`.
+  - New `container` and `box` recipes in `@becket-ui/tokens/recipes`, included in `index.css`.
+
+  **Breaking for `@becket-ui/tokens/jsx` only:** Panda's built-in `Box` and `Container` JSX patterns
+  are renamed to `PandaBox` and `PandaContainer`. Without the rename, Panda's extractor read
+  Becket's `<Box>` and `<Container>` props as style props and emitted invalid CSS.
+  `@becket-ui/react` users are unaffected.
+
+- 4e70f5c: Add `Icon` and 13 built-in glyphs.
+
+  - `Icon` sizes any inline SVG on the size scale (`size="sm|md|lg|xl"`: 1, 1.25, 1.5, 2rem) and
+    colors it with `currentColor`. It's decorative (`aria-hidden`) by default; pass `label` to give
+    it an accessible name (`role="img"`).
+  - Glyphs, drawn on one 24px grid and stroke: `ChevronDownIcon`, `ChevronRightIcon`, `CloseIcon`,
+    `MenuIcon`, `CheckIcon`, `CopyIcon`, `ExternalLinkIcon`, `LinkIcon`, `SearchIcon`, `SunIcon`,
+    `MoonIcon`, `InfoIcon`, `WarningIcon`. They're tree-shakeable: importing one doesn't bundle the
+    others.
+  - New `icon` recipe in `@becket-ui/tokens/recipes`, included in `index.css`.
+
+### Patch Changes
+
+- a6dd5a8: Stop shipping compiled component tests (`dist/components/*.test.js`) in the npm package.
+- Updated dependencies [93bc35d]
+- Updated dependencies [4e70f5c]
+  - @becket-ui/tokens@0.2.0
+
 ## 0.1.3
 
 ### Patch Changes
