@@ -38,7 +38,7 @@ Raw elements with inline styles are the most common mistake. Use this table:
 | panel `div` with border and padding                 | `Card` + `CardHeader` / `CardBody` / `CardFooter`                         |
 | pill `span`                                         | `Tag` (label) or `Badge` (count or status)                                |
 | `a`                                                 | `Link`                                                                    |
-| `a` styled as a button (call to action) | `Button as="a" href="…"` (anchor props are typed) |
+| `a` styled as a button (call to action)             | `Button as="a" href="…"` (anchor props are typed)                         |
 | custom modal, side panel, dropdown, tabs or tooltip | `Dialog`, `Drawer`, `Menu`, `Tabs`, `Tooltip`                             |
 
 Raw elements are fine for semantics Becket doesn't cover (`form`, `main`, `nav`, `section`,
