@@ -4,7 +4,7 @@
  * and install them as file: tarballs (publishConfig → dist, not workspace src/).
  */
 import { execSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -12,14 +12,21 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const example = join(root, 'apps/next-example');
 const vendor = join(example, 'vendor');
 
-const TOKENS_TGZ = 'becket-ui-tokens-0.1.0.tgz';
-const REACT_TGZ = 'becket-ui-react-0.1.0.tgz';
+// Version-free names so apps/next-example/package.json survives every version bump.
+const TOKENS_TGZ = 'becket-ui-tokens.tgz';
+const REACT_TGZ = 'becket-ui-react.tgz';
 
-function pack(filter) {
+function pack(filter, tarball) {
+  const before = new Set(readdirSync(vendor));
   execSync(`pnpm --filter ${filter} pack --pack-destination ${vendor}`, {
     cwd: root,
     stdio: 'inherit',
   });
+  const packed = readdirSync(vendor).filter((file) => file.endsWith('.tgz') && !before.has(file));
+  if (packed.length !== 1) {
+    throw new Error(`Expected one new tarball for ${filter} in vendor/, got: ${packed.join(', ') || '(none)'}`);
+  }
+  renameSync(join(vendor, packed[0]), join(vendor, tarball));
 }
 
 if (!existsSync(join(root, 'packages/react/dist/index.js'))) {
@@ -31,18 +38,11 @@ if (!existsSync(join(root, 'packages/react/dist/index.js'))) {
 
 rmSync(vendor, { recursive: true, force: true });
 mkdirSync(vendor, { recursive: true });
-pack('@becket-ui/tokens');
-pack('@becket-ui/react');
-
-const packed = readdirSync(vendor);
-for (const expected of [TOKENS_TGZ, REACT_TGZ]) {
-  if (!packed.includes(expected)) {
-    throw new Error(`Expected ${expected} in vendor/, got: ${packed.join(', ') || '(empty)'}`);
-  }
-}
+pack('@becket-ui/tokens', TOKENS_TGZ);
+pack('@becket-ui/react', REACT_TGZ);
 
 // npm, not pnpm: nested dirs still pick up the parent workspace even with --ignore-workspace.
-// file: tarballs stay at 0.1.0 — drop lock + install so npm does not reuse a stale integrity hash.
+// file: tarball names never change — drop lock + install so npm does not reuse a stale integrity hash.
 rmSync(join(example, 'node_modules'), { recursive: true, force: true });
 rmSync(join(example, 'package-lock.json'), { force: true });
 execSync('npm install', { cwd: example, stdio: 'inherit' });
