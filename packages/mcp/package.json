@@ -1,0 +1,31 @@
+{
+  "name": "@becket-ui/mcp",
+  "private": true,
+  "version": "0.0.0",
+  "description": "MCP server that teaches coding agents to build UIs with Becket UI. Private until MAV-44.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "becket-mcp": "dist/server.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup && node scripts/build-data.mjs",
+    "start": "node dist/server.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@becket-ui/react": "workspace:*",
+    "@becket-ui/tokens": "workspace:*",
+    "@types/node": "^22.18.0",
+    "tsup": "^8.5.1",
+    "typescript": "7.0.2",
+    "vitest": "^5.0.0"
+  }
+}
