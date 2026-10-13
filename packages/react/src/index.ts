@@ -76,6 +76,24 @@ export {
   Td,
 } from './components/Table';
 export { Spinner } from './components/Spinner';
+export { Icon } from './components/Icon';
+export type { IconProps } from './components/Icon';
+export {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  CloseIcon,
+  CopyIcon,
+  ExternalLinkIcon,
+  InfoIcon,
+  LinkIcon,
+  MenuIcon,
+  MoonIcon,
+  SearchIcon,
+  SunIcon,
+  WarningIcon,
+} from './components/Glyphs';
+export type { GlyphProps } from './components/Glyphs';
 export { Link } from './components/Link';
 export { Separator } from './components/Separator';
 export type { LabelCustomColors, LabelVisual } from './helpers/labelColors';
