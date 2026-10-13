@@ -5,7 +5,7 @@
   "shape": "storybook",
   "storybookConfigDir": "apps/docs/.storybook",
   "storybookStatic": ".design-sync/sb-reference",
-  "buildCmd": "pnpm -F \"@becket-ui/react...\" build",
+  "buildCmd": "pnpm -F \"@becket-ui/react...\" build && (cd apps/docs && STORYBOOK_BASE=./ npx storybook build -c .storybook -o ../../.design-sync/sb-reference)",
   "titleMap": {
     "Flex": null,
     "Tag": null,
@@ -29,11 +29,5 @@
     "Menu": null,
     "Tabs": null
   },
-  "extraFonts": [
-    "../../apps/docs/node_modules/@fontsource/inter/latin-400.css",
-    "../../apps/docs/node_modules/@fontsource/inter/latin-500.css",
-    "../../apps/docs/node_modules/@fontsource/inter/latin-700.css",
-    "../../apps/docs/node_modules/@fontsource/jetbrains-mono/latin-400.css"
-  ],
   "readmeHeader": ".design-sync/conventions.md"
 }

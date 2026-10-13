@@ -1,6 +1,11 @@
 ## Building with Becket UI — read this first
 
-**Setup.** No provider or theme wrapper — Becket components are styled by compiled CSS, not context. Link `styles.css` once and mount components from `window.Becket`. Dark is the default theme; for light, set `data-theme="light"` on `<html>` (`data-theme="dark"` switches back). `styles.css` already paints the page with `--beckui--colors-background` and `--beckui--colors-text`, so don't set your own page background or text color — it breaks the light/dark switch.
+**Setup.** No provider or theme wrapper — Becket components are styled by compiled CSS, not context. Link `styles.css` once and mount components from `window.Becket`.
+
+**Theme (dark default, light opt-in).** Put the theme on the root element: `document.documentElement.setAttribute('data-theme', 'light')` (or `'dark'`). `data-theme` only re-colors the element it's on and its descendants, and `styles.css` paints `<body>` from the root's theme. So:
+- Never put `data-theme` on an inner wrapper and leave the page around it unpainted — that gives light text and cards on a dark page (or the reverse).
+- If you must scope a theme to a subtree (a side-by-side light/dark demo), that element must paint itself: `style={{ background: 'var(--beckui--colors-background)', color: 'var(--beckui--colors-text)' }}`.
+- Every surface you build (page, sidebar, header, nav) uses token colors (`var(--beckui--colors-background|surface|text|muted|border)`), never hex or `#fff`/`#000`, so it flips with the theme.
 
 **Styling idiom: props first, then tokens. Never classes.**
 - Use component props for the design language: `Button visual="primary|secondary|neutral|outline" size="sm|md"`, `Card visual="elevated|outline|subtle" size="sm|md|lg"`, `Field size="sm|md|lg" invalid`.
