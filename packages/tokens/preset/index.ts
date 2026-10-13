@@ -1,7 +1,9 @@
 import { definePreset } from '@pandacss/dev';
 import {
   badge,
+  box,
   button,
+  container,
   card,
   checkbox,
   dialog,
@@ -93,6 +95,8 @@ export const becketPreset = definePreset({
         link,
         separator,
         tooltip,
+        container,
+        box,
         icon,
       },
     },

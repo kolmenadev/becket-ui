@@ -21,26 +21,28 @@ comment).
 
 Raw elements with inline styles are the most common mistake. Use this table:
 
-| Instead of                                          | Use                                                                                                                        |
-| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `div` with `display: flex; flex-direction: column`  | `VStack` / `Stack`                                                                                                         |
-| `div` with `display: flex` (row)                    | `HStack`, or `Flex` for wrap, grow and basis                                                                               |
-| `div` with `display: grid`                          | `SimpleGrid columns={{ base: 1, md: 2 }}`                                                                                  |
-| `h1`–`h6` with font styles                          | `Heading as="h1" size="2xl"`                                                                                               |
-| `p` / `span` with font size or color                | `Text fontSize="sm" color="muted"`                                                                                         |
-| bold `span`                                         | `Text as="strong"`                                                                                                         |
-| `hr`, or a 1px `div`                                | `Separator` (`orientation="vertical"` inside a row)                                                                        |
-| `button`                                            | `Button visual="primary\|secondary\|neutral\|outline"`                                                                     |
-| `input` + `label`                                   | `Field` + `FieldLabel` + `FieldControl`, or `TextField label`                                                              |
-| `select` / `textarea`                               | `Select` / `Textarea` (or `FieldSelect` / `FieldTextarea` inside `Field`)                                                  |
-| checkbox / radio / toggle `input`                   | `Checkbox`, `RadioGroup` + `Radio`, `Switch`                                                                               |
-| `table`, `tr`, `td`                                 | `Table`, `Thead`, `Tbody`, `Tr`, `Th`, `Td`                                                                                |
-| panel `div` with border and padding                 | `Card` + `CardHeader` / `CardBody` / `CardFooter`                                                                          |
-| pill `span`                                         | `Tag` (label) or `Badge` (count or status)                                                                                 |
-| inline `svg` icon                                   | `Icon` around your SVG, or a built-in glyph (`SearchIcon`, `ChevronDownIcon`, …); add `label` only when it carries meaning |
-| `a`                                                 | `Link`                                                                                                                     |
-| `a` styled as a button (call to action)             | `Button as="a" href="…"` (anchor props are typed)                                                                          |
-| custom modal, side panel, dropdown, tabs or tooltip | `Dialog`, `Drawer`, `Menu`, `Tabs`, `Tooltip`                                                                              |
+| Instead of                                           | Use                                                                                                                        |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| page wrapper `div` (max width, centering, gutters)   | `Container as="main" size="md"`                                                                                            |
+| plain block `div` with padding, background or radius | `Box padding="md" background="subtle" radius="md"`                                                                         |
+| `div` with `display: flex; flex-direction: column`   | `VStack` / `Stack`                                                                                                         |
+| `div` with `display: flex` (row)                     | `HStack`, or `Flex` for wrap, grow and basis                                                                               |
+| `div` with `display: grid`                           | `SimpleGrid columns={{ base: 1, md: 2 }}`                                                                                  |
+| `h1`–`h6` with font styles                           | `Heading as="h1" size="2xl"`                                                                                               |
+| `p` / `span` with font size or color                 | `Text fontSize="sm" color="muted"`                                                                                         |
+| bold `span`                                          | `Text as="strong"`                                                                                                         |
+| `hr`, or a 1px `div`                                 | `Separator` (`orientation="vertical"` inside a row)                                                                        |
+| `button`                                             | `Button visual="primary\|secondary\|neutral\|outline"`                                                                     |
+| `input` + `label`                                    | `Field` + `FieldLabel` + `FieldControl`, or `TextField label`                                                              |
+| `select` / `textarea`                                | `Select` / `Textarea` (or `FieldSelect` / `FieldTextarea` inside `Field`)                                                  |
+| checkbox / radio / toggle `input`                    | `Checkbox`, `RadioGroup` + `Radio`, `Switch`                                                                               |
+| `table`, `tr`, `td`                                  | `Table`, `Thead`, `Tbody`, `Tr`, `Th`, `Td`                                                                                |
+| panel `div` with border and padding                  | `Card` + `CardHeader` / `CardBody` / `CardFooter`                                                                          |
+| pill `span`                                          | `Tag` (label) or `Badge` (count or status)                                                                                 |
+| inline `svg` icon                                    | `Icon` around your SVG, or a built-in glyph (`SearchIcon`, `ChevronDownIcon`, …); add `label` only when it carries meaning |
+| `a`                                                  | `Link`                                                                                                                     |
+| `a` styled as a button (call to action)              | `Button as="a" href="…"` (anchor props are typed)                                                                          |
+| custom modal, side panel, dropdown, tabs or tooltip  | `Dialog`, `Drawer`, `Menu`, `Tabs`, `Tooltip`                                                                              |
 
 Raw elements are fine for semantics Becket doesn't cover (`form`, `main`, `nav`, `section`,
 `ul`/`li`). Render them through a layout component's `as` prop when they also lay things out:
@@ -49,7 +51,6 @@ Raw elements are fine for semantics Becket doesn't cover (`form`, `main`, `nav`,
 **Known gaps** (until these ship, an inline `style` with tokens is allowed, with a `TODO` naming the
 ticket):
 
-- Page width, padding and centering: no `Container` yet (MAV-90).
 - Font weight on `Text`: no `weight` prop yet (MAV-106). Use `Text as="strong"` for bold.
 - Status colors on `Badge` and `Tag`: no `success` / `warning` / `danger` visuals yet (MAV-107).
   Don't use a brand visual (`primary`, `secondary`) to mean a status.
@@ -127,7 +128,7 @@ that holds state or handlers, never on a whole page or barrel file.
   initialisms in one case (`userID`, `inviteURL`).
 - Sort imports: third-party (React, then `@becket-ui/react`), then absolute app modules, then
   relative.
-- Comment **why**, not what. A `TODO` names its ticket: `// TODO (MAV-90): use Container`.
+- Comment **why**, not what. A `TODO` names its ticket: `// TODO (MAV-106): use Text weight`.
 
 ## 10. Example: a settings screen
 
@@ -170,7 +171,17 @@ What's wrong:
 
 ```tsx
 import { useState } from "react";
-import { Card, CardBody, Heading, HStack, Separator, Switch, Text, VStack } from "@becket-ui/react";
+import {
+  Card,
+  CardBody,
+  Container,
+  Heading,
+  HStack,
+  Separator,
+  Switch,
+  Text,
+  VStack,
+} from "@becket-ui/react";
 
 const PREFERENCES = [
   {
@@ -200,14 +211,7 @@ export function WorkspaceSettings() {
   });
 
   return (
-    // TODO (MAV-90): replace with Container once it ships.
-    <div
-      style={{
-        maxWidth: "var(--beckui--sizes-4xl)",
-        marginInline: "auto",
-        padding: "var(--beckui--spacing-xl)",
-      }}
-    >
+    <Container as="main" size="md">
       <VStack gap="xl">
         <VStack gap="xs">
           <Heading as="h1" size="2xl">
@@ -247,13 +251,13 @@ export function WorkspaceSettings() {
           </CardBody>
         </Card>
       </VStack>
-    </div>
+    </Container>
   );
 }
 ```
 
-The only raw element left is the page wrapper. It's a known gap with a ticket, and it uses token
-values.
+No raw layout or text elements are left: `Container` renders the `main` landmark, and every visual
+decision is a prop with a token value.
 
 ## 11. Before you finish
 

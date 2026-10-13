@@ -6,6 +6,14 @@ export default defineConfig({
   include: ['../react/src/**/*.{js,ts,jsx,tsx}'],
   prefix: BECKET_PREFIX,
   jsxFramework: 'react',
+  // Becket exports its own Box and Container components. Rename Panda's built-in
+  // patterns so the extractor doesn't read their props as style props.
+  patterns: {
+    extend: {
+      box: { jsxName: 'PandaBox' },
+      container: { jsxName: 'PandaContainer' },
+    },
+  },
   outdir: 'styled-system',
   presets: ['@pandacss/preset-panda', becketPreset],
   staticCss: {

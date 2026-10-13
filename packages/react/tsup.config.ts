@@ -7,6 +7,7 @@ export default defineConfig({
     'src/helpers/*.ts',
     '!src/**/*.stories.tsx',
     '!src/**/*.test.ts',
+    '!src/**/*.test.tsx',
   ],
   format: ['esm'],
   // tsup 8.5.1 bundles rollup-plugin-dts 6.1.1, which crashes on TypeScript 7 (`ts.sys` is undefined).
