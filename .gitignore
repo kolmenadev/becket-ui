@@ -94,3 +94,6 @@ CLAUDE.md
 .design-sync/node_modules
 .ds-sync/
 ds-bundle/
+
+## Local AI handoff notes (not for the repo)
+DESIGN-SYNC-HANDOFF.md
