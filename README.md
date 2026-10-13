@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./logo.jpg" alt="Becket UI" width="352" />
+  <img src="./logo.png" alt="Becket UI" width="340" />
 </p>
 
 # Becket UI
