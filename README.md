@@ -80,6 +80,8 @@ Requirements: **React 19+**.
   for screens built with Becket (also used by Claude Design and coding agents)
 - [Coding style](./docs/CODING-STYLE.md) — how we write code in this repo (naming, abstraction,
   React, TypeScript, tests)
+- [MCP server](./packages/mcp/README.md) — connect Claude Code, Cursor or VS Code to Becket
+  (components, props, tokens, rules, code review)
 
 ## Contributing
 

@@ -116,6 +116,10 @@ for your app, hand it off to Claude Code:
    this line to your app's `CLAUDE.md`: "UI code follows
    `node_modules/@becket-ui/react/guides/building-with-becket.md`."
 
+   For the best results, also connect the Becket MCP server to Claude Code
+   ([packages/mcp](../packages/mcp/README.md)). It can then look up exact props and check its own
+   code with `review_usage`.
+
 2. In Claude Design, open **Export** and choose **Hand off to Claude Code**. It packages the design
    (screens, component choices, intent) and gives you a command or link for Claude Code, local or on
    the web.
