@@ -98,6 +98,14 @@ export default defineConfig({
         },
         conditions: ['sm', 'md', 'lg'],
       },
+      // Grid / GridItem (12-column layout): every count and span, at every breakpoint.
+      {
+        properties: {
+          gridTemplateColumns: Array.from({ length: 12 }, (_, i) => `repeat(${i + 1}, minmax(0, 1fr))`),
+          gridColumn: [...Array.from({ length: 12 }, (_, i) => `span ${i + 1} / span ${i + 1}`), '1 / -1'],
+        },
+        conditions: ['base', 'sm', 'md', 'lg', 'xl', '2xl'],
+      },
     ],
   },
 });

@@ -800,6 +800,30 @@
       border-color: var(--beckui--colors-neutral-300);
 }
 
+    .beckui--image {
+      display: block;
+      max-width: 100%;
+      height: auto;
+}
+
+    .beckui--aspectRatio {
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: var(--becket-aspect-ratio, 1);
+      width: 100%;
+}
+
+    .beckui--aspectRatio > * {
+      inset: var(--beckui--spacing-0);
+      position: absolute;
+      width: 100%;
+      height: 100%;
+}
+
+    .beckui--aspectRatio > img,.beckui--aspectRatio > video {
+      object-fit: cover;
+}
+
     .beckui--badge {
       background: var(--mav-label-bg, transparent);
       overflow: hidden;
@@ -822,12 +846,30 @@
       max-width: 100%;
 }
 
-    .beckui--box,.beckui--container {
+    .beckui--box {
       box-sizing: border-box;
+}
+
+    .beckui--center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+}
+
+    .beckui--code {
+      background: var(--beckui--colors-surface);
+      border-radius: var(--beckui--radii-sm);
+      padding-inline: 0.35em;
+      padding-block: 0.15em;
+      font-family: var(--beckui--fonts-mono);
+      font-size: 0.875em;
+      color: var(--beckui--colors-text);
+      overflow-wrap: anywhere;
 }
 
     .beckui--container {
       margin-inline: auto;
+      box-sizing: border-box;
       width: 100%;
 }
 
@@ -989,6 +1031,42 @@
 
     .beckui--link:is(:hover, [data-hover]) {
       color: var(--beckui--colors-primary-hover);
+}
+
+    .beckui--kbd {
+      background: var(--beckui--colors-surface);
+      padding-inline: 0.4em;
+      padding-block: 0.1em;
+      border-width: 1px;
+      border-style: solid;
+      border-color: var(--beckui--colors-neutral-700);
+      border-radius: var(--beckui--radii-sm);
+      font-family: var(--beckui--fonts-mono);
+      font-size: 0.85em;
+      color: var(--beckui--colors-text);
+      white-space: nowrap;
+      border-bottom-width: 2px;
+}
+
+    [data-theme='light'] .beckui--kbd {
+      border-color: var(--beckui--colors-border);
+}
+
+    .beckui--list {
+      margin: var(--beckui--spacing-0);
+      padding-inline-start: 1.25em;
+      color: var(--beckui--colors-text);
+}
+
+    .beckui--list > li::marker {
+      color: var(--beckui--colors-muted);
+}
+
+    .beckui--mark {
+      background: var(--beckui--colors-primary);
+      border-radius: var(--beckui--radii-sm);
+      padding-inline: 0.15em;
+      color: var(--beckui--colors-neutral-900);
 }
 
     .beckui--prose {
@@ -1247,6 +1325,39 @@
       background-color: var(--beckui--colors-border);
 }
 
+    .beckui--skipLink {
+      padding: var(--beckui--spacing-0);
+      margin: -1px;
+      overflow: hidden;
+      border-width: 0;
+      position: absolute;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      width: 1px;
+      height: 1px;
+}
+
+    .beckui--skipLink:is(:focus-visible, [data-focus-visible]) {
+      margin: var(--beckui--spacing-0);
+      background: var(--beckui--colors-primary);
+      padding-inline: var(--beckui--spacing-md);
+      padding-block: var(--beckui--spacing-sm);
+      border-radius: var(--beckui--radii-md);
+      text-decoration: none;
+      outline: var(--beckui--borders-none);
+      position: fixed;
+      z-index: 1000;
+      clip: auto;
+      white-space: normal;
+      color: var(--beckui--colors-neutral-900);
+      font-weight: var(--beckui--font-weights-bold);
+      box-shadow: var(--beckui--shadows-outline);
+      top: var(--beckui--spacing-md);
+      left: var(--beckui--spacing-md);
+      width: auto;
+      height: auto;
+}
+
     .beckui--spinner {
       border-width: 2px;
       border-style: solid;
@@ -1270,14 +1381,12 @@
 
     .beckui--tag {
       background: var(--mav-label-bg, transparent);
-      overflow: hidden;
       border-width: 1px;
       border-style: solid;
       border-color: var(--mav-label-border, transparent);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      white-space: nowrap;
       text-overflow: ellipsis;
       font-weight: var(--beckui--font-weights-medium);
       line-height: var(--beckui--line-heights-tight);
@@ -1286,6 +1395,21 @@
       -webkit-user-select: none;
       user-select: none;
       max-width: 100%;
+}
+
+    .beckui--tag,.beckui--visuallyHidden {
+      overflow: hidden;
+      white-space: nowrap;
+}
+
+    .beckui--visuallyHidden {
+      padding: var(--beckui--spacing-0);
+      margin: -1px;
+      border-width: 0;
+      position: absolute;
+      clip: rect(0, 0, 0, 0);
+      width: 1px;
+      height: 1px;
 }
 }
 
@@ -1383,6 +1507,34 @@
 
   .beckui--button--fullWidth_true {
     width: 100%;
+}
+
+  .beckui--image--fit_cover {
+    object-fit: cover;
+}
+
+  .beckui--image--radius_md {
+    border-radius: var(--beckui--radii-md);
+}
+
+  .beckui--image--fit_contain {
+    object-fit: contain;
+}
+
+  .beckui--image--radius_sm {
+    border-radius: var(--beckui--radii-sm);
+}
+
+  .beckui--image--radius_lg {
+    border-radius: var(--beckui--radii-lg);
+}
+
+  .beckui--image--radius_xl {
+    border-radius: var(--beckui--radii-xl);
+}
+
+  .beckui--image--radius_full {
+    border-radius: var(--beckui--radii-full);
 }
 
   .beckui--badge--size_sm {
@@ -1484,6 +1636,10 @@
 
   .beckui--box--radius_full {
     border-radius: var(--beckui--radii-full);
+}
+
+  .beckui--center--inline_true {
+    display: inline-flex;
 }
 
   .beckui--container--size_lg {
@@ -1685,6 +1841,31 @@
   .beckui--link--visual_muted:is(:hover, [data-hover]) {
     text-decoration: underline;
     color: var(--beckui--colors-text);
+}
+
+  .beckui--list--spacing_sm > li + li {
+    margin-top: var(--beckui--spacing-sm);
+}
+
+  .beckui--list--marker_disc {
+    list-style-type: disc;
+}
+
+  .beckui--list--spacing_md > li + li {
+    margin-top: var(--beckui--spacing-md);
+}
+
+  .beckui--list--marker_none {
+    list-style-type: none;
+    padding-inline-start: var(--beckui--spacing-0);
+}
+
+  .beckui--list--marker_decimal {
+    list-style-type: decimal;
+}
+
+  .beckui--list--spacing_xs > li + li {
+    margin-top: var(--beckui--spacing-xs);
 }
 
   .beckui--prose--size_md {
@@ -2307,6 +2488,61 @@
       box-shadow: var(--beckui--shadows-outline);
 }
 
+    .beckui--avatar__root {
+      background: var(--beckui--colors-surface);
+      overflow: hidden;
+      border-radius: var(--beckui--radii-full);
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--beckui--colors-text);
+      font-weight: var(--beckui--font-weights-medium);
+      -webkit-user-select: none;
+      user-select: none;
+}
+
+    [data-theme='light'] .beckui--avatar__root {
+      background: var(--beckui--colors-neutral-200);
+}
+
+    .beckui--avatar__image {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+}
+
+    .beckui--avatar__initials {
+      line-height: 1;
+      text-transform: uppercase;
+}
+
+    .beckui--blockquote__root {
+      margin: var(--beckui--spacing-0);
+      gap: var(--beckui--spacing-sm);
+      display: flex;
+      flex-direction: column;
+}
+
+    .beckui--blockquote__quote {
+      margin: var(--beckui--spacing-0);
+      padding-inline-start: var(--beckui--spacing-md);
+      border-inline-start-width: 3px;
+      border-inline-start-style: solid;
+      border-inline-start-color: var(--beckui--colors-primary);
+      color: var(--beckui--colors-text);
+      font-style: italic;
+      font-size: var(--beckui--font-sizes-lg);
+      line-height: var(--beckui--line-heights-normal);
+}
+
+    .beckui--blockquote__caption {
+      padding-inline-start: var(--beckui--spacing-md);
+      color: var(--beckui--colors-muted);
+      font-size: var(--beckui--font-sizes-sm);
+}
+
     .beckui--card__root {
       border-radius: var(--beckui--radii-md);
       overflow: hidden;
@@ -2350,6 +2586,18 @@
       font-family: var(--beckui--fonts-sans);
       color: var(--beckui--colors-muted);
       line-height: var(--beckui--line-heights-normal);
+      font-size: var(--beckui--font-sizes-sm);
+}
+
+    .beckui--figure__root {
+      margin: var(--beckui--spacing-0);
+      gap: var(--beckui--spacing-sm);
+      display: flex;
+      flex-direction: column;
+}
+
+    .beckui--figure__caption {
+      color: var(--beckui--colors-muted);
       font-size: var(--beckui--font-sizes-sm);
 }
 
@@ -2570,6 +2818,24 @@
     max-height: 100%;
 }
 
+  .beckui--avatar__root--size_md {
+    font-size: var(--beckui--font-sizes-sm);
+    width: var(--beckui--sizes-10);
+    height: var(--beckui--sizes-10);
+}
+
+  .beckui--avatar__root--size_lg {
+    font-size: var(--beckui--font-sizes-md);
+    width: var(--beckui--sizes-12);
+    height: var(--beckui--sizes-12);
+}
+
+  .beckui--avatar__root--size_sm {
+    font-size: var(--beckui--font-sizes-xs);
+    width: var(--beckui--sizes-8);
+    height: var(--beckui--sizes-8);
+}
+
   .beckui--card__root--size_md {
     padding: var(--beckui--spacing-md);
     gap: var(--beckui--spacing-md);
@@ -2760,12 +3026,20 @@
     border-width: 2px;
 }
 
-  .beckui--gap_sm {
-    gap: var(--beckui--spacing-sm);
+  .beckui--columns_3 {
+    columns: 3;
 }
 
   .beckui--gap_md {
     gap: var(--beckui--spacing-md);
+}
+
+  .beckui--gap_xs {
+    gap: var(--beckui--spacing-xs);
+}
+
+  .beckui--gap_sm {
+    gap: var(--beckui--spacing-sm);
 }
 
   .beckui--gap_1 {
@@ -2788,8 +3062,16 @@
     gap: var(--beckui--spacing-lg);
 }
 
-  .beckui--gap_xs {
-    gap: var(--beckui--spacing-xs);
+  .beckui--grid-c_span_8 {
+    grid-column: span 8;
+}
+
+  .beckui--grid-c_span_4 {
+    grid-column: span 4;
+}
+
+  .beckui--grid-c_span_full {
+    grid-column: span full;
 }
 
   .beckui--gap_8px {
@@ -2842,6 +3124,58 @@
 
   .beckui--gap_2xl {
     gap: var(--beckui--spacing-2xl);
+}
+
+  .beckui--grid-c_span_1_\/_span_1 {
+    grid-column: span 1 / span 1;
+}
+
+  .beckui--grid-c_span_2_\/_span_2 {
+    grid-column: span 2 / span 2;
+}
+
+  .beckui--grid-c_span_3_\/_span_3 {
+    grid-column: span 3 / span 3;
+}
+
+  .beckui--grid-c_span_4_\/_span_4 {
+    grid-column: span 4 / span 4;
+}
+
+  .beckui--grid-c_span_5_\/_span_5 {
+    grid-column: span 5 / span 5;
+}
+
+  .beckui--grid-c_span_6_\/_span_6 {
+    grid-column: span 6 / span 6;
+}
+
+  .beckui--grid-c_span_7_\/_span_7 {
+    grid-column: span 7 / span 7;
+}
+
+  .beckui--grid-c_span_8_\/_span_8 {
+    grid-column: span 8 / span 8;
+}
+
+  .beckui--grid-c_span_9_\/_span_9 {
+    grid-column: span 9 / span 9;
+}
+
+  .beckui--grid-c_span_10_\/_span_10 {
+    grid-column: span 10 / span 10;
+}
+
+  .beckui--grid-c_span_11_\/_span_11 {
+    grid-column: span 11 / span 11;
+}
+
+  .beckui--grid-c_span_12_\/_span_12 {
+    grid-column: span 12 / span 12;
+}
+
+  .beckui--grid-c_1_\/_-1 {
+    grid-column: 1 / -1;
 }
 
   .beckui--bg-c_transparent {
@@ -2898,12 +3232,28 @@
     content: Short glossary hint.;
 }
 
+  .beckui--pos_relative {
+    position: relative;
+}
+
   .beckui--d_flex {
     display: flex;
 }
 
   .beckui--ai_center {
     align-items: center;
+}
+
+  .beckui--flex-d_column {
+    flex-direction: column;
+}
+
+  .beckui--fs_xs {
+    font-size: var(--beckui--font-sizes-xs);
+}
+
+  .beckui--c_muted {
+    color: var(--beckui--colors-muted);
 }
 
   .beckui--flex-d_row {
@@ -2930,10 +3280,6 @@
     text-transform: uppercase;
 }
 
-  .beckui--flex-d_column {
-    flex-direction: column;
-}
-
   .beckui--fs_sm {
     font-size: var(--beckui--font-sizes-sm);
 }
@@ -2942,8 +3288,12 @@
     align-items: start;
 }
 
-  .beckui--c_muted {
-    color: var(--beckui--colors-muted);
+  .beckui--jc_center {
+    justify-content: center;
+}
+
+  .beckui--d_inline-flex {
+    display: inline-flex;
 }
 
   .beckui--d_inline {
@@ -2963,16 +3313,20 @@
     -webkit-background-clip: text;
 }
 
-  .beckui--fs_xs {
-    font-size: var(--beckui--font-sizes-xs);
-}
-
   .beckui--jc_between {
     justify-content: between;
 }
 
-  .beckui--d_inline-flex {
-    display: inline-flex;
+  .beckui--d_grid {
+    display: grid;
+}
+
+  .beckui--grid-tc_repeat\(12\,_minmax\(0\,_1fr\)\) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+  .beckui--grid-tc_repeat\(1\,_minmax\(0\,_1fr\)\) {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
   .beckui--d_none {
@@ -3019,16 +3373,24 @@
     row-gap: var(--beckui--spacing-sm);
 }
 
-  .beckui--d_grid {
-    display: grid;
-}
-
   .beckui--justify-items_stretch {
     justify-items: stretch;
 }
 
   .beckui--ai_stretch {
     align-items: stretch;
+}
+
+  .beckui--sr_true {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }
 
   .beckui--trf_translateX\(0\.75rem\) {
@@ -3069,10 +3431,6 @@
 
   .beckui--jc_start {
     justify-content: start;
-}
-
-  .beckui--jc_center {
-    justify-content: center;
 }
 
   .beckui--jc_end {
@@ -3121,10 +3479,6 @@
     white-space: nowrap;
 }
 
-  .beckui--grid-tc_repeat\(1\,_minmax\(0\,_1fr\)\) {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-
   .beckui--grid-tc_repeat\(2\,_minmax\(0\,_1fr\)\) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -3153,6 +3507,34 @@
     grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 }
 
+  .beckui--grid-tc_repeat\(5\,_minmax\(0\,_1fr\)\) {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+  .beckui--grid-tc_repeat\(6\,_minmax\(0\,_1fr\)\) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+  .beckui--grid-tc_repeat\(7\,_minmax\(0\,_1fr\)\) {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+  .beckui--grid-tc_repeat\(8\,_minmax\(0\,_1fr\)\) {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+  .beckui--grid-tc_repeat\(9\,_minmax\(0\,_1fr\)\) {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+  .beckui--grid-tc_repeat\(10\,_minmax\(0\,_1fr\)\) {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+  .beckui--grid-tc_repeat\(11\,_minmax\(0\,_1fr\)\) {
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+
   .beckui--max-w_34 {
     max-width: var(--beckui--sizes-34);
 }
@@ -3163,6 +3545,14 @@
 
   .beckui--w_8 {
     width: var(--beckui--sizes-8);
+}
+
+  .beckui--min-w_0 {
+    min-width: var(--beckui--sizes-0);
+}
+
+  .beckui--w_320 {
+    width: 320px;
 }
 
   .beckui--w_100\% {
@@ -3199,6 +3589,58 @@
 
   .beckui--w_21 {
     width: var(--beckui--sizes-21);
+}
+
+  .\[\&\>\*\]\:beckui--inset_0>* {
+    inset: var(--beckui--spacing-0);
+}
+
+  .\[\&\>\*\]\:beckui--ov_hidden>* {
+    overflow: hidden;
+}
+
+  .before\:beckui--content_\"\"::before {
+    content: "";
+}
+
+  .before\:beckui--d_block::before {
+    display: block;
+}
+
+  .\[\&\>\*\]\:beckui--d_flex>* {
+    display: flex;
+}
+
+  .\[\&\>\*\]\:beckui--jc_center>* {
+    justify-content: center;
+}
+
+  .\[\&\>\*\]\:beckui--ai_center>* {
+    align-items: center;
+}
+
+  .\[\&\>\*\]\:beckui--pos_absolute>* {
+    position: absolute;
+}
+
+  .\[\&\>img\,_\&\>video\]\:beckui--obj-f_cover>img,.\[\&\>img\,_\&\>video\]\:beckui--obj-f_cover>video {
+    object-fit: cover;
+}
+
+  .before\:beckui--h_0::before {
+    height: var(--beckui--sizes-0);
+}
+
+  .before\:beckui--pb_75\%::before {
+    padding-bottom: 75%;
+}
+
+  .\[\&\>\*\]\:beckui--w_100\%>* {
+    width: 100%;
+}
+
+  .\[\&\>\*\]\:beckui--h_100\%>* {
+    height: 100%;
 }
 
   .\[\&_\>_\*\]\:beckui--min-w_0 > * {
@@ -3248,6 +3690,45 @@
     .sm\:beckui--gap_xl {
       gap: var(--beckui--spacing-xl);
 }
+    .sm\:beckui--grid-c_span_1_\/_span_1 {
+      grid-column: span 1 / span 1;
+}
+    .sm\:beckui--grid-c_span_2_\/_span_2 {
+      grid-column: span 2 / span 2;
+}
+    .sm\:beckui--grid-c_span_3_\/_span_3 {
+      grid-column: span 3 / span 3;
+}
+    .sm\:beckui--grid-c_span_4_\/_span_4 {
+      grid-column: span 4 / span 4;
+}
+    .sm\:beckui--grid-c_span_5_\/_span_5 {
+      grid-column: span 5 / span 5;
+}
+    .sm\:beckui--grid-c_span_6_\/_span_6 {
+      grid-column: span 6 / span 6;
+}
+    .sm\:beckui--grid-c_span_7_\/_span_7 {
+      grid-column: span 7 / span 7;
+}
+    .sm\:beckui--grid-c_span_8_\/_span_8 {
+      grid-column: span 8 / span 8;
+}
+    .sm\:beckui--grid-c_span_9_\/_span_9 {
+      grid-column: span 9 / span 9;
+}
+    .sm\:beckui--grid-c_span_10_\/_span_10 {
+      grid-column: span 10 / span 10;
+}
+    .sm\:beckui--grid-c_span_11_\/_span_11 {
+      grid-column: span 11 / span 11;
+}
+    .sm\:beckui--grid-c_span_12_\/_span_12 {
+      grid-column: span 12 / span 12;
+}
+    .sm\:beckui--grid-c_1_\/_-1 {
+      grid-column: 1 / -1;
+}
     .sm\:beckui--d_contents {
       display: contents;
 }
@@ -3257,11 +3738,11 @@
     .sm\:beckui--d_none {
       display: none;
 }
-    .sm\:beckui--grid-tc_repeat\(1\,_minmax\(0\,_1fr\)\) {
-      grid-template-columns: repeat(1, minmax(0, 1fr));
-}
     .sm\:beckui--grid-tc_repeat\(2\,_minmax\(0\,_1fr\)\) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+    .sm\:beckui--grid-tc_repeat\(1\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
 }
     .sm\:beckui--grid-tc_repeat\(3\,_minmax\(0\,_1fr\)\) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -3269,9 +3750,39 @@
     .sm\:beckui--grid-tc_repeat\(4\,_minmax\(0\,_1fr\)\) {
       grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+    .sm\:beckui--grid-tc_repeat\(5\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+    .sm\:beckui--grid-tc_repeat\(6\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+    .sm\:beckui--grid-tc_repeat\(7\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+    .sm\:beckui--grid-tc_repeat\(8\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+    .sm\:beckui--grid-tc_repeat\(9\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+    .sm\:beckui--grid-tc_repeat\(10\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+    .sm\:beckui--grid-tc_repeat\(11\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+    .sm\:beckui--grid-tc_repeat\(12\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+}
 }
 
   @media screen and (min-width: 48rem) {
+    .md\:beckui--grid-c_span_6 {
+      grid-column: span 6;
+}
+    .md\:beckui--grid-c_span_3 {
+      grid-column: span 3;
+}
     .md\:beckui--gap_0 {
       gap: var(--beckui--spacing-0);
 }
@@ -3302,6 +3813,48 @@
     .md\:beckui--gap_xl {
       gap: var(--beckui--spacing-xl);
 }
+    .md\:beckui--grid-c_span_1_\/_span_1 {
+      grid-column: span 1 / span 1;
+}
+    .md\:beckui--grid-c_span_2_\/_span_2 {
+      grid-column: span 2 / span 2;
+}
+    .md\:beckui--grid-c_span_3_\/_span_3 {
+      grid-column: span 3 / span 3;
+}
+    .md\:beckui--grid-c_span_4_\/_span_4 {
+      grid-column: span 4 / span 4;
+}
+    .md\:beckui--grid-c_span_5_\/_span_5 {
+      grid-column: span 5 / span 5;
+}
+    .md\:beckui--grid-c_span_6_\/_span_6 {
+      grid-column: span 6 / span 6;
+}
+    .md\:beckui--grid-c_span_7_\/_span_7 {
+      grid-column: span 7 / span 7;
+}
+    .md\:beckui--grid-c_span_8_\/_span_8 {
+      grid-column: span 8 / span 8;
+}
+    .md\:beckui--grid-c_span_9_\/_span_9 {
+      grid-column: span 9 / span 9;
+}
+    .md\:beckui--grid-c_span_10_\/_span_10 {
+      grid-column: span 10 / span 10;
+}
+    .md\:beckui--grid-c_span_11_\/_span_11 {
+      grid-column: span 11 / span 11;
+}
+    .md\:beckui--grid-c_span_12_\/_span_12 {
+      grid-column: span 12 / span 12;
+}
+    .md\:beckui--grid-c_1_\/_-1 {
+      grid-column: 1 / -1;
+}
+    .md\:beckui--grid-tc_repeat\(12\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+}
     .md\:beckui--d_contents {
       display: contents;
 }
@@ -3323,9 +3876,33 @@
     .md\:beckui--grid-tc_repeat\(4\,_minmax\(0\,_1fr\)\) {
       grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+    .md\:beckui--grid-tc_repeat\(5\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+    .md\:beckui--grid-tc_repeat\(6\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+    .md\:beckui--grid-tc_repeat\(7\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+    .md\:beckui--grid-tc_repeat\(8\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+    .md\:beckui--grid-tc_repeat\(9\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+    .md\:beckui--grid-tc_repeat\(10\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+    .md\:beckui--grid-tc_repeat\(11\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(11, minmax(0, 1fr));
+}
 }
 
   @media screen and (min-width: 62rem) {
+    .lg\:beckui--grid-c_span_3 {
+      grid-column: span 3;
+}
     .lg\:beckui--gap_0 {
       gap: var(--beckui--spacing-0);
 }
@@ -3356,6 +3933,45 @@
     .lg\:beckui--gap_xl {
       gap: var(--beckui--spacing-xl);
 }
+    .lg\:beckui--grid-c_span_1_\/_span_1 {
+      grid-column: span 1 / span 1;
+}
+    .lg\:beckui--grid-c_span_2_\/_span_2 {
+      grid-column: span 2 / span 2;
+}
+    .lg\:beckui--grid-c_span_3_\/_span_3 {
+      grid-column: span 3 / span 3;
+}
+    .lg\:beckui--grid-c_span_4_\/_span_4 {
+      grid-column: span 4 / span 4;
+}
+    .lg\:beckui--grid-c_span_5_\/_span_5 {
+      grid-column: span 5 / span 5;
+}
+    .lg\:beckui--grid-c_span_6_\/_span_6 {
+      grid-column: span 6 / span 6;
+}
+    .lg\:beckui--grid-c_span_7_\/_span_7 {
+      grid-column: span 7 / span 7;
+}
+    .lg\:beckui--grid-c_span_8_\/_span_8 {
+      grid-column: span 8 / span 8;
+}
+    .lg\:beckui--grid-c_span_9_\/_span_9 {
+      grid-column: span 9 / span 9;
+}
+    .lg\:beckui--grid-c_span_10_\/_span_10 {
+      grid-column: span 10 / span 10;
+}
+    .lg\:beckui--grid-c_span_11_\/_span_11 {
+      grid-column: span 11 / span 11;
+}
+    .lg\:beckui--grid-c_span_12_\/_span_12 {
+      grid-column: span 12 / span 12;
+}
+    .lg\:beckui--grid-c_1_\/_-1 {
+      grid-column: 1 / -1;
+}
     .lg\:beckui--d_contents {
       display: contents;
 }
@@ -3364,6 +3980,9 @@
 }
     .lg\:beckui--d_none {
       display: none;
+}
+    .lg\:beckui--grid-tc_repeat\(6\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
 }
     .lg\:beckui--grid-tc_repeat\(1\,_minmax\(0\,_1fr\)\) {
       grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -3377,9 +3996,72 @@
     .lg\:beckui--grid-tc_repeat\(4\,_minmax\(0\,_1fr\)\) {
       grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+    .lg\:beckui--grid-tc_repeat\(5\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+    .lg\:beckui--grid-tc_repeat\(7\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+    .lg\:beckui--grid-tc_repeat\(8\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+    .lg\:beckui--grid-tc_repeat\(9\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+    .lg\:beckui--grid-tc_repeat\(10\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+    .lg\:beckui--grid-tc_repeat\(11\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+    .lg\:beckui--grid-tc_repeat\(12\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+}
 }
 
   @media screen and (min-width: 80rem) {
+    .xl\:beckui--grid-c_span_12 {
+      grid-column: span 12;
+}
+    .xl\:beckui--grid-c_span_1_\/_span_1 {
+      grid-column: span 1 / span 1;
+}
+    .xl\:beckui--grid-c_span_2_\/_span_2 {
+      grid-column: span 2 / span 2;
+}
+    .xl\:beckui--grid-c_span_3_\/_span_3 {
+      grid-column: span 3 / span 3;
+}
+    .xl\:beckui--grid-c_span_4_\/_span_4 {
+      grid-column: span 4 / span 4;
+}
+    .xl\:beckui--grid-c_span_5_\/_span_5 {
+      grid-column: span 5 / span 5;
+}
+    .xl\:beckui--grid-c_span_6_\/_span_6 {
+      grid-column: span 6 / span 6;
+}
+    .xl\:beckui--grid-c_span_7_\/_span_7 {
+      grid-column: span 7 / span 7;
+}
+    .xl\:beckui--grid-c_span_8_\/_span_8 {
+      grid-column: span 8 / span 8;
+}
+    .xl\:beckui--grid-c_span_9_\/_span_9 {
+      grid-column: span 9 / span 9;
+}
+    .xl\:beckui--grid-c_span_10_\/_span_10 {
+      grid-column: span 10 / span 10;
+}
+    .xl\:beckui--grid-c_span_11_\/_span_11 {
+      grid-column: span 11 / span 11;
+}
+    .xl\:beckui--grid-c_span_12_\/_span_12 {
+      grid-column: span 12 / span 12;
+}
+    .xl\:beckui--grid-c_1_\/_-1 {
+      grid-column: 1 / -1;
+}
     .xl\:beckui--d_contents {
       display: contents;
 }
@@ -3389,9 +4071,84 @@
     .xl\:beckui--d_none {
       display: none;
 }
+    .xl\:beckui--grid-tc_repeat\(4\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+    .xl\:beckui--grid-tc_repeat\(1\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+    .xl\:beckui--grid-tc_repeat\(2\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+    .xl\:beckui--grid-tc_repeat\(3\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+    .xl\:beckui--grid-tc_repeat\(5\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+    .xl\:beckui--grid-tc_repeat\(6\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+    .xl\:beckui--grid-tc_repeat\(7\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+    .xl\:beckui--grid-tc_repeat\(8\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+    .xl\:beckui--grid-tc_repeat\(9\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+    .xl\:beckui--grid-tc_repeat\(10\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+    .xl\:beckui--grid-tc_repeat\(11\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+    .xl\:beckui--grid-tc_repeat\(12\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+}
 }
 
   @media screen and (min-width: 96rem) {
+    .\32xl\:beckui--grid-c_span_1_\/_span_1 {
+      grid-column: span 1 / span 1;
+}
+    .\32xl\:beckui--grid-c_span_2_\/_span_2 {
+      grid-column: span 2 / span 2;
+}
+    .\32xl\:beckui--grid-c_span_3_\/_span_3 {
+      grid-column: span 3 / span 3;
+}
+    .\32xl\:beckui--grid-c_span_4_\/_span_4 {
+      grid-column: span 4 / span 4;
+}
+    .\32xl\:beckui--grid-c_span_5_\/_span_5 {
+      grid-column: span 5 / span 5;
+}
+    .\32xl\:beckui--grid-c_span_6_\/_span_6 {
+      grid-column: span 6 / span 6;
+}
+    .\32xl\:beckui--grid-c_span_7_\/_span_7 {
+      grid-column: span 7 / span 7;
+}
+    .\32xl\:beckui--grid-c_span_8_\/_span_8 {
+      grid-column: span 8 / span 8;
+}
+    .\32xl\:beckui--grid-c_span_9_\/_span_9 {
+      grid-column: span 9 / span 9;
+}
+    .\32xl\:beckui--grid-c_span_10_\/_span_10 {
+      grid-column: span 10 / span 10;
+}
+    .\32xl\:beckui--grid-c_span_11_\/_span_11 {
+      grid-column: span 11 / span 11;
+}
+    .\32xl\:beckui--grid-c_span_12_\/_span_12 {
+      grid-column: span 12 / span 12;
+}
+    .\32xl\:beckui--grid-c_1_\/_-1 {
+      grid-column: 1 / -1;
+}
     .\32xl\:beckui--d_contents {
       display: contents;
 }
@@ -3400,6 +4157,42 @@
 }
     .\32xl\:beckui--d_none {
       display: none;
+}
+    .\32xl\:beckui--grid-tc_repeat\(3\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+    .\32xl\:beckui--grid-tc_repeat\(1\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+    .\32xl\:beckui--grid-tc_repeat\(2\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+    .\32xl\:beckui--grid-tc_repeat\(4\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+    .\32xl\:beckui--grid-tc_repeat\(5\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+    .\32xl\:beckui--grid-tc_repeat\(6\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+    .\32xl\:beckui--grid-tc_repeat\(7\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+    .\32xl\:beckui--grid-tc_repeat\(8\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+    .\32xl\:beckui--grid-tc_repeat\(9\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+    .\32xl\:beckui--grid-tc_repeat\(10\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+    .\32xl\:beckui--grid-tc_repeat\(11\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+    .\32xl\:beckui--grid-tc_repeat\(12\,_minmax\(0\,_1fr\)\) {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 }
 }

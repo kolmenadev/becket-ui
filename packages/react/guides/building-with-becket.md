@@ -43,10 +43,19 @@ Raw elements with inline styles are the most common mistake. Use this table:
 | `a`                                                  | `Link`                                                                                                                     |
 | `a` styled as a button (call to action)              | `Button as="a" href="…"` (anchor props are typed)                                                                          |
 | HTML from Markdown or MDX (blog posts, docs)         | `<Prose as="article">`; wrap embedded components in `data-not-prose`                                                       |
+| `ul` / `ol` with `li`                                | `List` (`as="ol"` for steps, `marker="none"` for nav) + `ListItem`                                                         |
+| inline `code`, `kbd`, `mark`                         | `Code`, `Kbd`, `Mark`                                                                                                      |
+| `blockquote` (+ attribution)                         | `Blockquote cite` + `BlockquoteCaption`                                                                                    |
+| `img`                                                | `Image alt` (required; lazy by default), inside `Figure caption` when captioned                                            |
+| profile photo or initials circle                     | `Avatar name src`                                                                                                          |
+| centered box                                         | `Center` (`inline` for icons in text)                                                                                      |
+| 12-column page layout                                | `Grid columns={{ base: 1, md: 12 }}` + `GridItem colSpan`                                                                  |
+| fixed-ratio media (video, map, cover image)          | `AspectRatio ratio={16 / 9}`                                                                                               |
+| screen-reader-only text, skip link                   | `VisuallyHidden`, `SkipLink href="#main"`                                                                                  |
 | custom modal, side panel, dropdown, tabs or tooltip  | `Dialog`, `Drawer`, `Menu`, `Tabs`, `Tooltip`                                                                              |
 
-Raw elements are fine for semantics Becket doesn't cover (`form`, `main`, `nav`, `section`,
-`ul`/`li`). Render them through a layout component's `as` prop when they also lay things out:
+Raw elements are fine for semantics Becket doesn't cover (`form`, `main`, `nav`, `section`). Render
+them through a layout component's `as` prop when they also lay things out:
 `<VStack as="form" gap="md">`.
 
 **Known gaps** (until these ship, an inline `style` with tokens is allowed, with a `TODO` naming the
