@@ -2,7 +2,7 @@ import { defineRecipe } from '@pandacss/dev';
 
 export const icon = defineRecipe({
   className: 'icon',
-  description: 'Sizes an inline SVG on the size scale and colors it with currentColor',
+  description: 'Sizes an inline SVG on the type scale so it matches the text beside it and colors it with currentColor',
   base: {
     display: 'inline-flex',
     alignItems: 'center',
@@ -19,10 +19,10 @@ export const icon = defineRecipe({
   },
   variants: {
     size: {
-      sm: { width: '4', height: '4' },
-      md: { width: '5', height: '5' },
-      lg: { width: '6', height: '6' },
-      xl: { width: '8', height: '8' },
+      sm: { width: '{fontSizes.md}', height: '{fontSizes.md}' },
+      md: { width: '{fontSizes.lg}', height: '{fontSizes.lg}' },
+      lg: { width: '{fontSizes.xl}', height: '{fontSizes.xl}' },
+      xl: { width: '{fontSizes.2xl}', height: '{fontSizes.2xl}' },
     },
   },
   defaultVariants: {

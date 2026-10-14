@@ -37,7 +37,7 @@ export const menu = defineSlotRecipe({
       position: 'absolute',
       zIndex: 20,
       mt: '1',
-      minWidth: '10rem',
+      minWidth: '34',
       p: '1',
       borderWidth: '1px',
       borderStyle: 'solid',

@@ -7,7 +7,7 @@ export const tooltip = defineRecipe({
   base: {
     position: 'fixed',
     zIndex: 1000,
-    maxWidth: '16rem',
+    maxWidth: '55',
     px: '2',
     py: '1',
     borderRadius: 'md',

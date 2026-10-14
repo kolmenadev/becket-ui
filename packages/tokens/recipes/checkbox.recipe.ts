@@ -83,13 +83,13 @@ export const checkbox = defineSlotRecipe({
   variants: {
     size: {
       sm: {
-        indicator: { width: '1rem', height: '1rem' },
-        label: { fontSize: 'sm', minHeight: '1rem' },
+        indicator: { width: '{fontSizes.md}', height: '{fontSizes.md}' },
+        label: { fontSize: 'sm', minHeight: '{fontSizes.md}' },
         description: { fontSize: 'xs' },
       },
       md: {
-        indicator: { width: '1.25rem', height: '1.25rem' },
-        label: { fontSize: 'md', minHeight: '1.25rem' },
+        indicator: { width: '{fontSizes.lg}', height: '{fontSizes.lg}' },
+        label: { fontSize: 'md', minHeight: '{fontSizes.lg}' },
         description: { fontSize: 'sm' },
       },
     },

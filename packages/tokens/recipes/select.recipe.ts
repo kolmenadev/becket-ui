@@ -13,8 +13,8 @@ export const selectRecipe = defineRecipe({
     cursor: 'pointer',
     backgroundImage: chevron,
     backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'right 0.6rem center',
-    backgroundSize: '1rem',
+    backgroundPosition: 'right {spacing.3} center',
+    backgroundSize: '{fontSizes.md}',
     paddingRight: '8',
   },
   variants: {

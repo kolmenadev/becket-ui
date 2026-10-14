@@ -12,9 +12,9 @@ export const textareaRecipe = defineRecipe({
   },
   variants: {
     size: {
-      sm: { ...controlSizeVariants.sm, height: '5rem', minHeight: '5rem' },
-      md: { ...controlSizeVariants.md, height: '8rem', minHeight: '8rem' },
-      lg: { ...controlSizeVariants.lg, height: '13rem', minHeight: '13rem' },
+      sm: { ...controlSizeVariants.sm, height: '21', minHeight: '21' },
+      md: { ...controlSizeVariants.md, height: '34', minHeight: '34' },
+      lg: { ...controlSizeVariants.lg, height: '55', minHeight: '55' },
     },
     invalid: controlInvalidVariants,
   },
