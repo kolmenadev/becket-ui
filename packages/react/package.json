@@ -47,7 +47,7 @@
     }
   },
   "scripts": {
-    "build": "tsup && tsc --emitDeclarationOnly -p tsconfig.build.json",
+    "build": "tsup && tsc --emitDeclarationOnly -p tsconfig.build.json && node scripts/add-js-extensions.mjs",
     "prepack": "pnpm build",
     "test": "vitest run",
     "storybook": "storybook dev -p 6006 -c ../../apps/docs/.storybook --project-root ../../apps/docs",
