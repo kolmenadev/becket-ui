@@ -1,0 +1,142 @@
+import { defineRecipe } from '@pandacss/dev';
+
+/**
+ * Select descendant elements with zero specificity, skipping anything inside
+ * `[data-not-prose]`, so Becket components embedded in an article keep their
+ * own styles and consumer classes always win.
+ */
+const el = (selector: string) => `& :where(${selector}):not(:where([data-not-prose], [data-not-prose] *))`;
+
+export const prose = defineRecipe({
+  className: 'prose',
+  description: 'Styles HTML from Markdown or MDX (headings, text, lists, quotes, code, tables, media) with Becket tokens',
+  // Rules and frames use neutral.700 on dark like Separator; the `border` token is too bright there.
+  base: {
+    color: 'text',
+    fontFamily: 'sans',
+    lineHeight: 'loose',
+    maxWidth: 'prose',
+    // Vertical rhythm is in em so the `size` variant scales the whole article.
+    [el('p')]: { marginBlock: '1.25em' },
+    [el('h1, h2, h3, h4')]: {
+      fontWeight: 'bold',
+      lineHeight: 'tight',
+      color: 'text',
+      scrollMarginTop: '5',
+    },
+    [el('h1')]: { fontSize: '2.25em', marginBlock: '0 0.9em' },
+    [el('h2')]: { fontSize: '1.5em', marginBlock: '2em 1em' },
+    [el('h3')]: { fontSize: '1.25em', marginBlock: '1.6em 0.6em' },
+    [el('h4')]: { fontSize: '1em', marginBlock: '1.5em 0.5em' },
+    [el('h2 + *, h3 + *, h4 + *')]: { marginTop: '0' },
+    [el('a')]: {
+      color: 'primary',
+      textDecoration: 'underline',
+      textUnderlineOffset: '0.15em',
+      _hover: { color: 'primaryHover' },
+      _focusVisible: { outline: 'none', boxShadow: 'outline', borderRadius: 'sm' },
+    },
+    [el('strong')]: { fontWeight: 'bold', color: 'text' },
+    [el('ul, ol')]: { marginBlock: '1.25em', paddingInlineStart: '1.6em' },
+    [el('ul')]: { listStyleType: 'disc' },
+    [el('ol')]: { listStyleType: 'decimal' },
+    [el('li')]: { marginBlock: '0.5em', paddingInlineStart: '0.4em' },
+    [`${el('li')}::marker`]: { color: 'muted' },
+    [el('li > ul, li > ol')]: { marginBlock: '0.5em' },
+    [el('blockquote')]: {
+      marginBlock: '1.6em',
+      paddingInlineStart: '1em',
+      borderInlineStartWidth: '3px',
+      borderInlineStartStyle: 'solid',
+      borderInlineStartColor: 'primary',
+      color: 'muted',
+      fontStyle: 'italic',
+    },
+    [el('hr')]: {
+      marginBlock: '3em',
+      border: 'none',
+      borderTopWidth: '1px',
+      borderTopStyle: 'solid',
+      borderTopColor: 'neutral.700',
+      _light: { borderTopColor: 'border' },
+    },
+    [el(':not(pre) > code')]: {
+      fontFamily: 'mono',
+      fontSize: '0.875em',
+      bg: 'surface',
+      borderRadius: 'sm',
+      paddingInline: '0.35em',
+      paddingBlock: '0.15em',
+    },
+    [el('pre')]: {
+      marginBlock: '1.6em',
+      padding: 'md',
+      overflowX: 'auto',
+      bg: 'surface',
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: 'neutral.700',
+      _light: { borderColor: 'border' },
+      borderRadius: 'md',
+      fontFamily: 'mono',
+      fontSize: '0.875em',
+      lineHeight: 'normal',
+    },
+    [el('pre code')]: { fontFamily: 'inherit', fontSize: 'inherit', bg: 'transparent', padding: '0' },
+    [el('kbd')]: {
+      fontFamily: 'mono',
+      fontSize: '0.85em',
+      paddingInline: '0.4em',
+      paddingBlock: '0.1em',
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: 'neutral.700',
+      _light: { borderColor: 'border' },
+      borderBottomWidth: '2px',
+      borderRadius: 'sm',
+      bg: 'surface',
+    },
+    [el('mark')]: { bg: 'primary', color: 'neutral.900', borderRadius: 'sm', paddingInline: '0.15em' },
+    [el('img, video')]: { display: 'block', maxWidth: '100%', height: 'auto', borderRadius: 'md' },
+    [el('figure')]: { marginBlock: '2em' },
+    [el('figure > img, figure > video')]: { marginBlock: '0' },
+    [el('figcaption')]: { marginTop: '0.75em', fontSize: '0.875em', color: 'muted' },
+    [el('table')]: {
+      width: '100%',
+      marginBlock: '2em',
+      borderCollapse: 'collapse',
+      fontSize: '0.875em',
+      lineHeight: 'normal',
+    },
+    [el('thead th')]: {
+      textAlign: 'start',
+      fontWeight: 'bold',
+      borderBottomWidth: '1px',
+      borderBottomStyle: 'solid',
+      borderBottomColor: 'neutral.700',
+      _light: { borderBottomColor: 'border' },
+    },
+    [el('th, td')]: { paddingBlock: '0.6em', paddingInline: '0.75em' },
+    [el('tbody tr')]: {
+      borderBottomWidth: '1px',
+      borderBottomStyle: 'solid',
+      borderBottomColor: 'neutral.700',
+      _light: { borderBottomColor: 'border' },
+    },
+    [el('dt')]: { fontWeight: 'bold', marginTop: '1.25em' },
+    [el('dd')]: { marginTop: '0.5em', paddingInlineStart: '1.6em' },
+    [el('sup')]: { fontSize: '0.75em' },
+    '& > :where(:first-child)': { marginTop: '0' },
+    '& > :where(:last-child)': { marginBottom: '0' },
+  },
+  variants: {
+    size: {
+      sm: { fontSize: 'sm' },
+      md: { fontSize: 'md' },
+      lg: { fontSize: 'lg' },
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});

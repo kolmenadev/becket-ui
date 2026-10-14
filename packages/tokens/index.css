@@ -991,6 +991,251 @@
       color: var(--beckui--colors-primary-hover);
 }
 
+    .beckui--prose {
+      color: var(--beckui--colors-text);
+      font-family: var(--beckui--fonts-sans);
+      line-height: var(--beckui--line-heights-loose);
+      max-width: var(--beckui--sizes-prose);
+}
+
+    .beckui--prose :where(hr):not(:where([data-not-prose], [data-not-prose] *)) {
+      border: var(--beckui--borders-none);
+      margin-block: 3em;
+      border-top-width: 1px;
+      border-top-style: solid;
+      border-top-color: var(--beckui--colors-neutral-700);
+}
+
+    [data-theme='light'] .beckui--prose :where(hr):not(:where([data-not-prose], [data-not-prose] *)) {
+      border-top-color: var(--beckui--colors-border);
+}
+
+    .beckui--prose :where(:not(pre) > code):not(:where([data-not-prose], [data-not-prose] *)) {
+      background: var(--beckui--colors-surface);
+      border-radius: var(--beckui--radii-sm);
+      padding-inline: 0.35em;
+      padding-block: 0.15em;
+      font-family: var(--beckui--fonts-mono);
+      font-size: 0.875em;
+}
+
+    .beckui--prose :where(pre):not(:where([data-not-prose], [data-not-prose] *)) {
+      padding: var(--beckui--spacing-md);
+      background: var(--beckui--colors-surface);
+      margin-block: 1.6em;
+      border-width: 1px;
+      border-style: solid;
+      border-color: var(--beckui--colors-neutral-700);
+      border-radius: var(--beckui--radii-md);
+      font-family: var(--beckui--fonts-mono);
+      font-size: 0.875em;
+      line-height: var(--beckui--line-heights-normal);
+      overflow-x: auto;
+}
+
+    [data-theme='light'] .beckui--prose :where(pre):not(:where([data-not-prose], [data-not-prose] *)) {
+      border-color: var(--beckui--colors-border);
+}
+
+    .beckui--prose :where(pre code):not(:where([data-not-prose], [data-not-prose] *)) {
+      background: var(--beckui--colors-transparent);
+      padding: var(--beckui--spacing-0);
+      font-family: inherit;
+      font-size: inherit;
+}
+
+    .beckui--prose :where(kbd):not(:where([data-not-prose], [data-not-prose] *)) {
+      background: var(--beckui--colors-surface);
+      padding-inline: 0.4em;
+      padding-block: 0.1em;
+      border-width: 1px;
+      border-style: solid;
+      border-color: var(--beckui--colors-neutral-700);
+      border-radius: var(--beckui--radii-sm);
+      font-family: var(--beckui--fonts-mono);
+      font-size: 0.85em;
+      border-bottom-width: 2px;
+}
+
+    [data-theme='light'] .beckui--prose :where(kbd):not(:where([data-not-prose], [data-not-prose] *)) {
+      border-color: var(--beckui--colors-border);
+}
+
+    .beckui--prose :where(mark):not(:where([data-not-prose], [data-not-prose] *)) {
+      background: var(--beckui--colors-primary);
+      border-radius: var(--beckui--radii-sm);
+      padding-inline: 0.15em;
+      color: var(--beckui--colors-neutral-900);
+}
+
+    .beckui--prose :where(p):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: 1.25em;
+}
+
+    .beckui--prose :where(h1):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: 0 0.9em;
+      font-size: 2.25em;
+}
+
+    .beckui--prose :where(h2):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: 2em 1em;
+      font-size: 1.5em;
+}
+
+    .beckui--prose :where(h3):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: 1.6em 0.6em;
+      font-size: 1.25em;
+}
+
+    .beckui--prose :where(h4):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: 1.5em 0.5em;
+      font-size: 1em;
+}
+
+    .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *)) {
+      text-decoration: underline;
+      color: var(--beckui--colors-primary);
+      text-underline-offset: 0.15em;
+}
+
+    .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *)):is(:focus-visible, [data-focus-visible]) {
+      outline: var(--beckui--borders-none);
+      border-radius: var(--beckui--radii-sm);
+      box-shadow: var(--beckui--shadows-outline);
+}
+
+    .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *)):is(:hover, [data-hover]) {
+      color: var(--beckui--colors-primary-hover);
+}
+
+    .beckui--prose :where(ul, ol):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: 1.25em;
+      padding-inline-start: 1.6em;
+}
+
+    .beckui--prose :where(li):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: 0.5em;
+      padding-inline-start: 0.4em;
+}
+
+    .beckui--prose :where(li > ul, li > ol):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: 0.5em;
+}
+
+    .beckui--prose :where(blockquote):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: 1.6em;
+      padding-inline-start: 1em;
+      border-inline-start-width: 3px;
+      border-inline-start-style: solid;
+      border-inline-start-color: var(--beckui--colors-primary);
+      color: var(--beckui--colors-muted);
+      font-style: italic;
+}
+
+    .beckui--prose :where(img, video):not(:where([data-not-prose], [data-not-prose] *)) {
+      border-radius: var(--beckui--radii-md);
+      display: block;
+      max-width: 100%;
+      height: auto;
+}
+
+    .beckui--prose :where(figure):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: 2em;
+}
+
+    .beckui--prose :where(figure > img, figure > video):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: var(--beckui--spacing-0);
+}
+
+    .beckui--prose :where(table):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: 2em;
+      border-collapse: collapse;
+      font-size: 0.875em;
+      line-height: var(--beckui--line-heights-normal);
+      width: 100%;
+}
+
+    .beckui--prose :where(th, td):not(:where([data-not-prose], [data-not-prose] *)) {
+      padding-block: 0.6em;
+      padding-inline: 0.75em;
+}
+
+    .beckui--prose :where(h1, h2, h3, h4):not(:where([data-not-prose], [data-not-prose] *)) {
+      line-height: var(--beckui--line-heights-tight);
+      scroll-margin-top: var(--beckui--spacing-5);
+}
+
+    .beckui--prose :where(h1, h2, h3, h4):not(:where([data-not-prose], [data-not-prose] *)),.beckui--prose :where(strong):not(:where([data-not-prose], [data-not-prose] *)) {
+      font-weight: var(--beckui--font-weights-bold);
+      color: var(--beckui--colors-text);
+}
+
+    .beckui--prose :where(ul):not(:where([data-not-prose], [data-not-prose] *)) {
+      list-style-type: disc;
+}
+
+    .beckui--prose :where(ol):not(:where([data-not-prose], [data-not-prose] *)) {
+      list-style-type: decimal;
+}
+
+    .beckui--prose :where(li):not(:where([data-not-prose], [data-not-prose] *))::marker {
+      color: var(--beckui--colors-muted);
+}
+
+    .beckui--prose :where(figcaption):not(:where([data-not-prose], [data-not-prose] *)) {
+      font-size: 0.875em;
+      color: var(--beckui--colors-muted);
+      margin-top: 0.75em;
+}
+
+    .beckui--prose :where(thead th):not(:where([data-not-prose], [data-not-prose] *)) {
+      text-align: start;
+      font-weight: var(--beckui--font-weights-bold);
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: var(--beckui--colors-neutral-700);
+}
+
+    [data-theme='light'] .beckui--prose :where(thead th):not(:where([data-not-prose], [data-not-prose] *)) {
+      border-bottom-color: var(--beckui--colors-border);
+}
+
+    .beckui--prose :where(dt):not(:where([data-not-prose], [data-not-prose] *)) {
+      font-weight: var(--beckui--font-weights-bold);
+      margin-top: 1.25em;
+}
+
+    .beckui--prose :where(dd):not(:where([data-not-prose], [data-not-prose] *)) {
+      padding-inline-start: 1.6em;
+      margin-top: 0.5em;
+}
+
+    .beckui--prose :where(sup):not(:where([data-not-prose], [data-not-prose] *)) {
+      font-size: 0.75em;
+}
+
+    .beckui--prose :where(h2 + *, h3 + *, h4 + *):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-top: var(--beckui--spacing-0);
+}
+
+    .beckui--prose :where(tbody tr):not(:where([data-not-prose], [data-not-prose] *)) {
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: var(--beckui--colors-neutral-700);
+}
+
+    [data-theme='light'] .beckui--prose :where(tbody tr):not(:where([data-not-prose], [data-not-prose] *)) {
+      border-bottom-color: var(--beckui--colors-border);
+}
+
+    .beckui--prose > :where(:first-child) {
+      margin-top: var(--beckui--spacing-0);
+}
+
+    .beckui--prose > :where(:last-child) {
+      margin-bottom: var(--beckui--spacing-0);
+}
+
     .beckui--separator {
       border: var(--beckui--borders-none);
       margin: var(--beckui--spacing-0);
@@ -1440,6 +1685,18 @@
   .beckui--link--visual_muted:is(:hover, [data-hover]) {
     text-decoration: underline;
     color: var(--beckui--colors-text);
+}
+
+  .beckui--prose--size_md {
+    font-size: var(--beckui--font-sizes-md);
+}
+
+  .beckui--prose--size_lg {
+    font-size: var(--beckui--font-sizes-lg);
+}
+
+  .beckui--prose--size_sm {
+    font-size: var(--beckui--font-sizes-sm);
 }
 
   .beckui--separator--orientation_vertical {

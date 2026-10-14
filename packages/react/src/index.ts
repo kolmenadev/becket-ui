@@ -95,6 +95,8 @@ export {
 } from './components/Glyphs';
 export type { GlyphProps } from './components/Glyphs';
 export { Link } from './components/Link';
+export { Prose } from './components/Prose';
+export type { ProseProps } from './components/Prose';
 export { Separator } from './components/Separator';
 export type { LabelCustomColors, LabelVisual } from './helpers/labelColors';
 export type {
