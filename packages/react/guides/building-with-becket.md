@@ -79,7 +79,8 @@ language: `gap`, `align`, `justify`, `visual`, `size`, `invalid`, `columns`.
   from another system (`4:3`, 40px avatars).
 - **When you need your own CSS** (a known gap above, or a one-off like `minWidth: 0`), use token
   variables: `var(--beckui--colors-muted)`, `var(--beckui--spacing-lg)`, `var(--beckui--sizes-4xl)`,
-  `var(--beckui--radii-md)`. Never hex, `rgb()`, or raw pixel values for spacing and color.
+  `var(--beckui--radii-md)`; inside running text, `var(--beckui--spacing-text-2)` (em-based). Never hex,
+  `rgb()`, or raw `px`/`rem`/`em` values for spacing and color, since they ignore the app's theme overrides.
 - **Must not** write or copy `.beckui--*` class names. They're generated, not API.
 - **Avoid** named styled wrappers, CSS files per screen, or style objects defined away from the
   element. A reader shouldn't have to look anything up to see how an element looks.

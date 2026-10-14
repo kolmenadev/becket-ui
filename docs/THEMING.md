@@ -2,11 +2,12 @@
 
 Rebrand Becket **without Panda** and without a React theme provider.
 
-## Two knobs
+## Three knobs
 
 | Kind | When | How |
 | --- | --- | --- |
 | **Brand theme** | Recolor the whole app | Override public CSS variables after `index.css`, or `defineBecketTheme()` |
+| **Scale** | Make the whole app denser, roomier, or change the text size | Three unit variables (below) |
 | **Instance override** | This one Button | `style` or `className` on the component |
 
 Do **not** use Panda `css()` in a no-Panda app — those class names are not in `index.css` and will no-op.
@@ -35,11 +36,38 @@ Inject `themeCss` in a `<style>` tag, or copy [theme.example.css](../packages/to
 
 Unlayered `:root` wins over `@layer tokens`. Set `data-theme="dark" | "light"` on `<html>`. Dark is the default. `background` / `text` / `muted` / `danger` are semantic: one name, two values via `data-theme`. Filled brand controls use `neutral.900` ink so yellow/sage fills stay AA. The violet in the Button **Brand Theme** story is a `defineBecketTheme({ colors: { primary } })` demo (hue 280), not the default primary.
 
-Public names: `primary` / `secondary` / `tertiary` / `primaryHover`, neutrals 50–900, `background` / `text` / `muted` / `border` / `danger` / `accent`, status, `radii.*`, `fontSizes.xs–6xl`, `spacing.xs–xl` (layout / Stack gap), `sizes.field`, `fonts.sans` / `mono`, plus component density `--beckui-button-px-md` / `--beckui-field-*` / `--beckui-tag-*`.
+Public names: `primary` / `secondary` / `tertiary` / `primaryHover`, neutrals 50–900, `background` / `text` / `muted` / `border` / `danger` / `accent`, status, `radii.*`, `fontSizes.base` + `xs–6xl`, `spacing.unit` / `textUnit` + `xs–xl` (layout / Stack gap), `sizes.field`, `fonts.sans` / `mono`, plus component density `--beckui-button-px-md` / `--beckui-field-*` / `--beckui-tag-*`.
 
 Setting `primary` retints hover, focus outline, and gradients. You do not also set `--beckui--colors-brand-becket-yellow`.
 
-Do **not** shrink Stack gaps to make buttons denser. Override `--beckui-button-px-md` (and friends), not `--beckui--spacing-md`.
+Do **not** shrink Stack gaps to make only buttons denser. Override `--beckui-button-px-md` (and friends), not `--beckui--spacing-md`. To make everything denser, change `--beckui--spacing-unit`.
+
+## Scale: resize everything with three variables
+
+Every length in Becket comes from a token (`pnpm -F @becket-ui/tokens test` enforces it), and every scale is derived from one unit. Override a unit and the whole scale moves in proportion:
+
+| Variable | Default | Drives |
+| --- | --- | --- |
+| `--beckui--spacing-unit` | `0.25rem` | Fibonacci spacing (`gap`, padding) and sizes (avatar, textarea) and component padding (button, field, tag) |
+| `--beckui--spacing-text-unit` | `0.25em` | Spacing inside running text: Prose rhythm, inline code, kbd, list indent. In em, so it also follows the text size |
+| `--beckui--font-sizes-base` | `1rem` | Every font size (`xs`–`6xl` are ratios of it) |
+
+A full rebrand fits in a few lines:
+
+```css
+/* after @becket-ui/tokens/index.css */
+:root {
+  --beckui--colors-primary: oklch(0.62 0.19 255);
+  --beckui--fonts-sans: 'Söhne', system-ui, sans-serif;
+  --beckui--spacing-unit: 0.2rem;   /* denser product UI */
+  --beckui--font-sizes-base: 0.9375rem;
+  --beckui--radii-md: 0.25rem;      /* squarer corners */
+}
+```
+
+Or `defineBecketTheme({ spacing: { unit: '0.2rem' }, fontSizes: { base: '0.9375rem' } })`.
+
+Keep units in `rem` (and the text unit in `em`) so browser font-size settings still work (WCAG 1.4.4). Named layout widths (`sizes.xs`–`8xl`, `prose`) and the 24px minimum target size don't scale on purpose.
 
 ## Instance override
 

@@ -95,15 +95,19 @@ function parseTheme(css) {
     Object.fromEntries([...text.matchAll(/(--beckui--[\w-]+):\s*([^;}]+);?/g)].map(([, name, value]) => [name, value.trim()]));
   const base = vars(block(':where(:root, :host) {'));
   const light = { ...base, ...vars(block("[data-theme='light'] {")) };
+  // Scales are `calc(<unit> * n)`; show the computed length so agents see 1.25rem, not a formula.
+  const multiply = (value) => value.replace(/^calc\(([\d.]+)(r?em) \* ([\d.]+)\)$/, (_, unit, suffix, factor) => `${Number((unit * factor).toFixed(4))}${suffix}`);
   const resolve = (table, value, depth = 0) =>
-    depth > 5 ? value : value.replace(/var\((--beckui--[\w-]+)\)/g, (whole, name) => (table[name] ? resolve(table, table[name], depth + 1) : whole));
+    depth > 5
+      ? value
+      : multiply(value.replace(/var\((--beckui--[\w-]+)\)/g, (whole, name) => (table[name] ? resolve(table, table[name], depth + 1) : whole)));
 
   const groups = {
     colors: ['background', 'text', 'muted', 'surface', 'border', 'primary', 'secondary', 'tertiary', 'accent', 'danger', 'warning', 'success', 'link', 'link-hover', 'link-visited'],
-    spacing: ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '0', '1', '2', '3', '5', '8', '13', '21', '34'],
+    spacing: ['unit', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '0', '1', '2', '3', '5', '8', '13', '21', '34', 'text-unit', 'text-1', 'text-2', 'text-3', 'text-5', 'text-8', 'text-13'],
     radii: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
-    sizes: ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'prose', 'field'],
-    'font-sizes': ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'],
+    sizes: ['5', '8', '13', '21', '34', '55', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'prose', 'field'],
+    'font-sizes': ['base', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', 'text-xs', 'text-sm', 'text-md', 'text-lg', 'text-xl', 'text-2xl'],
     shadows: ['sm', 'md', 'lg', 'elevated'],
   };
   return Object.fromEntries(

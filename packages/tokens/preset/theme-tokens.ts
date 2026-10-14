@@ -106,45 +106,60 @@ export const semanticColors = {
   },
 };
 
+/**
+ * Fibonacci steps of one unit. Override `--beckui--spacing-unit` to make all of Becket denser or
+ * roomier; `--beckui--spacing-text-unit` does the same for spacing inside running text.
+ */
 export const spacing = {
+  unit: { value: '0.25rem' },
   0: { value: '0rem' },
-  1: { value: '0.25rem' },
-  2: { value: '0.5rem' },
-  3: { value: '0.75rem' },
-  5: { value: '1.25rem' },
-  8: { value: '2rem' },
-  13: { value: '3.25rem' },
-  21: { value: '5.25rem' },
-  34: { value: '8.5rem' },
+  1: { value: 'calc({spacing.unit} * 1)' },
+  2: { value: 'calc({spacing.unit} * 2)' },
+  3: { value: 'calc({spacing.unit} * 3)' },
+  5: { value: 'calc({spacing.unit} * 5)' },
+  8: { value: 'calc({spacing.unit} * 8)' },
+  13: { value: 'calc({spacing.unit} * 13)' },
+  21: { value: 'calc({spacing.unit} * 21)' },
+  34: { value: 'calc({spacing.unit} * 34)' },
   xs: { value: '{spacing.1}' },
   sm: { value: '{spacing.2}' },
   md: { value: '{spacing.3}' },
   lg: { value: '{spacing.5}' },
   xl: { value: '{spacing.8}' },
   '2xl': { value: '{spacing.13}' },
+  /** Em-based, so it grows with the text it sits in (Prose, Code, Kbd, List). */
+  'text-unit': { value: '0.25em' },
+  'text-1': { value: 'calc({spacing.text-unit} * 1)' },
+  'text-2': { value: 'calc({spacing.text-unit} * 2)' },
+  'text-3': { value: 'calc({spacing.text-unit} * 3)' },
+  'text-5': { value: 'calc({spacing.text-unit} * 5)' },
+  'text-8': { value: 'calc({spacing.text-unit} * 8)' },
+  'text-13': { value: 'calc({spacing.text-unit} * 13)' },
 };
 
+/** Fibonacci sizes share the spacing unit, so density overrides resize boxes too. */
 export const sizes = {
   0: { value: '0rem' },
-  1: { value: '0.25rem' },
-  2: { value: '0.5rem' },
-  3: { value: '0.75rem' },
-  5: { value: '1.25rem' },
-  8: { value: '2rem' },
-  13: { value: '3.25rem' },
-  21: { value: '5.25rem' },
-  34: { value: '8.5rem' },
-  55: { value: '13.75rem' },
+  1: { value: 'calc({spacing.unit} * 1)' },
+  2: { value: 'calc({spacing.unit} * 2)' },
+  3: { value: 'calc({spacing.unit} * 3)' },
+  5: { value: 'calc({spacing.unit} * 5)' },
+  8: { value: 'calc({spacing.unit} * 8)' },
+  13: { value: 'calc({spacing.unit} * 13)' },
+  21: { value: 'calc({spacing.unit} * 21)' },
+  34: { value: 'calc({spacing.unit} * 34)' },
+  55: { value: 'calc({spacing.unit} * 55)' },
   /** Default form-control width (~200px at 16px root). */
   field: { value: '12.5rem' },
 };
 
+/** Fibonacci 1, 2, 3, 5 × 0.25rem (4, 8, 12, 20px at a 16px root), in rem so they follow text size. */
 export const radii = {
-  none: { value: '0px' },
-  sm: { value: '4px' },
-  md: { value: '8px' },
-  lg: { value: '12px' },
-  xl: { value: '20px' },
+  none: { value: '0rem' },
+  sm: { value: '0.25rem' },
+  md: { value: '0.5rem' },
+  lg: { value: '0.75rem' },
+  xl: { value: '1.25rem' },
   full: { value: '9999px' },
 };
 
@@ -153,17 +168,29 @@ export const fonts = {
   mono: { value: "'JetBrains Mono', 'Menlo', 'Consolas', 'monospace'" },
 };
 
+/**
+ * The type scale as ratios of one base size. Override `--beckui--font-sizes-base` to resize all
+ * text. The `text-*` steps are the same ratios in em, for text sized relative to its parent
+ * (inline code, Prose headings).
+ */
 export const fontSizes = {
-  xs: { value: '0.75rem' },
-  sm: { value: '0.875rem' },
-  md: { value: '1rem' },
-  lg: { value: '1.25rem' },
-  xl: { value: '1.5rem' },
-  '2xl': { value: '2rem' },
-  '3xl': { value: '3rem' },
-  '4xl': { value: '3.75rem' },
-  '5xl': { value: '4.5rem' },
-  '6xl': { value: '6rem' },
+  base: { value: '1rem' },
+  xs: { value: 'calc({fontSizes.base} * 0.75)' },
+  sm: { value: 'calc({fontSizes.base} * 0.875)' },
+  md: { value: 'calc({fontSizes.base} * 1)' },
+  lg: { value: 'calc({fontSizes.base} * 1.25)' },
+  xl: { value: 'calc({fontSizes.base} * 1.5)' },
+  '2xl': { value: 'calc({fontSizes.base} * 2)' },
+  '3xl': { value: 'calc({fontSizes.base} * 3)' },
+  '4xl': { value: 'calc({fontSizes.base} * 3.75)' },
+  '5xl': { value: 'calc({fontSizes.base} * 4.5)' },
+  '6xl': { value: 'calc({fontSizes.base} * 6)' },
+  'text-xs': { value: '0.75em' },
+  'text-sm': { value: '0.875em' },
+  'text-md': { value: '1em' },
+  'text-lg': { value: '1.25em' },
+  'text-xl': { value: '1.5em' },
+  'text-2xl': { value: '2em' },
 };
 
 export const fontWeights = {

@@ -26,11 +26,16 @@ export type BecketThemeRadii = Partial<
   Record<'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full', string>
 >;
 
+/** `base` resizes all text: every step is a ratio of it. */
 export type BecketThemeFontSizes = Partial<
-  Record<'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl', string>
+  Record<'base' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl', string>
 >;
 
-export type BecketThemeSpacing = Partial<Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
+/**
+ * `unit` (default 0.25rem) resizes every Fibonacci spacing and size step; `textUnit` (default
+ * 0.25em) resizes spacing inside running text.
+ */
+export type BecketThemeSpacing = Partial<Record<'unit' | 'textUnit' | 'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
 
 export type BecketDensityBox = { px?: string; py?: string };
 

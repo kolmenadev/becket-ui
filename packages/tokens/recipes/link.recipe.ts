@@ -6,7 +6,7 @@ export const link = defineRecipe({
   base: {
     color: 'link',
     textDecoration: 'underline',
-    textUnderlineOffset: '0.15em',
+    textUnderlineOffset: '{spacing.text-1}',
     cursor: 'pointer',
     _hover: { color: 'linkHover' },
     _focusVisible: {

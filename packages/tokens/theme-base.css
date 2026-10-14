@@ -5,25 +5,27 @@
  *
  * Density vars use `--beckui-button-*` (one hyphen) so they are not
  * `--beckui--spacing-*`. Overriding button padding must not shrink Stack gap.
+ * Defaults point at the spacing scale, so `--beckui--spacing-unit` resizes them too.
  */
 @layer tokens {
   :where(:root, :host) {
-    --beckui-button-px-sm: 0.75rem;
-    --beckui-button-py-sm: 0.25rem;
-    --beckui-button-px-md: 1rem;
-    --beckui-button-py-md: 0.5rem;
-    --beckui-field-px-sm: 0.5rem;
-    --beckui-field-py-sm: 0.25rem;
-    --beckui-field-px-md: 0.75rem;
-    --beckui-field-py-md: 0.5rem;
-    --beckui-field-px-lg: 0.75rem;
-    --beckui-field-py-lg: 0.75rem;
-    --beckui-tag-px-sm: 0.5rem;
-    --beckui-tag-py-sm: 0.25rem;
-    --beckui-tag-px-md: 0.75rem;
-    --beckui-tag-py-md: 0.25rem;
-    --beckui-tag-px-lg: 0.75rem;
-    --beckui-tag-py-lg: 0.5rem;
+    --beckui-button-px-sm: var(--beckui--spacing-3);
+    --beckui-button-py-sm: var(--beckui--spacing-1);
+    /* 4 units: the one step off Fibonacci, kept so buttons don't change width (see MAV-124). */
+    --beckui-button-px-md: calc(var(--beckui--spacing-unit) * 4);
+    --beckui-button-py-md: var(--beckui--spacing-2);
+    --beckui-field-px-sm: var(--beckui--spacing-2);
+    --beckui-field-py-sm: var(--beckui--spacing-1);
+    --beckui-field-px-md: var(--beckui--spacing-3);
+    --beckui-field-py-md: var(--beckui--spacing-2);
+    --beckui-field-px-lg: var(--beckui--spacing-3);
+    --beckui-field-py-lg: var(--beckui--spacing-3);
+    --beckui-tag-px-sm: var(--beckui--spacing-2);
+    --beckui-tag-py-sm: var(--beckui--spacing-1);
+    --beckui-tag-px-md: var(--beckui--spacing-3);
+    --beckui-tag-py-md: var(--beckui--spacing-1);
+    --beckui-tag-px-lg: var(--beckui--spacing-3);
+    --beckui-tag-py-lg: var(--beckui--spacing-2);
   }
 }
 

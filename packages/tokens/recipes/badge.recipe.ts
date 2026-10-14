@@ -13,7 +13,7 @@ export const badge = defineRecipe({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     fontWeight: 'bold',
-    letterSpacing: '0.02em',
+    letterSpacing: 'wide',
     lineHeight: 'tight',
     borderWidth: '1px',
     borderStyle: 'solid',

@@ -20,7 +20,7 @@ export const separator = defineRecipe({
         width: '1px',
         height: 'auto',
         alignSelf: 'stretch',
-        minHeight: '1em',
+        minHeight: '{fontSizes.text-md}',
       },
     },
   },
