@@ -42,6 +42,7 @@ Raw elements with inline styles are the most common mistake. Use this table:
 | inline `svg` icon                                    | `Icon` around your SVG, or a built-in glyph (`SearchIcon`, `ChevronDownIcon`, …); add `label` only when it carries meaning |
 | `a`                                                  | `Link`                                                                                                                     |
 | `a` styled as a button (call to action)              | `Button as="a" href="…"` (anchor props are typed)                                                                          |
+| HTML from Markdown or MDX (blog posts, docs)         | `<Prose as="article">`; wrap embedded components in `data-not-prose`                                                       |
 | custom modal, side panel, dropdown, tabs or tooltip  | `Dialog`, `Drawer`, `Menu`, `Tabs`, `Tooltip`                                                                              |
 
 Raw elements are fine for semantics Becket doesn't cover (`form`, `main`, `nav`, `section`,

@@ -23,3 +23,4 @@ export * from './hide.recipe';
 export * from './container.recipe';
 export * from './box.recipe';
 export * from './icon.recipe';
+export * from './prose.recipe';
