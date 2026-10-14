@@ -700,15 +700,21 @@
     --beckui--colors-surface: var(--beckui--colors-neutral-800);
     --beckui--colors-danger: oklch(0.76 0.16 25);
     --beckui--colors-accent: oklch(0.86 0.12 125);
+    --beckui--colors-link: var(--beckui--colors-primary);
+    --beckui--colors-link-hover: oklch(0.78 0.13 78);
+    --beckui--colors-link-visited: oklch(0.72 0.12 125);
 }
 
   [data-theme='light'] {
     --beckui--colors-background: var(--beckui--colors-neutral-50);
     --beckui--colors-text: var(--beckui--colors-neutral-900);
-    --beckui--colors-muted: var(--beckui--colors-neutral-600);
+    --beckui--colors-muted: oklch(0.53 0.014 62);
     --beckui--colors-surface: var(--beckui--colors-white);
     --beckui--colors-danger: oklch(0.48 0.20 25);
-    --beckui--colors-accent: oklch(0.38 0.14 125)
+    --beckui--colors-accent: oklch(0.38 0.14 125);
+    --beckui--colors-link: oklch(0.54 0.12 70);
+    --beckui--colors-link-hover: oklch(0.46 0.11 70);
+    --beckui--colors-link-visited: oklch(0.52 0.09 125)
 }
 
   @keyframes ping {
@@ -1018,7 +1024,7 @@
 
     .beckui--link {
       text-decoration: underline;
-      color: var(--beckui--colors-primary);
+      color: var(--beckui--colors-link);
       text-underline-offset: 0.15em;
       cursor: pointer;
 }
@@ -1030,7 +1036,7 @@
 }
 
     .beckui--link:is(:hover, [data-hover]) {
-      color: var(--beckui--colors-primary-hover);
+      color: var(--beckui--colors-link-hover);
 }
 
     .beckui--kbd {
@@ -1172,7 +1178,7 @@
 
     .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *)) {
       text-decoration: underline;
-      color: var(--beckui--colors-primary);
+      color: var(--beckui--colors-link);
       text-underline-offset: 0.15em;
 }
 
@@ -1183,7 +1189,7 @@
 }
 
     .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *)):is(:hover, [data-hover]) {
-      color: var(--beckui--colors-primary-hover);
+      color: var(--beckui--colors-link-hover);
 }
 
     .beckui--prose :where(ul, ol):not(:where([data-not-prose], [data-not-prose] *)) {
@@ -1830,7 +1836,7 @@
 }
 
   .beckui--link--visited_true:visited {
-    color: var(--beckui--colors-secondary);
+    color: var(--beckui--colors-link-visited);
 }
 
   .beckui--link--visual_muted {

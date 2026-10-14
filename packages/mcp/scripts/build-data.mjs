@@ -92,14 +92,14 @@ function parseTheme(css) {
     return '';
   };
   const vars = (text) =>
-    Object.fromEntries([...text.matchAll(/(--beckui--[\w-]+):\s*([^;]+);/g)].map(([, name, value]) => [name, value.trim()]));
+    Object.fromEntries([...text.matchAll(/(--beckui--[\w-]+):\s*([^;}]+);?/g)].map(([, name, value]) => [name, value.trim()]));
   const base = vars(block(':where(:root, :host) {'));
   const light = { ...base, ...vars(block("[data-theme='light'] {")) };
   const resolve = (table, value, depth = 0) =>
     depth > 5 ? value : value.replace(/var\((--beckui--[\w-]+)\)/g, (whole, name) => (table[name] ? resolve(table, table[name], depth + 1) : whole));
 
   const groups = {
-    colors: ['background', 'text', 'muted', 'surface', 'border', 'primary', 'secondary', 'tertiary', 'accent', 'danger', 'warning', 'success'],
+    colors: ['background', 'text', 'muted', 'surface', 'border', 'primary', 'secondary', 'tertiary', 'accent', 'danger', 'warning', 'success', 'link', 'link-hover', 'link-visited'],
     spacing: ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '0', '1', '2', '3', '5', '8', '13', '21', '34'],
     radii: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
     sizes: ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'prose', 'field'],
