@@ -81,4 +81,14 @@ Component authoring: [`.cursor-config/becket.mdc`](./.cursor-config/becket.mdc).
 
 Record a consumer-facing bump on the feature branch with a file in `.changeset/`. Do not hand-edit package `version` fields. `@becket-ui/react` and `@becket-ui/tokens` always ship the same version.
 
+Becket follows semver, `major.minor.patch`:
+
+| Bump | When | Examples |
+| --- | --- | --- |
+| `patch` | Fixes that keep the API and intended look | contrast fix, wrong prop type, packaging fix |
+| `minor` | New features, or changes an existing app would notice | new component or token, new prop, a size or spacing change, a renamed token while below 1.0 |
+| `major` | Breaking API changes once at 1.0 or later | removed component or prop, renamed export |
+
+Below 1.0, breaking changes ship as `minor` (`^0.3.0` never installs 0.4.0) and the changeset says what to migrate. Releases group every pending changeset, and the largest bump wins. Docs, test and CI-only changes get no changeset. If the bump isn't obvious, ask the owner before committing it.
+
 That file does not publish. npm and the GitHub Releases sidebar come from the release workflow. Runbook: [`.cursor/skills/publish-becket/SKILL.md`](./.cursor/skills/publish-becket/SKILL.md). Turbo only **builds**.

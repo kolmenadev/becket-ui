@@ -32,7 +32,7 @@ On the feature branch, add `.changeset/<short-name>.md`. Do not run the interact
 What changed for consumers.
 ```
 
-Use `patch`, `minor`, or `major` on both packages. If the user did not choose, ask. A docs, test, or CI-only change gets no changeset.
+Use `patch`, `minor`, or `major` on both packages, following the table in CONTRIBUTING.md "Versions". If the user did not choose and the table doesn't settle it, ask. A docs, test, or CI-only change gets no changeset.
 
 Commit the changeset only when the user asks to commit, or when it belongs to a PR they asked for. Merging that branch does not publish.
 
