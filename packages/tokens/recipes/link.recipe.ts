@@ -4,11 +4,11 @@ export const link = defineRecipe({
   className: 'link',
   description: 'Inline link',
   base: {
-    color: 'primary',
+    color: 'link',
     textDecoration: 'underline',
     textUnderlineOffset: '0.15em',
     cursor: 'pointer',
-    _hover: { color: 'primaryHover' },
+    _hover: { color: 'linkHover' },
     _focusVisible: {
       outline: 'none',
       boxShadow: 'outline',
@@ -26,7 +26,7 @@ export const link = defineRecipe({
     },
     visited: {
       true: {
-        _visited: { color: 'secondary' },
+        _visited: { color: 'linkVisited' },
       },
       false: {},
     },

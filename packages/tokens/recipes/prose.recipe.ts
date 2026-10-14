@@ -30,10 +30,10 @@ export const prose = defineRecipe({
     [el('h4')]: { fontSize: '1em', marginBlock: '1.5em 0.5em' },
     [el('h2 + *, h3 + *, h4 + *')]: { marginTop: '0' },
     [el('a')]: {
-      color: 'primary',
+      color: 'link',
       textDecoration: 'underline',
       textUnderlineOffset: '0.15em',
-      _hover: { color: 'primaryHover' },
+      _hover: { color: 'linkHover' },
       _focusVisible: { outline: 'none', boxShadow: 'outline', borderRadius: 'sm' },
     },
     [el('strong')]: { fontWeight: 'bold', color: 'text' },

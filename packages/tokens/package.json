@@ -39,7 +39,7 @@
     "build": "panda codegen && panda cssgen && node scripts/bundle-css.mjs && tsup && node scripts/emit-preset-dts.mjs",
     "prepare": "pnpm build",
     "prepack": "pnpm build",
-    "test": "node --test theme/index.test.mjs"
+    "test": "node --test theme/index.test.mjs theme/contrast.test.mjs"
   },
   "exports": {
     ".": {
