@@ -47,10 +47,11 @@ export const semanticColors = {
       _light: '{colors.neutral.900}',
     },
   },
+  /** neutral.600 sits at 4.33:1 on the light canvas; light uses a slightly darker gray (≥ 4.5:1). */
   muted: {
     value: {
       base: '{colors.neutral.300}',
-      _light: '{colors.neutral.600}',
+      _light: 'oklch(0.53 0.014 62)',
     },
   },
   /** Overlay / control fill (dialog, field, menu). Cards keep their own surfaces. */
@@ -78,6 +79,29 @@ export const semanticColors = {
     value: {
       base: 'oklch(0.86 0.12 125)',
       _light: 'oklch(0.38 0.14 125)',
+    },
+  },  /**
+   * Link text. Brand yellow and sage read on dark, but fall to about 2:1 on the light
+   * canvas, so light uses darker shades of the same hues (≥ 4.5:1 on background and surface).
+   */
+  link: {
+    value: {
+      base: '{colors.primary}',
+      _light: 'oklch(0.54 0.12 70)',
+    },
+  },
+  linkHover: {
+    value: {
+      // Same as primaryHover (88% primary + white), written out so contrast can be checked.
+      base: 'oklch(0.78 0.13 78)',
+      _light: 'oklch(0.46 0.11 70)',
+    },
+  },
+  linkVisited: {
+    value: {
+      // A step lighter than secondary so it also clears 4.5:1 on the dark surface.
+      base: 'oklch(0.72 0.12 125)',
+      _light: 'oklch(0.52 0.09 125)',
     },
   },
 };
