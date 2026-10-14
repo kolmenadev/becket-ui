@@ -38,28 +38,33 @@
   /* --beckui--colors-warning: oklch(0.72 0.16 42); */
   /* --beckui--colors-success: oklch(0.68 0.14 165); */
 
-  /* Type + layout spacing (Stack gap). Do not use these to densify buttons. */
+  /* Overall size: one unit per scale. Every Fibonacci step, size and component padding follows. */
+  /* --beckui--spacing-unit: 0.25rem;      (0.2rem = denser, 0.3rem = roomier) */
+  /* --beckui--spacing-text-unit: 0.25em;  (spacing inside Prose, Code, Kbd, List) */
+  /* --beckui--font-sizes-base: 1rem;      (every font size is a ratio of this) */
+
+  /* Single steps. Prefer the units above; do not use spacing to densify only buttons. */
   /* --beckui--fonts-sans: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif; */
   /* --beckui--fonts-mono: 'JetBrains Mono', 'Menlo', 'Consolas', 'monospace'; */
-  /* --beckui--font-sizes-sm: 0.875rem; */
-  /* --beckui--font-sizes-md: 1rem; */
+  /* --beckui--font-sizes-sm: calc(var(--beckui--font-sizes-base) * 0.875); */
+  /* --beckui--font-sizes-md: calc(var(--beckui--font-sizes-base) * 1); */
   /* --beckui--spacing-xs: var(--beckui--spacing-1); */
   /* --beckui--spacing-sm: var(--beckui--spacing-2); */
   /* --beckui--spacing-md: var(--beckui--spacing-3); */
   /* --beckui--spacing-lg: var(--beckui--spacing-5); */
   /* --beckui--spacing-xl: var(--beckui--spacing-8); */
-  /* --beckui--radii-sm: 4px; */
-  /* --beckui--radii-md: 8px; */
-  /* --beckui--radii-lg: 12px; */
+  /* --beckui--radii-sm: 0.25rem; */
+  /* --beckui--radii-md: 0.5rem; */
+  /* --beckui--radii-lg: 0.75rem; */
   /* --beckui--sizes-field: 12.5rem; */
 
-  /* Component density (not Stack gap) */
-  /* --beckui-button-px-md: 1rem; */
-  /* --beckui-button-py-md: 0.5rem; */
-  /* --beckui-field-px-md: 0.75rem; */
-  /* --beckui-field-py-md: 0.5rem; */
-  /* --beckui-tag-px-md: 0.75rem; */
-  /* --beckui-tag-py-md: 0.25rem; */
+  /* Component density (not Stack gap). Defaults follow --beckui--spacing-unit. */
+  /* --beckui-button-px-md: calc(var(--beckui--spacing-unit) * 4); */
+  /* --beckui-button-py-md: var(--beckui--spacing-2); */
+  /* --beckui-field-px-md: var(--beckui--spacing-3); */
+  /* --beckui-field-py-md: var(--beckui--spacing-2); */
+  /* --beckui-tag-px-md: var(--beckui--spacing-3); */
+  /* --beckui-tag-py-md: var(--beckui--spacing-1); */
 }
 
 html[data-theme='light'] {

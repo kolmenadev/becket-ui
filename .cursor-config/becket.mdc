@@ -129,7 +129,7 @@ Use `@becket-ui/tokens/jsx` primitives (e.g., `VisuallyHidden`) when needed for 
 
 ### Sizing and spacing: pick the scale before the number
 
-Every length in a recipe comes from one of these scales. Choose the scale first, then the step. Raw `rem`/`px` and Panda's leftover numeric keys (`4`, `6`, `10`, `12`…) are not allowed: they still exist in the token set, so they compile silently, and `packages/tokens/theme/scale.test.mjs` is what catches them.
+Every length in a recipe comes from one of these scales. Choose the scale first, then the step. If a value you need isn't on a scale, snap to the nearest step rather than adding a token for it. Raw `rem`/`em`/`px` and Panda's leftover numeric keys (`4`, `6`, `10`, `12`…) are not allowed: they still exist in the token set, so they compile silently, and `packages/tokens/theme/scale.test.mjs` is what catches them.
 
 | What you are sizing | Scale | Values |
 | --- | --- | --- |
@@ -138,9 +138,11 @@ Every length in a recipe comes from one of these scales. Choose the scale first,
 | Things that sit in a line of text (icon, spinner, checkbox/radio box, switch height) | Type scale | `{fontSizes.md}`, `{fontSizes.lg}`…, so the glyph matches the text next to it |
 | Proportions inside a component (switch track, thumb, avatar initials, aspect ratios) | Fibonacci ratios | `3:2 5:3 8:5 13:8` and inverses, via `calc(var(--becket-…) * 8 / 5)` from one token |
 | Panels and containers (dialog, drawer, container) | Named layout sizes | `xs`–`8xl`, `prose`, `field` |
-| Rhythm inside running text (prose, code, kbd, list indent) | `em` | relative to the font size, so it scales with `Prose size` |
+| Rhythm inside running text (prose, code, kbd, list indent) | Text spacing, em | `text-1 text-2 text-3 text-5 text-8 text-13` (× 0.25em) and relative font sizes `text-xs`…`text-2xl`, so it scales with `Prose size` |
 
 Why Fibonacci isn't used everywhere: its steps (12, 20, 32, 52px…) are too coarse for things that must line up with 16px text, so those follow the type scale. Fibonacci still sets their proportions.
+
+Each scale derives from one unit (`--beckui--spacing-unit`, `--beckui--spacing-text-unit`, `--beckui--font-sizes-base`), which is how companies resize Becket (`docs/THEMING.md`). A literal in a recipe can't be overridden that way, which is the real reason for the rule.
 
 Allowed exceptions, and nothing else:
 - Borders, outlines, focus rings and shadows in `px` (`1px`–`3px`).

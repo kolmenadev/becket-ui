@@ -54,6 +54,17 @@ test('defineBecketTheme density vars do not touch spacing tokens', () => {
   assert.doesNotMatch(css, /--beckui--spacing-md/);
 });
 
+test('defineBecketTheme exposes one unit per scale', () => {
+  const css = defineBecketTheme({ spacing: { unit: '0.2rem', textUnit: '0.3em' }, fontSizes: { base: '1.0625rem' } });
+  assert.match(css, /--beckui--spacing-unit: 0\.2rem;/);
+  assert.match(css, /--beckui--spacing-text-unit: 0\.3em;/);
+  assert.match(css, /--beckui--font-sizes-base: 1\.0625rem;/);
+  const built = readFileSync(join(tokensRoot, 'index.css'), 'utf8');
+  for (const name of ['--beckui--spacing-unit', '--beckui--spacing-text-unit', '--beckui--font-sizes-base']) {
+    assert.match(built, new RegExp(`${name}:`));
+  }
+});
+
 test('defineBecketTheme rejects unknown keys', () => {
   assert.throws(
     () => defineBecketTheme({ colors: { highlight: 'red' } }),
@@ -66,9 +77,9 @@ test('generated index.css semantic text/background follow data-theme', () => {
   assert.match(css, /--beckui--colors-text:/);
   assert.match(css, /--beckui--colors-background:/);
   assert.match(css, /\[data-theme=['"]light['"]\]/);
-  assert.match(css, /--beckui-button-px-md:\s*1rem/);
-  assert.match(css, /--beckui-field-px-md:\s*0\.75rem/);
-  assert.match(css, /--beckui-tag-px-md:\s*0\.75rem/);
+  assert.match(css, /--beckui-button-px-md:\s*calc\(var\(--beckui--spacing-unit\) \* 4\)/);
+  assert.match(css, /--beckui-field-px-md:\s*var\(--beckui--spacing-3\)/);
+  assert.match(css, /--beckui-tag-px-md:\s*var\(--beckui--spacing-3\)/);
   assert.match(
     css,
     /--beckui--shadows-outline:\s*0 0 0 2px var\(--beckui--colors-background\), 0 0 0 4px var\(--beckui--colors-primary\)/,

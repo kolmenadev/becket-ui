@@ -5,12 +5,12 @@ export const code = defineRecipe({
   description: 'Inline code',
   base: {
     fontFamily: 'mono',
-    fontSize: '0.875em',
+    fontSize: 'text-sm',
     color: 'text',
     bg: 'surface',
     borderRadius: 'sm',
-    paddingInline: '0.35em',
-    paddingBlock: '0.15em',
+    paddingInline: 'text-1',
+    paddingBlock: 'text-1',
     overflowWrap: 'anywhere',
   },
 });

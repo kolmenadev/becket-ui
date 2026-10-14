@@ -16,8 +16,10 @@ const COLOR_FLAT = [
 const COLOR_THEMED = ['background', 'text', 'muted', 'border', 'danger', 'accent'];
 const NEUTRAL_STEPS = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
 const RADII = ['none', 'sm', 'md', 'lg', 'xl', 'full'];
-const FONT_SIZES = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'];
-const SPACING = ['xs', 'sm', 'md', 'lg', 'xl'];
+// `base` rescales the whole type scale; the steps are ratios of it.
+const FONT_SIZES = ['base', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'];
+// `unit` rescales every Fibonacci spacing and size step; `textUnit` the em-based text spacing.
+const SPACING = ['unit', 'textUnit', 'xs', 'sm', 'md', 'lg', 'xl'];
 const FONTS = ['sans', 'mono'];
 const DENSITY_SIZES = {
   button: ['sm', 'md'],

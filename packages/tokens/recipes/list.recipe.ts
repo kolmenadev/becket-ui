@@ -5,7 +5,7 @@ export const list = defineRecipe({
   description: 'Bulleted, numbered or plain list',
   base: {
     margin: 0,
-    paddingInlineStart: '1.25em',
+    paddingInlineStart: 'text-5',
     color: 'text',
     '& > li::marker': { color: 'muted' },
   },
@@ -17,7 +17,7 @@ export const list = defineRecipe({
     },
     marker: {
       disc: { listStyleType: 'disc' },
-      decimal: { listStyleType: 'decimal' },
+      decimal: { listStyleType: 'decimal', paddingInlineStart: 'text-8' },
       none: { listStyleType: 'none', paddingInlineStart: '0' },
     },
   },

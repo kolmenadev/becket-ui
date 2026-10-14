@@ -8,6 +8,6 @@ export const mark = defineRecipe({
     // Dark ink on brand yellow reads in both themes.
     color: 'neutral.900',
     borderRadius: 'sm',
-    paddingInline: '0.15em',
+    paddingInline: 'text-1',
   },
 });
