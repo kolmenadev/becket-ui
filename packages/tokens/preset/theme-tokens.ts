@@ -97,7 +97,7 @@ export const spacing = {
   md: { value: '{spacing.3}' },
   lg: { value: '{spacing.5}' },
   xl: { value: '{spacing.8}' },
-  '2xs': { value: '{spacing.13}' },
+  '2xl': { value: '{spacing.13}' },
 };
 
 export const sizes = {

@@ -1,6 +1,6 @@
 /** Shared Storybook knob values. ConditionalValue props infer as object controls — always override. */
 
-export const GAP_OPTIONS = ['xs', 'sm', 'md', 'lg', 'xl', '2xs'] as const;
+export const GAP_OPTIONS = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const;
 
 export const FLEX_DIRECTION_OPTIONS = [
   'row',

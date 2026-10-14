@@ -100,7 +100,7 @@ function parseTheme(css) {
 
   const groups = {
     colors: ['background', 'text', 'muted', 'surface', 'border', 'primary', 'secondary', 'tertiary', 'accent', 'danger', 'warning', 'success'],
-    spacing: ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '0', '1', '2', '3', '5', '8', '13', '21', '34'],
+    spacing: ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '0', '1', '2', '3', '5', '8', '13', '21', '34'],
     radii: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
     sizes: ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'prose', 'field'],
     'font-sizes': ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'],

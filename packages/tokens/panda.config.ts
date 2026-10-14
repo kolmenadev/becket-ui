@@ -39,7 +39,7 @@ export default defineConfig({
             'md',
             'lg',
             'xl',
-            '2xs',
+            '2xl',
           ],
         },
       },
