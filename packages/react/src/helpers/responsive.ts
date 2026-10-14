@@ -52,7 +52,7 @@ export const SPACING_SCALE = [0, 1, 2, 3, 5, 8, 13, 21, 34] as const;
 export type SpacingStep = (typeof SPACING_SCALE)[number];
 
 /** Semantic aliases preferred in apps. */
-export type SpacingSemantic = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xs';
+export type SpacingSemantic = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 /**
  * Values that show up in IDE autocomplete for `gap` / spacing props.

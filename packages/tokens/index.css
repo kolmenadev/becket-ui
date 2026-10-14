@@ -571,7 +571,7 @@
     --beckui--spacing-md: var(--beckui--spacing-3);
     --beckui--spacing-lg: var(--beckui--spacing-5);
     --beckui--spacing-xl: var(--beckui--spacing-8);
-    --beckui--spacing-2xs: var(--beckui--spacing-13);
+    --beckui--spacing-2xl: var(--beckui--spacing-13);
     --beckui--sizes-0: 0rem;
     --beckui--sizes-1: 0.25rem;
     --beckui--sizes-2: 0.5rem;
@@ -2583,8 +2583,8 @@
     gap: var(--beckui--spacing-xl);
 }
 
-  .beckui--gap_2xs {
-    gap: var(--beckui--spacing-2xs);
+  .beckui--gap_2xl {
+    gap: var(--beckui--spacing-2xl);
 }
 
   .beckui--bg-c_transparent {
