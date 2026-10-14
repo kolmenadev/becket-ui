@@ -1,5 +1,25 @@
 # @becket-ui/tokens
 
+## 0.3.0
+
+### Minor Changes
+
+- ec9c22f: Add `Prose`, which styles HTML from Markdown or MDX with Becket tokens: headings,
+  paragraphs, links, lists, blockquotes, inline code and code blocks, `kbd`, `mark`, images and
+  figures, tables, definition lists and rules. `<Prose as="article" size="sm|md|lg">`; spacing
+  scales with `size`. CSS only, no JS. Rules have zero specificity and skip anything inside
+  `[data-not-prose]`, so embedded Becket components keep their own styles. New `prose` recipe in
+  `@becket-ui/tokens/recipes`.
+- 76fcf51: Rename the spacing token `2xs` to `2xl`.
+
+  `2xs` resolved to Fibonacci step 13 (3.25rem), larger than `xl`, so the name said the opposite of
+  the value. It's now `2xl`, the step after `xl` (`xs` 0.25 → `sm` 0.5 → `md` 0.75 → `lg` 1.25 →
+  `xl` 2 → `2xl` 3.25rem).
+
+  **Migration:** replace `gap="2xs"` with `gap="2xl"` (same 3.25rem), and
+  `var(--beckui--spacing-2xs)` with `var(--beckui--spacing-2xl)`. TypeScript flags the old value.
+  Numeric `gap={13}` is unchanged.
+
 ## 0.2.0
 
 ### Minor Changes
