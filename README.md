@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="./logo.png" alt="Becket UI" width="340" />
+  <img src="./apps/docs/public/wordmark.png" alt="Becket" width="300" />
 </p>
 
-# Becket UI
+<h1 align="center">React components, compiled CSS</h1>
 
 Chakra-shaped React components whose styles are **compiled CSS**, not a CSS-in-JS runtime. Install
 two packages, import one stylesheet, set `data-theme`, start building.
