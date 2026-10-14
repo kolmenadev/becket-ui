@@ -21,6 +21,7 @@ export const switchRecipe = defineSlotRecipe({
       display: 'inline-flex',
       alignItems: 'center',
       flexShrink: 0,
+      height: 'var(--becket-switch-height)',
       cursor: 'pointer',
       border: 'none',
       padding: 0,
@@ -35,6 +36,9 @@ export const switchRecipe = defineSlotRecipe({
       },
     },
     track: {
+      // 8:5 track, 5:8 thumb: consecutive Fibonacci ratios (about the golden ratio).
+      width: 'calc(var(--becket-switch-height) * 8 / 5)',
+      height: 'var(--becket-switch-height)',
       position: 'relative',
       display: 'inline-flex',
       alignItems: 'center',
@@ -46,6 +50,9 @@ export const switchRecipe = defineSlotRecipe({
       },
     },
     thumb: {
+      width: 'calc(var(--becket-switch-height) * 5 / 8)',
+      height: 'calc(var(--becket-switch-height) * 5 / 8)',
+      left: 'calc(var(--becket-switch-height) * 3 / 16)',
       position: 'absolute',
       borderRadius: 'full',
       bg: 'white',
@@ -54,55 +61,23 @@ export const switchRecipe = defineSlotRecipe({
     },
   },
   variants: {
+    // Each size sets the track height on the type scale; the rest is Fibonacci proportion.
     size: {
-      sm: {
-        root: { height: '1.25rem' },
-        track: { width: '2rem', height: '1.25rem' },
-        thumb: { width: '0.875rem', height: '0.875rem', left: '0.1875rem' },
-      },
-      md: {
-        root: { height: '1.5rem' },
-        track: { width: '2.75rem', height: '1.5rem' },
-        thumb: { width: '1.125rem', height: '1.125rem', left: '0.1875rem' },
-      },
-      lg: {
-        root: { height: '1.75rem' },
-        track: { width: '3.25rem', height: '1.75rem' },
-        thumb: { width: '1.375rem', height: '1.375rem', left: '0.1875rem' },
-      },
+      sm: { root: { '--becket-switch-height': '{fontSizes.lg}' } },
+      md: { root: { '--becket-switch-height': '{fontSizes.xl}' } },
+      lg: { root: { '--becket-switch-height': '{fontSizes.2xl}' } },
     },
     checked: {
       true: {
         track: {
           bg: 'primary',
         },
+        // Track width minus thumb minus both insets: (8/5 - 5/8 - 3/8) of the height.
+        thumb: { transform: 'translateX(calc(var(--becket-switch-height) * 3 / 5))' },
       },
       false: {},
     },
   },
-  compoundVariants: [
-    {
-      size: 'sm',
-      checked: true,
-      css: {
-        thumb: { transform: 'translateX(0.75rem)' },
-      },
-    },
-    {
-      size: 'md',
-      checked: true,
-      css: {
-        thumb: { transform: 'translateX(1.25rem)' },
-      },
-    },
-    {
-      size: 'lg',
-      checked: true,
-      css: {
-        thumb: { transform: 'translateX(1.5rem)' },
-      },
-    },
-  ],
   defaultVariants: {
     size: 'md',
     checked: false,

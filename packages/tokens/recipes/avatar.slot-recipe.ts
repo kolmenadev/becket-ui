@@ -17,7 +17,11 @@ export const avatar = defineSlotRecipe({
       bg: 'surface',
       _light: { bg: 'neutral.200' },
       color: 'text',
+      // Initials scale with the circle at 2:5, a Fibonacci ratio.
+      fontSize: 'calc(var(--becket-avatar-size) * 2 / 5)',
       fontWeight: 'medium',
+      width: 'var(--becket-avatar-size)',
+      height: 'var(--becket-avatar-size)',
       userSelect: 'none',
     },
     image: { width: '100%', height: '100%', objectFit: 'cover' },
@@ -25,9 +29,11 @@ export const avatar = defineSlotRecipe({
   },
   variants: {
     size: {
-      sm: { root: { width: '8', height: '8', fontSize: 'xs' } },
-      md: { root: { width: '10', height: '10', fontSize: 'sm' } },
-      lg: { root: { width: '12', height: '12', fontSize: 'md' } },
+      // Consecutive Fibonacci steps: 20, 32, 52 and 84px at a 16px root.
+      sm: { root: { '--becket-avatar-size': '{sizes.5}' } },
+      md: { root: { '--becket-avatar-size': '{sizes.8}' } },
+      lg: { root: { '--becket-avatar-size': '{sizes.13}' } },
+      xl: { root: { '--becket-avatar-size': '{sizes.21}' } },
     },
   },
   defaultVariants: { size: 'md' },

@@ -1,26 +1,24 @@
-import { forwardRef, type ComponentPropsWithoutRef, type CSSProperties } from 'react';
+import { forwardRef, type ComponentPropsWithoutRef } from 'react';
 import { aspectRatio as aspectRatioRecipe } from '@becket-ui/tokens/recipes';
 
+type AspectRatioValue = '1:1' | '3:2' | '5:3' | '8:5' | '13:8' | '2:3' | '3:5' | '5:8' | '8:13' | '16:9' | '9:16';
+
 export type AspectRatioProps = ComponentPropsWithoutRef<'div'> & {
-  /** Width divided by height, e.g. 16 / 9. Default 1 (square). */
-  ratio?: number;
+  /** Width to height. Default `'1:1'`. */
+  ratio?: AspectRatioValue;
 };
 
 function mergeClassName(...classes: (string | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
-/** Keeps one child (image, video, iframe, map) at a fixed ratio; the child fills the box. */
-export const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(
-  ({ ratio = 1, className, style, ...props }, ref) => (
-    <div
-      ref={ref}
-      {...props}
-      // The ratio is per instance, so it travels as a custom property the recipe reads.
-      style={{ ...style, '--becket-aspect-ratio': String(ratio) } as CSSProperties}
-      className={mergeClassName(aspectRatioRecipe(), className)}
-    />
-  ),
-);
+/**
+ * Keeps one child (image, video, iframe, map) at a fixed ratio; the child fills the box.
+ * Ratios are Fibonacci pairs (`'3:2'`, `'8:5'`, `'13:8'` and their portrait flips) plus `'16:9'`
+ * and `'9:16'` for video. Default `'1:1'`.
+ */
+export const AspectRatio = forwardRef<HTMLDivElement, AspectRatioProps>(({ ratio, className, ...props }, ref) => (
+  <div ref={ref} {...props} className={mergeClassName(aspectRatioRecipe({ ratio }), className)} />
+));
 
 AspectRatio.displayName = 'AspectRatio';

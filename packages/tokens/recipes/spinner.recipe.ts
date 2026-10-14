@@ -24,9 +24,9 @@ export const spinner = defineRecipe({
   },
   variants: {
     size: {
-      sm: { width: '1rem', height: '1rem' },
-      md: { width: '1.5rem', height: '1.5rem' },
-      lg: { width: '2rem', height: '2rem' },
+      sm: { width: '{fontSizes.md}', height: '{fontSizes.md}' },
+      md: { width: '{fontSizes.xl}', height: '{fontSizes.xl}' },
+      lg: { width: '{fontSizes.2xl}', height: '{fontSizes.2xl}' },
     },
   },
   defaultVariants: {

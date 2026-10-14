@@ -12,6 +12,7 @@ Purpose: This is the single source of truth for creating production‑ready comp
 - **Always WCAG 2.2 AA**: Every interactive primitive must be fully accessible — keyboard, name/role/value, focus, and ARIA only when native HTML is not enough. This is not optional and does not wait for a later “a11y pass.” Bar: WCAG 2.2 **AA** + APG for overlays/disclosure (Dialog, Drawer, Menu, Tabs, Tooltip, Switch). Not AAA. Native HTML is the default, not a substitute for the bar. Do not claim “accessible” / WCAG on npm until contrast / 24×24 are recorded in Storybook (jsdom cannot prove them).
 - **Consistent API**: Follow the `as` prop pattern, forward refs, and surface HTML props of the base element.
 - **Use Panda recipes**: Variants and sizes live in `@becket-ui/tokens` recipes. Components consume recipes; they do not hardcode styles.
+- **Stay on the scales**: every length in a recipe comes from a Becket scale (see "Sizing and spacing" below). `theme/scale.test.mjs` fails the build otherwise.
 - **Colocation & clarity**: Keep files near their usage, name things clearly, reduce nesting, prefer inline logic, and avoid premature abstraction.
 
 ---
@@ -125,6 +126,31 @@ Use `@becket-ui/tokens/jsx` primitives (e.g., `VisuallyHidden`) when needed for 
 - Do not inline literal color values in components; use tokens (e.g., `primary`, `neutral.600`).
 - Variants (e.g., `visual`, `size`) come from recipes. Use `variantMap` to drive Storybook controls.
 - Shared style behavior that is reused by multiple React components should live in `packages/react/src/helpers`, not under `packages/react/src/components`.
+
+### Sizing and spacing: pick the scale before the number
+
+Every length in a recipe comes from one of these scales. Choose the scale first, then the step. Raw `rem`/`px` and Panda's leftover numeric keys (`4`, `6`, `10`, `12`…) are not allowed: they still exist in the token set, so they compile silently, and `packages/tokens/theme/scale.test.mjs` is what catches them.
+
+| What you are sizing | Scale | Values |
+| --- | --- | --- |
+| Gaps, padding, margins, insets | Spacing: semantic first, else Fibonacci | `xs sm md lg xl 2xl`, or `0 1 2 3 5 8 13 21 34` (× 0.25rem) |
+| Boxes that stand on their own (avatar, textarea height, menu min width) | Sizes, Fibonacci | `5 8 13 21 34 55`: one size per step, consecutive steps for `sm/md/lg/xl` |
+| Things that sit in a line of text (icon, spinner, checkbox/radio box, switch height) | Type scale | `{fontSizes.md}`, `{fontSizes.lg}`…, so the glyph matches the text next to it |
+| Proportions inside a component (switch track, thumb, avatar initials, aspect ratios) | Fibonacci ratios | `3:2 5:3 8:5 13:8` and inverses, via `calc(var(--becket-…) * 8 / 5)` from one token |
+| Panels and containers (dialog, drawer, container) | Named layout sizes | `xs`–`8xl`, `prose`, `field` |
+| Rhythm inside running text (prose, code, kbd, list indent) | `em` | relative to the font size, so it scales with `Prose size` |
+
+Why Fibonacci isn't used everywhere: its steps (12, 20, 32, 52px…) are too coarse for things that must line up with 16px text, so those follow the type scale. Fibonacci still sets their proportions.
+
+Allowed exceptions, and nothing else:
+- Borders, outlines, focus rings and shadows in `px` (`1px`–`3px`).
+- `1px` for visually hidden clipping.
+- `24px` minimum target size on icon-only buttons (WCAG 2.5.8).
+- `16:9` / `9:16` aspect ratios, because video is produced at those sizes.
+
+Derive a component's internal geometry from one custom property (`--becket-<component>-<dimension>`) that each `size` variant sets from a token. See `switch.recipe.ts` (height on the type scale; track `8/5`, thumb `5/8`, inset `3/16`) and `avatar.slot-recipe.ts` (Fibonacci sizes, initials at `2/5`).
+
+Reference tokens with braces when they sit inside a value: `calc(100% - {spacing.8})`, `right {spacing.3} center`. A key that doesn't exist (for example `sizes.2xs`) is dropped without an error, so check the built `index.css`.
 
 ### Brand vs status colors
 
@@ -323,11 +349,12 @@ Anything written *with* Becket rather than *in* it, like `*.examples.tsx`, compo
 
 ## When adding a new component, do this
 
-1) Add/extend a Panda recipe in `@becket-ui/tokens` if needed, export it, and regenerate Panda artifacts.
+1) Add/extend a Panda recipe in `@becket-ui/tokens` if needed, export it, and regenerate Panda artifacts. Every length comes from a scale in "Sizing and spacing" above; run `pnpm -F @becket-ui/tokens test` (contrast + scale) before review.
 2) Implement the React component in `@becket-ui/react` using the API rules and recipe. Meet WCAG 2.2 AA before review.
 3) Add a Storybook file with controls for all variants and key states. `@storybook/addon-a11y` must be clean on Default (local; not CI).
 4) Add Vitest coverage: axe-core via the private `@becket-ui/a11y` helper plus keyboard tests if the primitive has APG behavior. Do **not** add Playwright or Chromatic for this.
 5) Keep names and imports consistent; avoid mutations; use tokens over literals.
+6) Size variants follow the scale table: Fibonacci steps for boxes (`5/8/13/21`), the type scale for inline glyphs, Fibonacci ratios for proportions. Don't copy sizes from another library (24/32/40/48 avatars, 4:3 ratios).
 
 ---
 

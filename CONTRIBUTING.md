@@ -15,7 +15,7 @@ pnpm install
 
 ## Code style
 
-Follow [docs/CODING-STYLE.md](./docs/CODING-STYLE.md) for all code, and [Writing app code with Becket](./packages/react/guides/building-with-becket.md) for code that uses Becket components. Library rules are in `.cursor-config/becket.mdc`.
+Follow [docs/CODING-STYLE.md](./docs/CODING-STYLE.md) for all code, and [Writing app code with Becket](./packages/react/guides/building-with-becket.md) for code that uses Becket components. Library rules are in `.cursor-config/becket.mdc`. Read its "Sizing and spacing" table before writing a recipe: every length comes from a Becket scale, and `pnpm -F @becket-ui/tokens test` fails on raw `rem`/`px` or off-scale tokens.
 
 ## Develop
 

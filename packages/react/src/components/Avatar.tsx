@@ -3,13 +3,14 @@
 import { forwardRef, useState, type ComponentPropsWithoutRef } from 'react';
 import { avatar as avatarRecipe } from '@becket-ui/tokens/recipes';
 
-type AvatarSize = 'sm' | 'md' | 'lg';
+type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
 export type AvatarProps = Omit<ComponentPropsWithoutRef<'span'>, 'children'> & {
   /** The person's name: the accessible name and the source of the initials. */
   name: string;
   /** Photo URL. Without it, or if it fails to load, the initials show. */
   src?: string;
+  /** Fibonacci steps: 20, 32, 52 or 84px. Default `md`. */
   size?: AvatarSize;
 };
 

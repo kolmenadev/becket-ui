@@ -63,6 +63,7 @@ export const drawer = defineSlotRecipe({
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
+      // WCAG 2.5.8 minimum target size, the one fixed pixel size allowed off the scale.
       minW: '24px',
       minH: '24px',
       p: '1',
@@ -78,7 +79,7 @@ export const drawer = defineSlotRecipe({
     placement: {
       start: {
         root: {
-          width: '20rem',
+          width: 'xs',
           maxWidth: '100%',
           margin: '0 auto 0 0',
           height: '100%',
@@ -87,7 +88,7 @@ export const drawer = defineSlotRecipe({
       },
       end: {
         root: {
-          width: '20rem',
+          width: 'xs',
           maxWidth: '100%',
           margin: '0 0 0 auto',
           height: '100%',

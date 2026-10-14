@@ -116,13 +116,13 @@ describe('layout', () => {
         <Center inline data-testid="center">
           x
         </Center>
-        <AspectRatio ratio={16 / 9} data-testid="ratio">
+        <AspectRatio ratio="16:9" data-testid="ratio">
           <iframe title="Demo" src="about:blank" />
         </AspectRatio>
       </>,
     );
     expect(screen.getByTestId('center').className).toMatch(/center--inline_true/);
-    expect(screen.getByTestId('ratio').style.getPropertyValue('--becket-aspect-ratio')).toBe(String(16 / 9));
+    expect(screen.getByTestId('ratio').className).toMatch(/aspectRatio--ratio_16:9/);
   });
 
   it('every class Grid and GridItem emit exists in the prebuilt index.css', () => {
