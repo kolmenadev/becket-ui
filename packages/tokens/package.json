@@ -30,6 +30,8 @@
     "styled-system",
     "theme/index.mjs",
     "theme/index.d.ts",
+    "theme/color.mjs",
+    "theme/contrast.mjs",
     "theme.example.css",
     "index.css",
     "index.mjs",

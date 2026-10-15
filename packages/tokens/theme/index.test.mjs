@@ -131,3 +131,19 @@ test('generated index.css alias graph follows primary / tertiary / secondary', (
     /--beckui--colors-primary-hover:[^;]*brand-becket-yellow/,
   );
 });
+
+test('defineBecketTheme maps surface and link colors so a rebrand reaches light links', () => {
+  const css = defineBecketTheme({
+    colors: {
+      surface: { light: 'oklch(1 0 0)' },
+      link: { dark: 'oklch(0.8 0.1 255)', light: 'oklch(0.45 0.15 255)' },
+      linkHover: 'oklch(0.5 0.15 255)',
+      linkVisited: { light: 'oklch(0.45 0.12 300)' },
+    },
+  });
+  assert.match(css, /:root \{[\s\S]*--beckui--colors-link: oklch\(0\.8 0\.1 255\);/);
+  assert.match(css, /:root \{[\s\S]*--beckui--colors-link-hover: oklch\(0\.5 0\.15 255\);/);
+  assert.match(css, /html\[data-theme='light'\] \{[\s\S]*--beckui--colors-link: oklch\(0\.45 0\.15 255\);/);
+  assert.match(css, /html\[data-theme='light'\] \{[\s\S]*--beckui--colors-link-visited: oklch\(0\.45 0\.12 300\);/);
+  assert.match(css, /html\[data-theme='light'\] \{[\s\S]*--beckui--colors-surface: oklch\(1 0 0\);/);
+});
