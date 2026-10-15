@@ -3,7 +3,7 @@
  * Fail if packed tarballs are missing the files consumers need.
  * pnpm pack has no --dry-run; pack to a temp dir and delete after.
  */
-import { execSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, renameSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -46,11 +46,13 @@ function assertNone(files, needles, label) {
 }
 
 /**
- * Install the packed tarballs into a throwaway consumer and import the library
- * with plain Node ESM, the way scripts, `node --test` and bundler-free SSR do
- * (MAV-120). Bundlers forgive extensionless imports; Node doesn't.
+ * Install the packed tarballs into a throwaway consumer, then:
+ * - import the library with plain Node ESM, the way scripts, `node --test` and
+ *   bundler-free SSR do (MAV-120). Bundlers forgive extensionless imports; Node doesn't.
+ * - start the MCP server from its tarball and list its tools over stdio, the way
+ *   `npx @becket-ui/mcp` runs it.
  */
-function assertNodeImport() {
+function assertConsumer() {
   const consumer = mkdtempSync(join(tmpdir(), 'becket-import-'));
   try {
     const modules = join(consumer, 'node_modules');
@@ -65,14 +67,40 @@ function assertNodeImport() {
     for (const peer of ['react', 'react-dom']) {
       symlinkSync(realpathSync(join(root, 'packages', 'react', 'node_modules', peer)), join(modules, peer));
     }
+    mkdirSync(join(modules, '@modelcontextprotocol'), { recursive: true });
+    for (const dependency of ['@modelcontextprotocol/sdk', 'zod']) {
+      symlinkSync(realpathSync(join(root, 'packages', 'mcp', 'node_modules', dependency)), join(modules, dependency));
+    }
     writeFileSync(join(consumer, 'package.json'), '{"type":"module","private":true}\n');
     const probe = "const m = await import('@becket-ui/react'); if (!m.Button || !m.Container) throw new Error('missing exports'); console.log(Object.keys(m).length);";
+    let exportCount;
     try {
-      return execSync(`node --input-type=module -e ${JSON.stringify(probe)}`, { cwd: consumer, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+      exportCount = execSync(`node --input-type=module -e ${JSON.stringify(probe)}`, { cwd: consumer, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
     } catch (error) {
       console.error(`@becket-ui/react can't be imported with Node ESM:\n${String(error.stderr || error.message).split('\n').slice(0, 3).join('\n')}`);
       process.exit(1);
     }
+    const requests = [
+      { jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'pack-check', version: '0' } } },
+      { jsonrpc: '2.0', method: 'notifications/initialized' },
+      { jsonrpc: '2.0', id: 2, method: 'tools/list' },
+    ];
+    const server = spawnSync('node', [join(modules, '@becket-ui', 'mcp', 'dist', 'server.js')], {
+      cwd: consumer,
+      input: requests.map((request) => JSON.stringify(request)).join('\n') + '\n',
+      encoding: 'utf8',
+      timeout: 10_000,
+    });
+    const tools = server.stdout
+      .split('\n')
+      .filter(Boolean)
+      .map((line) => JSON.parse(line))
+      .find((message) => message.id === 2)?.result?.tools;
+    if (!tools?.length) {
+      console.error(`@becket-ui/mcp didn't answer tools/list from its tarball:\n${(server.stderr || server.error?.message || '').slice(0, 400)}`);
+      process.exit(1);
+    }
+    return { exportCount, toolCount: tools.length };
   } finally {
     rmSync(consumer, { recursive: true, force: true });
   }
@@ -99,12 +127,18 @@ try {
   assertIncludes(react, ['dist/index.js', 'dist/index.d.ts', 'guides/building-with-becket.md'], '@becket-ui/react');
   assertNone(react, ['.test.', '.stories.', '.examples.', 'compositions', 'src/components'], '@becket-ui/react');
 
-  const exportCount = assertNodeImport();
+  const mcp = packedFiles('@becket-ui/mcp');
+  assertIncludes(mcp, ['dist/server.js', 'dist/data/catalog.json', 'dist/data/theme.json', 'dist/data/guidelines.md'], '@becket-ui/mcp');
+  assertNone(mcp, ['src/', 'test/', 'scripts/'], '@becket-ui/mcp');
+
+  const { exportCount, toolCount } = assertConsumer();
 
   console.log('pack-check ok');
   console.log(`  tokens: ${tokens.length} files`);
   console.log(`  react:  ${react.length} files`);
+  console.log(`  mcp:    ${mcp.length} files`);
   console.log(`  node import: ok (${exportCount} exports)`);
+  console.log(`  mcp server: ok (${toolCount} tools)`);
 } finally {
   rmSync(dest, { recursive: true, force: true });
 }

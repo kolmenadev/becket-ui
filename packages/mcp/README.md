@@ -9,8 +9,8 @@ It runs over stdio. All its data is generated at build time from this repo's own
 `@becket-ui/tokens/index.css` and `packages/react/guides/building-with-becket.md`. It can't drift
 from the library it ships with.
 
-> Private for now: run it from a clone of this repo. Publishing to npm (`npx @becket-ui/mcp`) is
-> MAV-44.
+It ships with the same version number as `@becket-ui/react`: `@becket-ui/mcp@0.4.0` describes
+`@becket-ui/react@0.4.0`. Needs Node 22 or later.
 
 ## Tools
 
@@ -24,27 +24,12 @@ from the library it ships with.
 | `get_guidelines`        | The app-code guide, whole or one section (`component`, `tokens`, `accessibility`, `example`, `checklist`, …)                                               |
 | `review_usage`          | Checks code for raw layout, text and controls, literal colors, pixel spacing, recipe classes, Chakra imports and unknown exports, each with the Becket fix |
 
-## Build
-
-From the repo root:
-
-```bash
-pnpm install
-pnpm -F "@becket-ui/mcp..." build
-```
-
-That builds `@becket-ui/tokens`, `@becket-ui/react` and then the server
-(`packages/mcp/dist/server.js`, plus its data in `dist/data`). Rebuild after changing components or
-tokens.
-
 ## Connect
-
-Use the absolute path to `packages/mcp/dist/server.js` in your clone.
 
 **Claude Code**
 
 ```bash
-claude mcp add becket-ui -- node /absolute/path/to/becket-ui/packages/mcp/dist/server.js
+claude mcp add becket-ui -- npx -y @becket-ui/mcp
 ```
 
 **Cursor**: `.cursor/mcp.json` in your app (or `~/.cursor/mcp.json`):
@@ -53,8 +38,8 @@ claude mcp add becket-ui -- node /absolute/path/to/becket-ui/packages/mcp/dist/s
 {
   "mcpServers": {
     "becket-ui": {
-      "command": "node",
-      "args": ["/absolute/path/to/becket-ui/packages/mcp/dist/server.js"]
+      "command": "npx",
+      "args": ["-y", "@becket-ui/mcp"]
     }
   }
 }
@@ -67,12 +52,14 @@ claude mcp add becket-ui -- node /absolute/path/to/becket-ui/packages/mcp/dist/s
   "servers": {
     "becket-ui": {
       "type": "stdio",
-      "command": "node",
-      "args": ["/absolute/path/to/becket-ui/packages/mcp/dist/server.js"]
+      "command": "npx",
+      "args": ["-y", "@becket-ui/mcp"]
     }
   }
 }
 ```
+
+To match an app that pins an older Becket, pin the server too: `@becket-ui/mcp@0.4.0`.
 
 Then ask your agent something like "build a settings page with Becket UI". It should call
 `get_guidelines` and `list_components` first, and `review_usage` before it finishes. Add a line to
@@ -83,10 +70,24 @@ your app's `CLAUDE.md` (or Cursor rules) to make that the habit:
 
 ## Develop
 
+From the repo root:
+
 ```bash
-pnpm -F @becket-ui/mcp build   # tsup + scripts/build-data.mjs
-pnpm -F @becket-ui/mcp test    # tool handlers + an end-to-end stdio test
+pnpm install
+pnpm -F "@becket-ui/mcp..." build   # tokens, react, then the server (tsup + scripts/build-data.mjs)
+pnpm -F @becket-ui/mcp test         # tool handlers + an end-to-end stdio test
 ```
+
+The build writes `packages/mcp/dist/server.js` and its data in `dist/data`. Rebuild after changing
+components, tokens or the guide. To try unreleased changes in an agent, point it at your clone
+instead of npm:
+
+```bash
+claude mcp add becket-ui -- node /absolute/path/to/becket-ui/packages/mcp/dist/server.js
+```
+
+Releases go out with `@becket-ui/react` and `@becket-ui/tokens` (one Changesets `fixed` group); see
+CONTRIBUTING.md "Versions".
 
 `review_usage` is heuristic (line patterns, not a parser). A line containing `TODO (MAV-…)` counts
 as an acknowledged gap. Examples come from Storybook stories until per-component AI examples land

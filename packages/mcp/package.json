@@ -1,20 +1,44 @@
 {
   "name": "@becket-ui/mcp",
-  "private": true,
-  "version": "0.0.0",
-  "description": "MCP server that teaches coding agents to build UIs with Becket UI. Private until MAV-44.",
+  "version": "0.4.0",
+  "description": "MCP server that teaches coding agents to build UIs with Becket UI: components, props, examples, tokens and a usage review.",
   "type": "module",
   "license": "MIT",
+  "author": "Kolmena de Software",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kolmenadev/becket-ui.git",
+    "directory": "packages/mcp"
+  },
+  "homepage": "https://github.com/kolmenadev/becket-ui/tree/main/packages/mcp#readme",
+  "bugs": {
+    "url": "https://github.com/kolmenadev/becket-ui/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "becket-ui",
+    "design-system",
+    "react",
+    "ai"
+  ],
   "bin": {
     "becket-mcp": "dist/server.js"
   },
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup && node scripts/build-data.mjs",
     "start": "node dist/server.js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepack": "pnpm build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.1",
