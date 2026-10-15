@@ -85,6 +85,10 @@ apps/next-example/.next/
 CLAUDE.md
 .claude/
 
+## Job journal (local session log kept by the scrum-master skill)
+JOB-JOURNAL.md
+JOB-JOURNAL.archive.md
+
 ## Env files
 .env
 .env.*
