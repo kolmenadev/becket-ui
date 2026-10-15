@@ -42,12 +42,16 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.1",
+    "jpeg-js": "0.4.4",
+    "pngjs": "7.0.0",
+    "unpdf": "1.8.1",
     "zod": "^4.6.7"
   },
   "devDependencies": {
     "@becket-ui/react": "workspace:*",
     "@becket-ui/tokens": "workspace:*",
     "@types/node": "^22.18.0",
+    "@types/pngjs": "6.0.5",
     "tsup": "^8.5.1",
     "typescript": "7.0.2",
     "vitest": "^5.0.0"

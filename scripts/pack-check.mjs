@@ -67,8 +67,10 @@ function assertConsumer() {
     for (const peer of ['react', 'react-dom']) {
       symlinkSync(realpathSync(join(root, 'packages', 'react', 'node_modules', peer)), join(modules, peer));
     }
-    mkdirSync(join(modules, '@modelcontextprotocol'), { recursive: true });
-    for (const dependency of ['@modelcontextprotocol/sdk', 'zod']) {
+    // The server's runtime dependencies, read from its manifest so a new one can't be missed.
+    const mcpManifest = JSON.parse(readFileSync(join(root, 'packages', 'mcp', 'package.json'), 'utf8'));
+    for (const dependency of Object.keys(mcpManifest.dependencies ?? {})) {
+      if (dependency.includes('/')) mkdirSync(join(modules, dependency.split('/')[0]), { recursive: true });
       symlinkSync(realpathSync(join(root, 'packages', 'mcp', 'node_modules', dependency)), join(modules, dependency));
     }
     writeFileSync(join(consumer, 'package.json'), '{"type":"module","private":true}\n');

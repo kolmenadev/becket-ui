@@ -3,6 +3,8 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
+import { brandManualPDF } from './brandFixtures';
+
 // End to end: spawn the built server the way Claude Code / Cursor / VS Code do.
 const serverPath = join(__dirname, '..', 'dist', 'server.js');
 let client: Client;
@@ -31,6 +33,7 @@ describe('stdio server', () => {
       'list_components',
       'review_usage',
       'set_theme',
+      'suggest_theme',
     ]);
   });
 
@@ -45,6 +48,11 @@ describe('stdio server', () => {
       'export type ButtonProps',
     );
     expect(textOf(await client.callTool({ name: 'get_component_props', arguments: { name: 'FieldLabel' } }))).toContain('# Field');
+  });
+
+  it('suggests a theme from a brand manual over the wire', async () => {
+    const result = await client.callTool({ name: 'suggest_theme', arguments: { base64: brandManualPDF().toString('base64') } });
+    expect(textOf(result)).toContain('Your manual uses Montserrat');
   });
 
   it('reviews code over the wire', async () => {

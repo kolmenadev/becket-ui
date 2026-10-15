@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { loadData, type Data } from './data';
 import { formatReview, reviewUsage } from './review';
 import { setTheme } from './theme/setTheme';
+import { suggestTheme } from './theme/suggestTheme';
 import { componentExample, componentProps, guidelines, installation, listComponents, theme } from './tools';
 
 const text = (value: string) => ({ content: [{ type: 'text' as const, text: value }] });
@@ -120,6 +121,23 @@ export function createServer(data: Data = loadData()): McpServer {
       annotations: readOnly,
     },
     async (input) => text(setTheme(input)),
+  );
+
+  server.registerTool(
+    'suggest_theme',
+    {
+      title: 'Suggest a brand theme',
+      description:
+        "Read a logo (PNG, JPEG, SVG) or a brand manual (PDF) and suggest Becket brand tokens: colors, plus fonts, corner radius and text size when a manual states them. Returns what it found and a step-by-step script: ask the user one decision at a time, then call set_theme with what they confirm. Pass exactly one of path, url (public https) or base64. For an image only pasted in chat, pass the colors you see in `colors` instead.",
+      inputSchema: {
+        path: z.string().optional().describe('Local file path, absolute or relative to the working directory'),
+        url: z.string().optional().describe('Public https URL of the image or PDF'),
+        base64: z.string().optional().describe('File contents as base64 or a data: URL'),
+        colors: z.array(z.string()).min(1).max(8).optional().describe('Colors you read from an image you can see but cannot pass as a file, most prominent first'),
+      },
+      annotations: { readOnlyHint: true, openWorldHint: true },
+    },
+    async (input) => text(await suggestTheme(input)),
   );
 
   return server;
