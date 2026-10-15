@@ -11,8 +11,8 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-/** The only packages allowed on npm. Add @becket-ui/mcp here when MAV-44 publishes it. */
-const PUBLISHABLE = new Set(['@becket-ui/react', '@becket-ui/tokens']);
+/** The only packages allowed on npm. */
+const PUBLISHABLE = new Set(['@becket-ui/react', '@becket-ui/tokens', '@becket-ui/mcp']);
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 

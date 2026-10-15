@@ -79,7 +79,7 @@ Component authoring: [`.cursor-config/becket.mdc`](./.cursor-config/becket.mdc).
 
 ## Versions
 
-Record a consumer-facing bump on the feature branch with a file in `.changeset/`. Do not hand-edit package `version` fields. `@becket-ui/react` and `@becket-ui/tokens` always ship the same version.
+Record a consumer-facing bump on the feature branch with a file in `.changeset/`. Do not hand-edit package `version` fields. `@becket-ui/react`, `@becket-ui/tokens` and `@becket-ui/mcp` always ship the same version, so the MCP server always describes the library release with its number.
 
 Becket follows semver, `major.minor.patch`:
 

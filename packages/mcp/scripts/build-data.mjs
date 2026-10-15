@@ -7,7 +7,7 @@
  *   - guidelines.md: the app-code guide, copied as-is
  *
  * Everything is copied into dist/data so the server never depends on the
- * workspace at runtime (and could be published on its own later, MAV-44).
+ * workspace at runtime: the published package is just dist/.
  */
 import { mkdirSync, readFileSync, writeFileSync, existsSync, copyFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
