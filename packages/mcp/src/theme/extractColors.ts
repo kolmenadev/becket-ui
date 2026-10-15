@@ -1,4 +1,10 @@
-import { colorDistance, formatHex, parseColor, rgbToOklch, type Oklch } from '@becket-ui/tokens/theme';
+import {
+  colorDistance,
+  formatHex,
+  parseColor,
+  rgbToOklch,
+  type Oklch,
+} from '@becket-ui/tokens/theme';
 import jpeg from 'jpeg-js';
 import { PNG } from 'pngjs';
 
@@ -22,13 +28,19 @@ const NEUTRAL_CHROMA = 0.04;
 function decodePNG(bytes: Buffer): Pixels {
   const width = bytes.readUInt32BE(16);
   const height = bytes.readUInt32BE(20);
-  if (width * height > MAX_PIXELS) throw new Error(`The PNG is ${width}×${height}; the limit is ${MAX_PIXELS / 1e6} megapixels.`);
+  if (width * height > MAX_PIXELS)
+    throw new Error(`The PNG is ${width}×${height}; the limit is ${MAX_PIXELS / 1e6} megapixels.`);
   const png = PNG.sync.read(bytes);
   return { width: png.width, height: png.height, data: png.data };
 }
 
 function decodeJPEG(bytes: Buffer): Pixels {
-  const image = jpeg.decode(bytes, { useTArray: true, formatAsRGBA: true, maxResolutionInMP: MAX_PIXELS / 1e6, maxMemoryUsageInMB: 1024 });
+  const image = jpeg.decode(bytes, {
+    useTArray: true,
+    formatAsRGBA: true,
+    maxResolutionInMP: MAX_PIXELS / 1e6,
+    maxMemoryUsageInMB: 1024,
+  });
   return { width: image.width, height: image.height, data: image.data };
 }
 
@@ -83,31 +95,68 @@ export function colorsFromPixels({ width, height, data }: Pixels): ExtractedColo
   return clusters
     .filter((cluster) => cluster.count / opaque >= MIN_SHARE)
     .map((cluster) => {
-      const isBackground = edgeSamples > 0 && cluster.edge / cluster.count >= edgeShare * 0.5 && cluster.edge / edgeSamples >= 0.05;
-      const role: ColorRole = isBackground ? 'background' : cluster.color.C < NEUTRAL_CHROMA ? 'neutral' : 'brand';
-      return { hex: formatHex(cluster.color), color: cluster.color, share: cluster.count / opaque, role };
+      const isBackground =
+        edgeSamples > 0 &&
+        cluster.edge / cluster.count >= edgeShare * 0.5 &&
+        cluster.edge / edgeSamples >= 0.05;
+      const role: ColorRole = isBackground
+        ? 'background'
+        : cluster.color.C < NEUTRAL_CHROMA
+          ? 'neutral'
+          : 'brand';
+      return {
+        hex: formatHex(cluster.color),
+        color: cluster.color,
+        share: cluster.count / opaque,
+        role,
+      };
     });
 }
 
 // SVG and PDF often name basic colors. Anything rarer is reported as skipped, not guessed.
 const NAMED: Record<string, string> = {
-  black: '#000000', white: '#ffffff', red: '#ff0000', green: '#008000', blue: '#0000ff', yellow: '#ffff00',
-  orange: '#ffa500', purple: '#800080', gray: '#808080', grey: '#808080', navy: '#000080', teal: '#008080',
-  maroon: '#800000', olive: '#808000', lime: '#00ff00', aqua: '#00ffff', fuchsia: '#ff00ff', silver: '#c0c0c0',
+  black: '#000000',
+  white: '#ffffff',
+  red: '#ff0000',
+  green: '#008000',
+  blue: '#0000ff',
+  yellow: '#ffff00',
+  orange: '#ffa500',
+  purple: '#800080',
+  gray: '#808080',
+  grey: '#808080',
+  navy: '#000080',
+  teal: '#008080',
+  maroon: '#800000',
+  olive: '#808000',
+  lime: '#00ff00',
+  aqua: '#00ffff',
+  fuchsia: '#ff00ff',
+  silver: '#c0c0c0',
 };
 
 /**
  * Colors an SVG declares (fill, stroke, stop-color, color, in attributes and CSS), weighted by
  * how often each appears. The SVG is read as text: nothing renders, runs or loads.
  */
-export function colorsFromSVG(svg: string): { colors: ExtractedColor[]; skipped: string[]; embedded: Buffer[] } {
+export function colorsFromSVG(svg: string): {
+  colors: ExtractedColor[];
+  skipped: string[];
+  embedded: Buffer[];
+} {
   const counts = new Map<string, { color: Oklch; count: number }>();
   const skipped = new Set<string>();
-  const declaration = /(?:^|[\s;"'{])(fill|stroke|stop-color|color|flood-color)\s*(?:=\s*["']|:\s*)([^"';}>]+)/gi;
+  const declaration =
+    /(?:^|[\s;"'{])(fill|stroke|stop-color|color|flood-color)\s*(?:=\s*["']|:\s*)([^"';}>]+)/gi;
   for (const [, , raw] of svg.matchAll(declaration)) {
     const value = raw.trim().replace(/\s*!important$/, '');
     const lower = value.toLowerCase();
-    if (['none', 'currentcolor', 'transparent', 'inherit', 'initial', 'unset'].includes(lower) || lower.startsWith('url(') || lower.startsWith('var(')) continue;
+    if (
+      ['none', 'currentcolor', 'transparent', 'inherit', 'initial', 'unset'].includes(lower) ||
+      lower.startsWith('url(') ||
+      lower.startsWith('var(')
+    )
+      continue;
     const color = parseColor(NAMED[lower] ?? value);
     if (!color) {
       skipped.add(value);
@@ -118,7 +167,9 @@ export function colorsFromSVG(svg: string): { colors: ExtractedColor[]; skipped:
     entry.count += 1;
     counts.set(hex, entry);
   }
-  const embedded = [...svg.matchAll(/data:image\/(?:png|jpeg);base64,([A-Za-z0-9+/=\s]+)/g)].map(([, data]) => Buffer.from(data.replace(/\s+/g, ''), 'base64'));
+  const embedded = [...svg.matchAll(/data:image\/(?:png|jpeg);base64,([A-Za-z0-9+/=\s]+)/g)].map(
+    ([, data]) => Buffer.from(data.replace(/\s+/g, ''), 'base64'),
+  );
   const total = [...counts.values()].reduce((sum, entry) => sum + entry.count, 0);
   const colors = [...counts.entries()].map(([hex, entry]) => ({
     hex,
@@ -133,7 +184,9 @@ export function colorsFromSVG(svg: string): { colors: ExtractedColor[]; skipped:
 export function mergeClose(colors: ExtractedColor[]): ExtractedColor[] {
   const merged: ExtractedColor[] = [];
   for (const color of colors.toSorted((a, b) => b.share - a.share)) {
-    const home = merged.find((each) => each.role === color.role && colorDistance(each.color, color.color) < MERGE);
+    const home = merged.find(
+      (each) => each.role === color.role && colorDistance(each.color, color.color) < MERGE,
+    );
     if (home) home.share += color.share;
     else merged.push({ ...color });
   }
@@ -142,22 +195,44 @@ export function mergeClose(colors: ExtractedColor[]): ExtractedColor[] {
 
 /** Dominant colors of a PNG, JPEG or SVG source. */
 export function extractImageColors(source: Source): Extraction {
-  if (source.kind === 'png') return { colors: colorsFromPixels(decodePNG(source.bytes)), method: 'PNG pixels', skipped: [] };
-  if (source.kind === 'jpeg') return { colors: colorsFromPixels(decodeJPEG(source.bytes)), method: 'JPEG pixels', skipped: [] };
+  if (source.kind === 'png')
+    return { colors: colorsFromPixels(decodePNG(source.bytes)), method: 'PNG pixels', skipped: [] };
+  if (source.kind === 'jpeg')
+    return {
+      colors: colorsFromPixels(decodeJPEG(source.bytes)),
+      method: 'JPEG pixels',
+      skipped: [],
+    };
   if (source.kind === 'svg') {
     const { colors, skipped, embedded } = colorsFromSVG(source.bytes.toString('utf8'));
     const fromImages = embedded.flatMap((bytes) => {
       try {
-        return bytes[0] === 0x89 ? colorsFromPixels(decodePNG(bytes)) : colorsFromPixels(decodeJPEG(bytes));
+        return bytes[0] === 0x89
+          ? colorsFromPixels(decodePNG(bytes))
+          : colorsFromPixels(decodeJPEG(bytes));
       } catch {
         return [];
       }
     });
-    const all = mergeClose([...colors, ...fromImages.map((color) => ({ ...color, share: color.share / Math.max(1, embedded.length) }))]);
-    return { colors: all, method: embedded.length ? 'SVG colors and embedded images (by how often each color is used, not by area)' : 'SVG colors (by how often each is used, not by area)', skipped };
+    const all = mergeClose([
+      ...colors,
+      ...fromImages.map((color) => ({
+        ...color,
+        share: color.share / Math.max(1, embedded.length),
+      })),
+    ]);
+    return {
+      colors: all,
+      method: embedded.length
+        ? 'SVG colors and embedded images (by how often each color is used, not by area)'
+        : 'SVG colors (by how often each is used, not by area)',
+      skipped,
+    };
   }
   if (source.kind === 'webp' || source.kind === 'gif') {
-    throw new Error(`${source.kind.toUpperCase()} isn't supported yet. Export the logo as SVG or PNG, or tell me its colors.`);
+    throw new Error(
+      `${source.kind.toUpperCase()} isn't supported yet. Export the logo as SVG or PNG, or tell me its colors.`,
+    );
   }
   throw new Error("That isn't a PNG, JPEG, SVG or PDF file.");
 }

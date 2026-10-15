@@ -8,7 +8,8 @@ import { PNG } from 'pngjs';
 type RGBA = [number, number, number, number];
 type Painter = (x: number, y: number) => RGBA;
 
-const hex = (value: string): RGBA => [1, 3, 5].map((start) => Number.parseInt(value.slice(start, start + 2), 16)).concat(255) as RGBA;
+const hex = (value: string): RGBA =>
+  [1, 3, 5].map((start) => Number.parseInt(value.slice(start, start + 2), 16)).concat(255) as RGBA;
 
 function draw(width: number, height: number, paint: Painter) {
   const data = Buffer.alloc(width * height * 4);
@@ -29,7 +30,8 @@ export function jpg(width: number, height: number, paint: Painter): Buffer {
 }
 
 const transparent: RGBA = [0, 0, 0, 0];
-const inRect = (x: number, y: number, [left, top, right, bottom]: number[]) => x >= left && x < right && y >= top && y < bottom;
+const inRect = (x: number, y: number, [left, top, right, bottom]: number[]) =>
+  x >= left && x < right && y >= top && y < bottom;
 
 /** Navy block and an anti-aliased orange disc on a transparent canvas. */
 export const transparentLogo = () =>
@@ -48,11 +50,17 @@ export const photoLogo = () =>
     if (inRect(x, y, [110, 70, 210, 150])) return hex('#d0021b');
     const noise = ((x * 7919 + y * 104729) % 23) - 11;
     const t = y / 220;
-    return [Math.round(90 + 60 * t + noise), Math.round(150 + 40 * t + noise), Math.round(220 - 120 * t + noise), 255];
+    return [
+      Math.round(90 + 60 * t + noise),
+      Math.round(150 + 40 * t + noise),
+      Math.round(220 - 120 * t + noise),
+      255,
+    ];
   });
 
 /** Black wordmark on white, the classic one-color logo. */
-export const monoLogo = () => png(200, 100, (x, y) => (inRect(x, y, [30, 30, 170, 70]) ? hex('#111111') : hex('#ffffff')));
+export const monoLogo = () =>
+  png(200, 100, (x, y) => (inRect(x, y, [30, 30, 170, 70]) ? hex('#111111') : hex('#ffffff')));
 
 /** Four brand stripes, padded on white. */
 export const stripes = ['#e63946', '#2a9d8f', '#e9c46a', '#264653'];
@@ -64,7 +72,10 @@ export const multicolorLogo = () =>
     return hex(stripes[position < 0.4 ? 0 : position < 0.7 ? 1 : position < 0.9 ? 2 : 3]);
   });
 
-export const bigLogo = () => png(2000, 2000, (x, y) => (inRect(x, y, [400, 400, 1600, 1600]) ? hex('#0a3d91') : hex('#ffffff')));
+export const bigLogo = () =>
+  png(2000, 2000, (x, y) =>
+    inRect(x, y, [400, 400, 1600, 1600]) ? hex('#0a3d91') : hex('#ffffff'),
+  );
 
 export const flatSVG = `<?xml version="1.0"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" onload="alert('svg')">

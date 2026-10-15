@@ -59,12 +59,17 @@ function hslToRgb(hue, saturation, lightness) {
   const x = chroma * (1 - Math.abs((sector % 2) - 1));
   const offset = lightness - chroma / 2;
   const [r, g, b] =
-    sector < 1 ? [chroma, x, 0]
-    : sector < 2 ? [x, chroma, 0]
-    : sector < 3 ? [0, chroma, x]
-    : sector < 4 ? [0, x, chroma]
-    : sector < 5 ? [x, 0, chroma]
-    : [chroma, 0, x];
+    sector < 1
+      ? [chroma, x, 0]
+      : sector < 2
+        ? [x, chroma, 0]
+        : sector < 3
+          ? [0, chroma, x]
+          : sector < 4
+            ? [0, x, chroma]
+            : sector < 5
+              ? [x, 0, chroma]
+              : [chroma, 0, x];
   return [r + offset, g + offset, b + offset];
 }
 
@@ -79,7 +84,9 @@ function number(part, scale = 1) {
 /** Split `1 2 3 / 0.5` or `1, 2, 3, 0.5` into the three color channels (alpha dropped). */
 function channels(body) {
   const withoutAlpha = body.split('/')[0];
-  const parts = withoutAlpha.includes(',') ? withoutAlpha.split(',') : withoutAlpha.trim().split(/\s+/);
+  const parts = withoutAlpha.includes(',')
+    ? withoutAlpha.split(',')
+    : withoutAlpha.trim().split(/\s+/);
   return parts.slice(0, 3);
 }
 
@@ -113,7 +120,11 @@ export function parseColor(input) {
     return linearToOklch(rgb.map(toLinear));
   }
   if (kind.startsWith('hsl')) {
-    const [hue, saturation, lightness] = [Number.parseFloat(parts[0]), number(parts[1]), number(parts[2])];
+    const [hue, saturation, lightness] = [
+      Number.parseFloat(parts[0]),
+      number(parts[1]),
+      number(parts[2]),
+    ];
     if ([hue, saturation, lightness].some(Number.isNaN)) return null;
     return linearToOklch(hslToRgb(hue, clamp01(saturation), clamp01(lightness)).map(toLinear));
   }
@@ -152,7 +163,9 @@ export function formatOklch({ L, C, h }) {
 
 /** @param {{ L: number, C: number, h: number }} color */
 export function formatHex(color) {
-  const rgb = oklchToLinear(toGamut(color)).map((channel) => Math.round(clamp01(fromLinear(clamp01(channel))) * 255));
+  const rgb = oklchToLinear(toGamut(color)).map((channel) =>
+    Math.round(clamp01(fromLinear(clamp01(channel))) * 255),
+  );
   return `#${rgb.map((channel) => channel.toString(16).padStart(2, '0')).join('')}`;
 }
 
@@ -175,7 +188,8 @@ export function luminance(color) {
 export function contrastRatio(foreground, background) {
   const [first, second] = [foreground, background].map((color) => {
     const parsed = typeof color === 'string' ? parseColor(color) : color;
-    if (!parsed) throw new Error(`Can't read the color "${color}". Use hex, rgb(), hsl() or oklch().`);
+    if (!parsed)
+      throw new Error(`Can't read the color "${color}". Use hex, rgb(), hsl() or oklch().`);
     return luminance(parsed);
   });
   const [high, low] = first > second ? [first, second] : [second, first];
@@ -189,7 +203,11 @@ export function contrastRatio(foreground, background) {
  * @param {{ L: number, C: number, h: number }} second
  */
 export function colorDistance(first, second) {
-  const lab = ({ L, C, h }) => [L, C * Math.cos((h * Math.PI) / 180), C * Math.sin((h * Math.PI) / 180)];
+  const lab = ({ L, C, h }) => [
+    L,
+    C * Math.cos((h * Math.PI) / 180),
+    C * Math.sin((h * Math.PI) / 180),
+  ];
   const [a, b] = [lab(first), lab(second)];
   return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 }

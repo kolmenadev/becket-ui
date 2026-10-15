@@ -36,11 +36,30 @@ Inject `themeCss` in a `<style>` tag, or copy [theme.example.css](../packages/to
 
 Unlayered `:root` wins over `@layer tokens`. Set `data-theme="dark" | "light"` on `<html>`. Dark is the default. `background` / `text` / `muted` / `danger` are semantic: one name, two values via `data-theme`. Filled brand controls use `neutral.900` ink so yellow/sage fills stay AA. The violet in the Button **Brand Theme** story is a `defineBecketTheme({ colors: { primary } })` demo (hue 280), not the default primary.
 
-Public names: `primary` / `secondary` / `tertiary` / `primaryHover`, neutrals 50–900, `background` / `text` / `muted` / `border` / `danger` / `accent`, status, `radii.*`, `fontSizes.base` + `xs–6xl`, `spacing.unit` / `textUnit` + `xs–xl` (layout / Stack gap), `sizes.field`, `fonts.sans` / `mono`, plus component density `--beckui-button-px-md` / `--beckui-field-*` / `--beckui-tag-*`.
+Public names: `primary` / `secondary` / `tertiary` / `primaryHover`, neutrals 50–900, `background` / `text` / `muted` / `border` / `danger` / `accent` / `surface` / `link` / `linkHover` / `linkVisited`, status, `radii.*`, `fontSizes.base` + `xs–6xl`, `spacing.unit` / `textUnit` + `xs–xl` (layout / Stack gap), `sizes.field`, `fonts.sans` / `mono`, plus component density `--beckui-button-px-md` / `--beckui-field-*` / `--beckui-tag-*`.
 
 Setting `primary` retints hover, focus outline, and gradients. You do not also set `--beckui--colors-brand-becket-yellow`.
 
 Do **not** shrink Stack gaps to make only buttons denser. Override `--beckui-button-px-md` (and friends), not `--beckui--spacing-md`. To make everything denser, change `--beckui--spacing-unit`.
+
+## From brand colors, a logo or a brand manual
+
+Changing `primary` alone rarely passes contrast: filled buttons put dark `neutral.900` labels on it, and light-theme links have their own darker shade. Let Becket derive the rest:
+
+```ts
+import { defineBecketTheme, deriveBecketTheme } from '@becket-ui/tokens/theme';
+
+const { theme, notes, contrast } = deriveBecketTheme({ brand: ['#0a3d91', '#f5a623'] });
+// contrast.passes: every pair Becket draws reaches WCAG 2.2 AA in dark and light.
+// notes: why each value is what it is ("lightened from L 0.39 to 0.62 so labels reach 4.5:1").
+const themeCss = defineBecketTheme(theme);
+```
+
+- One to three brand colors, most important first: hex, `rgb()`, `hsl()` or `oklch()`. Only lightness moves; the hue never does. A color that already passes is used exactly.
+- `pinned: { background: { dark: '…', light: '…' } }` keeps colors you must match. They're checked, never changed, and anything on them is shaded to fit.
+- `checkBecketThemeContrast(theme)` checks any theme, hand-written ones included. Advisory rows (the focus ring on a light canvas, labels over the tertiary end of a gradient) are reported but not enforced, because Becket's default theme misses them too.
+
+With an agent, the Becket MCP does this for you: `suggest_theme` reads a logo or brand manual PDF and asks you one decision at a time; `set_theme` returns the CSS. See the [MCP README](../packages/mcp/README.md#brand-themes).
 
 ## Scale: resize everything with three variables
 

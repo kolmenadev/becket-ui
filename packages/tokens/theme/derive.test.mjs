@@ -24,7 +24,13 @@ const palettes = {
 for (const [name, brand] of Object.entries(palettes)) {
   test(`${name}: the derived theme passes AA in both themes`, () => {
     const { theme, contrast, notes } = deriveBecketTheme({ brand });
-    assert.equal(contrast.passes, true, contrast.failures.map((failure) => `${failure.theme} ${failure.use}: ${failure.ratio}`).join('\n'));
+    assert.equal(
+      contrast.passes,
+      true,
+      contrast.failures
+        .map((failure) => `${failure.theme} ${failure.use}: ${failure.ratio}`)
+        .join('\n'),
+    );
     // The report is the checker's own verdict, not a copy.
     assert.deepEqual(checkBecketThemeContrast(theme), contrast);
     assert.ok(notes.some((note) => note.token === 'primary'));
@@ -48,9 +54,15 @@ test('a brand color that already passes is used exactly', () => {
 });
 
 test('pinned values are kept exactly, and a failing one is reported with its ratio', () => {
-  const { theme, contrast, notes } = deriveBecketTheme({ brand: ['#0a3d91'], pinned: { primary: '#0a3d91' } });
+  const { theme, contrast, notes } = deriveBecketTheme({
+    brand: ['#0a3d91'],
+    pinned: { primary: '#0a3d91' },
+  });
   assert.equal(theme.colors.primary, '#0a3d91');
-  assert.match(notes.find((note) => note.token === 'primary' && /Pinned/.test(note.reason)).reason, /kept exactly/);
+  assert.match(
+    notes.find((note) => note.token === 'primary' && /Pinned/.test(note.reason)).reason,
+    /kept exactly/,
+  );
   assert.equal(contrast.passes, false);
   const label = contrast.failures.find((failure) => failure.background === 'primary');
   assert.ok(label.ratio < 4.5);
@@ -71,13 +83,19 @@ test('the output passes straight to defineBecketTheme', () => {
 });
 
 test('same input, same output', () => {
-  assert.deepEqual(deriveBecketTheme({ brand: ['#0a3d91', '#f5a623'] }), deriveBecketTheme({ brand: ['#0a3d91', '#f5a623'] }));
+  assert.deepEqual(
+    deriveBecketTheme({ brand: ['#0a3d91', '#f5a623'] }),
+    deriveBecketTheme({ brand: ['#0a3d91', '#f5a623'] }),
+  );
 });
 
 test('bad input says what to pass', () => {
   assert.throws(() => deriveBecketTheme({ brand: [] }), /one to three brand colors/);
   assert.throws(() => deriveBecketTheme({ brand: ['a', 'b', 'c', 'd'] }), /one to three/);
-  assert.throws(() => deriveBecketTheme({ brand: ['brand blue'] }), /Can't read the brand color "brand blue"/);
+  assert.throws(
+    () => deriveBecketTheme({ brand: ['brand blue'] }),
+    /Can't read the brand color "brand blue"/,
+  );
 });
 
 test('a red brand gets a note about danger', () => {

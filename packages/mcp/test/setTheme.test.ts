@@ -17,12 +17,17 @@ describe('set_theme', () => {
     const text = setTheme({ colors: { primary: '#0a3d91' } });
     expect(text).toContain('--beckui--colors-primary: #0a3d91;');
     expect(text).toMatch(/\d+ of 34 required pairs FAIL/);
-    expect(text).toMatch(/\| dark \| label on a filled primary control \| 1\.\d+:1 \| 4\.5:1 \| \*\*FAIL\*\* \|/);
+    expect(text).toMatch(
+      /\| dark \| label on a filled primary control \| 1\.\d+:1 \| 4\.5:1 \| \*\*FAIL\*\* \|/,
+    );
     expect(text).toContain('pass the color as `brand`');
   });
 
   it('pins exact colors next to brand colors', () => {
-    const text = setTheme({ brand: ['#0a3d91'], colors: { background: { dark: 'oklch(0.18 0.03 260)', light: '#ffffff' } } });
+    const text = setTheme({
+      brand: ['#0a3d91'],
+      colors: { background: { dark: 'oklch(0.18 0.03 260)', light: '#ffffff' } },
+    });
     expect(text).toContain('--beckui--colors-background: oklch(0.18 0.03 260);');
     expect(text).toContain('--beckui--colors-background: #ffffff;');
     expect(text).toContain('- background: Pinned by you, kept exactly.');
@@ -30,7 +35,11 @@ describe('set_theme', () => {
   });
 
   it('writes px lengths as rem (and the text unit as em)', () => {
-    const text = setTheme({ spacing: { unit: '4px', textUnit: '4px' }, fontSizes: { base: '15px' }, radii: { md: '4px' } });
+    const text = setTheme({
+      spacing: { unit: '4px', textUnit: '4px' },
+      fontSizes: { base: '15px' },
+      radii: { md: '4px' },
+    });
     expect(text).toContain('--beckui--spacing-unit: 0.25rem;');
     expect(text).toContain('--beckui--spacing-text-unit: 0.25em;');
     expect(text).toContain('--beckui--font-sizes-base: 0.9375rem;');
@@ -39,7 +48,9 @@ describe('set_theme', () => {
   });
 
   it('adds system fallbacks to a brand font and says the app loads it', () => {
-    const text = setTheme({ fonts: { sans: 'Neue Haas Grotesk', mono: 'JetBrains Mono, monospace' } });
+    const text = setTheme({
+      fonts: { sans: 'Neue Haas Grotesk', mono: 'JetBrains Mono, monospace' },
+    });
     expect(text).toContain("--beckui--fonts-sans: 'Neue Haas Grotesk', system-ui");
     expect(text).toContain("--beckui--fonts-mono: 'JetBrains Mono', monospace;");
     expect(text).toContain('Load the webfont in your app');
@@ -50,12 +61,18 @@ describe('set_theme', () => {
       'Unknown Becket theme key "colors.brand". Did you mean brand (a top-level list of one to three colors)? Nothing was generated.',
     );
     expect(setTheme({ colors: { bg: '#fff' } })).toContain('Did you mean colors.background?');
-    expect(setTheme({ fonts: { display: 'Inter' } })).toContain('Did you mean one of fonts.sans, fonts.mono?');
+    expect(setTheme({ fonts: { display: 'Inter' } })).toContain(
+      'Did you mean one of fonts.sans, fonts.mono?',
+    );
   });
 
   it('says what to pass when a color or the input is unreadable', () => {
-    expect(setTheme({ brand: ['corporate blue'] })).toContain('Can\'t read the brand color "corporate blue"');
-    expect(setTheme({ colors: { primary: 'corporate blue' } })).toContain('Use hex, rgb(), hsl() or oklch().');
+    expect(setTheme({ brand: ['corporate blue'] })).toContain(
+      'Can\'t read the brand color "corporate blue"',
+    );
+    expect(setTheme({ colors: { primary: 'corporate blue' } })).toContain(
+      'Use hex, rgb(), hsl() or oklch().',
+    );
     expect(setTheme({})).toContain('Nothing to set.');
   });
 });

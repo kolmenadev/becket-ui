@@ -29,7 +29,10 @@ const DISTINCT = 0.1;
 
 /** Up to three brand colors, most visual weight first, distinct from each other. */
 export function pickBrand(findings: Findings): string[] {
-  const candidates = [...(findings.stated?.colors ?? []), ...findings.colors.filter((color) => color.role !== 'background')].flatMap((entry) => {
+  const candidates = [
+    ...(findings.stated?.colors ?? []),
+    ...findings.colors.filter((color) => color.role !== 'background'),
+  ].flatMap((entry) => {
     const color = parseColor(entry.hex);
     return color ? [{ hex: entry.hex, color }] : [];
   });
@@ -42,7 +45,9 @@ export function pickBrand(findings: Findings): string[] {
   }
   if (picked.length > 0) return picked.map((entry) => entry.hex);
   // A black, gray or white logo: use its darkest neutral, and Becket stays untinted.
-  const darkest = candidates.filter((entry) => entry.color.L < 0.9).toSorted((a, b) => a.color.L - b.color.L)[0];
+  const darkest = candidates
+    .filter((entry) => entry.color.L < 0.9)
+    .toSorted((a, b) => a.color.L - b.color.L)[0];
   return darkest ? [darkest.hex] : [];
 }
 
@@ -62,7 +67,8 @@ function preview(brand: string[]) {
 
 function options(brand: string[]) {
   const list = [{ label: 'Recommended', brand }];
-  if (brand.length >= 2) list.push({ label: 'Swap the first two', brand: [brand[1], brand[0], ...brand.slice(2)] });
+  if (brand.length >= 2)
+    list.push({ label: 'Swap the first two', brand: [brand[1], brand[0], ...brand.slice(2)] });
   if (brand.length >= 2) list.push({ label: 'First color only', brand: [brand[0]] });
   return list;
 }
@@ -72,34 +78,57 @@ const percent = (share: number) => `${Math.round(share * 100)}%`;
 export function formatSuggestion(findings: Findings): string {
   const brand = pickBrand(findings);
   const stated = findings.stated;
-  const lines: string[] = [`# Brand suggestion from ${findings.label}`, `Read as: ${findings.method}.`];
+  const lines: string[] = [
+    `# Brand suggestion from ${findings.label}`,
+    `Read as: ${findings.method}.`,
+  ];
 
   if (stated?.colors.length) {
-    lines.push('## Colors the source states', '| color | name | page |', '| --- | --- | --- |', ...stated.colors.map((entry) => `| ${entry.hex} | ${entry.name ?? ''} | ${entry.page} |`));
+    lines.push(
+      '## Colors the source states',
+      '| color | name | page |',
+      '| --- | --- | --- |',
+      ...stated.colors.map((entry) => `| ${entry.hex} | ${entry.name ?? ''} | ${entry.page} |`),
+    );
   }
   if (findings.colors.length) {
     lines.push(
       stated ? '## Colors sampled from its artwork' : '## Colors found',
       '| color | share | role |',
       '| --- | --- | --- |',
-      ...findings.colors.slice(0, 10).map((color) => `| ${color.hex} | ${percent(color.share)} | ${color.role} |`),
+      ...findings.colors
+        .slice(0, 10)
+        .map((color) => `| ${color.hex} | ${percent(color.share)} | ${color.role} |`),
     );
   }
-  if (findings.skipped.length) lines.push(`Skipped (not a color Becket can read): ${findings.skipped.slice(0, 10).join(', ')}.`);
+  if (findings.skipped.length)
+    lines.push(
+      `Skipped (not a color Becket can read): ${findings.skipped.slice(0, 10).join(', ')}.`,
+    );
 
   if (brand.length === 0) {
-    lines.push('## Next', "No brand color found. Ask the user for their brand colors (hex is best), then call set_theme with `brand`.");
+    lines.push(
+      '## Next',
+      'No brand color found. Ask the user for their brand colors (hex is best), then call set_theme with `brand`.',
+    );
     return lines.join('\n\n');
   }
 
   const fonts = stated?.fonts ?? [];
-  const steps = ['brand colors', fonts.length ? 'brand font' : null, stated?.radii.length || stated?.baseSize.length ? 'corners and text size' : null].filter(Boolean);
+  const steps = [
+    'brand colors',
+    fonts.length ? 'brand font' : null,
+    stated?.radii.length || stated?.baseSize.length ? 'corners and text size' : null,
+  ].filter(Boolean);
   lines.push(
     '## Guided setup',
     `Ask the user one step at a time and wait for each answer. ${steps.length} step${steps.length > 1 ? 's' : ''}: ${steps.join(', then ')}.`,
     `### Step 1 of ${steps.length}: brand colors`,
     `Ask: "These look like your brand colors: ${brand.join(', ')}. Which should Becket use, most important first?" Offer:`,
-    ...options(brand).map((option, index) => `${index + 1}. ${option.label}: \`${JSON.stringify(option.brand)}\` — ${preview(option.brand)}`),
+    ...options(brand).map(
+      (option, index) =>
+        `${index + 1}. ${option.label}: \`${JSON.stringify(option.brand)}\` — ${preview(option.brand)}`,
+    ),
     'Or the user gives their own hex values. Becket shades any color that would fail contrast and says why.',
   );
 
@@ -116,14 +145,27 @@ export function formatSuggestion(findings: Findings): string {
     step += 1;
     const radius = stated.radii[0];
     const base = stated.baseSize[0];
-    const ask = [radius && `corner radius ${radius.value} (page ${radius.page})`, base && `body text ${base.value} (page ${base.page})`].filter(Boolean).join(' and ');
-    const values = [radius && `radii: { "md": "${radius.value}" }`, base && `fontSizes: { "base": "${base.value}" }`].filter(Boolean).join(', ');
-    lines.push(`### Step ${step} of ${steps.length}: corners and text size`, `Ask: "Your manual sets ${ask}. Apply ${radius && base ? 'them' : 'it'} to Becket?" If yes, add ${values}. Otherwise keep Becket's defaults.`);
+    const ask = [
+      radius && `corner radius ${radius.value} (page ${radius.page})`,
+      base && `body text ${base.value} (page ${base.page})`,
+    ]
+      .filter(Boolean)
+      .join(' and ');
+    const values = [
+      radius && `radii: { "md": "${radius.value}" }`,
+      base && `fontSizes: { "base": "${base.value}" }`,
+    ]
+      .filter(Boolean)
+      .join(', ');
+    lines.push(
+      `### Step ${step} of ${steps.length}: corners and text size`,
+      `Ask: "Your manual sets ${ask}. Apply ${radius && base ? 'them' : 'it'} to Becket?" If yes, add ${values}. Otherwise keep Becket's defaults.`,
+    );
   }
   if (!fonts.length) {
     lines.push(
       stated ? 'No font name found in the manual.' : 'An image has no font name to read.',
-      "If the user mentions a brand font, add `fonts: { \"sans\": \"<family>\" }`; otherwise keep Becket's system font. Don't guess a font from a logo.",
+      'If the user mentions a brand font, add `fonts: { "sans": "<family>" }`; otherwise keep Becket\'s system font. Don\'t guess a font from a logo.',
     );
   }
   lines.push(
@@ -139,10 +181,21 @@ export async function suggestTheme(input: SuggestThemeInput): Promise<string> {
       const seen = input.colors;
       const colors = seen.map((value): ExtractedColor => {
         const color = parseColor(value);
-        if (!color) throw new Error(`Can't read the color "${value}". Use hex, rgb(), hsl() or oklch().`);
-        return { hex: formatHex(color), color, share: 1 / seen.length, role: color.C < 0.04 ? 'neutral' : 'brand' };
+        if (!color)
+          throw new Error(`Can't read the color "${value}". Use hex, rgb(), hsl() or oklch().`);
+        return {
+          hex: formatHex(color),
+          color,
+          share: 1 / seen.length,
+          role: color.C < 0.04 ? 'neutral' : 'brand',
+        };
       });
-      return formatSuggestion({ label: 'the colors you read from the image', method: 'colors passed by the agent, in the order given', colors, skipped: [] });
+      return formatSuggestion({
+        label: 'the colors you read from the image',
+        method: 'colors passed by the agent, in the order given',
+        colors,
+        skipped: [],
+      });
     }
     const source = await loadSource(input);
     if (source.kind === 'pdf') {

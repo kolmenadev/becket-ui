@@ -119,11 +119,14 @@ try {
       'dist/preset',
       'theme/index.mjs',
       'theme/index.d.ts',
+      'theme/color.mjs',
+      'theme/contrast.mjs',
+      'theme/derive.mjs',
       'theme.example.css',
     ],
     '@becket-ui/tokens',
   );
-  assertNone(tokens, ['theme/index.test.mjs'], '@becket-ui/tokens');
+  assertNone(tokens, ['theme/index.test.mjs', 'theme/contrast.test.mjs', 'theme/derive.test.mjs'], '@becket-ui/tokens');
 
   const react = packedFiles('@becket-ui/react');
   assertIncludes(react, ['dist/index.js', 'dist/index.d.ts', 'guides/building-with-becket.md'], '@becket-ui/react');

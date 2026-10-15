@@ -46,8 +46,21 @@ const ALIASES: Record<string, string> = {
   'spacing.base': 'spacing.unit',
 };
 
-const GENERIC_FAMILIES = ['sans-serif', 'serif', 'monospace', 'system-ui', 'ui-sans-serif', 'ui-monospace', 'ui-serif', 'cursive', 'fantasy'];
-const FALLBACK = { sans: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif", mono: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace" };
+const GENERIC_FAMILIES = [
+  'sans-serif',
+  'serif',
+  'monospace',
+  'system-ui',
+  'ui-sans-serif',
+  'ui-monospace',
+  'ui-serif',
+  'cursive',
+  'fantasy',
+];
+const FALLBACK = {
+  sans: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+  mono: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
+};
 
 /** px → rem (or em for the text unit) so browser text-size settings keep working (WCAG 1.4.4). */
 function toRelative(value: string, unit: 'rem' | 'em') {
@@ -57,9 +70,15 @@ function toRelative(value: string, unit: 'rem' | 'em') {
 }
 
 function withFallback(family: string, kind: 'sans' | 'mono') {
-  const names = family.split(',').map((name) => name.trim()).filter(Boolean);
-  const quoted = names.map((name) => (/^['"]/.test(name) || !/\s/.test(name) || GENERIC_FAMILIES.includes(name) ? name : `'${name}'`));
-  if (names.some((name) => GENERIC_FAMILIES.includes(name.toLowerCase()))) return { value: quoted.join(', '), added: false };
+  const names = family
+    .split(',')
+    .map((name) => name.trim())
+    .filter(Boolean);
+  const quoted = names.map((name) =>
+    /^['"]/.test(name) || !/\s/.test(name) || GENERIC_FAMILIES.includes(name) ? name : `'${name}'`,
+  );
+  if (names.some((name) => GENERIC_FAMILIES.includes(name.toLowerCase())))
+    return { value: quoted.join(', '), added: false };
   return { value: [...quoted, FALLBACK[kind]].join(', '), added: true };
 }
 
@@ -67,7 +86,25 @@ function nearMiss(path: string) {
   if (ALIASES[path]) return ALIASES[path];
   const [group] = path.split('.');
   const allowed: Record<string, string[]> = {
-    colors: ['primary', 'secondary', 'tertiary', 'primaryHover', 'background', 'text', 'muted', 'border', 'danger', 'accent', 'surface', 'link', 'linkHover', 'linkVisited', 'warning', 'success', 'neutral'],
+    colors: [
+      'primary',
+      'secondary',
+      'tertiary',
+      'primaryHover',
+      'background',
+      'text',
+      'muted',
+      'border',
+      'danger',
+      'accent',
+      'surface',
+      'link',
+      'linkHover',
+      'linkVisited',
+      'warning',
+      'success',
+      'neutral',
+    ],
     fonts: ['sans', 'mono'],
     radii: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
     fontSizes: ['base', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'],
@@ -75,7 +112,9 @@ function nearMiss(path: string) {
     sizes: ['field'],
   };
   const options = allowed[group];
-  return options ? `one of ${options.map((key) => `${group}.${key}`).join(', ')}` : `one of ${GROUPS.join(', ')}`;
+  return options
+    ? `one of ${options.map((key) => `${group}.${key}`).join(', ')}`
+    : `one of ${GROUPS.join(', ')}`;
 }
 
 /** Relative lengths, fallback fonts. Returns the cleaned groups and what changed. */
@@ -83,14 +122,22 @@ function normalize(input: SetThemeInput) {
   const notes: Note[] = [];
   const theme: BecketTheme = {};
 
-  for (const [group, unit] of [['spacing', 'rem'], ['fontSizes', 'rem'], ['radii', 'rem']] as const) {
+  for (const [group, unit] of [
+    ['spacing', 'rem'],
+    ['fontSizes', 'rem'],
+    ['radii', 'rem'],
+  ] as const) {
     const values = input[group];
     if (!values) continue;
     const cleaned: Record<string, string> = {};
     for (const [key, value] of Object.entries(values)) {
       const relative = toRelative(value, group === 'spacing' && key === 'textUnit' ? 'em' : unit);
       cleaned[key] = relative ?? value;
-      if (relative) notes.push({ token: `${group}.${key}`, reason: `${value} written as ${relative} so browser text-size settings still scale it (WCAG 1.4.4).` });
+      if (relative)
+        notes.push({
+          token: `${group}.${key}`,
+          reason: `${value} written as ${relative} so browser text-size settings still scale it (WCAG 1.4.4).`,
+        });
     }
     Object.assign(theme, { [group]: cleaned });
   }
@@ -104,10 +151,18 @@ function normalize(input: SetThemeInput) {
       }
       const { value, added } = withFallback(family, key);
       fonts[key] = value;
-      if (added) notes.push({ token: `fonts.${key}`, reason: `System fallbacks added after ${family}, so text renders before (or without) the webfont.` });
+      if (added)
+        notes.push({
+          token: `fonts.${key}`,
+          reason: `System fallbacks added after ${family}, so text renders before (or without) the webfont.`,
+        });
     }
     theme.fonts = fonts;
-    notes.push({ token: 'fonts', reason: 'Becket only names the font. Load the webfont in your app (@font-face or your font host) and check its license covers the web.' });
+    notes.push({
+      token: 'fonts',
+      reason:
+        'Becket only names the font. Load the webfont in your app (@font-face or your font host) and check its license covers the web.',
+    });
   }
 
   if (input.sizes) theme.sizes = input.sizes;
@@ -125,10 +180,18 @@ function formatContrast(report: BecketContrastReport) {
       : `${report.failures.length} of ${required.length} required pairs FAIL WCAG 2.2 AA. Don't ship this theme as is.`,
   ];
   if (report.failures.length || report.advisories.length) {
-    lines.push('', '| theme | where | ratio | needs | result |', '| --- | --- | --- | --- | --- |', ...[...report.failures, ...report.advisories].map(row));
+    lines.push(
+      '',
+      '| theme | where | ratio | needs | result |',
+      '| --- | --- | --- | --- | --- |',
+      ...[...report.failures, ...report.advisories].map(row),
+    );
   }
   if (report.advisories.length) {
-    lines.push('', `Advisory rows aren't enforced because Becket's own default theme misses them too, but fix them when you can: ${[...new Set(report.advisories.map((result) => result.note))].join(' ')}`);
+    lines.push(
+      '',
+      `Advisory rows aren't enforced because Becket's own default theme misses them too, but fix them when you can: ${[...new Set(report.advisories.map((result) => result.note))].join(' ')}`,
+    );
   }
   return lines.join('\n');
 }
@@ -143,7 +206,10 @@ export function setTheme(input: SetThemeInput): string {
   let contrast: BecketContrastReport;
   try {
     if (input.brand?.length) {
-      const derived = deriveBecketTheme({ brand: input.brand, pinned: input.colors as BecketThemeColors | undefined });
+      const derived = deriveBecketTheme({
+        brand: input.brand,
+        pinned: input.colors as BecketThemeColors | undefined,
+      });
       theme.colors = derived.theme.colors;
       notes.unshift(...derived.notes);
     } else if (input.colors) {
@@ -154,9 +220,13 @@ export function setTheme(input: SetThemeInput): string {
     contrast = checkBecketThemeContrast(theme);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    const unknown = message.match(/Unknown Becket theme key "theme\.([^"]+)"|Unknown Becket theme key "([^"]+)"/);
+    const unknown = message.match(
+      /Unknown Becket theme key "theme\.([^"]+)"|Unknown Becket theme key "([^"]+)"/,
+    );
     const path = unknown?.[1] ?? unknown?.[2];
-    return path ? `${message}. Did you mean ${nearMiss(path)}? Nothing was generated.` : `${message} Nothing was generated.`;
+    return path
+      ? `${message}. Did you mean ${nearMiss(path)}? Nothing was generated.`
+      : `${message} Nothing was generated.`;
   }
 
   const css = defineBecketTheme(theme);
@@ -168,7 +238,9 @@ export function setTheme(input: SetThemeInput): string {
     `Write this to a file such as \`src/becket-theme.css\` and import it right after \`@becket-ui/tokens/index.css\`. It's unlayered, so it wins over Becket's defaults. Keep \`data-theme\` on <html>.\n\n\`\`\`css\n${css}\`\`\``,
     '## Same theme in code',
     `\`\`\`ts\nimport { defineBecketTheme } from '@becket-ui/tokens/theme';\n\nexport const becketTheme = defineBecketTheme(${JSON.stringify(theme, null, 2)});\n\`\`\`\nInject \`becketTheme\` in a <style> tag after index.css, or keep the CSS file above. Use one, not both.`,
-    notes.length ? `## Why each value\n${notes.map((note) => `- ${note.token}: ${note.reason}`).join('\n')}` : null,
+    notes.length
+      ? `## Why each value\n${notes.map((note) => `- ${note.token}: ${note.reason}`).join('\n')}`
+      : null,
     '## Next',
     contrast.passes
       ? "Show the user the brand colors and any value that was shaded for contrast, then write the CSS file. Don't hand-edit colors afterwards; call set_theme again so they stay checked."

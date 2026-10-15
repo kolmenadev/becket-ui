@@ -9,12 +9,17 @@ import type { Findings, Stated } from './suggestTheme';
 const MAX_PAGES = 60;
 const NEUTRAL_CHROMA = 0.04;
 // Fonts every PDF tool can fall back to; a manual set in one of these rarely means "use it".
-const FALLBACK_FONTS = /^(Helvetica|Arial|Times|TimesNewRoman|Courier|Symbol|ZapfDingbats|ArialMT)$/i;
-const WEIGHTS = /[-,]?(Thin|ExtraLight|UltraLight|Light|Regular|Book|Roman|Medium|SemiBold|DemiBold|Bold|ExtraBold|UltraBold|Black|Heavy|Italic|Oblique|It|MT|PS)+$/;
+const FALLBACK_FONTS =
+  /^(Helvetica|Arial|Times|TimesNewRoman|Courier|Symbol|ZapfDingbats|ArialMT)$/i;
+const WEIGHTS =
+  /[-,]?(Thin|ExtraLight|UltraLight|Light|Regular|Book|Roman|Medium|SemiBold|DemiBold|Bold|ExtraBold|UltraBold|Black|Heavy|Italic|Oblique|It|MT|PS)+$/;
 
 /** "ABCDEF+OpenSans-SemiBoldItalic" → "Open Sans". */
 export function fontFamily(postScriptName: string): string {
-  const name = postScriptName.replace(/^[A-Z]{6}\+/, '').replace(WEIGHTS, '').replace(/[-_,]+$/, '');
+  const name = postScriptName
+    .replace(/^[A-Z]{6}\+/, '')
+    .replace(WEIGHTS, '')
+    .replace(/[-_,]+$/, '');
   return name.includes(' ') ? name : name.replace(/([a-z])([A-Z])/g, '$1 $2');
 }
 
@@ -24,17 +29,27 @@ function toRem(value: number, unit: string) {
   return `${Number((px / 16).toFixed(4))}rem`;
 }
 
-const COLOR_PATTERNS: { pattern: RegExp; read: (match: RegExpMatchArray) => string | null; approximate?: boolean }[] = [
+const COLOR_PATTERNS: {
+  pattern: RegExp;
+  read: (match: RegExpMatchArray) => string | null;
+  approximate?: boolean;
+}[] = [
   { pattern: /#([0-9a-f]{6}|[0-9a-f]{3})\b/gi, read: (match) => `#${match[1]}` },
   {
     pattern: /\bRGB[:\s]*\(?\s*(\d{1,3})[,\s/]+(\d{1,3})[,\s/]+(\d{1,3})\)?/gi,
-    read: (match) => (match.slice(1, 4).every((channel) => Number(channel) <= 255) ? `rgb(${match[1]}, ${match[2]}, ${match[3]})` : null),
+    read: (match) =>
+      match.slice(1, 4).every((channel) => Number(channel) <= 255)
+        ? `rgb(${match[1]}, ${match[2]}, ${match[3]})`
+        : null,
   },
   {
     // "CMYK 100 58 0 43", "C100 M58 Y0 K43", "C 100 / M 58 / Y 0 / K 43"
-    pattern: /\b(?:CMYK[:\s]*\(?\s*(\d{1,3})[,\s/%]+(\d{1,3})[,\s/%]+(\d{1,3})[,\s/%]+(\d{1,3})|C\s*(\d{1,3})[,\s/%]*M\s*(\d{1,3})[,\s/%]*Y\s*(\d{1,3})[,\s/%]*K\s*(\d{1,3}))/gi,
+    pattern:
+      /\b(?:CMYK[:\s]*\(?\s*(\d{1,3})[,\s/%]+(\d{1,3})[,\s/%]+(\d{1,3})[,\s/%]+(\d{1,3})|C\s*(\d{1,3})[,\s/%]*M\s*(\d{1,3})[,\s/%]*Y\s*(\d{1,3})[,\s/%]*K\s*(\d{1,3}))/gi,
     read: (match) => {
-      const [c, m, y, k] = (match[1] ? match.slice(1, 5) : match.slice(5, 9)).map((part) => Number(part) / 100);
+      const [c, m, y, k] = (match[1] ? match.slice(1, 5) : match.slice(5, 9)).map(
+        (part) => Number(part) / 100,
+      );
       if ([c, m, y, k].some((part) => part > 1)) return null;
       // Uncalibrated conversion: close enough to pick a hue, not a print match. Reported as approximate.
       const rgb = [c, m, y].map((part) => Math.round(255 * (1 - part) * (1 - k)));
@@ -70,13 +85,21 @@ export function readStated(pages: string[]): Stated {
           const hex = formatHex(color);
           if (stated.colors.some((entry) => entry.hex === hex)) continue;
           const name = nameBefore(line, match.index ?? 0);
-          stated.colors.push({ hex, name: approximate ? `${name ?? ''} (from CMYK, approximate)`.trim() : name, page });
+          stated.colors.push({
+            hex,
+            name: approximate ? `${name ?? ''} (from CMYK, approximate)`.trim() : name,
+            page,
+          });
         }
       }
-      for (const match of line.matchAll(/\b(?:corner|border)[\s-]*radi(?:us|i)\b[^0-9\n]{0,24}(\d+(?:\.\d+)?)\s*(px|pt)\b/gi)) {
+      for (const match of line.matchAll(
+        /\b(?:corner|border)[\s-]*radi(?:us|i)\b[^0-9\n]{0,24}(\d+(?:\.\d+)?)\s*(px|pt)\b/gi,
+      )) {
         stated.radii.push({ value: toRem(Number(match[1]), match[2]), page });
       }
-      for (const match of line.matchAll(/\b(?:body|base|paragraph)\s*(?:text|copy|font)?\s*(?:size)?\b[^0-9\n]{0,24}(\d+(?:\.\d+)?)\s*(px|pt)\b/gi)) {
+      for (const match of line.matchAll(
+        /\b(?:body|base|paragraph)\s*(?:text|copy|font)?\s*(?:size)?\b[^0-9\n]{0,24}(\d+(?:\.\d+)?)\s*(px|pt)\b/gi,
+      )) {
         const size = Number(match[1]);
         if (size >= 10 && size <= 24) stated.baseSize.push({ value: toRem(size, match[2]), page });
       }
@@ -107,7 +130,10 @@ export async function extractPDF(source: Source): Promise<Findings> {
       text += item.str;
       if (item.hasEOL) text += '\n';
       lastY = y;
-      charactersByFont.set(item.fontName, (charactersByFont.get(item.fontName) ?? 0) + item.str.trim().length);
+      charactersByFont.set(
+        item.fontName,
+        (charactersByFont.get(item.fontName) ?? 0) + item.str.trim().length,
+      );
     }
     pages.push(text);
 
@@ -141,7 +167,14 @@ export async function extractPDF(source: Source): Promise<Findings> {
   const colors: ExtractedColor[] = [...fills.entries()].flatMap(([hex, count]) => {
     const color = parseColor(hex);
     if (!color) return [];
-    return [{ hex: formatHex(color), color, share: count / total, role: color.C < NEUTRAL_CHROMA ? 'neutral' : 'brand' } as ExtractedColor];
+    return [
+      {
+        hex: formatHex(color),
+        color,
+        share: count / total,
+        role: color.C < NEUTRAL_CHROMA ? 'neutral' : 'brand',
+      } as ExtractedColor,
+    ];
   });
 
   return {
@@ -149,6 +182,9 @@ export async function extractPDF(source: Source): Promise<Findings> {
     method: `PDF, ${pageCount} of ${totalPages} pages: stated colors, fonts and sizes from the text, plus artwork fill colors (by how often each is used, not by area)`,
     colors: mergeClose(colors),
     stated,
-    skipped: totalPages > MAX_PAGES ? [`pages ${MAX_PAGES + 1}–${totalPages} (only the first ${MAX_PAGES} are read)`] : [],
+    skipped:
+      totalPages > MAX_PAGES
+        ? [`pages ${MAX_PAGES + 1}–${totalPages} (only the first ${MAX_PAGES} are read)`]
+        : [],
   };
 }

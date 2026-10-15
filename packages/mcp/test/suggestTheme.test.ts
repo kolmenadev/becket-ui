@@ -8,10 +8,25 @@ import { extractImageColors } from '../src/theme/extractColors';
 import { extractPDF, fontFamily } from '../src/theme/extractPDF';
 import { detectKind, type Source } from '../src/theme/loadSource';
 import { pickBrand, suggestTheme } from '../src/theme/suggestTheme';
-import { bigLogo, brandManualPDF, flatSVG, gradientSVG, monoLogo, multicolorLogo, photoLogo, stripes, transparentLogo } from './brandFixtures';
+import {
+  bigLogo,
+  brandManualPDF,
+  flatSVG,
+  gradientSVG,
+  monoLogo,
+  multicolorLogo,
+  photoLogo,
+  stripes,
+  transparentLogo,
+} from './brandFixtures';
 
-const source = (bytes: Buffer, label = 'fixture'): Source => ({ bytes, kind: detectKind(bytes), label });
-const close = (actual: string, expected: string) => colorDistance(parseColor(actual)!, parseColor(expected)!) < 0.02;
+const source = (bytes: Buffer, label = 'fixture'): Source => ({
+  bytes,
+  kind: detectKind(bytes),
+  label,
+});
+const close = (actual: string, expected: string) =>
+  colorDistance(parseColor(actual)!, parseColor(expected)!) < 0.02;
 const brandOf = (bytes: Buffer) => {
   const { colors, method, skipped } = extractImageColors(source(bytes));
   return pickBrand({ label: 'fixture', method, colors, skipped });
@@ -42,7 +57,9 @@ describe('extracting brand colors from logos', () => {
   it('multicolor logo: the three biggest stripes, biggest first', () => {
     const brand = brandOf(multicolorLogo());
     expect(brand).toHaveLength(3);
-    stripes.slice(0, 3).forEach((expected, index) => expect(close(brand[index], expected)).toBe(true));
+    stripes
+      .slice(0, 3)
+      .forEach((expected, index) => expect(close(brand[index], expected)).toBe(true));
   });
 
   it('flat SVG: reads declared colors only, never runs or loads anything', () => {
@@ -68,8 +85,12 @@ describe('extracting brand colors from logos', () => {
 
   it('refuses formats it cannot decode with a way forward', () => {
     const webp = Buffer.concat([Buffer.from('RIFF'), Buffer.alloc(4), Buffer.from('WEBPVP8 ')]);
-    expect(() => extractImageColors(source(webp))).toThrow(/WEBP isn't supported yet. Export the logo as SVG or PNG/);
-    expect(() => extractImageColors(source(Buffer.from('hello')))).toThrow(/isn't a PNG, JPEG, SVG or PDF/);
+    expect(() => extractImageColors(source(webp))).toThrow(
+      /WEBP isn't supported yet. Export the logo as SVG or PNG/,
+    );
+    expect(() => extractImageColors(source(Buffer.from('hello')))).toThrow(
+      /isn't a PNG, JPEG, SVG or PDF/,
+    );
   });
 });
 
@@ -81,7 +102,9 @@ describe('reading a brand manual PDF', () => {
     expect(findings.stated?.fonts).toEqual([{ family: 'Montserrat', page: 1 }]);
     expect(findings.stated?.radii).toEqual([{ value: '0.25rem', page: 1 }]);
     expect(findings.stated?.baseSize).toEqual([{ value: '1rem', page: 1 }]);
-    expect(findings.colors.map((color) => color.hex)).toEqual(expect.arrayContaining(['#0a3d91', '#f5a624']));
+    expect(findings.colors.map((color) => color.hex)).toEqual(
+      expect.arrayContaining(['#0a3d91', '#f5a624']),
+    );
     // Stated colors come before sampled ones.
     expect(pickBrand(findings)[0]).toBe('#0a3d91');
   });
@@ -101,8 +124,12 @@ describe('suggest_theme', () => {
     writeFileSync(path, transparentLogo());
     const text = await suggestTheme({ path });
     expect(text).toContain('# Brand suggestion from logo.png');
-    expect(text).toContain('Ask the user one step at a time and wait for each answer. 1 step: brand colors.');
-    expect(text).toMatch(/1\. Recommended: `\["#[0-9a-f]{6}","#[0-9a-f]{6}"\]` — buttons #[0-9a-f]{6}.*passes AA in dark and light/);
+    expect(text).toContain(
+      'Ask the user one step at a time and wait for each answer. 1 step: brand colors.',
+    );
+    expect(text).toMatch(
+      /1\. Recommended: `\["#[0-9a-f]{6}","#[0-9a-f]{6}"\]` — buttons #[0-9a-f]{6}.*passes AA in dark and light/,
+    );
     expect(text).toContain('2. Swap the first two');
     expect(text).toContain("Don't guess a font from a logo.");
     expect(text).toMatch(/Call set_theme with only what the user confirmed, e\.g\. `\{"brand":\[/);
@@ -124,10 +151,16 @@ describe('suggest_theme', () => {
   });
 
   it('accepts data: URLs and explains failures with a way forward', async () => {
-    expect(await suggestTheme({ base64: `data:image/svg+xml;base64,${Buffer.from(flatSVG).toString('base64')}` })).toContain('#0a3d91');
+    expect(
+      await suggestTheme({
+        base64: `data:image/svg+xml;base64,${Buffer.from(flatSVG).toString('base64')}`,
+      }),
+    ).toContain('#0a3d91');
     const missing = await suggestTheme({ path: join(tmp, 'nope.png') });
     expect(missing).toContain("Couldn't read that source: No file at");
     expect(missing).toContain('call suggest_theme with `colors:');
-    expect(await suggestTheme({ path: 'a.png', url: 'https://example.com/a.png' })).toContain('Pass exactly one of path, url or base64.');
+    expect(await suggestTheme({ path: 'a.png', url: 'https://example.com/a.png' })).toContain(
+      'Pass exactly one of path, url or base64.',
+    );
   });
 });

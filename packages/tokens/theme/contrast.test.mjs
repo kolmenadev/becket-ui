@@ -5,7 +5,12 @@ import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import { colorDistance, contrastRatio, formatOklch, parseColor, toGamut } from './color.mjs';
-import { CONTRAST_PAIRS, DEFAULT_COLORS, checkBecketThemeContrast, resolveBecketColors } from './contrast.mjs';
+import {
+  CONTRAST_PAIRS,
+  DEFAULT_COLORS,
+  checkBecketThemeContrast,
+  resolveBecketColors,
+} from './contrast.mjs';
 
 /**
  * WCAG 2.2 AA contrast for the pairs Becket draws, in both themes. The checker's defaults are
@@ -25,7 +30,10 @@ function block(selector) {
   return '';
 }
 
-const vars = (text) => Object.fromEntries([...text.matchAll(/(--beckui--[\w-]+):\s*([^;}]+);?/g)].map(([, n, v]) => [n, v.trim()]));
+const vars = (text) =>
+  Object.fromEntries(
+    [...text.matchAll(/(--beckui--[\w-]+):\s*([^;}]+);?/g)].map(([, n, v]) => [n, v.trim()]),
+  );
 const cssDark = vars(block(':where(:root, :host) {'));
 const cssLight = { ...cssDark, ...vars(block("[data-theme='light'] {")) };
 
@@ -36,7 +44,9 @@ function cssColor(table, name, depth = 0) {
   assert.ok(value, `missing --beckui--colors-${name}`);
   const nested = value.match(/^var\(--beckui--colors-([\w-]+)\)$/);
   if (nested && depth < 6) return cssColor(table, nested[1], depth + 1);
-  const mix = value.match(/^color-mix\(in oklch, var\(--beckui--colors-([\w-]+)\) (\d+)%, white\)$/);
+  const mix = value.match(
+    /^color-mix\(in oklch, var\(--beckui--colors-([\w-]+)\) (\d+)%, white\)$/,
+  );
   if (mix) {
     const base = cssColor(table, mix[1], depth + 1);
     const amount = Number(mix[2]) / 100;
@@ -48,11 +58,17 @@ function cssColor(table, name, depth = 0) {
 }
 
 const defaults = resolveBecketColors();
-for (const [mode, table] of [['dark', cssDark], ['light', cssLight]]) {
+for (const [mode, table] of [
+  ['dark', cssDark],
+  ['light', cssLight],
+]) {
   test(`${mode}: the checker's default colors match index.css`, () => {
     for (const key of Object.keys(DEFAULT_COLORS.dark)) {
       const fromCss = cssColor(table, kebab(key));
-      assert.ok(colorDistance(defaults[mode][key], fromCss) < 1e-6, `${key}: checker ${formatOklch(defaults[mode][key])}, index.css ${formatOklch(fromCss)}`);
+      assert.ok(
+        colorDistance(defaults[mode][key], fromCss) < 1e-6,
+        `${key}: checker ${formatOklch(defaults[mode][key])}, index.css ${formatOklch(fromCss)}`,
+      );
     }
   });
 }
@@ -65,14 +81,24 @@ for (const result of report.results.filter((each) => each.level === 'required'))
 }
 
 test('advisory pairs are the known default gaps, and only those', () => {
-  const failing = report.advisories.map((result) => `${result.theme}:${result.foreground}/${result.background}`);
-  assert.deepEqual(failing.toSorted(), ['dark:neutral.900/tertiary', 'light:neutral.900/tertiary', 'light:primary/background', 'light:primary/surface']);
+  const failing = report.advisories.map(
+    (result) => `${result.theme}:${result.foreground}/${result.background}`,
+  );
+  assert.deepEqual(failing.toSorted(), [
+    'dark:neutral.900/tertiary',
+    'light:neutral.900/tertiary',
+    'light:primary/background',
+    'light:primary/surface',
+  ]);
   assert.equal(report.passes, true);
 });
 
 test('every pair names tokens the resolver knows', () => {
   for (const pair of CONTRAST_PAIRS) {
-    assert.ok(defaults.dark[pair.foreground] && defaults.dark[pair.background], `${pair.foreground}/${pair.background}`);
+    assert.ok(
+      defaults.dark[pair.foreground] && defaults.dark[pair.background],
+      `${pair.foreground}/${pair.background}`,
+    );
   }
 });
 
@@ -84,7 +110,14 @@ test('contrastRatio: black on white is 21:1, a color on itself is 1:1', () => {
 });
 
 test('parseColor: hex, rgb(), hsl() and oklch() give the same ratio for the same color', () => {
-  const formats = ['#0a3d91', '#0A3D91', 'rgb(10, 61, 145)', 'rgb(10 61 145 / 50%)', 'hsl(217.33 87.1% 30.39%)', formatOklch(parseColor('#0a3d91'))];
+  const formats = [
+    '#0a3d91',
+    '#0A3D91',
+    'rgb(10, 61, 145)',
+    'rgb(10 61 145 / 50%)',
+    'hsl(217.33 87.1% 30.39%)',
+    formatOklch(parseColor('#0a3d91')),
+  ];
   const ratios = formats.map((format) => contrastRatio(format, '#ffffff'));
   for (const ratio of ratios) assert.ok(Math.abs(ratio - ratios[0]) < 0.01, `${ratios.join(', ')}`);
 });
@@ -107,6 +140,8 @@ test('toGamut lowers chroma only, and out-of-gamut colors still get a ratio', ()
 test('a theme that fails says which pair and by how much', () => {
   const failing = checkBecketThemeContrast({ colors: { primary: '#0a3d91' } });
   assert.equal(failing.passes, false);
-  const label = failing.failures.find((result) => result.background === 'primary' && result.theme === 'dark');
+  const label = failing.failures.find(
+    (result) => result.background === 'primary' && result.theme === 'dark',
+  );
   assert.ok(label && label.ratio < 4.5, JSON.stringify(failing.failures));
 });

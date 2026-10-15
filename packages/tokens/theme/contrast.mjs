@@ -67,8 +67,15 @@ const canvases = ['background', 'surface'];
  * reported, not enforced, until Becket's recipes change.
  */
 export const CONTRAST_PAIRS = [
-  ...['text', 'muted', 'link', 'linkHover', 'linkVisited', 'danger', 'accent'].flatMap((foreground) =>
-    canvases.map((background) => ({ foreground, background, minimum: text, level: 'required', use: `${foreground} text on ${background}` })),
+  ...['text', 'muted', 'link', 'linkHover', 'linkVisited', 'danger', 'accent'].flatMap(
+    (foreground) =>
+      canvases.map((background) => ({
+        foreground,
+        background,
+        minimum: text,
+        level: 'required',
+        use: `${foreground} text on ${background}`,
+      })),
   ),
   ...['primary', 'primaryHover', 'secondary'].map((background) => ({
     foreground: 'neutral.900',
@@ -125,11 +132,16 @@ function resolveTable(table) {
     if (typeof value === 'object') {
       const base = resolve(value.mixWithWhite, depth + 1);
       // color-mix(in oklch, base n%, white): white has no hue, so the hue stays the base's.
-      color = { L: base.L * value.amount + (1 - value.amount), C: base.C * value.amount, h: base.h };
+      color = {
+        L: base.L * value.amount + (1 - value.amount),
+        C: base.C * value.amount,
+        h: base.h,
+      };
     } else {
       const reference = value.match(/^\{([\w.]+)\}$/);
       color = reference ? resolve(reference[1], depth + 1) : parseColor(value);
-      if (!color) throw new Error(`Can't read colors.${key} "${value}". Use hex, rgb(), hsl() or oklch().`);
+      if (!color)
+        throw new Error(`Can't read colors.${key} "${value}". Use hex, rgb(), hsl() or oklch().`);
     }
     resolved[key] = color;
     return color;
