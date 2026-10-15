@@ -110,7 +110,8 @@ export function colorsFromPixels({ width, height, data }: Pixels): ExtractedColo
         share: cluster.count / opaque,
         role,
       };
-    });
+    })
+    .toSorted((a, b) => b.share - a.share);
 }
 
 // SVG and PDF often name basic colors. Anything rarer is reported as skipped, not guessed.

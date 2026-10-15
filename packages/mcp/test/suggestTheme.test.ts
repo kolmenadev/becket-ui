@@ -54,6 +54,12 @@ describe('extracting brand colors from logos', () => {
     expect(brandOf(monoLogo())).toEqual(['#111111']);
   });
 
+  it('lists colors biggest share first', () => {
+    const { colors } = extractImageColors(source(multicolorLogo()));
+    const shares = colors.map((color) => color.share);
+    expect(shares).toEqual(shares.toSorted((a, b) => b - a));
+  });
+
   it('multicolor logo: the three biggest stripes, biggest first', () => {
     const brand = brandOf(multicolorLogo());
     expect(brand).toHaveLength(3);
@@ -141,7 +147,10 @@ describe('suggest_theme', () => {
     expect(text).toContain('Your manual uses Montserrat');
     expect(text).toContain('`fonts: { "sans": "Montserrat" }`');
     expect(text).toContain('radii: { "md": "0.25rem" }, fontSizes: { "base": "1rem" }');
-    expect(text).toContain('| #0a3d91 | Ocean Blue | 1 |');
+    expect(text).toContain(
+      '| color | name | page |\n| --- | --- | --- |\n| #0a3d91 | Ocean Blue | 1 |',
+    );
+    expect(text).toMatch(/\| color \| share \| role \|\n\| --- \| --- \| --- \|\n\| #/);
   });
 
   it('accepts colors the agent read from a pasted image', async () => {

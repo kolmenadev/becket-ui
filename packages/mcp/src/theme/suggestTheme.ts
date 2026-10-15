@@ -29,13 +29,21 @@ const DISTINCT = 0.1;
 
 /** Up to three brand colors, most visual weight first, distinct from each other. */
 export function pickBrand(findings: Findings): string[] {
-  const candidates = [
-    ...(findings.stated?.colors ?? []),
-    ...findings.colors.filter((color) => color.role !== 'background'),
-  ].flatMap((entry) => {
+  const read = (entry: { hex: string; share?: number }) => {
     const color = parseColor(entry.hex);
-    return color ? [{ hex: entry.hex, color }] : [];
-  });
+    return color ? [{ hex: entry.hex, color, share: entry.share ?? 0 }] : [];
+  };
+  const sampled = findings.colors.filter((color) => color.role !== 'background').flatMap(read);
+  // A gradient shows up as several close shades of one hue; weigh each color with its family.
+  const family = (entry: (typeof sampled)[number]) =>
+    sampled
+      .filter((other) => colorDistance(other.color, entry.color) < DISTINCT)
+      .reduce((sum, other) => sum + other.share, 0);
+  // Stated colors (a manual) always come first, in the manual's order.
+  const candidates = [
+    ...(findings.stated?.colors ?? []).flatMap(read),
+    ...sampled.toSorted((a, b) => family(b) - family(a)),
+  ];
   const picked: typeof candidates = [];
   for (const candidate of candidates) {
     if (candidate.color.C < 0.04) continue;
@@ -86,19 +94,24 @@ export function formatSuggestion(findings: Findings): string {
   if (stated?.colors.length) {
     lines.push(
       '## Colors the source states',
-      '| color | name | page |',
-      '| --- | --- | --- |',
-      ...stated.colors.map((entry) => `| ${entry.hex} | ${entry.name ?? ''} | ${entry.page} |`),
+      // One entry: sections are joined with blank lines, which would break a Markdown table apart.
+      [
+        '| color | name | page |',
+        '| --- | --- | --- |',
+        ...stated.colors.map((entry) => `| ${entry.hex} | ${entry.name ?? ''} | ${entry.page} |`),
+      ].join('\n'),
     );
   }
   if (findings.colors.length) {
     lines.push(
       stated ? '## Colors sampled from its artwork' : '## Colors found',
-      '| color | share | role |',
-      '| --- | --- | --- |',
-      ...findings.colors
-        .slice(0, 10)
-        .map((color) => `| ${color.hex} | ${percent(color.share)} | ${color.role} |`),
+      [
+        '| color | share | role |',
+        '| --- | --- | --- |',
+        ...findings.colors
+          .slice(0, 10)
+          .map((color) => `| ${color.hex} | ${percent(color.share)} | ${color.role} |`),
+      ].join('\n'),
     );
   }
   if (findings.skipped.length)
