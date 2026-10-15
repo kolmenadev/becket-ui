@@ -91,7 +91,7 @@ export const CONTRAST_PAIRS = [
     minimum: nonText,
     level: 'advisory',
     use: `focus ring and checked controls on ${background}`,
-    note: "One primary can't carry dark labels and also reach 3:1 on a near-white canvas; the default is 2.02:1 in light.",
+    note: 'A primary light enough for dark labels is usually too light for 3:1 on a near-white canvas; the default is 2.02:1 in light.',
   })),
 ];
 

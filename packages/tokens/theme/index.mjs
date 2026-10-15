@@ -2,6 +2,7 @@
 
 export { colorDistance, contrastRatio, formatHex, formatOklch, parseColor, rgbToOklch, toGamut } from './color.mjs';
 export { CONTRAST_PAIRS, checkBecketThemeContrast, resolveBecketColors } from './contrast.mjs';
+export { deriveBecketTheme } from './derive.mjs';
 
 const PREFIX = '--beckui--';
 

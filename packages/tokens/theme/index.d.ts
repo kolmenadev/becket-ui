@@ -133,3 +133,25 @@ export const CONTRAST_PAIRS: readonly BecketContrastPair[];
 export function resolveBecketColors(theme?: BecketTheme): Record<'dark' | 'light', Record<BecketColorToken, Oklch>>;
 /** WCAG 2.2 AA check of every pair Becket draws, in both themes. */
 export function checkBecketThemeContrast(theme?: BecketTheme): BecketContrastReport;
+
+export type DeriveBecketThemeInput = {
+  /** One to three brand colors, most important first: hex, rgb(), hsl() or oklch(). */
+  brand: string[];
+  /** Colors to keep exactly as given. They are still checked, never changed. */
+  pinned?: BecketThemeColors;
+};
+
+export type DerivedBecketTheme = {
+  /** Pass straight to defineBecketTheme(). */
+  theme: BecketTheme;
+  /** Why each token has its value: used as is, shaded for contrast, derived or pinned. */
+  notes: { token: string; reason: string }[];
+  contrast: BecketContrastReport;
+};
+
+/**
+ * A full color theme from brand colors that passes WCAG 2.2 AA in dark and light. Only
+ * lightness moves (and chroma when a shade leaves sRGB); the brand hue never changes.
+ * Deterministic: the same input gives the same theme.
+ */
+export function deriveBecketTheme(input: DeriveBecketThemeInput): DerivedBecketTheme;
