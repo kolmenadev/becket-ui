@@ -22,6 +22,8 @@ pnpm add @becket-ui/react @becket-ui/tokens
 - index.css paints the page background, text color and font from the theme.
 - Components marked client in list_components use state or effects ('use client'); the rest render in React Server Components.
 
+To brand Becket, call set_theme with brand colors or tokens, or suggest_theme with a logo, image URL or brand manual.
+
 Before writing UI, call get_guidelines (the app-code guide). Before finishing, call review_usage on your code.`;
 }
 

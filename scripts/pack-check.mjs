@@ -67,8 +67,11 @@ function assertConsumer() {
     for (const peer of ['react', 'react-dom']) {
       symlinkSync(realpathSync(join(root, 'packages', 'react', 'node_modules', peer)), join(modules, peer));
     }
-    mkdirSync(join(modules, '@modelcontextprotocol'), { recursive: true });
-    for (const dependency of ['@modelcontextprotocol/sdk', 'zod']) {
+    // The server's runtime dependencies, read from its manifest so a new one can't be missed.
+    for (const dependency of Object.keys(
+      JSON.parse(readFileSync(join(root, 'packages', 'mcp', 'package.json'), 'utf8')).dependencies ?? {},
+    )) {
+      if (dependency.includes('/')) mkdirSync(join(modules, dependency.split('/')[0]), { recursive: true });
       symlinkSync(realpathSync(join(root, 'packages', 'mcp', 'node_modules', dependency)), join(modules, dependency));
     }
     writeFileSync(join(consumer, 'package.json'), '{"type":"module","private":true}\n');
@@ -117,11 +120,14 @@ try {
       'dist/preset',
       'theme/index.mjs',
       'theme/index.d.ts',
+      'theme/color.mjs',
+      'theme/contrast.mjs',
+      'theme/derive.mjs',
       'theme.example.css',
     ],
     '@becket-ui/tokens',
   );
-  assertNone(tokens, ['theme/index.test.mjs'], '@becket-ui/tokens');
+  assertNone(tokens, ['theme/index.test.mjs', 'theme/contrast.test.mjs', 'theme/derive.test.mjs'], '@becket-ui/tokens');
 
   const react = packedFiles('@becket-ui/react');
   assertIncludes(react, ['dist/index.js', 'dist/index.d.ts', 'guides/building-with-becket.md'], '@becket-ui/react');

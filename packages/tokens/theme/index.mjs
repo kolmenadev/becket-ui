@@ -1,5 +1,9 @@
 /** Public CSS-variable theming. No Panda, no theme provider. */
 
+export { colorDistance, contrastRatio, formatHex, formatOklch, parseColor, rgbToOklch, toGamut } from './color.mjs';
+export { contrastPairs, checkBecketThemeContrast, resolveBecketColors } from './contrast.mjs';
+export { deriveBecketTheme } from './derive.mjs';
+
 const PREFIX = '--beckui--';
 
 const COLOR_FLAT = [
@@ -13,7 +17,18 @@ const COLOR_FLAT = [
   'success',
 ];
 
-const COLOR_THEMED = ['background', 'text', 'muted', 'border', 'danger', 'accent'];
+const COLOR_THEMED = [
+  'background',
+  'text',
+  'muted',
+  'border',
+  'danger',
+  'accent',
+  'surface',
+  'link',
+  'linkHover',
+  'linkVisited',
+];
 const NEUTRAL_STEPS = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
 const RADII = ['none', 'sm', 'md', 'lg', 'xl', 'full'];
 // `base` rescales the whole type scale; the steps are ratios of it.

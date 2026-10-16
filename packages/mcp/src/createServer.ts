@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 import { loadData, type Data } from './data';
 import { formatReview, reviewUsage } from './review';
+import { setTheme } from './theme/setTheme';
+import { suggestTheme } from './theme/suggestTheme';
 import { componentExample, componentProps, guidelines, installation, listComponents, theme } from './tools';
 
 const text = (value: string) => ({ content: [{ type: 'text' as const, text: value }] });
@@ -91,6 +93,51 @@ export function createServer(data: Data = loadData()): McpServer {
       annotations: readOnly,
     },
     async ({ code }) => text(formatReview(reviewUsage(code, data))),
+  );
+
+  const tokens = z.record(z.string(), z.string());
+  server.registerTool(
+    'set_theme',
+    {
+      title: 'Set a brand theme',
+      description:
+        'Turn brand tokens into Becket theme CSS that passes WCAG 2.2 AA in dark and light. Give one to three brand colors (Becket derives every color token) and/or exact tokens. Returns the CSS to write, the same theme as defineBecketTheme() code, why each value was chosen, and a contrast report. Writes nothing; you write the file. For a logo, image URL or brand manual, call suggest_theme first.',
+      inputSchema: {
+        brand: z.array(z.string()).min(1).max(3).optional().describe('Brand colors, most important first: hex, rgb(), hsl() or oklch()'),
+        colors: z
+          .record(z.string(), z.union([z.string(), z.record(z.string(), z.string())]))
+          .optional()
+          .describe('Exact color tokens to keep, e.g. { "background": { "dark": "#101820", "light": "#ffffff" } }. With brand, these are pinned and the rest is derived.'),
+        fonts: tokens.optional().describe('{ "sans": "Inter", "mono": "JetBrains Mono" }'),
+        radii: tokens.optional().describe('none, sm, md, lg, xl, full, e.g. { "md": "0.25rem" }'),
+        fontSizes: tokens.optional().describe('{ "base": "1rem" } resizes all text; xs–6xl override single steps'),
+        spacing: tokens.optional().describe('{ "unit": "0.25rem" } resizes all spacing; textUnit (em) spacing inside text'),
+        sizes: tokens.optional().describe('{ "field": "16rem" }'),
+        density: z
+          .record(z.string(), z.record(z.string(), z.object({ px: z.string().optional(), py: z.string().optional() })))
+          .optional()
+          .describe('Component padding, e.g. { "button": { "md": { "px": "0.75rem" } } }'),
+      },
+      annotations: readOnly,
+    },
+    async (input) => text(setTheme(input)),
+  );
+
+  server.registerTool(
+    'suggest_theme',
+    {
+      title: 'Suggest a brand theme',
+      description:
+        "Read a logo (PNG, JPEG, SVG) or a brand manual (PDF) and suggest Becket brand tokens: colors, plus fonts, corner radius and text size when a manual states them. Returns what it found and a step-by-step script: ask the user one decision at a time, then call set_theme with what they confirm. Pass exactly one of path, url (public https) or base64. For an image only pasted in chat, pass the colors you see in `colors` instead.",
+      inputSchema: {
+        path: z.string().optional().describe('Local file path, absolute or relative to the working directory'),
+        url: z.string().optional().describe('Public https URL of the image or PDF'),
+        base64: z.string().optional().describe('File contents as base64 or a data: URL'),
+        colors: z.array(z.string()).min(1).max(8).optional().describe('Colors you read from an image you can see but cannot pass as a file, most prominent first'),
+      },
+      annotations: { readOnlyHint: true, openWorldHint: true },
+    },
+    async (input) => text(await suggestTheme(input)),
   );
 
   return server;
