@@ -26,6 +26,13 @@ export type Findings = {
 
 // Brand colors closer than this read as the same color to most people.
 const DISTINCT = 0.1;
+// Brand colors are different hues. Manuals print tint ramps (one hue, many lightnesses); those
+// are shades of one brand color, not three.
+const HUE_APART = 30;
+// A sampled color under this share of the artwork is a one-off graphic, not the brand.
+const MIN_BRAND_SHARE = 0.05;
+
+const hueGap = (a: number, b: number) => Math.min(Math.abs(a - b), 360 - Math.abs(a - b));
 
 /** Up to three brand colors, most visual weight first, distinct from each other. */
 export function pickBrand(findings: Findings): string[] {
@@ -42,12 +49,14 @@ export function pickBrand(findings: Findings): string[] {
   // Stated colors (a manual) always come first, in the manual's order.
   const candidates = [
     ...(findings.stated?.colors ?? []).flatMap(read),
-    ...sampled.toSorted((a, b) => family(b) - family(a)),
+    ...sampled
+      .filter((entry) => family(entry) >= MIN_BRAND_SHARE)
+      .toSorted((a, b) => family(b) - family(a)),
   ];
   const picked: typeof candidates = [];
   for (const candidate of candidates) {
     if (candidate.color.C < 0.04) continue;
-    if (picked.some((other) => colorDistance(other.color, candidate.color) < DISTINCT)) continue;
+    if (picked.some((other) => hueGap(other.color.h, candidate.color.h) < HUE_APART)) continue;
     picked.push(candidate);
     if (picked.length === 3) break;
   }

@@ -115,6 +115,26 @@ describe('reading a brand manual PDF', () => {
     expect(pickBrand(findings)[0]).toBe('#0a3d91');
   });
 
+  it('picks different hues as brand colors, not a tint ramp or a one-off splash', () => {
+    const ramp = ['#1f8197', '#abebfc', '#55bcd4', '#196d80'].map((hex) => ({ hex, page: 6 }));
+    const splash = {
+      hex: '#e0169c',
+      color: parseColor('#e0169c')!,
+      share: 0.03,
+      role: 'brand' as const,
+    };
+    const findings = {
+      label: 'manual',
+      method: '',
+      colors: [splash],
+      skipped: [],
+      stated: { colors: ramp, fonts: [], radii: [], baseSize: [] },
+    };
+    expect(pickBrand(findings)).toEqual(['#1f8197']);
+    const bigger = { ...splash, share: 0.2 };
+    expect(pickBrand({ ...findings, colors: [bigger] })).toEqual(['#1f8197', '#e0169c']);
+  });
+
   it('names fonts the way CSS does', () => {
     expect(fontFamily('ABCDEF+OpenSans-SemiBoldItalic')).toBe('Open Sans');
     expect(fontFamily('Montserrat-Bold')).toBe('Montserrat');

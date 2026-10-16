@@ -160,6 +160,10 @@ export async function extractPDF(source: Source): Promise<Findings> {
   const stated = readStated(pages);
   stated.fonts = [...fontUse.values()]
     .filter((font) => !FALLBACK_FONTS.test(font.family.replace(/\s/g, '')))
+    // pdf.js names glyph-drawn (Type 3) and unnamed fonts with placeholders, not real families.
+    .filter(
+      (font) => /[a-z]{2}/i.test(font.family) && !/^(Type\s?3|T3\s?Font|g_d\d)/i.test(font.family),
+    )
     .toSorted((a, b) => b.characters - a.characters)
     .map(({ family, page }) => ({ family, page }));
 
