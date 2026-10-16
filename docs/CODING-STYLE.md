@@ -73,6 +73,29 @@ copy a real pattern has emerged, and you can name it accurately.
 When the third copy does appear, extract the smallest thing that removes the duplication, and keep
 it next to its callers ([colocation](#prefer-code-colocation)).
 
+This covers **named constants, helper functions and types** too, not only shared modules. A name
+used once is an abstraction with one caller: to read one line, the reader jumps to its definition
+and back. Write the value or the logic where it's used, and put the reason in a comment there.
+
+```ts
+// Avoid: a constant and a helper, each used once, defined far from their only caller
+const HUE_APART = 30;
+const hueGap = (a: number, b: number) => Math.min(Math.abs(a - b), 360 - Math.abs(a - b));
+// …40 lines later
+if (picked.some((other) => hueGap(other.h, candidate.h) < HUE_APART)) continue;
+
+// Prefer: the value and its reason where they're used
+// Brand colors are different hues; a tint ramp (one hue, many lightnesses) is one brand color.
+const tooClose = picked.some((other) => {
+  const gap = Math.abs(other.h - candidate.h);
+  return Math.min(gap, 360 - gap) < 30;
+});
+```
+
+Keep a name when it's used three or more times, when a function calls itself, or when it's part
+of a public API. Before you commit, check each new top-level `const`, function and type: if it has
+one caller, inline it.
+
 **Related reads**
 
 - https://kentcdodds.com/blog/aha-programming
