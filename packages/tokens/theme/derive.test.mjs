@@ -6,7 +6,7 @@ import { checkBecketThemeContrast } from './contrast.mjs';
 import { deriveBecketTheme } from './derive.mjs';
 import { defineBecketTheme } from './index.mjs';
 
-const palettes = {
+for (const [name, brand] of Object.entries({
   'dark navy': ['#0a3d91'],
   neon: ['#39ff14', '#ff00ff'],
   pastel: ['#ffd1dc', '#c1e1c1', '#aec6cf'],
@@ -19,9 +19,7 @@ const palettes = {
   'teal and coral': ['rgb(0 128 128)', 'hsl(16 100% 66%)', '#2f4858'],
   'forest green': ['#228b22'],
   'out of gamut': ['oklch(0.7 0.4 150)'],
-};
-
-for (const [name, brand] of Object.entries(palettes)) {
+})) {
   test(`${name}: the derived theme passes AA in both themes`, () => {
     const { theme, contrast, notes } = deriveBecketTheme({ brand });
     assert.equal(
@@ -38,10 +36,9 @@ for (const [name, brand] of Object.entries(palettes)) {
 }
 
 test('the brand hue never changes, only lightness and chroma', () => {
-  const seed = parseColor('#0a3d91');
   const { theme } = deriveBecketTheme({ brand: ['#0a3d91'] });
   for (const value of [theme.colors.primary, theme.colors.link.dark, theme.colors.link.light]) {
-    assert.ok(Math.abs(parseColor(value).h - seed.h) < 0.5, value);
+    assert.ok(Math.abs(parseColor(value).h - parseColor('#0a3d91').h) < 0.5, value);
   }
 });
 
@@ -49,8 +46,12 @@ test('a brand color that already passes is used exactly', () => {
   const { theme, notes } = deriveBecketTheme({ brand: ['#0a3d91'] });
   assert.ok(colorDistance(parseColor(theme.colors.link.light), parseColor('#0a3d91')) < 0.001);
   assert.match(notes.find((note) => note.token === 'link').reason, /used as is in light/);
-  const yellow = deriveBecketTheme({ brand: ['#ffcc00'] });
-  assert.ok(colorDistance(parseColor(yellow.theme.colors.primary), parseColor('#ffcc00')) < 0.001);
+  assert.ok(
+    colorDistance(
+      parseColor(deriveBecketTheme({ brand: ['#ffcc00'] }).theme.colors.primary),
+      parseColor('#ffcc00'),
+    ) < 0.001,
+  );
 });
 
 test('pinned values are kept exactly, and a failing one is reported with its ratio', () => {
@@ -64,8 +65,8 @@ test('pinned values are kept exactly, and a failing one is reported with its rat
     /kept exactly/,
   );
   assert.equal(contrast.passes, false);
-  const label = contrast.failures.find((failure) => failure.background === 'primary');
-  assert.ok(label.ratio < 4.5);
+  // The label on the pinned primary.
+  assert.ok(contrast.failures.find((failure) => failure.background === 'primary').ratio < 4.5);
 });
 
 test('a pinned canvas moves the colors on it, not the canvas', () => {

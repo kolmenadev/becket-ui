@@ -11,6 +11,7 @@ Brand themes from colors, a logo or a brand manual.
   and `defineBecketTheme()` code with a WCAG 2.2 AA report for dark and light. Neither writes files.
 - `@becket-ui/tokens/theme`: `deriveBecketTheme({ brand })` builds a full color theme from one to
   three brand colors that passes AA in both themes; `checkBecketThemeContrast(theme)` checks any
-  theme; `contrastRatio` and `parseColor` read hex, `rgb()`, `hsl()` and `oklch()`.
+  theme; `contrastRatio` and `parseColor` read hex, `rgb()`, `hsl()`, `oklch()` and basic color
+  names (`navy`, `teal`).
 - `defineBecketTheme` accepts `surface`, `link`, `linkHover` and `linkVisited`, so a rebrand can
   recolor light-theme links instead of leaving them Becket yellow.

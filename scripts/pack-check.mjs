@@ -68,8 +68,9 @@ function assertConsumer() {
       symlinkSync(realpathSync(join(root, 'packages', 'react', 'node_modules', peer)), join(modules, peer));
     }
     // The server's runtime dependencies, read from its manifest so a new one can't be missed.
-    const mcpManifest = JSON.parse(readFileSync(join(root, 'packages', 'mcp', 'package.json'), 'utf8'));
-    for (const dependency of Object.keys(mcpManifest.dependencies ?? {})) {
+    for (const dependency of Object.keys(
+      JSON.parse(readFileSync(join(root, 'packages', 'mcp', 'package.json'), 'utf8')).dependencies ?? {},
+    )) {
       if (dependency.includes('/')) mkdirSync(join(modules, dependency.split('/')[0]), { recursive: true });
       symlinkSync(realpathSync(join(root, 'packages', 'mcp', 'node_modules', dependency)), join(modules, dependency));
     }

@@ -26,6 +26,7 @@ const source = (bytes: Buffer, label = 'fixture'): Source => ({
   label,
 });
 const close = (actual: string, expected: string) =>
+  // Every color passed here is a valid hex.
   colorDistance(parseColor(actual)!, parseColor(expected)!) < 0.02;
 const brandOf = (bytes: Buffer) => {
   const { colors, method, skipped } = extractImageColors(source(bytes));
@@ -42,8 +43,9 @@ describe('extracting brand colors from logos', () => {
 
   it('JPEG over a photo: the mark wins and the background is set aside', () => {
     const { colors } = extractImageColors(source(photoLogo()));
-    const brand = pickBrand({ label: 'fixture', method: '', colors, skipped: [] });
-    expect(close(brand[0], '#d0021b')).toBe(true);
+    expect(
+      close(pickBrand({ label: 'fixture', method: '', colors, skipped: [] })[0], '#d0021b'),
+    ).toBe(true);
     expect(colors.filter((color) => color.role === 'background').length).toBeGreaterThan(0);
     expect(colors.find((color) => close(color.hex, '#d0021b'))?.role).toBe('brand');
   });
@@ -70,30 +72,33 @@ describe('extracting brand colors from logos', () => {
 
   it('flat SVG: reads declared colors only, never runs or loads anything', () => {
     const { colors, skipped } = extractImageColors(source(Buffer.from(flatSVG)));
-    const brand = pickBrand({ label: 'fixture', method: '', colors, skipped });
-    expect(brand.map((hex) => hex.toLowerCase())).toEqual(['#0a3d91', '#f5a623']);
+    expect(
+      pickBrand({ label: 'fixture', method: '', colors, skipped }).map((hex) => hex.toLowerCase()),
+    ).toEqual(['#0a3d91', '#f5a623']);
     expect(skipped).toEqual(['rebeccapurple']);
   });
 
   it('SVG gradient: both stop colors and the CSS class color', () => {
     const { colors } = extractImageColors(source(Buffer.from(gradientSVG)));
-    const hexes = colors.map((color) => color.hex);
-    expect(hexes).toEqual(expect.arrayContaining(['#ff6b6b', '#4ecdc4', '#1a1a2e']));
+    expect(colors.map((color) => color.hex)).toEqual(
+      expect.arrayContaining(['#ff6b6b', '#4ecdc4', '#1a1a2e']),
+    );
   });
 
   it('a 2000×2000 PNG takes under a second', () => {
+    // Drawn before the clock starts: only the extraction is timed.
     const bytes = bigLogo();
     const start = performance.now();
-    const brand = brandOf(bytes);
+    expect(close(brandOf(bytes)[0], '#0a3d91')).toBe(true);
     expect(performance.now() - start).toBeLessThan(1000);
-    expect(close(brand[0], '#0a3d91')).toBe(true);
   });
 
   it('refuses formats it cannot decode with a way forward', () => {
-    const webp = Buffer.concat([Buffer.from('RIFF'), Buffer.alloc(4), Buffer.from('WEBPVP8 ')]);
-    expect(() => extractImageColors(source(webp))).toThrow(
-      /WEBP isn't supported yet. Export the logo as SVG or PNG/,
-    );
+    expect(() =>
+      extractImageColors(
+        source(Buffer.concat([Buffer.from('RIFF'), Buffer.alloc(4), Buffer.from('WEBPVP8 ')])),
+      ),
+    ).toThrow(/WEBP isn't supported yet. Export the logo as SVG or PNG/);
     expect(() => extractImageColors(source(Buffer.from('hello')))).toThrow(
       /isn't a PNG, JPEG, SVG or PDF/,
     );
@@ -117,9 +122,9 @@ describe('reading a brand manual PDF', () => {
   });
 
   it('picks different hues as brand colors, not a tint ramp or a one-off splash', () => {
-    const ramp = ['#1f8197', '#abebfc', '#55bcd4', '#196d80'].map((hex) => ({ hex, page: 6 }));
     const splash = {
       hex: '#e0169c',
+      // A valid hex.
       color: parseColor('#e0169c')!,
       share: 0.03,
       role: 'brand' as const,
@@ -129,11 +134,19 @@ describe('reading a brand manual PDF', () => {
       method: '',
       colors: [splash],
       skipped: [],
-      stated: { colors: ramp, fonts: [], radii: [], baseSize: [] },
+      stated: {
+        // A tint ramp: one hue, four lightnesses.
+        colors: ['#1f8197', '#abebfc', '#55bcd4', '#196d80'].map((hex) => ({ hex, page: 6 })),
+        fonts: [],
+        radii: [],
+        baseSize: [],
+      },
     };
     expect(pickBrand(findings)).toEqual(['#1f8197']);
-    const bigger = { ...splash, share: 0.2 };
-    expect(pickBrand({ ...findings, colors: [bigger] })).toEqual(['#1f8197', '#e0169c']);
+    expect(pickBrand({ ...findings, colors: [{ ...splash, share: 0.2 }] })).toEqual([
+      '#1f8197',
+      '#e0169c',
+    ]);
   });
 });
 

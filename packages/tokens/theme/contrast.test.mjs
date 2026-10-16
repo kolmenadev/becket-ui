@@ -30,25 +30,26 @@ function block(selector) {
   return '';
 }
 
-const vars = (text) =>
-  Object.fromEntries(
-    [...text.matchAll(/(--beckui--[\w-]+):\s*([^;}]+);?/g)].map(([, n, v]) => [n, v.trim()]),
-  );
-const cssDark = vars(block(':where(:root, :host) {'));
-const cssLight = { ...cssDark, ...vars(block("[data-theme='light'] {")) };
+const [cssDark, cssLightOnly] = [':where(:root, :host) {', "[data-theme='light'] {"].map(
+  (selector) =>
+    Object.fromEntries(
+      [...block(selector).matchAll(/(--beckui--[\w-]+):\s*([^;}]+);?/g)].map(([, n, v]) => [
+        n,
+        v.trim(),
+      ]),
+    ),
+);
 
-const kebab = (key) => key.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`).replace('.', '-');
-
-function cssColor(table, name, depth = 0) {
+function cssColor({ table, name, depth = 0 }) {
   const value = table[`--beckui--colors-${name}`];
   assert.ok(value, `missing --beckui--colors-${name}`);
   const nested = value.match(/^var\(--beckui--colors-([\w-]+)\)$/);
-  if (nested && depth < 6) return cssColor(table, nested[1], depth + 1);
+  if (nested && depth < 6) return cssColor({ table, name: nested[1], depth: depth + 1 });
   const mix = value.match(
     /^color-mix\(in oklch, var\(--beckui--colors-([\w-]+)\) (\d+)%, white\)$/,
   );
   if (mix) {
-    const base = cssColor(table, mix[1], depth + 1);
+    const base = cssColor({ table, name: mix[1], depth: depth + 1 });
     const amount = Number(mix[2]) / 100;
     return { L: base.L * amount + (1 - amount), C: base.C * amount, h: base.h };
   }
@@ -60,11 +61,14 @@ function cssColor(table, name, depth = 0) {
 const defaults = resolveBecketColors();
 for (const [mode, table] of [
   ['dark', cssDark],
-  ['light', cssLight],
+  ['light', { ...cssDark, ...cssLightOnly }],
 ]) {
   test(`${mode}: the checker's default colors match index.css`, () => {
     for (const key of Object.keys(defaultColors.dark)) {
-      const fromCss = cssColor(table, kebab(key));
+      const fromCss = cssColor({
+        table,
+        name: key.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`).replace('.', '-'),
+      });
       assert.ok(
         colorDistance(defaults[mode][key], fromCss) < 1e-6,
         `${key}: checker ${formatOklch(defaults[mode][key])}, index.css ${formatOklch(fromCss)}`,
@@ -81,15 +85,17 @@ for (const result of report.results.filter((each) => each.level === 'required'))
 }
 
 test('advisory pairs are the known default gaps, and only those', () => {
-  const failing = report.advisories.map(
-    (result) => `${result.theme}:${result.foreground}/${result.background}`,
+  assert.deepEqual(
+    report.advisories
+      .map((result) => `${result.theme}:${result.foreground}/${result.background}`)
+      .toSorted(),
+    [
+      'dark:neutral.900/tertiary',
+      'light:neutral.900/tertiary',
+      'light:primary/background',
+      'light:primary/surface',
+    ],
   );
-  assert.deepEqual(failing.toSorted(), [
-    'dark:neutral.900/tertiary',
-    'light:neutral.900/tertiary',
-    'light:primary/background',
-    'light:primary/surface',
-  ]);
   assert.equal(report.passes, true);
 });
 
@@ -110,15 +116,14 @@ test('contrastRatio: black on white is 21:1, a color on itself is 1:1', () => {
 });
 
 test('parseColor: hex, rgb(), hsl() and oklch() give the same ratio for the same color', () => {
-  const formats = [
+  const ratios = [
     '#0a3d91',
     '#0A3D91',
     'rgb(10, 61, 145)',
     'rgb(10 61 145 / 50%)',
     'hsl(217.33 87.1% 30.39%)',
     formatOklch(parseColor('#0a3d91')),
-  ];
-  const ratios = formats.map((format) => contrastRatio(format, '#ffffff'));
+  ].map((format) => contrastRatio(format, '#ffffff'));
   for (const ratio of ratios) assert.ok(Math.abs(ratio - ratios[0]) < 0.01, `${ratios.join(', ')}`);
 });
 

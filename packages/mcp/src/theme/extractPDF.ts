@@ -8,12 +8,6 @@ import type { Findings, Stated } from './suggestTheme';
 // Brand manuals put colors, type and spacing up front; past this, pages are mostly imagery.
 const maxPages = 60;
 
-/** px or pt → rem, so the theme keeps following the browser's text size. */
-function toRem(value: number, unit: string) {
-  const px = unit.toLowerCase() === 'pt' ? (value * 4) / 3 : value;
-  return `${Number((px / 16).toFixed(4))}rem`;
-}
-
 /** Colors, fonts, corner radius and text size from a brand manual PDF. Nothing in the PDF runs. */
 export async function extractPDF(source: Source): Promise<Findings> {
   const { OPS } = await getResolvedPDFJS();
@@ -26,11 +20,10 @@ export async function extractPDF(source: Source): Promise<Findings> {
 
   for (let number = 1; number <= pageCount; number += 1) {
     const page = await pdf.getPage(number);
-    const content = await page.getTextContent();
     let text = '';
     let lastY: number | null = null;
     const charactersByFont = new Map<string, number>();
-    for (const item of content.items) {
+    for (const item of (await page.getTextContent()).items) {
       if (!('str' in item)) continue;
       const y = item.transform[5];
       if (lastY !== null && Math.abs(y - lastY) > 1) text += '\n';
@@ -75,39 +68,37 @@ export async function extractPDF(source: Source): Promise<Findings> {
 
   // What the manual says outright, line by line.
   const stated: Stated = { colors: [], fonts: [], radii: [], baseSize: [] };
-  const colorPatterns: {
-    pattern: RegExp;
-    read: (match: RegExpMatchArray) => string | null;
-    approximate?: boolean;
-  }[] = [
-    { pattern: /#([0-9a-f]{6}|[0-9a-f]{3})\b/gi, read: (match) => `#${match[1]}` },
-    {
-      pattern: /\bRGB[:\s]*\(?\s*(\d{1,3})[,\s/]+(\d{1,3})[,\s/]+(\d{1,3})\)?/gi,
-      read: (match) =>
-        match.slice(1, 4).every((channel) => Number(channel) <= 255)
-          ? `rgb(${match[1]}, ${match[2]}, ${match[3]})`
-          : null,
-    },
-    {
-      // "CMYK 100 58 0 43", "C100 M58 Y0 K43", "C 100 / M 58 / Y 0 / K 43"
-      pattern:
-        /\b(?:CMYK[:\s]*\(?\s*(\d{1,3})[,\s/%]+(\d{1,3})[,\s/%]+(\d{1,3})[,\s/%]+(\d{1,3})|C\s*(\d{1,3})[,\s/%]*M\s*(\d{1,3})[,\s/%]*Y\s*(\d{1,3})[,\s/%]*K\s*(\d{1,3}))/gi,
-      read: (match) => {
-        const [c, m, y, k] = (match[1] ? match.slice(1, 5) : match.slice(5, 9)).map(
-          (part) => Number(part) / 100,
-        );
-        if ([c, m, y, k].some((part) => part > 1)) return null;
-        // Uncalibrated conversion: close enough to pick a hue, not a print match. Reported as approximate.
-        const [r, g, b] = [c, m, y].map((part) => Math.round(255 * (1 - part) * (1 - k)));
-        return formatHex(rgbToOklch([r, g, b]));
-      },
-      approximate: true,
-    },
-  ];
   pages.forEach((text, index) => {
     const page = index + 1;
     for (const line of text.split('\n')) {
-      for (const { pattern, read, approximate } of colorPatterns) {
+      for (const { pattern, read, approximate } of [
+        {
+          pattern: /#([0-9a-f]{6}|[0-9a-f]{3})\b/gi,
+          read: (match: RegExpMatchArray) => `#${match[1]}`,
+        },
+        {
+          pattern: /\bRGB[:\s]*\(?\s*(\d{1,3})[,\s/]+(\d{1,3})[,\s/]+(\d{1,3})\)?/gi,
+          read: (match: RegExpMatchArray) =>
+            match.slice(1, 4).every((channel) => Number(channel) <= 255)
+              ? `rgb(${match[1]}, ${match[2]}, ${match[3]})`
+              : null,
+        },
+        {
+          // "CMYK 100 58 0 43", "C100 M58 Y0 K43", "C 100 / M 58 / Y 0 / K 43"
+          pattern:
+            /\b(?:CMYK[:\s]*\(?\s*(\d{1,3})[,\s/%]+(\d{1,3})[,\s/%]+(\d{1,3})[,\s/%]+(\d{1,3})|C\s*(\d{1,3})[,\s/%]*M\s*(\d{1,3})[,\s/%]*Y\s*(\d{1,3})[,\s/%]*K\s*(\d{1,3}))/gi,
+          read: (match: RegExpMatchArray) => {
+            const [c, m, y, k] = (match[1] ? match.slice(1, 5) : match.slice(5, 9)).map(
+              (part) => Number(part) / 100,
+            );
+            if ([c, m, y, k].some((part) => part > 1)) return null;
+            // Uncalibrated conversion: close enough to pick a hue, not a print match. Reported as approximate.
+            const [r, g, b] = [c, m, y].map((part) => Math.round(255 * (1 - part) * (1 - k)));
+            return formatHex(rgbToOklch([r, g, b]));
+          },
+          approximate: true,
+        },
+      ]) {
         for (const match of line.matchAll(pattern)) {
           const value = read(match);
           const color = value && parseColor(value);
@@ -135,13 +126,21 @@ export async function extractPDF(source: Source): Promise<Findings> {
       for (const match of line.matchAll(
         /\b(?:corner|border)[\s-]*radi(?:us|i)\b[^0-9\n]{0,24}(\d+(?:\.\d+)?)\s*(px|pt)\b/gi,
       )) {
-        stated.radii.push({ value: toRem(Number(match[1]), match[2]), page });
+        stated.radii.push({
+          // px or pt → rem, so the theme keeps following the browser's text size.
+          value: `${Number(((match[2].toLowerCase() === 'pt' ? (Number(match[1]) * 4) / 3 : Number(match[1])) / 16).toFixed(4))}rem`,
+          page,
+        });
       }
       for (const match of line.matchAll(
         /\b(?:body|base|paragraph)\s*(?:text|copy|font)?\s*(?:size)?\b[^0-9\n]{0,24}(\d+(?:\.\d+)?)\s*(px|pt)\b/gi,
       )) {
         const size = Number(match[1]);
-        if (size >= 10 && size <= 24) stated.baseSize.push({ value: toRem(size, match[2]), page });
+        if (size < 10 || size > 24) continue;
+        stated.baseSize.push({
+          value: `${Number(((match[2].toLowerCase() === 'pt' ? (size * 4) / 3 : size) / 16).toFixed(4))}rem`,
+          page,
+        });
       }
     }
   });
@@ -160,24 +159,25 @@ export async function extractPDF(source: Source): Promise<Findings> {
     .toSorted((a, b) => b.characters - a.characters)
     .map(({ family, page }) => ({ family, page }));
 
+  // Summed once here, not per color inside the flatMap below.
   const total = [...fills.values()].reduce((sum, count) => sum + count, 0);
-  const colors = [...fills.entries()].flatMap(([hex, count]): ExtractedColor[] => {
-    const color = parseColor(hex);
-    if (!color) return [];
-    return [
-      {
-        hex: formatHex(color),
-        color,
-        share: count / total,
-        role: color.C < neutralChroma ? 'neutral' : 'brand',
-      },
-    ];
-  });
-
   return {
     label: source.label,
     method: `PDF, ${pageCount} of ${totalPages} pages: stated colors, fonts and sizes from the text, plus artwork fill colors (by how often each is used, not by area)`,
-    colors: mergeClose(colors),
+    colors: mergeClose(
+      [...fills.entries()].flatMap(([hex, count]): ExtractedColor[] => {
+        const color = parseColor(hex);
+        if (!color) return [];
+        return [
+          {
+            hex: formatHex(color),
+            color,
+            share: count / total,
+            role: color.C < neutralChroma ? 'neutral' : 'brand',
+          },
+        ];
+      }),
+    ),
     stated,
     skipped:
       totalPages > maxPages

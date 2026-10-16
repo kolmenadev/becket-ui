@@ -88,34 +88,33 @@ export function isPublicAddress(address: string): boolean {
   return !blocked.check(address, 'ipv6');
 }
 
-function checkURL(raw: string) {
-  let url: URL;
-  try {
-    url = new URL(raw);
-  } catch {
-    throw new Error(`"${raw}" isn't a URL.`);
-  }
-  if (url.protocol !== 'https:')
-    throw new Error(`Only https URLs are fetched, not ${url.protocol}//.`);
-  if (url.username || url.password) throw new Error('URLs with credentials are refused.');
-  const host = url.hostname.replace(/^\[|\]$/g, '');
-  if (isIP(host) && !isPublicAddress(host))
-    throw new Error(
-      `${host} is a private or reserved address; only public https URLs are fetched.`,
-    );
-  if (
-    host === 'localhost' ||
-    host.endsWith('.localhost') ||
-    host.endsWith('.local') ||
-    host.endsWith('.internal')
-  ) {
-    throw new Error(`${host} is a local host name; only public https URLs are fetched.`);
-  }
-  return url;
-}
-
-function download(url: URL, redirects: number): Promise<Buffer> {
+/** Every URL, the first and each redirect, is checked here before it's requested. */
+function download(raw: string, redirects: number): Promise<Buffer> {
   return new Promise((resolvePromise, reject) => {
+    // A throw in here rejects the promise.
+    let url: URL;
+    try {
+      url = new URL(raw);
+    } catch {
+      throw new Error(`"${raw}" isn't a URL.`);
+    }
+    if (url.protocol !== 'https:')
+      throw new Error(`Only https URLs are fetched, not ${url.protocol}//.`);
+    if (url.username || url.password) throw new Error('URLs with credentials are refused.');
+    const host = url.hostname.replace(/^\[|\]$/g, '');
+    if (isIP(host) && !isPublicAddress(host))
+      throw new Error(
+        `${host} is a private or reserved address; only public https URLs are fetched.`,
+      );
+    if (
+      host === 'localhost' ||
+      host.endsWith('.localhost') ||
+      host.endsWith('.local') ||
+      host.endsWith('.internal')
+    ) {
+      throw new Error(`${host} is a local host name; only public https URLs are fetched.`);
+    }
+
     const req = request(
       url,
       {
@@ -138,6 +137,7 @@ function download(url: URL, redirects: number): Promise<Buffer> {
               );
             }
             if (options.all) {
+              // See above: the all-addresses reply isn't in Node's callback type.
               return (callback as unknown as (error: null, addresses: LookupAddress[]) => void)(
                 null,
                 list,
@@ -156,9 +156,11 @@ function download(url: URL, redirects: number): Promise<Buffer> {
           if (redirects >= maxRedirects)
             return reject(new Error(`More than ${maxRedirects} redirects.`));
           try {
-            const next = checkURL(new URL(response.headers.location, url).toString());
-            return resolvePromise(download(next, redirects + 1));
+            return resolvePromise(
+              download(new URL(response.headers.location, url).toString(), redirects + 1),
+            );
           } catch (error) {
+            // A Location that can't be read as a URL.
             return reject(error);
           }
         }
@@ -198,8 +200,8 @@ function download(url: URL, redirects: number): Promise<Buffer> {
 
 /** Read an image or PDF from a local path, an https URL or base64 (a data: URL works too). */
 export async function loadSource(input: SourceInput): Promise<Source> {
-  const given = [input.path, input.url, input.base64].filter(Boolean);
-  if (given.length !== 1) throw new Error('Pass exactly one of path, url or base64.');
+  if ([input.path, input.url, input.base64].filter(Boolean).length !== 1)
+    throw new Error('Pass exactly one of path, url or base64.');
 
   let bytes: Buffer;
   let label: string;
@@ -214,9 +216,8 @@ export async function loadSource(input: SourceInput): Promise<Source> {
     bytes = await readFile(path);
     label = basename(path);
   } else if (input.url) {
-    const url = checkURL(input.url);
-    bytes = await download(url, 0);
-    label = url.toString();
+    bytes = await download(input.url, 0);
+    label = input.url;
   } else {
     const data = (input.base64 ?? '').replace(/^data:[^;,]+;base64,/, '').replace(/\s+/g, '');
     if (!/^[A-Za-z0-9+/]+={0,2}$/.test(data)) throw new Error("base64 isn't valid base64.");

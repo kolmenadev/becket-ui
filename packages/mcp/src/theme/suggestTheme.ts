@@ -26,33 +26,38 @@ export type Findings = {
 
 /** Up to three brand colors, most visual weight first, distinct from each other. */
 export function pickBrand(findings: Findings): string[] {
-  const read = (entry: { hex: string; share?: number }) => {
-    const color = parseColor(entry.hex);
-    return color ? [{ hex: entry.hex, color, share: entry.share ?? 0 }] : [];
-  };
-  const sampled = findings.colors.filter((color) => color.role !== 'background').flatMap(read);
-  // A gradient shows up as several close shades of one hue (ΔE OK under 0.1, which most people
-  // read as one color); weigh each color with its family.
-  const family = (entry: (typeof sampled)[number]) =>
-    sampled
-      .filter((other) => colorDistance(other.color, entry.color) < 0.1)
-      .reduce((sum, other) => sum + other.share, 0);
   // Stated colors (a manual) always come first, in the manual's order.
   const candidates = [
-    ...(findings.stated?.colors ?? []).flatMap(read),
-    // Under 5% of the artwork is a one-off graphic, not the brand.
-    ...sampled.filter((entry) => family(entry) >= 0.05).toSorted((a, b) => family(b) - family(a)),
+    ...(findings.stated?.colors ?? []).flatMap((entry) => {
+      const color = parseColor(entry.hex);
+      return color ? [{ hex: entry.hex, color }] : [];
+    }),
+    ...findings.colors
+      .filter((color) => color.role !== 'background')
+      // A gradient shows up as several close shades of one hue (ΔE OK under 0.1, which most
+      // people read as one color); weigh each color with its family.
+      .map((entry, _, sampled) => ({
+        ...entry,
+        family: sampled
+          .filter((other) => colorDistance(other.color, entry.color) < 0.1)
+          .reduce((sum, other) => sum + other.share, 0),
+      }))
+      // Under 5% of the artwork is a one-off graphic, not the brand.
+      .filter((entry) => entry.family >= 0.05)
+      .toSorted((a, b) => b.family - a.family),
   ];
   const picked: typeof candidates = [];
   for (const candidate of candidates) {
     if (candidate.color.C < neutralChroma) continue;
     // Brand colors are different hues. Manuals print tint ramps (one hue, many lightnesses);
     // those are shades of one brand color, not three.
-    const tooClose = picked.some((other) => {
-      const gap = Math.abs(other.color.h - candidate.color.h);
-      return Math.min(gap, 360 - gap) < 30;
-    });
-    if (tooClose) continue;
+    if (
+      picked.some((other) => {
+        const gap = Math.abs(other.color.h - candidate.color.h);
+        return Math.min(gap, 360 - gap) < 30;
+      })
+    )
+      continue;
     picked.push(candidate);
     if (picked.length === 3) break;
   }
@@ -130,16 +135,14 @@ export function formatSuggestion(findings: Findings): string {
     ].map((option, index) => {
       // Preview each option with the real derivation, so the user sees what they'd get.
       const { theme, contrast, notes } = deriveBecketTheme({ brand: option.brand });
-      const toHex = (value: unknown) => {
+      const [button, link] = [
+        theme.colors?.primary,
+        typeof theme.colors?.link === 'object' ? theme.colors.link.light : theme.colors?.link,
+      ].map((value) => {
         const color = typeof value === 'string' ? parseColor(value) : null;
         return color ? formatHex(color) : String(value);
-      };
-      const link = theme.colors?.link;
-      const shaded = notes.some(
-        (note) => note.token === 'primary' && /lightened/.test(note.reason),
-      );
-      const preview = `buttons ${toHex(theme.colors?.primary)}${shaded ? ` (lightened from ${option.brand[0]} for readable labels)` : ''}, light-theme links ${toHex(typeof link === 'object' ? link.light : link)}; ${contrast.passes ? 'passes AA in dark and light' : `${contrast.failures.length} AA failures`}`;
-      return `${index + 1}. ${option.label}: \`${JSON.stringify(option.brand)}\` — ${preview}`;
+      });
+      return `${index + 1}. ${option.label}: \`${JSON.stringify(option.brand)}\` — buttons ${button}${notes.some((note) => note.token === 'primary' && /lightened/.test(note.reason)) ? ` (lightened from ${option.brand[0]} for readable labels)` : ''}, light-theme links ${link}; ${contrast.passes ? 'passes AA in dark and light' : `${contrast.failures.length} AA failures`}`;
     }),
     'Or the user gives their own hex values. Becket shades any color that would fail contrast and says why.',
   );
@@ -157,21 +160,19 @@ export function formatSuggestion(findings: Findings): string {
     step += 1;
     const radius = stated.radii[0];
     const base = stated.baseSize[0];
-    const ask = [
-      radius && `corner radius ${radius.value} (page ${radius.page})`,
-      base && `body text ${base.value} (page ${base.page})`,
-    ]
-      .filter(Boolean)
-      .join(' and ');
-    const values = [
-      radius && `radii: { "md": "${radius.value}" }`,
-      base && `fontSizes: { "base": "${base.value}" }`,
-    ]
-      .filter(Boolean)
-      .join(', ');
     lines.push(
       `### Step ${step} of ${steps.length}: corners and text size`,
-      `Ask: "Your manual sets ${ask}. Apply ${radius && base ? 'them' : 'it'} to Becket?" If yes, add ${values}. Otherwise keep Becket's defaults.`,
+      `Ask: "Your manual sets ${[
+        radius && `corner radius ${radius.value} (page ${radius.page})`,
+        base && `body text ${base.value} (page ${base.page})`,
+      ]
+        .filter(Boolean)
+        .join(' and ')}. Apply ${radius && base ? 'them' : 'it'} to Becket?" If yes, add ${[
+        radius && `radii: { "md": "${radius.value}" }`,
+        base && `fontSizes: { "base": "${base.value}" }`,
+      ]
+        .filter(Boolean)
+        .join(', ')}. Otherwise keep Becket's defaults.`,
     );
   }
   if (!fonts.length) {
@@ -190,22 +191,20 @@ export function formatSuggestion(findings: Findings): string {
 export async function suggestTheme(input: SuggestThemeInput): Promise<string> {
   try {
     if (input.colors?.length && !input.path && !input.url && !input.base64) {
-      const seen = input.colors;
-      const colors = seen.map((value): ExtractedColor => {
-        const color = parseColor(value);
-        if (!color)
-          throw new Error(`Can't read the color "${value}". Use hex, rgb(), hsl() or oklch().`);
-        return {
-          hex: formatHex(color),
-          color,
-          share: 1 / seen.length,
-          role: color.C < neutralChroma ? 'neutral' : 'brand',
-        };
-      });
       return formatSuggestion({
         label: 'the colors you read from the image',
         method: 'colors passed by the agent, in the order given',
-        colors,
+        colors: input.colors.map((value, _, all): ExtractedColor => {
+          const color = parseColor(value);
+          if (!color)
+            throw new Error(`Can't read the color "${value}". Use hex, rgb(), hsl() or oklch().`);
+          return {
+            hex: formatHex(color),
+            color,
+            share: 1 / all.length,
+            role: color.C < neutralChroma ? 'neutral' : 'brand',
+          };
+        }),
         skipped: [],
       });
     }
@@ -217,7 +216,6 @@ export async function suggestTheme(input: SuggestThemeInput): Promise<string> {
     const { colors, method, skipped } = extractImageColors(source);
     return formatSuggestion({ label: source.label, method, colors, skipped });
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    return `Couldn't read that source: ${message}\n\nIf the image is only in the chat (pasted), read its main colors yourself and call suggest_theme with \`colors: ["#…", "#…"]\`, or ask the user for the file path.`;
+    return `Couldn't read that source: ${error instanceof Error ? error.message : String(error)}\n\nIf the image is only in the chat (pasted), read its main colors yourself and call suggest_theme with \`colors: ["#…", "#…"]\`, or ask the user for the file path.`;
   }
 }

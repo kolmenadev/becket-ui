@@ -100,35 +100,6 @@ export const contrastPairs = [
   })),
 ];
 
-function resolveTable(table) {
-  const resolved = {};
-  const resolve = (key, depth = 0) => {
-    if (resolved[key]) return resolved[key];
-    if (depth > 8) throw new Error(`Color token "${key}" refers to itself`);
-    const value = table[key];
-    if (value == null) throw new Error(`Unknown color token "${key}"`);
-    let color;
-    if (typeof value === 'object') {
-      const base = resolve(value.mixWithWhite, depth + 1);
-      // color-mix(in oklch, base n%, white): white has no hue, so the hue stays the base's.
-      color = {
-        L: base.L * value.amount + (1 - value.amount),
-        C: base.C * value.amount,
-        h: base.h,
-      };
-    } else {
-      const reference = value.match(/^\{([\w.]+)\}$/);
-      color = reference ? resolve(reference[1], depth + 1) : parseColor(value);
-      if (!color)
-        throw new Error(`Can't read colors.${key} "${value}". Use hex, rgb(), hsl() or oklch().`);
-    }
-    resolved[key] = color;
-    return color;
-  };
-  for (const key of Object.keys(table)) resolve(key);
-  return resolved;
-}
-
 /**
  * Final colors in both themes for a theme config, as OKLCH.
  *
@@ -140,21 +111,50 @@ function resolveTable(table) {
  */
 export function resolveBecketColors(theme = {}) {
   const root = {};
-  const light = {};
+  const lightOnly = {};
   for (const [key, value] of Object.entries(theme.colors ?? {})) {
     if (value == null) continue;
     if (key === 'neutral') {
       for (const [step, color] of Object.entries(value)) root[`neutral.${step}`] = color;
     } else if (typeof value === 'object') {
       if (value.dark) root[key] = value.dark;
-      if (value.light) light[key] = value.light;
+      if (value.light) lightOnly[key] = value.light;
     } else {
       root[key] = value;
     }
   }
-  const darkTable = { ...defaultColors.dark, ...root };
-  const lightTable = { ...defaultColors.dark, ...defaultColors.light, ...root, ...light };
-  return { dark: resolveTable(darkTable), light: resolveTable(lightTable) };
+  const [dark, light] = [
+    { ...defaultColors.dark, ...root },
+    { ...defaultColors.dark, ...defaultColors.light, ...root, ...lightOnly },
+  ].map((table) => {
+    const resolved = {};
+    const resolve = (key, depth = 0) => {
+      if (resolved[key]) return resolved[key];
+      if (depth > 8) throw new Error(`Color token "${key}" refers to itself`);
+      const value = table[key];
+      if (value == null) throw new Error(`Unknown color token "${key}"`);
+      let color;
+      if (typeof value === 'object') {
+        const base = resolve(value.mixWithWhite, depth + 1);
+        // color-mix(in oklch, base n%, white): white has no hue, so the hue stays the base's.
+        color = {
+          L: base.L * value.amount + (1 - value.amount),
+          C: base.C * value.amount,
+          h: base.h,
+        };
+      } else {
+        const reference = value.match(/^\{([\w.]+)\}$/);
+        color = reference ? resolve(reference[1], depth + 1) : parseColor(value);
+        if (!color)
+          throw new Error(`Can't read colors.${key} "${value}". Use hex, rgb(), hsl() or oklch().`);
+      }
+      resolved[key] = color;
+      return color;
+    };
+    for (const key of Object.keys(table)) resolve(key);
+    return resolved;
+  });
+  return { dark, light };
 }
 
 /**

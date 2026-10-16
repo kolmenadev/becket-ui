@@ -16,13 +16,15 @@ function linearToOklch([r, g, b]) {
   const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
   const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
   const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
-  const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
   const a = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
   const bb = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
   const C = Math.hypot(a, bb);
-  // Grays have no meaningful hue; 0 keeps the output stable.
-  const h = C < 1e-4 ? 0 : ((Math.atan2(bb, a) * 180) / Math.PI + 360) % 360;
-  return { L, C: C < 1e-4 ? 0 : C, h };
+  return {
+    L: 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+    C: C < 1e-4 ? 0 : C,
+    // Grays have no meaningful hue; 0 keeps the output stable.
+    h: C < 1e-4 ? 0 : ((Math.atan2(bb, a) * 180) / Math.PI + 360) % 360,
+  };
 }
 
 /** OKLCH → linear sRGB, unclamped (channels outside 0–1 mean out of gamut). */
@@ -49,7 +51,7 @@ function number(part, scale = 1) {
 }
 
 /**
- * Parse a CSS color (hex, rgb(), hsl(), oklch(), black, white) into OKLCH.
+ * Parse a CSS color (hex, rgb(), hsl(), oklch() or a basic color name) into OKLCH.
  * Alpha is ignored: Becket brand tokens are opaque.
  *
  * @param {string} input
@@ -57,15 +59,39 @@ function number(part, scale = 1) {
  */
 export function parseColor(input) {
   if (typeof input !== 'string') return null;
+  // CSS's basic color names, the ones logos and SVGs use. Rarer names aren't guessed.
   const value = (
-    { black: '#000000', white: '#ffffff' }[input.trim().toLowerCase()] ?? input
+    {
+      black: '#000000',
+      white: '#ffffff',
+      red: '#ff0000',
+      green: '#008000',
+      blue: '#0000ff',
+      yellow: '#ffff00',
+      orange: '#ffa500',
+      purple: '#800080',
+      gray: '#808080',
+      grey: '#808080',
+      navy: '#000080',
+      teal: '#008080',
+      maroon: '#800000',
+      olive: '#808000',
+      lime: '#00ff00',
+      aqua: '#00ffff',
+      fuchsia: '#ff00ff',
+      silver: '#c0c0c0',
+    }[input.trim().toLowerCase()] ?? input
   ).trim();
 
   const hex = value.match(/^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i);
   if (hex) {
-    const digits = hex[1].length <= 4 ? [...hex[1]].map((digit) => digit + digit).join('') : hex[1];
-    const rgb = [0, 2, 4].map((start) => Number.parseInt(digits.slice(start, start + 2), 16) / 255);
-    return linearToOklch(rgb.map(toLinear));
+    return linearToOklch(
+      // #abc → #aabbcc; the first three pairs are r, g, b (alpha is dropped).
+      (hex[1].length <= 4 ? [...hex[1]].map((digit) => digit + digit).join('') : hex[1])
+        .match(/../g)
+        .slice(0, 3)
+        .map((pair) => toLinear(Number.parseInt(pair, 16) / 255)),
+    );
   }
 
   const fn = value.match(/^(rgba?|hsla?|oklch)\(\s*([^)]*)\)$/i);
@@ -108,11 +134,6 @@ export function parseColor(input) {
   return { L: clamp01(L), C: Math.max(0, C), h: ((h % 360) + 360) % 360 };
 }
 
-/** @param {{ L: number, C: number, h: number }} color */
-function isInGamut(color) {
-  return oklchToLinear(color).every((channel) => channel >= -1e-4 && channel <= 1 + 1e-4);
-}
-
 /**
  * Bring a color into sRGB by lowering chroma only, keeping lightness and hue. That keeps
  * contrast predictable, which matters more here than keeping saturation.
@@ -120,11 +141,18 @@ function isInGamut(color) {
  * @param {{ L: number, C: number, h: number }} color
  */
 export function toGamut(color) {
-  if (isInGamut(color)) return color;
+  // In gamut: every linear channel within 0–1, give or take float noise.
+  if (oklchToLinear(color).every((channel) => channel >= -1e-4 && channel <= 1 + 1e-4))
+    return color;
   let [low, high] = [0, color.C];
   for (let step = 0; step < 24; step += 1) {
     const middle = (low + high) / 2;
-    if (isInGamut({ ...color, C: middle })) low = middle;
+    if (
+      oklchToLinear({ ...color, C: middle }).every(
+        (channel) => channel >= -1e-4 && channel <= 1 + 1e-4,
+      )
+    )
+      low = middle;
     else high = middle;
   }
   return { ...color, C: low };
@@ -138,13 +166,18 @@ export function formatOklch({ L, C, h }) {
 
 /** @param {{ L: number, C: number, h: number }} color */
 export function formatHex(color) {
-  const rgb = oklchToLinear(toGamut(color)).map((linear) => {
-    const channel = clamp01(linear);
-    // Linear light → sRGB channel (the inverse of toLinear).
-    const srgb = channel <= 0.0031308 ? channel * 12.92 : 1.055 * channel ** (1 / 2.4) - 0.055;
-    return Math.round(clamp01(srgb) * 255);
-  });
-  return `#${rgb.map((channel) => channel.toString(16).padStart(2, '0')).join('')}`;
+  return `#${oklchToLinear(toGamut(color))
+    .map((linear) => {
+      const channel = clamp01(linear);
+      // Linear light → sRGB channel (the inverse of toLinear).
+      return Math.round(
+        clamp01(channel <= 0.0031308 ? channel * 12.92 : 1.055 * channel ** (1 / 2.4) - 0.055) *
+          255,
+      )
+        .toString(16)
+        .padStart(2, '0');
+    })
+    .join('')}`;
 }
 
 /**
@@ -173,12 +206,11 @@ export function contrastRatio(foreground, background) {
  * @param {{ L: number, C: number, h: number }} second
  */
 export function colorDistance(first, second) {
-  const lab = ({ L, C, h }) => [
+  const [a, b] = [first, second].map(({ L, C, h }) => [
     L,
     C * Math.cos((h * Math.PI) / 180),
     C * Math.sin((h * Math.PI) / 180),
-  ];
-  const [a, b] = [lab(first), lab(second)];
+  ]);
   return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 }
 

@@ -69,7 +69,7 @@ export const BECKET_PUBLIC_NEUTRAL_STEPS: readonly string[];
 /** A color in OKLCH: lightness 0–1, chroma 0–~0.4, hue in degrees. */
 export type Oklch = { L: number; C: number; h: number };
 
-/** Parse hex, rgb(), hsl(), oklch(), black or white. Alpha is ignored. Null when unsupported. */
+/** Parse hex, rgb(), hsl(), oklch() or a basic color name. Alpha is ignored. Null when unsupported. */
 export function parseColor(input: string): Oklch | null;
 /** WCAG 2 contrast ratio, 1–21. Throws on a color it can't read. */
 export function contrastRatio(foreground: string | Oklch, background: string | Oklch): number;

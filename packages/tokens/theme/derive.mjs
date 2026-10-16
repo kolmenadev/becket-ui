@@ -10,20 +10,15 @@ import { checkBecketThemeContrast, resolveBecketColors } from './contrast.mjs';
 // Aim slightly above 4.5:1 so values rounded for CSS still pass.
 const textTarget = 4.6;
 
-const shift = (color, degrees) => ({ ...color, h: (((color.h + degrees) % 360) + 360) % 360 });
-
 /**
  * Move a color's lightness in one direction, one small step at a time, until it reaches
- * `minimum` against every color in `against`. Returns the color unchanged when it already
- * passes, or null when no lightness in that direction works.
+ * `minimum` against every color in `against`. The first step is the color itself, so one that
+ * already passes comes back unchanged. Null when no lightness in that direction works.
  */
 function fitLightness({ color, against, minimum, direction }) {
-  const passes = (candidate) =>
-    against.every((other) => contrastRatio(candidate, other) >= minimum);
-  if (passes(toGamut(color))) return toGamut(color);
   for (let L = color.L; L >= 0 && L <= 1; L += direction === 'lighter' ? 0.005 : -0.005) {
     const candidate = toGamut({ ...color, L });
-    if (passes(candidate)) return candidate;
+    if (against.every((other) => contrastRatio(candidate, other) >= minimum)) return candidate;
   }
   return null;
 }
@@ -49,34 +44,30 @@ export function deriveBecketTheme({ brand, pinned = {} }) {
   const [primarySeed] = seeds;
   // With fewer than three colors, follow the default theme's shape: secondary is the brand hue
   // turned ~45° and tertiary ~30° the other way, at the same lightness and chroma.
-  const secondarySeed = seeds[1] ?? shift(primarySeed, 45);
-  const tertiarySeed = seeds[2] ?? shift(primarySeed, -30);
+  const secondarySeed = seeds[1] ?? { ...primarySeed, h: (primarySeed.h + 45) % 360 };
 
   const notes = [];
   const colors = {};
   const note = (token, reason) => notes.push({ token, reason });
 
-  const neutral = {};
   // A whisper of the brand hue in the grays, like the default theme's warm neutrals. Below 0.012
   // the tint is invisible; above it grays start to read as a color.
   const tint = primarySeed.C < 0.02 ? 0 : 0.012;
-  // The default theme's lightness ladder, so text and canvases keep their contrast.
-  const ladder = {
-    50: 0.96,
-    100: 0.94,
-    200: 0.89,
-    300: 0.84,
-    400: 0.75,
-    500: 0.65,
-    600: 0.55,
-    700: 0.45,
-    800: 0.35,
-    900: 0.22,
-  };
-  for (const [step, L] of Object.entries(ladder)) {
-    neutral[step] = formatOklch({ L, C: tint, h: tint ? primarySeed.h : 0 });
-  }
-  colors.neutral = neutral;
+  colors.neutral = Object.fromEntries(
+    // The default theme's lightness ladder, so text and canvases keep their contrast.
+    Object.entries({
+      50: 0.96,
+      100: 0.94,
+      200: 0.89,
+      300: 0.84,
+      400: 0.75,
+      500: 0.65,
+      600: 0.55,
+      700: 0.45,
+      800: 0.35,
+      900: 0.22,
+    }).map(([step, L]) => [step, formatOklch({ L, C: tint, h: tint ? primarySeed.h : 0 })]),
+  );
   colors.muted = { light: formatOklch({ L: 0.53, C: tint, h: tint ? primarySeed.h : 0 }) };
   note(
     'neutral',
@@ -89,12 +80,12 @@ export function deriveBecketTheme({ brand, pinned = {} }) {
   const canvases = resolveBecketColors({ colors: { ...colors, ...pinned } });
   const dark = [canvases.dark.background, canvases.dark.surface];
   const light = [canvases.light.background, canvases.light.surface];
-  const ink = canvases.dark['neutral.900'];
 
-  const fill = (token, seed, label) => {
+  const fill = ({ token, seed, label }) => {
     const fitted = fitLightness({
       color: seed,
-      against: [ink],
+      // Filled controls put neutral.900 labels on the brand color.
+      against: [canvases.dark['neutral.900']],
       minimum: textTarget,
       direction: 'lighter',
     });
@@ -106,17 +97,17 @@ export function deriveBecketTheme({ brand, pinned = {} }) {
       );
     else note(token, `${label} used as is.`);
   };
-  fill('primary', primarySeed, 'Brand color 1');
-  fill(
-    'secondary',
-    secondarySeed,
-    seeds[1] ? 'Brand color 2' : 'Derived from brand color 1 (hue +45°)',
-  );
-  fill(
-    'tertiary',
-    tertiarySeed,
-    seeds[2] ? 'Brand color 3' : 'Derived from brand color 1 (hue −30°)',
-  );
+  fill({ token: 'primary', seed: primarySeed, label: 'Brand color 1' });
+  fill({
+    token: 'secondary',
+    seed: secondarySeed,
+    label: seeds[1] ? 'Brand color 2' : 'Derived from brand color 1 (hue +45°)',
+  });
+  fill({
+    token: 'tertiary',
+    seed: seeds[2] ?? { ...primarySeed, h: (primarySeed.h + 330) % 360 },
+    label: seeds[2] ? 'Brand color 3' : 'Derived from brand color 1 (hue −30°)',
+  });
 
   const onCanvas = ({ token, seed, label }) => {
     const darkFit = fitLightness({
@@ -165,14 +156,17 @@ export function deriveBecketTheme({ brand, pinned = {} }) {
   });
   if (link) {
     // Hover moves away from the canvas, so it keeps (and gains) contrast.
-    const darkHover = toGamut({ ...link.dark, L: Math.min(1, link.dark.L + 0.06) });
-    const lightHover = fitLightness({
-      color: { ...link.light, L: Math.max(0, link.light.L - 0.08) },
-      against: light,
-      minimum: textTarget,
-      direction: 'darker',
-    });
-    colors.linkHover = { dark: formatOklch(darkHover), light: formatOklch(lightHover) };
+    colors.linkHover = {
+      dark: formatOklch(toGamut({ ...link.dark, L: Math.min(1, link.dark.L + 0.06) })),
+      light: formatOklch(
+        fitLightness({
+          color: { ...link.light, L: Math.max(0, link.light.L - 0.08) },
+          against: light,
+          minimum: textTarget,
+          direction: 'darker',
+        }),
+      ),
+    };
     note('linkHover', 'The link color a step lighter on dark and a step darker on light.');
   }
 
