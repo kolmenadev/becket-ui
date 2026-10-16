@@ -73,28 +73,43 @@ copy a real pattern has emerged, and you can name it accurately.
 When the third copy does appear, extract the smallest thing that removes the duplication, and keep
 it next to its callers ([colocation](#prefer-code-colocation)).
 
-This covers **named constants, helper functions and types** too, not only shared modules. A name
-used once is an abstraction with one caller: to read one line, the reader jumps to its definition
-and back. Write the value or the logic where it's used, and put the reason in a comment there.
+This covers **every name**: constants, helper functions and types, and local variables and
+aliases inside a function too. A name used once is an abstraction with one caller: the reader stops,
+remembers what it holds, and puts it back together at the use. A function used twice is still below
+the Rule of 3: write it out at both uses, or restructure so it's needed once.
 
 ```ts
-// Avoid: a constant and a helper, each used once, defined far from their only caller
-const HUE_APART = 30;
-const hueGap = (a: number, b: number) => Math.min(Math.abs(a - b), 360 - Math.abs(a - b));
-// …40 lines later
-if (picked.some((other) => hueGap(other.h, candidate.h) < HUE_APART)) continue;
+// Avoid: `seen` only renames `input.colors`, and `colors` is passed on once
+const seen = input.colors;
+const colors = seen.map((value) => {
+  const color = parseColor(value);
+  if (!color) throw new Error(`Can't read the color "${value}".`);
+  return { hex: formatHex(color), color, share: 1 / seen.length };
+});
+return formatSuggestion({ label: 'the colors you read from the image', colors });
 
-// Prefer: the value and its reason where they're used
-// Brand colors are different hues; a tint ramp (one hue, many lightnesses) is one brand color.
-const tooClose = picked.some((other) => {
-  const gap = Math.abs(other.h - candidate.h);
-  return Math.min(gap, 360 - gap) < 30;
+// Prefer: the expression where it's used; nothing to remember on the way down
+return formatSuggestion({
+  label: 'the colors you read from the image',
+  colors: input.colors.map((value, _, all) => {
+    const color = parseColor(value);
+    if (!color) throw new Error(`Can't read the color "${value}".`);
+    return { hex: formatHex(color), color, share: 1 / all.length };
+  }),
 });
 ```
 
-Keep a name when it's used three or more times, when a function calls itself, or when it's part
-of a public API. Before you commit, check each new top-level `const`, function and type: if it has
-one caller, inline it.
+The reason a value is what it is goes in a comment at the use, not in a name.
+
+Keep a name only when:
+
+- it's used three or more times, a function calls itself, or it's part of a public API, or
+- inlining would change what the code does: work repeated on every pass of a loop or callback,
+  evaluation order (a timer started before the work it measures, a value read before it's
+  changed), or TypeScript's narrowing. Say which in a comment.
+
+Before you commit, check every new name, top-level and local: if it has one use (or it only
+renames something), inline it.
 
 **Related reads**
 
