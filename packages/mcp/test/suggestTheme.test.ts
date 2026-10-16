@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { extractImageColors } from '../src/theme/extractColors';
-import { extractPDF, fontFamily } from '../src/theme/extractPDF';
+import { extractPDF } from '../src/theme/extractPDF';
 import { detectKind, type Source } from '../src/theme/loadSource';
 import { pickBrand, suggestTheme } from '../src/theme/suggestTheme';
 import {
@@ -105,7 +105,8 @@ describe('reading a brand manual PDF', () => {
     const findings = await extractPDF(source(brandManualPDF(), 'manual.pdf'));
     expect(findings.stated?.colors[0]).toEqual({ hex: '#0a3d91', name: 'Ocean Blue', page: 1 });
     expect(findings.stated?.colors[1].name).toBe('Sunrise (from CMYK, approximate)');
-    expect(findings.stated?.fonts).toEqual([{ family: 'Montserrat', page: 1 }]);
+    // The PDF names "ABCDEF+OpenSans-SemiBoldItalic"; CSS needs "Open Sans".
+    expect(findings.stated?.fonts).toEqual([{ family: 'Open Sans', page: 1 }]);
     expect(findings.stated?.radii).toEqual([{ value: '0.25rem', page: 1 }]);
     expect(findings.stated?.baseSize).toEqual([{ value: '1rem', page: 1 }]);
     expect(findings.colors.map((color) => color.hex)).toEqual(
@@ -134,12 +135,6 @@ describe('reading a brand manual PDF', () => {
     const bigger = { ...splash, share: 0.2 };
     expect(pickBrand({ ...findings, colors: [bigger] })).toEqual(['#1f8197', '#e0169c']);
   });
-
-  it('names fonts the way CSS does', () => {
-    expect(fontFamily('ABCDEF+OpenSans-SemiBoldItalic')).toBe('Open Sans');
-    expect(fontFamily('Montserrat-Bold')).toBe('Montserrat');
-    expect(fontFamily('ArialMT')).toBe('Arial');
-  });
 });
 
 describe('suggest_theme', () => {
@@ -164,8 +159,8 @@ describe('suggest_theme', () => {
   it('adds font and size steps when a manual states them', async () => {
     const text = await suggestTheme({ base64: brandManualPDF().toString('base64') });
     expect(text).toContain('3 steps: brand colors, then brand font, then corners and text size.');
-    expect(text).toContain('Your manual uses Montserrat');
-    expect(text).toContain('`fonts: { "sans": "Montserrat" }`');
+    expect(text).toContain('Your manual uses Open Sans');
+    expect(text).toContain('`fonts: { "sans": "Open Sans" }`');
     expect(text).toContain('radii: { "md": "0.25rem" }, fontSizes: { "base": "1rem" }');
     expect(text).toContain(
       '| color | name | page |\n| --- | --- | --- |\n| #0a3d91 | Ocean Blue | 1 |',

@@ -111,8 +111,8 @@ export function brandManualPDF(): Buffer {
     '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
     '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>',
     `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`,
-    `<< /Type /Font /Subtype /TrueType /BaseFont /ABCDEF+Montserrat-SemiBold /FirstChar 32 /LastChar 126 /Widths [${Array(95).fill(600).join(' ')}] /FontDescriptor 6 0 R >>`,
-    '<< /Type /FontDescriptor /FontName /ABCDEF+Montserrat-SemiBold /Flags 32 /FontBBox [0 0 1000 1000] /ItalicAngle 0 /Ascent 800 /Descent -200 /CapHeight 700 /StemV 80 >>',
+    `<< /Type /Font /Subtype /TrueType /BaseFont /ABCDEF+OpenSans-SemiBoldItalic /FirstChar 32 /LastChar 126 /Widths [${Array(95).fill(600).join(' ')}] /FontDescriptor 6 0 R >>`,
+    '<< /Type /FontDescriptor /FontName /ABCDEF+OpenSans-SemiBoldItalic /Flags 32 /FontBBox [0 0 1000 1000] /ItalicAngle 0 /Ascent 800 /Descent -200 /CapHeight 700 /StemV 80 >>',
   ];
   let out = '%PDF-1.4\n';
   const offsets: number[] = [];

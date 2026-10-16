@@ -1,7 +1,7 @@
 import { lookup as dnsLookup, type LookupAddress } from 'node:dns';
 import { readFile, stat } from 'node:fs/promises';
 import { request } from 'node:https';
-import { BlockList, isIP, type LookupFunction } from 'node:net';
+import { BlockList, isIP } from 'node:net';
 import { basename, resolve } from 'node:path';
 
 export type SourceKind = 'png' | 'jpeg' | 'svg' | 'pdf' | 'webp' | 'gif' | 'unknown';
@@ -9,9 +9,9 @@ export type Source = { bytes: Buffer; kind: SourceKind; label: string };
 export type SourceInput = { path?: string; url?: string; base64?: string };
 
 /** Brand manuals run to tens of pages of images; logos are far smaller. */
-export const MAX_BYTES = 25 * 1024 * 1024;
-const TIMEOUT_MS = 15_000;
-const MAX_REDIRECTS = 5;
+const maxBytes = 25 * 1024 * 1024;
+const timeoutMs = 15_000;
+const maxRedirects = 5;
 
 /** Detect the format from the bytes, never from the file name or Content-Type. */
 export function detectKind(bytes: Buffer): SourceKind {
@@ -88,30 +88,6 @@ export function isPublicAddress(address: string): boolean {
   return !blocked.check(address, 'ipv6');
 }
 
-/**
- * Resolve, then refuse private addresses. Runs at connect time, so a DNS answer that changes
- * between a check and the request (rebinding) can't reach an internal host.
- */
-const publicLookup: LookupFunction = (hostname, options, callback) => {
-  dnsLookup(hostname, { ...options, all: true }, (error, addresses) => {
-    if (error) return callback(error, '', 0);
-    const list = addresses as unknown as LookupAddress[];
-    const refused = list.find((entry) => !isPublicAddress(entry.address));
-    if (refused || list.length === 0) {
-      return callback(
-        new Error(
-          `${hostname} resolves to a private or reserved address (${refused?.address ?? 'none'}); only public https URLs are fetched.`,
-        ),
-        '',
-        0,
-      );
-    }
-    if (options.all)
-      return (callback as unknown as (error: null, addresses: LookupAddress[]) => void)(null, list);
-    return callback(null, list[0].address, list[0].family);
-  });
-};
-
 function checkURL(raw: string) {
   let url: URL;
   try {
@@ -143,16 +119,42 @@ function download(url: URL, redirects: number): Promise<Buffer> {
     const req = request(
       url,
       {
-        lookup: publicLookup,
-        timeout: TIMEOUT_MS,
+        // Resolve, then refuse private addresses. This runs at connect time, so a DNS answer that
+        // changes between a check and the request (rebinding) can't reach an internal host.
+        lookup: (hostname, options, callback) => {
+          dnsLookup(hostname, { ...options, all: true }, (error, addresses) => {
+            if (error) return callback(error, '', 0);
+            // With `all: true` Node passes an array, but its callback type only models the
+            // single-address form; the same goes for the reply below.
+            const list = addresses as unknown as LookupAddress[];
+            const refused = list.find((entry) => !isPublicAddress(entry.address));
+            if (refused || list.length === 0) {
+              return callback(
+                new Error(
+                  `${hostname} resolves to a private or reserved address (${refused?.address ?? 'none'}); only public https URLs are fetched.`,
+                ),
+                '',
+                0,
+              );
+            }
+            if (options.all) {
+              return (callback as unknown as (error: null, addresses: LookupAddress[]) => void)(
+                null,
+                list,
+              );
+            }
+            return callback(null, list[0].address, list[0].family);
+          });
+        },
+        timeout: timeoutMs,
         headers: { accept: 'image/*, application/pdf', 'user-agent': '@becket-ui/mcp' },
       },
       (response) => {
         const status = response.statusCode ?? 0;
         if (status >= 300 && status < 400 && response.headers.location) {
           response.resume();
-          if (redirects >= MAX_REDIRECTS)
-            return reject(new Error(`More than ${MAX_REDIRECTS} redirects.`));
+          if (redirects >= maxRedirects)
+            return reject(new Error(`More than ${maxRedirects} redirects.`));
           try {
             const next = checkURL(new URL(response.headers.location, url).toString());
             return resolvePromise(download(next, redirects + 1));
@@ -165,11 +167,11 @@ function download(url: URL, redirects: number): Promise<Buffer> {
           return reject(new Error(`The server answered ${status}.`));
         }
         const declared = Number(response.headers['content-length'] ?? 0);
-        if (declared > MAX_BYTES) {
+        if (declared > maxBytes) {
           response.destroy();
           return reject(
             new Error(
-              `The file is ${(declared / 1048576).toFixed(1)} MB; the limit is ${MAX_BYTES / 1048576} MB.`,
+              `The file is ${(declared / 1048576).toFixed(1)} MB; the limit is ${maxBytes / 1048576} MB.`,
             ),
           );
         }
@@ -177,9 +179,9 @@ function download(url: URL, redirects: number): Promise<Buffer> {
         let size = 0;
         response.on('data', (chunk: Buffer) => {
           size += chunk.length;
-          if (size > MAX_BYTES) {
+          if (size > maxBytes) {
             response.destroy();
-            reject(new Error(`The file is over the ${MAX_BYTES / 1048576} MB limit.`));
+            reject(new Error(`The file is over the ${maxBytes / 1048576} MB limit.`));
             return;
           }
           chunks.push(chunk);
@@ -188,7 +190,7 @@ function download(url: URL, redirects: number): Promise<Buffer> {
         response.on('error', reject);
       },
     );
-    req.on('timeout', () => req.destroy(new Error(`No answer within ${TIMEOUT_MS / 1000} s.`)));
+    req.on('timeout', () => req.destroy(new Error(`No answer within ${timeoutMs / 1000} s.`)));
     req.on('error', reject);
     req.end();
   });
@@ -205,9 +207,9 @@ export async function loadSource(input: SourceInput): Promise<Source> {
     const path = resolve(input.path);
     const info = await stat(path).catch(() => null);
     if (!info?.isFile()) throw new Error(`No file at ${path}.`);
-    if (info.size > MAX_BYTES)
+    if (info.size > maxBytes)
       throw new Error(
-        `${basename(path)} is ${(info.size / 1048576).toFixed(1)} MB; the limit is ${MAX_BYTES / 1048576} MB.`,
+        `${basename(path)} is ${(info.size / 1048576).toFixed(1)} MB; the limit is ${maxBytes / 1048576} MB.`,
       );
     bytes = await readFile(path);
     label = basename(path);
@@ -218,8 +220,8 @@ export async function loadSource(input: SourceInput): Promise<Source> {
   } else {
     const data = (input.base64 ?? '').replace(/^data:[^;,]+;base64,/, '').replace(/\s+/g, '');
     if (!/^[A-Za-z0-9+/]+={0,2}$/.test(data)) throw new Error("base64 isn't valid base64.");
-    if ((data.length * 3) / 4 > MAX_BYTES)
-      throw new Error(`The data is over the ${MAX_BYTES / 1048576} MB limit.`);
+    if ((data.length * 3) / 4 > maxBytes)
+      throw new Error(`The data is over the ${maxBytes / 1048576} MB limit.`);
     bytes = Buffer.from(data, 'base64');
     label = 'base64 data';
   }

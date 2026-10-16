@@ -1,4 +1,5 @@
 import {
+  BECKET_PUBLIC_COLOR_KEYS,
   checkBecketThemeContrast,
   defineBecketTheme,
   deriveBecketTheme,
@@ -21,141 +22,74 @@ export type SetThemeInput = {
   density?: Record<string, Record<string, { px?: string; py?: string }>>;
 };
 
-type Note = { token: string; reason: string };
+const groups = ['colors', 'fonts', 'radii', 'fontSizes', 'spacing', 'sizes', 'density'] as const;
 
-const GROUPS = ['colors', 'fonts', 'radii', 'fontSizes', 'spacing', 'sizes', 'density'] as const;
+export function setTheme(input: SetThemeInput): string {
+  const given = groups.filter((group) => input[group] && Object.keys(input[group]).length > 0);
+  if (!input.brand?.length && given.length === 0) {
+    return `Nothing to set. Pass brand colors (\`brand: ["#0a3d91"]\`) and/or exact tokens: ${groups.join(', ')}. To start from a logo, image URL or brand manual, call suggest_theme first.`;
+  }
 
-/** What people call Becket tokens, mapped to the real key. */
-const ALIASES: Record<string, string> = {
-  'colors.brand': 'brand (a top-level list of one to three colors)',
-  'colors.main': 'colors.primary',
-  'colors.primaryColor': 'colors.primary',
-  'colors.secondaryColor': 'colors.secondary',
-  'colors.bg': 'colors.background',
-  'colors.backgroundColor': 'colors.background',
-  'colors.foreground': 'colors.text',
-  'colors.textColor': 'colors.text',
-  'colors.error': 'colors.danger',
-  'colors.gray': 'colors.neutral',
-  'colors.grey': 'colors.neutral',
-  'fonts.body': 'fonts.sans',
-  'fonts.heading': 'fonts.sans (Becket uses one sans family for headings and body)',
-  'fonts.code': 'fonts.mono',
-  'radii.default': 'radii.md',
-  'fontSizes.root': 'fontSizes.base',
-  'spacing.base': 'spacing.unit',
-};
-
-const GENERIC_FAMILIES = [
-  'sans-serif',
-  'serif',
-  'monospace',
-  'system-ui',
-  'ui-sans-serif',
-  'ui-monospace',
-  'ui-serif',
-  'cursive',
-  'fantasy',
-];
-const FALLBACK = {
-  sans: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
-  mono: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
-};
-
-/** px → rem (or em for the text unit) so browser text-size settings keep working (WCAG 1.4.4). */
-function toRelative(value: string, unit: 'rem' | 'em') {
-  const match = value.trim().match(/^(-?\d*\.?\d+)px$/);
-  if (!match) return null;
-  return `${Number((Number(match[1]) / 16).toFixed(4))}${unit}`;
-}
-
-function withFallback(family: string, kind: 'sans' | 'mono') {
-  const names = family
-    .split(',')
-    .map((name) => name.trim())
-    .filter(Boolean);
-  const quoted = names.map((name) =>
-    /^['"]/.test(name) || !/\s/.test(name) || GENERIC_FAMILIES.includes(name) ? name : `'${name}'`,
-  );
-  if (names.some((name) => GENERIC_FAMILIES.includes(name.toLowerCase())))
-    return { value: quoted.join(', '), added: false };
-  return { value: [...quoted, FALLBACK[kind]].join(', '), added: true };
-}
-
-function nearMiss(path: string) {
-  if (ALIASES[path]) return ALIASES[path];
-  const [group] = path.split('.');
-  const allowed: Record<string, string[]> = {
-    colors: [
-      'primary',
-      'secondary',
-      'tertiary',
-      'primaryHover',
-      'background',
-      'text',
-      'muted',
-      'border',
-      'danger',
-      'accent',
-      'surface',
-      'link',
-      'linkHover',
-      'linkVisited',
-      'warning',
-      'success',
-      'neutral',
-    ],
-    fonts: ['sans', 'mono'],
-    radii: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
-    fontSizes: ['base', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'],
-    spacing: ['unit', 'textUnit', 'xs', 'sm', 'md', 'lg', 'xl'],
-    sizes: ['field'],
-  };
-  const options = allowed[group];
-  return options
-    ? `one of ${options.map((key) => `${group}.${key}`).join(', ')}`
-    : `one of ${GROUPS.join(', ')}`;
-}
-
-/** Relative lengths, fallback fonts. Returns the cleaned groups and what changed. */
-function normalize(input: SetThemeInput) {
-  const notes: Note[] = [];
+  const notes: { token: string; reason: string }[] = [];
   const theme: BecketTheme = {};
 
-  for (const [group, unit] of [
-    ['spacing', 'rem'],
-    ['fontSizes', 'rem'],
-    ['radii', 'rem'],
-  ] as const) {
+  // px → rem (em for the text unit), so browser text-size settings still scale it (WCAG 1.4.4).
+  for (const group of ['spacing', 'fontSizes', 'radii'] as const) {
     const values = input[group];
     if (!values) continue;
     const cleaned: Record<string, string> = {};
     for (const [key, value] of Object.entries(values)) {
-      const relative = toRelative(value, group === 'spacing' && key === 'textUnit' ? 'em' : unit);
-      cleaned[key] = relative ?? value;
-      if (relative)
+      const px = value.trim().match(/^(-?\d*\.?\d+)px$/);
+      const unit = group === 'spacing' && key === 'textUnit' ? 'em' : 'rem';
+      cleaned[key] = px ? `${Number((Number(px[1]) / 16).toFixed(4))}${unit}` : value;
+      if (px) {
         notes.push({
           token: `${group}.${key}`,
-          reason: `${value} written as ${relative} so browser text-size settings still scale it (WCAG 1.4.4).`,
+          reason: `${value} written as ${cleaned[key]} so browser text-size settings still scale it (WCAG 1.4.4).`,
         });
+      }
     }
-    Object.assign(theme, { [group]: cleaned });
+    theme[group] = cleaned;
   }
 
   if (input.fonts) {
+    const generic = [
+      'sans-serif',
+      'serif',
+      'monospace',
+      'system-ui',
+      'ui-sans-serif',
+      'ui-monospace',
+      'ui-serif',
+      'cursive',
+      'fantasy',
+    ];
     const fonts: Record<string, string> = {};
     for (const [key, family] of Object.entries(input.fonts)) {
-      if (key !== 'sans' && key !== 'mono') {
-        fonts[key] = family;
+      const names = family
+        .split(',')
+        .map((name) => name.trim())
+        .filter(Boolean);
+      // Multi-word family names need quotes in CSS; generic families must not have them.
+      const quoted = names.map((name) =>
+        /^['"]/.test(name) || !/\s/.test(name) || generic.includes(name) ? name : `'${name}'`,
+      );
+      if (
+        (key !== 'sans' && key !== 'mono') ||
+        names.some((name) => generic.includes(name.toLowerCase()))
+      ) {
+        fonts[key] = quoted.join(', ');
         continue;
       }
-      const { value, added } = withFallback(family, key);
-      fonts[key] = value;
-      if (added)
-        notes.push({
-          token: `fonts.${key}`,
-          reason: `System fallbacks added after ${family}, so text renders before (or without) the webfont.`,
-        });
+      const fallback =
+        key === 'sans'
+          ? "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+          : "ui-monospace, 'SF Mono', Menlo, Consolas, monospace";
+      fonts[key] = [...quoted, fallback].join(', ');
+      notes.push({
+        token: `fonts.${key}`,
+        reason: `System fallbacks added after ${family}, so text renders before (or without) the webfont.`,
+      });
     }
     theme.fonts = fonts;
     notes.push({
@@ -166,46 +100,13 @@ function normalize(input: SetThemeInput) {
   }
 
   if (input.sizes) theme.sizes = input.sizes;
+  // Zod already checked the shape; defineBecketTheme below rejects unknown component or size keys.
   if (input.density) theme.density = input.density as BecketTheme['density'];
-  return { theme, notes };
-}
 
-function formatContrast(report: BecketContrastReport) {
-  const row = (result: BecketContrastReport['results'][number]) =>
-    `| ${result.theme} | ${result.use} | ${result.ratio}:1 | ${result.minimum}:1 | ${result.passes ? 'pass' : result.level === 'advisory' ? 'advisory' : '**FAIL**'} |`;
-  const required = report.results.filter((result) => result.level === 'required');
-  const lines = [
-    report.passes
-      ? `All ${required.length} required pairs pass WCAG 2.2 AA in dark and light.`
-      : `${report.failures.length} of ${required.length} required pairs FAIL WCAG 2.2 AA. Don't ship this theme as is.`,
-  ];
-  if (report.failures.length || report.advisories.length) {
-    lines.push(
-      '',
-      '| theme | where | ratio | needs | result |',
-      '| --- | --- | --- | --- | --- |',
-      ...[...report.failures, ...report.advisories].map(row),
-    );
-  }
-  if (report.advisories.length) {
-    lines.push(
-      '',
-      `Advisory rows aren't enforced because Becket's own default theme misses them too, but fix them when you can: ${[...new Set(report.advisories.map((result) => result.note))].join(' ')}`,
-    );
-  }
-  return lines.join('\n');
-}
-
-export function setTheme(input: SetThemeInput): string {
-  const given = GROUPS.filter((group) => input[group] && Object.keys(input[group]).length > 0);
-  if (!input.brand?.length && given.length === 0) {
-    return `Nothing to set. Pass brand colors (\`brand: ["#0a3d91"]\`) and/or exact tokens: ${GROUPS.join(', ')}. To start from a logo, image URL or brand manual, call suggest_theme first.`;
-  }
-
-  const { theme, notes } = normalize(input);
   let contrast: BecketContrastReport;
   try {
     if (input.brand?.length) {
+      // Same as above: defineBecketTheme validates the color keys.
       const derived = deriveBecketTheme({
         brand: input.brand,
         pinned: input.colors as BecketThemeColors | undefined,
@@ -220,20 +121,71 @@ export function setTheme(input: SetThemeInput): string {
     contrast = checkBecketThemeContrast(theme);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    const unknown = message.match(
-      /Unknown Becket theme key "theme\.([^"]+)"|Unknown Becket theme key "([^"]+)"/,
-    );
-    const path = unknown?.[1] ?? unknown?.[2];
-    return path
-      ? `${message}. Did you mean ${nearMiss(path)}? Nothing was generated.`
-      : `${message} Nothing was generated.`;
+    const path = message.match(/Unknown Becket theme key "(?:theme\.)?([^"]+)"/)?.[1];
+    if (!path) return `${message} Nothing was generated.`;
+    // What people call Becket tokens, mapped to the real key; otherwise list the group's keys.
+    const alias: Record<string, string> = {
+      'colors.brand': 'brand (a top-level list of one to three colors)',
+      'colors.main': 'colors.primary',
+      'colors.primaryColor': 'colors.primary',
+      'colors.secondaryColor': 'colors.secondary',
+      'colors.bg': 'colors.background',
+      'colors.backgroundColor': 'colors.background',
+      'colors.foreground': 'colors.text',
+      'colors.textColor': 'colors.text',
+      'colors.error': 'colors.danger',
+      'colors.gray': 'colors.neutral',
+      'colors.grey': 'colors.neutral',
+      'fonts.body': 'fonts.sans',
+      'fonts.heading': 'fonts.sans (Becket uses one sans family for headings and body)',
+      'fonts.code': 'fonts.mono',
+      'radii.default': 'radii.md',
+      'fontSizes.root': 'fontSizes.base',
+      'spacing.base': 'spacing.unit',
+    };
+    const [group] = path.split('.');
+    const keys: Record<string, readonly string[]> = {
+      colors: [...BECKET_PUBLIC_COLOR_KEYS.filter((key) => !key.startsWith('light')), 'neutral'],
+      fonts: ['sans', 'mono'],
+      radii: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
+      fontSizes: ['base', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'],
+      spacing: ['unit', 'textUnit', 'xs', 'sm', 'md', 'lg', 'xl'],
+      sizes: ['field'],
+    };
+    const suggestion =
+      alias[path] ??
+      `one of ${(keys[group] ?? groups).map((key) => (keys[group] ? `${group}.${key}` : key)).join(', ')}`;
+    return `${message}. Did you mean ${suggestion}? Nothing was generated.`;
   }
+
+  const required = contrast.results.filter((result) => result.level === 'required');
+  const flagged = [...contrast.failures, ...contrast.advisories];
+  const contrastSection = [
+    contrast.passes
+      ? `All ${required.length} required pairs pass WCAG 2.2 AA in dark and light.`
+      : `${contrast.failures.length} of ${required.length} required pairs FAIL WCAG 2.2 AA. Don't ship this theme as is.`,
+    flagged.length
+      ? [
+          '| theme | where | ratio | needs | result |',
+          '| --- | --- | --- | --- | --- |',
+          ...flagged.map(
+            (result) =>
+              `| ${result.theme} | ${result.use} | ${result.ratio}:1 | ${result.minimum}:1 | ${result.passes ? 'pass' : result.level === 'advisory' ? 'advisory' : '**FAIL**'} |`,
+          ),
+        ].join('\n')
+      : null,
+    contrast.advisories.length
+      ? `Advisory rows aren't enforced because Becket's own default theme misses them too, but fix them when you can: ${[...new Set(contrast.advisories.map((result) => result.note))].join(' ')}`
+      : null,
+  ]
+    .filter(Boolean)
+    .join('\n\n');
 
   const css = defineBecketTheme(theme);
   const sections = [
     `# Becket theme${contrast.passes ? '' : ' (contrast failures, see below)'}`,
     '## Contrast',
-    formatContrast(contrast),
+    contrastSection,
     '## Theme CSS',
     `Write this to a file such as \`src/becket-theme.css\` and import it right after \`@becket-ui/tokens/index.css\`. It's unlayered, so it wins over Becket's defaults. Keep \`data-theme\` on <html>.\n\n\`\`\`css\n${css}\`\`\``,
     '## Same theme in code',

@@ -77,7 +77,7 @@ export function contrastRatio(foreground: string | Oklch, background: string | O
 export function toGamut(color: Oklch): Oklch;
 export function formatOklch(color: Oklch): string;
 export function formatHex(color: Oklch): string;
-export function rgbToOklch(red: number, green: number, blue: number): Oklch;
+export function rgbToOklch(rgb: [number, number, number]): Oklch;
 /** ΔE OK (Euclidean in OKLab). About 0.02 is a just-noticeable difference. */
 export function colorDistance(first: Oklch, second: Oklch): number;
 
@@ -128,7 +128,7 @@ export type BecketContrastReport = {
   results: BecketContrastResult[];
 };
 
-export const CONTRAST_PAIRS: readonly BecketContrastPair[];
+export const contrastPairs: readonly BecketContrastPair[];
 /** Final colors in dark and light for a theme, the way the browser resolves defineBecketTheme's CSS. */
 export function resolveBecketColors(theme?: BecketTheme): Record<'dark' | 'light', Record<BecketColorToken, Oklch>>;
 /** WCAG 2.2 AA check of every pair Becket draws, in both themes. */

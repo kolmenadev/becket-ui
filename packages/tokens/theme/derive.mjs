@@ -7,27 +7,10 @@
 import { contrastRatio, formatOklch, parseColor, toGamut } from './color.mjs';
 import { checkBecketThemeContrast, resolveBecketColors } from './contrast.mjs';
 
-const NEUTRAL_LIGHTNESS = {
-  50: 0.96,
-  100: 0.94,
-  200: 0.89,
-  300: 0.84,
-  400: 0.75,
-  500: 0.65,
-  600: 0.55,
-  700: 0.45,
-  800: 0.35,
-  900: 0.22,
-};
-// A whisper of the brand hue in the grays, like the default theme's warm neutrals. Below this
-// the tint is invisible; above it grays start to read as a color.
-const NEUTRAL_CHROMA = 0.012;
 // Aim slightly above 4.5:1 so values rounded for CSS still pass.
-const TEXT = 4.6;
-const STEP = 0.005;
+const textTarget = 4.6;
 
-const hue = (degrees) => ((degrees % 360) + 360) % 360;
-const shift = (color, degrees) => ({ ...color, h: hue(color.h + degrees) });
+const shift = (color, degrees) => ({ ...color, h: (((color.h + degrees) % 360) + 360) % 360 });
 
 /**
  * Move a color's lightness in one direction, one small step at a time, until it reaches
@@ -38,7 +21,7 @@ function fitLightness({ color, against, minimum, direction }) {
   const passes = (candidate) =>
     against.every((other) => contrastRatio(candidate, other) >= minimum);
   if (passes(toGamut(color))) return toGamut(color);
-  for (let L = color.L; L >= 0 && L <= 1; L += direction === 'lighter' ? STEP : -STEP) {
+  for (let L = color.L; L >= 0 && L <= 1; L += direction === 'lighter' ? 0.005 : -0.005) {
     const candidate = toGamut({ ...color, L });
     if (passes(candidate)) return candidate;
   }
@@ -74,8 +57,23 @@ export function deriveBecketTheme({ brand, pinned = {} }) {
   const note = (token, reason) => notes.push({ token, reason });
 
   const neutral = {};
-  const tint = primarySeed.C < 0.02 ? 0 : NEUTRAL_CHROMA;
-  for (const [step, L] of Object.entries(NEUTRAL_LIGHTNESS)) {
+  // A whisper of the brand hue in the grays, like the default theme's warm neutrals. Below 0.012
+  // the tint is invisible; above it grays start to read as a color.
+  const tint = primarySeed.C < 0.02 ? 0 : 0.012;
+  // The default theme's lightness ladder, so text and canvases keep their contrast.
+  const ladder = {
+    50: 0.96,
+    100: 0.94,
+    200: 0.89,
+    300: 0.84,
+    400: 0.75,
+    500: 0.65,
+    600: 0.55,
+    700: 0.45,
+    800: 0.35,
+    900: 0.22,
+  };
+  for (const [step, L] of Object.entries(ladder)) {
     neutral[step] = formatOklch({ L, C: tint, h: tint ? primarySeed.h : 0 });
   }
   colors.neutral = neutral;
@@ -97,7 +95,7 @@ export function deriveBecketTheme({ brand, pinned = {} }) {
     const fitted = fitLightness({
       color: seed,
       against: [ink],
-      minimum: TEXT,
+      minimum: textTarget,
       direction: 'lighter',
     });
     colors[token] = formatOklch(fitted);
@@ -124,13 +122,13 @@ export function deriveBecketTheme({ brand, pinned = {} }) {
     const darkFit = fitLightness({
       color: seed,
       against: dark,
-      minimum: TEXT,
+      minimum: textTarget,
       direction: 'lighter',
     });
     const lightFit = fitLightness({
       color: seed,
       against: light,
-      minimum: TEXT,
+      minimum: textTarget,
       direction: 'darker',
     });
     if (!darkFit || !lightFit) {
@@ -171,7 +169,7 @@ export function deriveBecketTheme({ brand, pinned = {} }) {
     const lightHover = fitLightness({
       color: { ...link.light, L: Math.max(0, link.light.L - 0.08) },
       against: light,
-      minimum: TEXT,
+      minimum: textTarget,
       direction: 'darker',
     });
     colors.linkHover = { dark: formatOklch(darkHover), light: formatOklch(lightHover) };
@@ -185,13 +183,13 @@ export function deriveBecketTheme({ brand, pinned = {} }) {
     const darkFit = fitLightness({
       color: current.dark[token],
       against: dark,
-      minimum: TEXT,
+      minimum: textTarget,
       direction: 'lighter',
     });
     const lightFit = fitLightness({
       color: current.light[token],
       against: light,
-      minimum: TEXT,
+      minimum: textTarget,
       direction: 'darker',
     });
     if (darkFit.L === current.dark[token].L && lightFit.L === current.light[token].L) continue;
@@ -199,9 +197,9 @@ export function deriveBecketTheme({ brand, pinned = {} }) {
     note(token, 'Adjusted so it stays at 4.5:1 on your pinned canvas.');
   }
 
-  const near = (color, degrees) =>
-    Math.min(Math.abs(color.h - degrees), 360 - Math.abs(color.h - degrees));
-  if (primarySeed.C >= 0.08 && near(primarySeed, 25) < 20) {
+  // Within 20° of Becket's danger hue (25°).
+  const fromDanger = Math.abs(primarySeed.h - 25);
+  if (primarySeed.C >= 0.08 && Math.min(fromDanger, 360 - fromDanger) < 20) {
     note(
       'danger',
       'Your brand is red, like error text. Danger stays Becket red; make sure errors also carry an icon or text, not color alone.',

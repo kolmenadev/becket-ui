@@ -5,14 +5,12 @@
 
 import { contrastRatio, formatOklch, parseColor } from './color.mjs';
 
-const NEUTRAL_STEPS = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
-
 /**
  * Default color tokens as index.css declares them. `{key}` is a reference to another token, so
  * a theme that changes `primary` also moves `link`. contrast.test.mjs asserts these match
  * index.css, so they can't drift.
  */
-export const DEFAULT_COLORS = {
+export const defaultColors = {
   dark: {
     primary: 'oklch(0.75 0.15 78)',
     secondary: 'oklch(0.70 0.13 125)',
@@ -58,7 +56,6 @@ export const DEFAULT_COLORS = {
 };
 
 const text = 4.5;
-const nonText = 3;
 const canvases = ['background', 'surface'];
 
 /**
@@ -66,7 +63,7 @@ const canvases = ['background', 'surface'];
  * theme. `advisory` pairs fail in the default theme too (see their `note`), so they're
  * reported, not enforced, until Becket's recipes change.
  */
-export const CONTRAST_PAIRS = [
+export const contrastPairs = [
   ...['text', 'muted', 'link', 'linkHover', 'linkVisited', 'danger', 'accent'].flatMap(
     (foreground) =>
       canvases.map((background) => ({
@@ -95,31 +92,13 @@ export const CONTRAST_PAIRS = [
   ...canvases.map((background) => ({
     foreground: 'primary',
     background,
-    minimum: nonText,
+    // Non-text UI and state indicators (WCAG 1.4.11).
+    minimum: 3,
     level: 'advisory',
     use: `focus ring and checked controls on ${background}`,
     note: 'A primary light enough for dark labels is usually too light for 3:1 on a near-white canvas; the default is 2.02:1 in light.',
   })),
 ];
-
-function flatten(colors = {}) {
-  const root = {};
-  const light = {};
-  for (const [key, value] of Object.entries(colors)) {
-    if (value == null) continue;
-    if (key === 'neutral') {
-      for (const step of NEUTRAL_STEPS) if (value[step]) root[`neutral.${step}`] = value[step];
-      continue;
-    }
-    if (typeof value === 'object') {
-      if (value.dark) root[key] = value.dark;
-      if (value.light) light[key] = value.light;
-      continue;
-    }
-    root[key] = value;
-  }
-  return { root, light };
-}
 
 function resolveTable(table) {
   const resolved = {};
@@ -160,14 +139,26 @@ function resolveTable(table) {
  * @param {import('./index.d.ts').BecketTheme} [theme]
  */
 export function resolveBecketColors(theme = {}) {
-  const { root, light } = flatten(theme.colors);
-  const darkTable = { ...DEFAULT_COLORS.dark, ...root };
-  const lightTable = { ...DEFAULT_COLORS.dark, ...DEFAULT_COLORS.light, ...root, ...light };
+  const root = {};
+  const light = {};
+  for (const [key, value] of Object.entries(theme.colors ?? {})) {
+    if (value == null) continue;
+    if (key === 'neutral') {
+      for (const [step, color] of Object.entries(value)) root[`neutral.${step}`] = color;
+    } else if (typeof value === 'object') {
+      if (value.dark) root[key] = value.dark;
+      if (value.light) light[key] = value.light;
+    } else {
+      root[key] = value;
+    }
+  }
+  const darkTable = { ...defaultColors.dark, ...root };
+  const lightTable = { ...defaultColors.dark, ...defaultColors.light, ...root, ...light };
   return { dark: resolveTable(darkTable), light: resolveTable(lightTable) };
 }
 
 /**
- * WCAG 2.2 AA contrast for every pair in CONTRAST_PAIRS, in dark and light.
+ * WCAG 2.2 AA contrast for every pair in contrastPairs, in dark and light.
  *
  * @param {import('./index.d.ts').BecketTheme} [theme]
  * @returns {import('./index.d.ts').BecketContrastReport}
@@ -175,7 +166,7 @@ export function resolveBecketColors(theme = {}) {
 export function checkBecketThemeContrast(theme = {}) {
   const colors = resolveBecketColors(theme);
   const results = ['dark', 'light'].flatMap((mode) =>
-    CONTRAST_PAIRS.map((pair) => {
+    contrastPairs.map((pair) => {
       const ratio = contrastRatio(colors[mode][pair.foreground], colors[mode][pair.background]);
       return {
         ...pair,

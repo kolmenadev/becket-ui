@@ -6,8 +6,8 @@ import { fileURLToPath } from 'node:url';
 
 import { colorDistance, contrastRatio, formatOklch, parseColor, toGamut } from './color.mjs';
 import {
-  CONTRAST_PAIRS,
-  DEFAULT_COLORS,
+  contrastPairs,
+  defaultColors,
   checkBecketThemeContrast,
   resolveBecketColors,
 } from './contrast.mjs';
@@ -63,7 +63,7 @@ for (const [mode, table] of [
   ['light', cssLight],
 ]) {
   test(`${mode}: the checker's default colors match index.css`, () => {
-    for (const key of Object.keys(DEFAULT_COLORS.dark)) {
+    for (const key of Object.keys(defaultColors.dark)) {
       const fromCss = cssColor(table, kebab(key));
       assert.ok(
         colorDistance(defaults[mode][key], fromCss) < 1e-6,
@@ -94,7 +94,7 @@ test('advisory pairs are the known default gaps, and only those', () => {
 });
 
 test('every pair names tokens the resolver knows', () => {
-  for (const pair of CONTRAST_PAIRS) {
+  for (const pair of contrastPairs) {
     assert.ok(
       defaults.dark[pair.foreground] && defaults.dark[pair.background],
       `${pair.foreground}/${pair.background}`,

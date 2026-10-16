@@ -52,7 +52,7 @@ describe('stdio server', () => {
 
   it('suggests a theme from a brand manual over the wire', async () => {
     const result = await client.callTool({ name: 'suggest_theme', arguments: { base64: brandManualPDF().toString('base64') } });
-    expect(textOf(result)).toContain('Your manual uses Montserrat');
+    expect(textOf(result)).toContain('Your manual uses Open Sans');
   });
 
   it('reviews code over the wire', async () => {
