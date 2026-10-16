@@ -17,6 +17,8 @@ pnpm install
 
 Follow [docs/CODING-STYLE.md](./docs/CODING-STYLE.md) for all code, and [Writing app code with Becket](./packages/react/guides/building-with-becket.md) for code that uses Becket components. Library rules are in `.cursor-config/becket.mdc`. Read its "Sizing and spacing" table before writing a recipe: every length comes from a Becket scale, and `pnpm -F @becket-ui/tokens test` fails on raw `rem`/`px` or off-scale tokens.
 
+To check a change against all of these guides, run `node .cursor/skills/becket-guides/scripts/style-check.mjs` (your branch against `main`; add `--paths <folder>` or `--all` for more). The script covers the rules a parser can check. The [becket-guides skill](./.cursor/skills/becket-guides/SKILL.md) walks through the rest.
+
 ## Develop
 
 ```bash
