@@ -65,13 +65,13 @@ for (const [mode, table] of [
 ]) {
   test(`${mode}: the checker's default colors match index.css`, () => {
     for (const key of Object.keys(defaultColors.dark)) {
-      const fromCss = cssColor({
+      const fromCSS = cssColor({
         table,
         name: key.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`).replace('.', '-'),
       });
       assert.ok(
-        colorDistance(defaults[mode][key], fromCss) < 1e-6,
-        `${key}: checker ${formatOklch(defaults[mode][key])}, index.css ${formatOklch(fromCss)}`,
+        colorDistance(defaults[mode][key], fromCSS) < 1e-6,
+        `${key}: checker ${formatOklch(defaults[mode][key])}, index.css ${formatOklch(fromCSS)}`,
       );
     }
   });
