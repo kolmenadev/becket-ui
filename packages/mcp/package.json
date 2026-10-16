@@ -1,6 +1,6 @@
 {
   "name": "@becket-ui/mcp",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "MCP server that teaches coding agents to build UIs with Becket UI: components, props, examples, tokens and a usage review.",
   "type": "module",
   "license": "MIT",
