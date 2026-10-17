@@ -41,7 +41,7 @@
   "scripts": {
     "build": "panda codegen && panda cssgen && node scripts/bundle-css.mjs && tsup && node scripts/emit-preset-dts.mjs",
     "prepare": "pnpm build",
-    "prepack": "pnpm build",
+    "prepack": "node ../../scripts/assert-built.mjs dist/preset.js styled-system",
     "test": "node --test theme/index.test.mjs theme/contrast.test.mjs theme/derive.test.mjs theme/scale.test.mjs"
   },
   "exports": {
