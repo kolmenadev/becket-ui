@@ -38,7 +38,7 @@
     "build": "tsup && node scripts/build-data.mjs",
     "start": "node dist/server.js",
     "test": "vitest run",
-    "prepack": "pnpm build"
+    "prepack": "node ../../scripts/assert-built.mjs dist/server.js dist/data/catalog.json"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.1",
