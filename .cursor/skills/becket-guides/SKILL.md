@@ -140,3 +140,8 @@ kept name with a written reason never deadlocks. Wire it in `.claude/settings.lo
 ```
 
 When it blocks, fix the findings. Never commit again just to get past it.
+
+The same gate runs for every contributor as a git hook: `.githooks/pre-commit` calls
+`--staged --once`, and `pnpm install` sets `core.hooksPath` to `.githooks`. Both gates share one
+record of the findings they've seen, so a commit that passed one passes the other. CI runs
+`pnpm lint:style --base origin/<base>` on pull requests in warn mode.

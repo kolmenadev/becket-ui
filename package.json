@@ -11,12 +11,14 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
+    "lint:style": "node .cursor/skills/becket-guides/scripts/style-check.mjs",
     "test": "turbo run test",
     "pack:check": "node scripts/pack-check.mjs",
     "publish:check": "node scripts/check-publishable.mjs",
     "example:prepare": "node scripts/prepare-next-example.mjs",
     "example:dev": "pnpm example:prepare && npm --prefix apps/next-example run dev",
-    "example:build": "pnpm example:prepare && npm --prefix apps/next-example run build"
+    "example:build": "pnpm example:prepare && npm --prefix apps/next-example run build",
+    "prepare": "git rev-parse --git-dir >/dev/null 2>&1 && git config core.hooksPath .githooks || true"
   },
   "workspaces": [
     "apps/docs",

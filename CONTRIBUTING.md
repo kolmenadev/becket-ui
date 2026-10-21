@@ -17,7 +17,12 @@ pnpm install
 
 Follow [docs/CODING-STYLE.md](./docs/CODING-STYLE.md) for all code, and [Writing app code with Becket](./packages/react/guides/building-with-becket.md) for code that uses Becket components. Library rules are in `.cursor-config/becket.mdc`. Read its "Sizing and spacing" table before writing a recipe: every length comes from a Becket scale, and `pnpm -F @becket-ui/tokens test` fails on raw `rem`/`px` or off-scale tokens.
 
-To check a change against all of these guides, run `node .cursor/skills/becket-guides/scripts/style-check.mjs` (your branch against `main`; add `--paths <folder>` or `--all` for more). The script covers the rules a parser can check. The [becket-guides skill](./.cursor/skills/becket-guides/SKILL.md) walks through the rest.
+To check a change against all of these guides, run `pnpm lint:style` (your branch against `main`; add `--paths <folder>` or `--all` for more). The script covers the rules a parser can check. The [becket-guides skill](./.cursor/skills/becket-guides/SKILL.md) walks through the rest.
+
+The same check runs in two more places:
+
+- **On every commit.** `pnpm install` points git at `.githooks/`, whose `pre-commit` checks the lines you staged. It blocks the first time it sees a set of findings. Fix them, or keep a name for a reason the guide accepts and write that reason in a comment, then commit again: the same findings pass the second time. Turn it off with `git config --unset core.hooksPath`.
+- **On pull requests.** CI checks the lines the PR adds against its base branch and puts each finding on the PR as an annotation. It warns for now and doesn't fail the build.
 
 ## Develop
 
