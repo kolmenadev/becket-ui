@@ -1,0 +1,4 @@
+#!/bin/sh
+# The becket-guides check on the lines this commit adds. It blocks once per set of findings, so a
+# name kept with a written reason passes on the next try. CONTRIBUTING.md, "Code style".
+exec node .cursor/skills/becket-guides/scripts/style-check.mjs --staged --once

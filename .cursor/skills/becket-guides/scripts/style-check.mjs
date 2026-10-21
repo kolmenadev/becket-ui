@@ -9,10 +9,12 @@
  *   node style-check.mjs --base main              lines added since main (the default)
  *   node style-check.mjs --staged                 lines added in the index
  *   node style-check.mjs --hook                   Claude Code PreToolUse gate for `git commit`
+ *   node style-check.mjs --staged --once          the git pre-commit gate (.githooks/pre-commit)
  *   add --repo <dir> to check another checkout
  *
- * Exit 1 on any finding. The hook blocks a commit the first time it sees a set of findings and
- * passes the same set on the next try, so a name kept on purpose (with its reason) can't block forever.
+ * Exit 1 on any finding. --hook and --once block a commit the first time they see a set of findings
+ * and pass the same set on the next try, so a name kept on purpose (with its reason) can't block
+ * forever. Both share one record, so a commit that passed the Claude Code hook passes the git hook.
  */
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -626,7 +628,13 @@ const reportText = [
     ),
 ].join('\n');
 
-if (!args.includes('--hook')) {
+// GitHub Actions turns these lines into annotations on the PR's changed lines.
+if (process.env.GITHUB_ACTIONS === 'true')
+  for (const finding of findings)
+    console.log(
+      `::warning file=${finding.file},line=${finding.line}::[${finding.level}] ${finding.message} — ${finding.rule}`,
+    );
+if (!args.includes('--hook') && !args.includes('--once')) {
   console.log(reportText);
   process.exit(1);
 }
