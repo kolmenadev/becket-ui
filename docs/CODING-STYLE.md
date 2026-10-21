@@ -40,6 +40,7 @@ reason.
   - [TODO comments must have a ticket number](#todo-comments-must-have-a-ticket-number)
 - [React](#react)
   - [Prefer design-system components over raw elements](#prefer-design-system-components-over-raw-elements)
+  - [Prefer to derive component props](#prefer-to-derive-component-props)
   - [Prefer derived values over synced state](#prefer-derived-values-over-synced-state)
   - [Use effects only to sync with something outside React](#use-effects-only-to-sync-with-something-outside-react)
   - [Must use stable keys](#must-use-stable-keys)
@@ -536,6 +537,51 @@ styles: layout (`Stack`, `HStack`, `Flex`, `SimpleGrid`), text (`Heading`, `Text
 (`Separator`), controls (`Button`, `TextField`, `Select`, `Switch`). Raw elements are for semantics
 the design system doesn't cover, such as `<form>`, `<nav>`, `<main>` and `<ul>`, and those usually
 pass through a component's `as` prop.
+
+## Prefer to derive component props
+
+When a component wraps or extends another component or element, **derive** its props from the one it
+wraps with `ComponentProps<typeof X>`, `ComponentPropsWithoutRef<"input">`, `Omit` and `Pick`.
+Don't write them out again by hand.
+
+This is [Avoid hasty abstraction](#avoid-hasty-abstraction) for types: the wrapped component already
+names its props, and a hand-written copy is duplication that drifts. It's also
+[colocation](#prefer-code-colocation): each prop is declared once, next to the component that
+handles it.
+
+**Why?**
+
+- When the wrapped component adds, renames or retypes a prop, the wrapper follows without an edit.
+- The reader sees only what the wrapper changes: the props it takes away and the ones it adds.
+- Callers keep everything the wrapped component accepts (`aria-*`, `data-*`, event handlers,
+  `className`) without the wrapper listing it.
+
+```tsx
+// Avoid: restates Avatar's props; `size` is wrong the day Avatar adds a size
+type MemberAvatarProps = {
+  member: Member;
+  size?: "sm" | "md" | "lg" | "xl";
+  className?: string;
+};
+
+// Prefer: everything Avatar takes, minus what the member supplies, plus the member
+export type MemberAvatarProps = Omit<ComponentProps<typeof Avatar>, "name" | "src"> & {
+  member: Member;
+};
+
+export function MemberAvatar({ member, ...props }: MemberAvatarProps) {
+  return <Avatar name={member.name} src={member.photoURL} {...props} />;
+}
+```
+
+For a native element, use `ComponentPropsWithoutRef<"input">` rather than
+`InputHTMLAttributes<HTMLInputElement>`: it's named by the element you render, and it's one form
+for every element. For a single prop, index into the type instead of copying its union:
+`size: ComponentProps<typeof Avatar>["size"]`.
+
+Derive only what you forward. A prop the wrapper sets itself (`name` and `src` above) is `Omit`ted
+from the derived type. If most of the wrapped component's props wouldn't reach it, the component
+isn't a wrapper: write its props out.
 
 ## Prefer derived values over synced state
 
