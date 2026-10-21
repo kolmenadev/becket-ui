@@ -4,6 +4,9 @@ export * from './styled-system/jsx/index.mjs'
 export * from './styled-system/helpers.mjs'
 export * from './styled-system/patterns/index.mjs'
 export * from './styled-system/recipes/index.mjs'
+// Patterns and recipes both export these names, and two `export *` with one name leave it out.
+// Name the pattern explicitly so the root entry has them (MAV-121); recipes stay at ./recipes.
+export { aspectRatio, box, center, container, visuallyHidden } from './styled-system/patterns/index.mjs'
 
 
 // Re-export specific utilities

@@ -49,6 +49,7 @@ function assertNone(files, needles, label) {
  * Install the packed tarballs into a throwaway consumer, then:
  * - import the library with plain Node ESM, the way scripts, `node --test` and
  *   bundler-free SSR do (MAV-120). Bundlers forgive extensionless imports; Node doesn't.
+ * - typecheck a consumer against the shipped declarations with nodenext and bundler resolution.
  * - start the MCP server from its tarball and list its tools over stdio, the way
  *   `npx @becket-ui/mcp` runs it.
  */
@@ -82,6 +83,47 @@ function assertConsumer() {
     } catch (error) {
       console.error(`@becket-ui/react can't be imported with Node ESM:\n${String(error.stderr || error.message).split('\n').slice(0, 3).join('\n')}`);
       process.exit(1);
+    }
+    mkdirSync(join(modules, '@types'));
+    for (const types of ['react', 'react-dom']) {
+      symlinkSync(realpathSync(join(root, 'packages', 'react', 'node_modules', '@types', types)), join(modules, '@types', types));
+    }
+    writeFileSync(
+      join(consumer, 'index.tsx'),
+      [
+        "import { Button, Container, SearchIcon } from '@becket-ui/react';",
+        "import { css, type JsxStyleProps } from '@becket-ui/tokens';",
+        "import { button } from '@becket-ui/tokens/recipes';",
+        "import { stack } from '@becket-ui/tokens/patterns';",
+        "export const page = <Container><SearchIcon /><Button className={css({ color: 'link' })}>Go</Button></Container>;",
+        'export const classes = [button(), stack()];',
+        'export type Style = JsxStyleProps;',
+        '',
+      ].join('\n'),
+    );
+    // Type the tarballs the way consumers do: nodenext (Node, strict ESM) and bundler (Vite, Next),
+    // with skipLibCheck off so the shipped declarations are checked too (MAV-121).
+    for (const resolution of ['nodenext', 'bundler']) {
+      writeFileSync(
+        join(consumer, `tsconfig.${resolution}.json`),
+        JSON.stringify({
+          compilerOptions: {
+            module: resolution === 'nodenext' ? 'nodenext' : 'esnext',
+            moduleResolution: resolution,
+            target: 'es2022',
+            jsx: 'react-jsx',
+            strict: true,
+            skipLibCheck: false,
+            noEmit: true,
+          },
+          files: ['index.tsx'],
+        }),
+      );
+      const typecheck = spawnSync(join(root, 'node_modules', '.bin', 'tsc'), ['-p', `tsconfig.${resolution}.json`], { cwd: consumer, encoding: 'utf8' });
+      if (typecheck.status !== 0) {
+        console.error(`The packed declarations don't typecheck with moduleResolution "${resolution}":\n${(typecheck.stdout || typecheck.stderr || typecheck.error?.message || '').split('\n').slice(0, 10).join('\n')}`);
+        process.exit(1);
+      }
     }
     const requests = [
       { jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'pack-check', version: '0' } } },
@@ -144,6 +186,7 @@ try {
   console.log(`  react:  ${react.length} files`);
   console.log(`  mcp:    ${mcp.length} files`);
   console.log(`  node import: ok (${exportCount} exports)`);
+  console.log('  types: ok (nodenext, bundler)');
   console.log(`  mcp server: ok (${toolCount} tools)`);
 } finally {
   rmSync(dest, { recursive: true, force: true });

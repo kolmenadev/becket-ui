@@ -15,6 +15,9 @@ export default defineConfig({
     },
   },
   outdir: 'styled-system',
+  // Declarations as .d.mts next to the .mjs runtime, so TypeScript's nodenext resolution pairs
+  // them. scripts/rewrite-declaration-imports.mjs then fixes the specifiers Panda emits (MAV-121).
+  forceConsistentTypeExtension: true,
   presets: ['@pandacss/preset-panda', becketPreset],
   staticCss: {
     recipes: '*',
