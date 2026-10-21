@@ -1,5 +1,12 @@
 # @becket-ui/react
 
+## 0.5.1
+
+### Patch Changes
+
+- Updated dependencies [6c3934a]
+  - @becket-ui/tokens@0.5.1
+
 ## 0.5.0
 
 ### Patch Changes
