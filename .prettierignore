@@ -9,6 +9,9 @@
 **/packages/tokens/index.d.ts
 **/packages/tokens/styles.css
 
+# Story markup snapshots: compared byte for byte, so formatting them breaks the test
+**/__markup__/
+
 # Node and tooling
 **/node_modules/
 **/.turbo/

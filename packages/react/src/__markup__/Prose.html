@@ -1,0 +1,93 @@
+<!-- Article -->
+<div>
+<article class="beckui--prose beckui--prose--size_md">
+<h1>Designing with Becket in Claude Design</h1>
+<p>Becket is a <strong>native-first</strong> design system. This post walks through the <a href="#setup">setup</a>, the <em>agent guide</em> and the handoff to code. Press <kbd>⌘</kbd> <kbd>K</kbd> to search, and look for <mark>highlighted</mark> terms.</p>
+<h2 id="setup">Setup</h2>
+<p>Install both packages and import <code>@becket-ui/tokens/index.css</code> once:</p>
+<pre>
+<code>pnpm add @becket-ui/react @becket-ui/tokens
+
+import '@becket-ui/tokens/index.css';</code>
+</pre>
+<ul>
+<li>No provider and no theme wrapper.</li>
+<li>Theme lives on <code>&lt;html data-theme&gt;</code>:<ul>
+<li>dark by default</li>
+<li>light on request</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>Sync the design system.</li>
+<li>Prompt a screen.</li>
+<li>Hand off to Claude Code.</li>
+</ol>
+<blockquote>
+<p>Every visual decision is a prop with a token value.</p>
+</blockquote>
+<h3>Tokens at a glance</h3>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>gap="md"</code>
+</td>
+<td>0.75rem</td>
+</tr>
+<tr>
+<td>
+<code>gap="xl"</code>
+</td>
+<td>2rem</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<dl>
+<dt>Prose</dt>
+<dd>Styles content you don't write as components.</dd>
+</dl>
+</article>
+</div>
+
+<!-- Sizes -->
+<div>
+<div class="beckui--prose beckui--prose--size_sm">
+<h3>size="sm"</h3>
+<p>Headings, spacing and <code>code</code> scale with the base size.</p>
+</div>
+<div class="beckui--prose beckui--prose--size_md">
+<h3>size="md"</h3>
+<p>Headings, spacing and <code>code</code> scale with the base size.</p>
+</div>
+<div class="beckui--prose beckui--prose--size_lg">
+<h3>size="lg"</h3>
+<p>Headings, spacing and <code>code</code> scale with the base size.</p>
+</div>
+</div>
+
+<!-- WithComponents -->
+<div>
+<div class="beckui--prose beckui--prose--size_md">
+<p>A post can embed Becket components:</p>
+<div data-not-prose="true">
+<div class="beckui--card__root beckui--card__root--fullWidth_false beckui--card__root--size_md beckui--card__root--visual_outline">
+<div class="beckui--card__header beckui--card__header--fullWidth_false beckui--card__header--size_md beckui--card__header--visual_outline">
+<h3 class="beckui--card__title beckui--card__title--fullWidth_false beckui--card__title--size_md beckui--card__title--visual_outline">Release 0.2.0</h3>
+<span style="--mav-label-bg: var(--beckui--colors-primary); --mav-label-border: transparent; --mav-label-color: var(--beckui--colors-neutral-900);" class="beckui--badge beckui--badge--borderRadius_full beckui--badge--size_sm beckui--badge--visual_primary beckui--badge--withGradient_false">New</span>
+</div>
+<div class="beckui--card__body beckui--card__body--fullWidth_false beckui--card__body--size_md beckui--card__body--visual_outline">
+<p class="beckui--c_muted beckui--fs_sm">Container, Box and Icon.</p>
+</div>
+</div>
+</div>
+<p>The text after it is styled by Prose again.</p>
+</div>
+</div>
