@@ -1,4 +1,6 @@
 /// <reference types="vite/client" />
+// toSorted is ES2023; the package targets ES2022 for what it ships. Tests run on Node 22, which has it.
+/// <reference lib="es2023.array" />
 import { composeStories, type composeStory } from '@storybook/react';
 import { cleanup, render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
@@ -30,12 +32,10 @@ describe('story markup', () => {
             return `id-${ids.indexOf(id) + 1}`;
           })
           // Class order inside the attribute doesn't affect the cascade, and Panda versions emit
-          // variant classes in different orders; sort them so only real changes show up. sort() over
-          // toSorted(): split() returns a new array, so nothing else is touched, and toSorted isn't
-          // in this package's TypeScript lib.
+          // variant classes in different orders; sort them so only real changes show up.
           .replace(
             / class="([^"]*)"/g,
-            (_, classes: string) => ` class="${classes.split(' ').sort().join(' ')}"`,
+            (_, classes: string) => ` class="${classes.split(' ').toSorted().join(' ')}"`,
           )
           .replace(/></g, '>\n<')}\n`,
       );
