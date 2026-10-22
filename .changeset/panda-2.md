@@ -40,3 +40,8 @@ modules from `@becket-ui/tokens`, should check the following.
 - `Avatar`, `Blockquote`, `Card`, `Checkbox`, `Dialog`, `Drawer`, `Field`, `Figure`, `Menu`,
   `Radio`, `Switch`, `Table` and `Tabs` recipes are registered as slot recipes. Their exports and
   class names are the same.
+- **Fixed:** `Flex` and `Stack` with `border="secondary"` or `border="neutral"` now draw the border.
+  Only `primary` had CSS before.
+- Recipes that overrode each other by position (Prose spacing, AspectRatio children) now do it by
+  specificity, because Panda 2 orders recipe rules differently. Every story's screenshot matches the
+  previous release apart from the fix above.

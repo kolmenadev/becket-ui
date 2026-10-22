@@ -2994,6 +2994,15 @@
     -webkit-background-clip: padding-box, border-box;
     background-clip: padding-box, border-box;
   }
+  .beckui--bg-i_linear-gradient\(\{colors\.background\}\,_\{colors\.background\}\)\,_\{gradients\.neutral\} {
+    background-image: linear-gradient(var(--beckui--colors-background), var(--beckui--colors-background)), var(--beckui--gradients-neutral);
+  }
+  .beckui--bg-i_linear-gradient\(\{colors\.background\}\,_\{colors\.background\}\)\,_\{gradients\.primary\} {
+    background-image: linear-gradient(var(--beckui--colors-background), var(--beckui--colors-background)), var(--beckui--gradients-primary);
+  }
+  .beckui--bg-i_linear-gradient\(\{colors\.background\}\,_\{colors\.background\}\)\,_\{gradients\.secondary\} {
+    background-image: linear-gradient(var(--beckui--colors-background), var(--beckui--colors-background)), var(--beckui--gradients-secondary);
+  }
   .beckui--bg-o_border-box {
     background-origin: border-box;
   }
