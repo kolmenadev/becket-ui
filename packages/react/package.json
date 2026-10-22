@@ -50,6 +50,8 @@
     "build": "tsup && tsc --emitDeclarationOnly -p tsconfig.build.json && node scripts/add-js-extensions.mjs",
     "prepack": "node ../../scripts/assert-built.mjs dist/index.js dist/index.d.ts",
     "test": "vitest run",
+    "test:visual": "vitest run -c vitest.visual.config.ts",
+    "test:visual:update": "vitest run -c vitest.visual.config.ts --update",
     "storybook": "storybook dev -p 6006 -c ../../apps/docs/.storybook --project-root ../../apps/docs",
     "build-storybook": "storybook build -c ../../apps/docs/.storybook --project-root ../../apps/docs"
   },
@@ -61,7 +63,10 @@
   "devDependencies": {
     "@becket-ui/a11y": "workspace:*",
     "@becket-ui/tokens": "workspace:*",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
     "@pandacss/dev": "^1.12.1",
+    "@puppeteer/browsers": "2.13.2",
     "@storybook/react": "^10.6.0",
     "@storybook/react-vite": "^10.6.0",
     "@testing-library/react": "^16.3.0",
@@ -69,12 +74,15 @@
     "@types/node": "^22.18.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@vitest/browser": "5.0.0",
+    "@vitest/browser-webdriverio": "5.0.0",
     "jsdom": "^26.1.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "tsup": "^8.5.1",
     "typescript": "7.0.2",
     "vite": "^8.3.0",
-    "vitest": "^5.0.0"
+    "vitest": "5.0.0",
+    "webdriverio": "^9.32.0"
   }
 }

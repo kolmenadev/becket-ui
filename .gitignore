@@ -103,3 +103,8 @@ ds-bundle/
 
 ## Local AI handoff notes (not for the repo)
 DESIGN-SYNC-HANDOFF.md
+
+# Visual tests (MAV-145): pinned Chrome download and local reference screenshots
+packages/react/.visual-browsers/
+packages/react/.visual-references/
+packages/react/.vitest-attachments/

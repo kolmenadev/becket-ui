@@ -2,7 +2,14 @@ packages:
   - 'packages/*'
   - 'apps/docs'
 allowBuilds:
+  edgedriver: false
   esbuild: true
+  geckodriver: false
 
 minimumReleaseAgeExclude:
   - vite@8.3.0
+
+# Visual tests pin Vitest exactly (experimental screenshot API, MAV-145); keep the browser
+# runner the WebdriverIO provider pulls in on the same version.
+overrides:
+  '@vitest/browser': 5.0.0
