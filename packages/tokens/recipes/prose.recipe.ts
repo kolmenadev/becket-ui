@@ -7,6 +7,13 @@ import { defineRecipe } from '@pandacss/dev';
  */
 const el = (selector: string) => `& :where(${selector}):not(:where([data-not-prose], [data-not-prose] *))`;
 
+/**
+ * `el` for a rule that has to beat other prose rules on the same element: a heading's next
+ * sibling, nested lists, `ol` over `ul, ol`. The doubled class wins by specificity, since Panda 2
+ * sorts nested selectors and the order they're written in no longer decides.
+ */
+const override = (selector: string) => `&${el(selector)}`;
+
 export const prose = defineRecipe({
   className: 'prose',
   description: 'Styles HTML from Markdown or MDX (headings, text, lists, quotes, code, tables, media) with Becket tokens',
@@ -28,7 +35,7 @@ export const prose = defineRecipe({
     [el('h2')]: { fontSize: 'text-xl', marginBlock: '{spacing.text-8} {spacing.text-3}' },
     [el('h3')]: { fontSize: 'text-lg', marginBlock: '{spacing.text-8} {spacing.text-2}' },
     [el('h4')]: { fontSize: 'text-md', marginBlock: '{spacing.text-5} {spacing.text-2}' },
-    [el('h2 + *, h3 + *, h4 + *')]: { marginTop: '0' },
+    [override('h2 + *, h3 + *, h4 + *')]: { marginTop: '0' },
     [el('a')]: {
       color: 'link',
       textDecoration: 'underline',
@@ -40,10 +47,10 @@ export const prose = defineRecipe({
     [el('ul, ol')]: { marginBlock: 'text-5', paddingInlineStart: 'text-5' },
     [el('ul')]: { listStyleType: 'disc' },
     // Room for two-digit markers.
-    [el('ol')]: { listStyleType: 'decimal', paddingInlineStart: 'text-8' },
+    [override('ol')]: { listStyleType: 'decimal', paddingInlineStart: 'text-8' },
     [el('li')]: { marginBlock: 'text-2', paddingInlineStart: 'text-1' },
     [`${el('li')}::marker`]: { color: 'muted' },
-    [el('li > ul, li > ol')]: { marginBlock: 'text-2' },
+    [override('li > ul, li > ol')]: { marginBlock: 'text-2' },
     [el('blockquote')]: {
       marginBlock: 'text-8',
       paddingInlineStart: 'text-5',
@@ -127,8 +134,8 @@ export const prose = defineRecipe({
     [el('dt')]: { fontWeight: 'bold', marginTop: 'text-5' },
     [el('dd')]: { marginTop: 'text-2', paddingInlineStart: 'text-5' },
     [el('sup')]: { fontSize: 'text-xs' },
-    '& > :where(:first-child)': { marginTop: '0' },
-    '& > :where(:last-child)': { marginBottom: '0' },
+    '&& > :where(:first-child)': { marginTop: '0' },
+    '&& > :where(:last-child)': { marginBottom: '0' },
   },
   variants: {
     size: {

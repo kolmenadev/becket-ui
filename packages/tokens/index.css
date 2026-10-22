@@ -743,14 +743,14 @@
       position: relative;
       width: 100%;
     }
-    .beckui--aspectRatio > * {
+    .beckui--aspectRatio > img, .beckui--aspectRatio > video {
+      object-fit: cover;
+    }
+    .beckui--aspectRatio.beckui--aspectRatio > * {
       inset: var(--beckui--spacing-0);
       position: absolute;
       width: 100%;
       height: 100%;
-    }
-    .beckui--aspectRatio > img, .beckui--aspectRatio > video {
-      object-fit: cover;
     }
     .beckui--badge {
       background: var(--mav-label-bg, transparent);
@@ -902,10 +902,10 @@
     [data-theme='light'] :is(.beckui--prose :where(tbody tr):not(:where([data-not-prose], [data-not-prose] *))), [data-theme='light'] :is(.beckui--prose :where(thead th):not(:where([data-not-prose], [data-not-prose] *))) {
       border-bottom-color: var(--beckui--colors-border);
     }
-    .beckui--prose > :where(:first-child) {
+    .beckui--prose.beckui--prose > :where(:first-child) {
       margin-top: var(--beckui--spacing-0);
     }
-    .beckui--prose > :where(:last-child) {
+    .beckui--prose.beckui--prose > :where(:last-child) {
       margin-bottom: var(--beckui--spacing-0);
     }
     .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *)) {
@@ -959,9 +959,6 @@
       color: var(--beckui--colors-text);
       scroll-margin-top: var(--beckui--spacing-5);
     }
-    .beckui--prose :where(h2 + *, h3 + *, h4 + *):not(:where([data-not-prose], [data-not-prose] *)) {
-      margin-top: var(--beckui--spacing-0);
-    }
     .beckui--prose :where(h2):not(:where([data-not-prose], [data-not-prose] *)) {
       margin-block: var(--beckui--spacing-text-8) var(--beckui--spacing-text-3);
       font-size: var(--beckui--font-sizes-text-xl);
@@ -999,9 +996,6 @@
       font-size: var(--beckui--font-sizes-text-sm);
       border-bottom-width: 2px;
     }
-    .beckui--prose :where(li > ul, li > ol):not(:where([data-not-prose], [data-not-prose] *)) {
-      margin-block: var(--beckui--spacing-text-2);
-    }
     .beckui--prose :where(li):not(:where([data-not-prose], [data-not-prose] *)) {
       margin-block: var(--beckui--spacing-text-2);
       padding-inline-start: var(--beckui--spacing-text-1);
@@ -1011,10 +1005,6 @@
       padding-inline: var(--beckui--spacing-text-1);
       border-radius: var(--beckui--radii-sm);
       color: var(--beckui--colors-neutral-900);
-    }
-    .beckui--prose :where(ol):not(:where([data-not-prose], [data-not-prose] *)) {
-      padding-inline-start: var(--beckui--spacing-text-8);
-      list-style-type: decimal;
     }
     .beckui--prose :where(p):not(:where([data-not-prose], [data-not-prose] *)) {
       margin-block: var(--beckui--spacing-text-5);
@@ -1074,6 +1064,16 @@
     .beckui--prose :where(ul, ol):not(:where([data-not-prose], [data-not-prose] *)) {
       margin-block: var(--beckui--spacing-text-5);
       padding-inline-start: var(--beckui--spacing-text-5);
+    }
+    .beckui--prose.beckui--prose :where(h2 + *, h3 + *, h4 + *):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-top: var(--beckui--spacing-0);
+    }
+    .beckui--prose.beckui--prose :where(li > ul, li > ol):not(:where([data-not-prose], [data-not-prose] *)) {
+      margin-block: var(--beckui--spacing-text-2);
+    }
+    .beckui--prose.beckui--prose :where(ol):not(:where([data-not-prose], [data-not-prose] *)) {
+      padding-inline-start: var(--beckui--spacing-text-8);
+      list-style-type: decimal;
     }
     .beckui--prose :where(:not(pre) > code):not(:where([data-not-prose], [data-not-prose] *)) {
       background: var(--beckui--colors-surface);

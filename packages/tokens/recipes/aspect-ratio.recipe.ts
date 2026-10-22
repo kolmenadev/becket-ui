@@ -11,7 +11,9 @@ export const aspectRatio = defineRecipe({
     position: 'relative',
     width: '100%',
     overflow: 'hidden',
-    '& > *': {
+    // Doubled class: the child fills the box over its own recipe (Image sets `height: auto`), which
+    // Panda 2's recipe order no longer guarantees.
+    '&& > *': {
       position: 'absolute',
       inset: '0',
       width: '100%',
