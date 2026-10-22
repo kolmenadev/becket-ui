@@ -37,8 +37,9 @@ colors that passes WCAG AA in dark and light. See [docs/THEMING.md](./docs/THEMI
 ```ts
 import { becketPreset, BECKET_PREFIX } from "@becket-ui/tokens/preset";
 
+// Panda 2 adds no base preset once `presets` is set: list it, or stack, flex and grid go missing.
 export default defineConfig({
-  presets: [becketPreset],
+  presets: ["@pandacss/preset-base", becketPreset],
   prefix: BECKET_PREFIX,
   theme: { extend: { tokens: { colors: { primary: { value: "..." } } } } },
 });
@@ -57,6 +58,7 @@ Most apps only need `index.css` + `@becket-ui/react`. Advanced imports:
 | `@becket-ui/tokens/css`        | `css`, `cva`, `sva`                   |
 | `@becket-ui/tokens/recipes`    | Recipe functions + variant types      |
 | `@becket-ui/tokens/patterns`   | Layout patterns                       |
+| `@becket-ui/tokens/types`      | Token and style types                 |
 | `@becket-ui/tokens/jsx`        | Panda JSX factory                     |
 | `@becket-ui/tokens/preset`     | `definePreset` + `BECKET_PREFIX`      |
 

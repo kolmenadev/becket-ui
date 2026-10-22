@@ -151,6 +151,8 @@ export const sizes = {
   55: { value: 'calc({spacing.unit} * 55)' },
   /** Default form-control width (~200px at 16px root). */
   field: { value: '12.5rem' },
+  /** Prose line length. Panda 2's default is 60ch; Becket keeps the 65ch measure it shipped with. */
+  prose: { value: '65ch' },
 };
 
 /** Fibonacci 1, 2, 3, 5 × 0.25rem (4, 8, 12, 20px at a 16px root), in rem so they follow text size. */

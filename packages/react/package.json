@@ -65,7 +65,7 @@
     "@becket-ui/tokens": "workspace:*",
     "@fontsource/inter": "^5.3.0",
     "@fontsource/jetbrains-mono": "^5.3.0",
-    "@pandacss/dev": "^1.12.1",
+    "@pandacss/dev": "^2.3.0",
     "@puppeteer/browsers": "2.13.2",
     "@storybook/react": "^10.6.0",
     "@storybook/react-vite": "^10.6.0",

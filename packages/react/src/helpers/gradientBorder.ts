@@ -1,5 +1,5 @@
 import { css } from '@becket-ui/tokens';
-import type { GradientToken } from '@becket-ui/tokens/tokens';
+import type { GradientToken } from '@becket-ui/tokens/types';
 
 export type GradientBorderToken = Exclude<GradientToken, 'primaryHover'>;
 

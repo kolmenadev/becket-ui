@@ -15,10 +15,16 @@ export default defineConfig({
     },
   },
   outdir: 'styled-system',
-  // Declarations as .d.mts next to the .mjs runtime, so TypeScript's nodenext resolution pairs
-  // them. scripts/rewrite-declaration-imports.mjs then fixes the specifiers Panda emits (MAV-121).
-  forceConsistentTypeExtension: true,
-  presets: ['@pandacss/preset-panda', becketPreset],
+  // The React package imports the generated system as @becket-ui/tokens/* (and css from the root
+  // entry). Panda 2 only extracts calls from the modules listed here; without this, css() and
+  // pattern styles in components (SimpleGrid's child rules, say) never reach index.css.
+  importMap: ['@becket-ui/tokens', { css: '@becket-ui/tokens' }],
+  // Relative imports in the generated runtime and declarations end in .js, which TypeScript's
+  // nodenext resolution requires (MAV-121).
+  forceImportExtension: true,
+  // Panda 2 no longer adds preset-base on its own once `presets` is set: without it, every
+  // pattern except box and container (stack, flex, grid…) and the base utilities go missing.
+  presets: ['@pandacss/preset-base', '@pandacss/preset-panda', becketPreset],
   staticCss: {
     recipes: '*',
     css: [
