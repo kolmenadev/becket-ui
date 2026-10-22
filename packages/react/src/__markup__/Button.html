@@ -1,0 +1,50 @@
+<!-- Default -->
+<div>
+<button type="button" class="beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_false beckui--button--size_md beckui--button--visual_primary beckui--button--withGradient_false">Click me</button>
+</div>
+
+<!-- WithGradient -->
+<div>
+<button type="button" class="beckui--bd-c_transparent beckui--bd-w_0px beckui--bg-c_transparent beckui--bg-cp_border-box beckui--bg-i_{gradients.primary} beckui--bg-o_border-box beckui--bg-r_no-repeat beckui--bg-s_100%_100% beckui--border-style_solid beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_false beckui--button--size_md beckui--button--visual_primary beckui--button--withGradient_true beckui--c_neutral.900 hover:beckui--bg-i_{gradients.primaryHover}">Gradient</button>
+</div>
+
+<!-- FullWidth -->
+<div>
+<button type="button" class="beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_true beckui--button--size_md beckui--button--visual_primary beckui--button--withGradient_false">Full width</button>
+</div>
+
+<!-- BrandTheme -->
+<div>
+<style>:root {
+  --beckui--colors-primary: oklch(0.82 0.14 280);
+}
+</style>
+<div class="beckui--ai_start beckui--d_flex beckui--flex-d_column beckui--gap_md">
+<p class="beckui--c_muted beckui--fs_sm beckui--max-w_34">Injects <code>--beckui--colors-primary: oklch(0.82 0.14 280)</code> (violet) so theming is obvious. Default primary is yellow.</p>
+<button type="button" class="beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_false beckui--button--size_md beckui--button--visual_primary beckui--button--withGradient_false">Brand primary</button>
+<button type="button" class="beckui--bd-c_transparent beckui--bd-w_0px beckui--bg-c_transparent beckui--bg-cp_border-box beckui--bg-i_{gradients.primary} beckui--bg-o_border-box beckui--bg-r_no-repeat beckui--bg-s_100%_100% beckui--border-style_solid beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_false beckui--button--size_md beckui--button--visual_primary beckui--button--withGradient_true beckui--c_neutral.900 hover:beckui--bg-i_{gradients.primaryHover}">Brand gradient</button>
+</div>
+</div>
+
+<!-- InstanceOverride -->
+<div>
+<button type="button" style="background: rebeccapurple; border-radius: 9999px; color: white; padding: 0.75rem 1.5rem;" class="beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_false beckui--button--size_md beckui--button--visual_primary beckui--button--withGradient_false">One-off override</button>
+</div>
+
+<!-- DensityOverride -->
+<div>
+<style>:root {
+  --beckui-button-px-md: 0.4rem;
+  --beckui-button-py-md: 0.15rem;
+}
+</style>
+<div style="padding: 1rem;" class="beckui--ai_start beckui--d_flex beckui--flex-d_column beckui--gap_md">
+<button type="button" class="beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_false beckui--button--size_md beckui--button--visual_primary beckui--button--withGradient_false">Dense md</button>
+<button type="button" class="beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_false beckui--button--size_sm beckui--button--visual_primary beckui--button--withGradient_false">Dense sm (unchanged vars)</button>
+</div>
+</div>
+
+<!-- AsLink -->
+<div>
+<a href="https://github.com/kolmenadev/becket-ui" class="beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_false beckui--button--size_md beckui--button--visual_primary beckui--button--withGradient_false">View on GitHub</a>
+</div>

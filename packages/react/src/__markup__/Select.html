@@ -1,0 +1,73 @@
+<!-- Default -->
+<div>
+<div class="beckui--field__root beckui--field__root--fullWidth_false beckui--field__root--size_md">
+<label for="id-1" class="beckui--field__label beckui--field__label--fullWidth_false beckui--field__label--size_md">Fruit</label>
+<select id="id-1" class="beckui--select beckui--select--invalid_false beckui--select--size_md" aria-describedby="id-1-helper">
+<option value="">Choose one</option>
+<option value="apple">Apple</option>
+<option value="pear">Pear</option>
+<option value="plum">Plum</option>
+</select>
+<span id="id-1-helper" class="beckui--field__helper beckui--field__helper--fullWidth_false beckui--field__helper--size_md">Native select — works without JS.</span>
+</div>
+</div>
+
+<!-- Invalid -->
+<div>
+<div class="beckui--field__root beckui--field__root--fullWidth_false beckui--field__root--size_md">
+<label for="id-1" class="beckui--field__label beckui--field__label--fullWidth_false beckui--field__label--size_md">Fruit</label>
+<select id="id-1" aria-invalid="true" class="beckui--select beckui--select--invalid_true beckui--select--size_md" aria-describedby="id-1-error">
+<option value="" selected="">Choose one</option>
+<option value="apple">Apple</option>
+<option value="pear">Pear</option>
+<option value="plum">Plum</option>
+</select>
+<span id="id-1-error" role="alert" class="beckui--field__error beckui--field__error--fullWidth_false beckui--field__error--size_md">Pick a fruit</span>
+</div>
+</div>
+
+<!-- Disabled -->
+<div>
+<div class="beckui--field__root beckui--field__root--fullWidth_false beckui--field__root--size_md">
+<label for="id-1" class="beckui--field__label beckui--field__label--fullWidth_false beckui--field__label--size_md">Fruit</label>
+<select id="id-1" disabled="" class="beckui--select beckui--select--invalid_false beckui--select--size_md">
+<option value="">Choose one</option>
+<option value="apple">Apple</option>
+<option value="pear" selected="">Pear</option>
+<option value="plum">Plum</option>
+</select>
+</div>
+</div>
+
+<!-- Sizes -->
+<div>
+<div class="beckui--d_flex beckui--flex-d_column beckui--gap_md">
+<div class="beckui--field__root beckui--field__root--fullWidth_false beckui--field__root--size_sm">
+<label for="id-1" class="beckui--field__label beckui--field__label--fullWidth_false beckui--field__label--size_sm">Small</label>
+<select id="id-1" class="beckui--select beckui--select--invalid_false beckui--select--size_sm">
+<option value="">Choose one</option>
+<option value="apple" selected="">Apple</option>
+<option value="pear">Pear</option>
+<option value="plum">Plum</option>
+</select>
+</div>
+<div class="beckui--field__root beckui--field__root--fullWidth_false beckui--field__root--size_md">
+<label for="id-2" class="beckui--field__label beckui--field__label--fullWidth_false beckui--field__label--size_md">Medium</label>
+<select id="id-2" class="beckui--select beckui--select--invalid_false beckui--select--size_md">
+<option value="">Choose one</option>
+<option value="apple">Apple</option>
+<option value="pear" selected="">Pear</option>
+<option value="plum">Plum</option>
+</select>
+</div>
+<div class="beckui--field__root beckui--field__root--fullWidth_false beckui--field__root--size_lg">
+<label for="id-3" class="beckui--field__label beckui--field__label--fullWidth_false beckui--field__label--size_lg">Large</label>
+<select id="id-3" class="beckui--select beckui--select--invalid_false beckui--select--size_lg">
+<option value="">Choose one</option>
+<option value="apple">Apple</option>
+<option value="pear">Pear</option>
+<option value="plum" selected="">Plum</option>
+</select>
+</div>
+</div>
+</div>
