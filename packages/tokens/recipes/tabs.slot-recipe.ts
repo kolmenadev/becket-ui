@@ -1,6 +1,6 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
-export const tabs = defineSlotRecipe({
+export const tabs: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'tabs',
   description: 'ARIA tabs with list, tab, and panel slots',
   slots: ['root', 'list', 'tab', 'panel'],

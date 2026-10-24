@@ -1,7 +1,7 @@
 import { defineRecipe } from '@pandacss/dev';
 import { filledGradient, outlineGradient } from './gradientStyles';
 
-export const badge = defineRecipe({
+export const badge: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'badge',
   description: 'Non-interactive status chip (Badge)',
   base: {

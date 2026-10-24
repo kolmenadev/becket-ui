@@ -2,7 +2,7 @@ import { defineRecipe } from '@pandacss/dev';
 import { filledGradient, outlineGradient } from './gradientStyles';
 import { buttonSizeStyles } from './density';
 
-export const button = defineRecipe({
+export const button: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'button',
   description: 'The styles for the Button component',
   base: {

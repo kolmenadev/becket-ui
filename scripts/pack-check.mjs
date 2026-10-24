@@ -125,6 +125,59 @@ function assertConsumer() {
         process.exit(1);
       }
     }
+    // The preset entry, as an app on Panda 2 uses it. 0.6.0 shipped a preset.d.ts naming types it
+    // never imported, and the check above never imported it (MAV-156). Panda's own declarations
+    // and their dependencies don't pass skipLibCheck: false, so an error in a file counts only when
+    // the file is Becket's or this probe; an error that names no file (a config error) always counts.
+    symlinkSync(
+      realpathSync(join(root, 'packages', 'tokens', 'node_modules', '@pandacss')),
+      join(modules, '@pandacss'),
+    );
+    writeFileSync(
+      join(consumer, 'preset.ts'),
+      [
+        "import { defineConfig, type Preset } from '@pandacss/dev';",
+        "import { becketPreset, BECKET_PREFIX } from '@becket-ui/tokens/preset';",
+        'export const preset: Preset = becketPreset;',
+        "export default defineConfig({ presets: ['@pandacss/preset-base', becketPreset], prefix: BECKET_PREFIX });",
+        '',
+      ].join('\n'),
+    );
+    for (const resolution of ['nodenext', 'bundler']) {
+      writeFileSync(
+        join(consumer, `tsconfig.preset.${resolution}.json`),
+        JSON.stringify({
+          compilerOptions: {
+            module: resolution === 'nodenext' ? 'nodenext' : 'esnext',
+            moduleResolution: resolution,
+            target: 'es2022',
+            strict: true,
+            skipLibCheck: false,
+            noEmit: true,
+          },
+          files: ['preset.ts'],
+        }),
+      );
+      const typecheck = spawnSync(
+        join(root, 'node_modules', '.bin', 'tsc'),
+        ['-p', `tsconfig.preset.${resolution}.json`, '--pretty', 'false'],
+        { cwd: consumer, encoding: 'utf8' },
+      );
+      const errors = `${typecheck.stdout}${typecheck.stderr}`
+        .split('\n')
+        .filter(
+          (line) =>
+            /error TS\d+/.test(line) &&
+            (!/^\S+\(\d+,\d+\): error/.test(line) ||
+              /^(preset\.ts|node_modules\/@becket-ui\/)/.test(line)),
+        );
+      if (errors.length > 0 || typecheck.error) {
+        console.error(
+          `@becket-ui/tokens/preset doesn't typecheck with moduleResolution "${resolution}":\n${(errors.join('\n') || typecheck.error?.message).split('\n').slice(0, 10).join('\n')}`,
+        );
+        process.exit(1);
+      }
+    }
     const requests = [
       { jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'pack-check', version: '0' } } },
       { jsonrpc: '2.0', method: 'notifications/initialized' },
@@ -186,7 +239,7 @@ try {
   console.log(`  react:  ${react.length} files`);
   console.log(`  mcp:    ${mcp.length} files`);
   console.log(`  node import: ok (${exportCount} exports)`);
-  console.log('  types: ok (nodenext, bundler)');
+  console.log('  types: ok (nodenext, bundler), preset entry included');
   console.log(`  mcp server: ok (${toolCount} tools)`);
 } finally {
   rmSync(dest, { recursive: true, force: true });

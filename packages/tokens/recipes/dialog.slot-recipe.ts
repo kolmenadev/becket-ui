@@ -1,6 +1,6 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
-export const dialog = defineSlotRecipe({
+export const dialog: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'dialog',
   description: 'Native dialog overlay with header, body, and footer slots',
   slots: ['root', 'header', 'body', 'footer', 'title', 'close'],

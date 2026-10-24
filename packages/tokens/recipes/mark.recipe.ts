@@ -1,6 +1,6 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const mark = defineRecipe({
+export const mark: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'mark',
   description: 'Highlighted text',
   base: {

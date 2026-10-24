@@ -1,6 +1,6 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const separator = defineRecipe({
+export const separator: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'separator',
   description: 'Horizontal or vertical rule',
   base: {

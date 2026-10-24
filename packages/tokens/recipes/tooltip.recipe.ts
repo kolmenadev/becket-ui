@@ -1,7 +1,7 @@
 import { defineRecipe } from '@pandacss/dev';
 
 /** Floating label for hover/focus hints — generic DS primitive. */
-export const tooltip = defineRecipe({
+export const tooltip: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'tooltip',
   description: 'Tooltip content bubble',
   base: {

@@ -1,6 +1,6 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
-export const blockquote = defineSlotRecipe({
+export const blockquote: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'blockquote',
   description: 'Quotation with an optional caption',
   slots: ['root', 'quote', 'caption'],

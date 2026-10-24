@@ -1,6 +1,6 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
-export const drawer = defineSlotRecipe({
+export const drawer: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'drawer',
   description: 'Side overlay built on native dialog',
   slots: ['root', 'header', 'body', 'footer', 'title', 'close'],

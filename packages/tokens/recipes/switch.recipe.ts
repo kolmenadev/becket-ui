@@ -1,7 +1,7 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
 /** Generic on/off switch (track + thumb). No product-domain naming. */
-export const switchRecipe = defineSlotRecipe({
+export const switchRecipe: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'switch',
   description: 'Accessible switch control with track and thumb slots',
   slots: ['root', 'track', 'thumb', 'wrap', 'label'],

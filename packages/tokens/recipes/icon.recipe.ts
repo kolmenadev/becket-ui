@@ -1,6 +1,6 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const icon = defineRecipe({
+export const icon: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'icon',
   description: 'Sizes an inline SVG on the type scale so it matches the text beside it and colors it with currentColor',
   base: {

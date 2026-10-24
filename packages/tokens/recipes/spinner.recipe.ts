@@ -1,6 +1,6 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const spinner = defineRecipe({
+export const spinner: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'spinner',
   description: 'Pure CSS loading spinner',
   base: {

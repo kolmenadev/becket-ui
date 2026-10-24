@@ -1,7 +1,7 @@
 import { defineRecipe } from '@pandacss/dev';
 import { visuallyHiddenStyles } from './visually-hidden.recipe';
 
-export const skipLink = defineRecipe({
+export const skipLink: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'skipLink',
   description: 'Skip-to-content link, visible only when focused',
   base: {

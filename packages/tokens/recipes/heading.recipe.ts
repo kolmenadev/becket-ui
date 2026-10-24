@@ -1,6 +1,8 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const heading = defineRecipe({
+// Typed explicitly: TypeScript infers this recipe's config through Panda's internal RecipeConfig,
+// which it can't name in a declaration; defineRecipe's own return type is public (MAV-156).
+export const heading: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'heading',
   description: 'The styles for the Heading component',
   base: {
