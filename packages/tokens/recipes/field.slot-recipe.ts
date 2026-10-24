@@ -1,7 +1,7 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
 /** Shared label / helper / error chrome for form controls. */
-export const field = defineSlotRecipe({
+export const field: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'field',
   description: 'Field composition: label, helper, and error around a control',
   slots: ['root', 'label', 'helper', 'error'],

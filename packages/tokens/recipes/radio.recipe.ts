@@ -3,7 +3,7 @@ import { defineSlotRecipe } from '@pandacss/dev';
 const radioDot =
   'radial-gradient(circle, {colors.white} 32%, transparent 34%)';
 
-export const radio = defineSlotRecipe({
+export const radio: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'radio',
   description: 'Native radio with visible control, label, optional description, and group',
   slots: ['group', 'legend', 'root', 'control', 'indicator', 'text', 'label', 'description'],

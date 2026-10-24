@@ -1,6 +1,6 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const box = defineRecipe({
+export const box: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'box',
   description: 'Generic block with token-only padding, background and radius',
   base: {

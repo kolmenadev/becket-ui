@@ -1,6 +1,6 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
-export const menu = defineSlotRecipe({
+export const menu: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'menu',
   description: 'Disclosure menu using details/summary',
   slots: ['root', 'trigger', 'content', 'item'],

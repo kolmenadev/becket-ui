@@ -1,6 +1,6 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const image = defineRecipe({
+export const image: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'image',
   description: 'Responsive image',
   base: { display: 'block', maxWidth: '100%', height: 'auto' },

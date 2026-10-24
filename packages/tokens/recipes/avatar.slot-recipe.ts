@@ -1,6 +1,6 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
-export const avatar = defineSlotRecipe({
+export const avatar: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'avatar',
   description: 'Person image with an initials fallback',
   slots: ['root', 'image', 'initials'],

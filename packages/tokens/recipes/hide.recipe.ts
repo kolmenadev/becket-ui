@@ -11,7 +11,7 @@ const breakpointVariants = {
   '2xl': {},
 };
 
-export const hide = defineRecipe({
+export const hide: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'hide',
   description: 'Hide children below or from a breakpoint (CSS media queries)',
   variants: {

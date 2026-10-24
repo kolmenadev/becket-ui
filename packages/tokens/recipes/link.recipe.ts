@@ -1,6 +1,6 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const link = defineRecipe({
+export const link: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'link',
   description: 'Inline link',
   base: {

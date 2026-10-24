@@ -1,6 +1,6 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const container = defineRecipe({
+export const container: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'container',
   description: 'Centered page-width wrapper with inline gutters',
   base: {

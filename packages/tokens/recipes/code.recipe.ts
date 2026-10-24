@@ -1,6 +1,6 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const code = defineRecipe({
+export const code: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'code',
   description: 'Inline code',
   base: {

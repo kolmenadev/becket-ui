@@ -2,7 +2,7 @@ import { defineRecipe } from '@pandacss/dev';
 import { filledGradient, outlineGradient } from './gradientStyles';
 import { tagSizeStyles } from './density';
 
-export const tag = defineRecipe({
+export const tag: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'tag',
   description: 'Non-interactive metadata chip (Tag)',
   base: {

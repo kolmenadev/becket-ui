@@ -1,6 +1,6 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const list = defineRecipe({
+export const list: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'list',
   description: 'Bulleted, numbered or plain list',
   base: {

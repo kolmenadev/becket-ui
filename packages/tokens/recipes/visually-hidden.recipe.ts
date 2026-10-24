@@ -13,7 +13,7 @@ export const visuallyHiddenStyles = {
   borderWidth: '0',
 };
 
-export const visuallyHidden = defineRecipe({
+export const visuallyHidden: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'visuallyHidden',
   description: 'Visually hidden but available to screen readers',
   base: visuallyHiddenStyles,

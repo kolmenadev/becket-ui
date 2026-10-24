@@ -4,7 +4,7 @@ import { defineRecipe } from '@pandacss/dev';
  * Ratios are consecutive Fibonacci numbers (they approach the golden ratio as they grow), plus
  * 16:9 and 9:16 because video and embeds are produced at those sizes.
  */
-export const aspectRatio = defineRecipe({
+export const aspectRatio: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'aspectRatio',
   description: 'Keeps its content at a fixed width-to-height ratio',
   base: {

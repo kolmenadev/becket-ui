@@ -1,6 +1,6 @@
 import { defineRecipe } from '@pandacss/dev';
 
-export const kbd = defineRecipe({
+export const kbd: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'kbd',
   description: 'Keyboard key',
   base: {

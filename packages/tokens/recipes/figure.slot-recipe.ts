@@ -1,6 +1,6 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
-export const figure = defineSlotRecipe({
+export const figure: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'figure',
   description: 'Figure with a caption',
   slots: ['root', 'caption'],

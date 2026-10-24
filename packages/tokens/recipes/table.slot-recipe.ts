@@ -1,6 +1,6 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
-export const table = defineSlotRecipe({
+export const table: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'table',
   description: 'Semantic table slots',
   slots: ['root', 'caption', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td'],

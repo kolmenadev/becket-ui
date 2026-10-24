@@ -131,7 +131,7 @@ const elementRules = {
   [el('sup')]: { fontSize: 'text-xs' },
 };
 
-export const prose = defineRecipe({
+export const prose: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'prose',
   description: 'Styles HTML from Markdown or MDX (headings, text, lists, quotes, code, tables, media) with Becket tokens',
   base: {
