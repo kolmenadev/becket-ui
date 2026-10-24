@@ -1,7 +1,9 @@
 import { defineRecipe } from '@pandacss/dev';
 import { controlChrome, controlInvalidVariants, controlSizeVariants } from './controlStyles';
 
-export const textareaRecipe = defineRecipe({
+// Typed explicitly: TypeScript infers this recipe's config through Panda's internal RecipeConfig,
+// which it can't name in a declaration; defineRecipe's own return type is public (MAV-156).
+export const textareaRecipe: ReturnType<typeof defineRecipe> = defineRecipe({
   className: 'textarea',
   description: 'Native textarea. Label / helper / error live on Field.',
   base: {

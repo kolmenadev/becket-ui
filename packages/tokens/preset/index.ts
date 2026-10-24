@@ -1,4 +1,4 @@
-import { definePreset } from '@pandacss/dev';
+import { definePreset, type Preset } from '@pandacss/dev';
 import {
   aspectRatio,
   avatar,
@@ -58,7 +58,9 @@ import {
 /** Class / CSS-variable prefix. Set `prefix` on the consumer `defineConfig` to match. */
 export const BECKET_PREFIX = 'beckui-';
 
-export const becketPreset = definePreset({
+// Typed as Preset: Panda 2's definePreset infers the whole literal config, which references Panda's
+// internal RecipeConfig type, so the published declaration can't name it (MAV-156).
+export const becketPreset: Preset = definePreset({
   name: '@becket-ui/tokens',
   conditions: {
     extend: {

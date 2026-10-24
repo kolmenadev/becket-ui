@@ -42,7 +42,8 @@
     "build": "panda codegen && panda cssgen && node scripts/bundle-css.mjs && tsup && node scripts/emit-preset-dts.mjs",
     "prepare": "pnpm build",
     "prepack": "node ../../scripts/assert-built.mjs dist/preset.js styled-system",
-    "test": "node --test theme/index.test.mjs theme/contrast.test.mjs theme/derive.test.mjs theme/scale.test.mjs"
+    "test": "node --test theme/index.test.mjs theme/contrast.test.mjs theme/derive.test.mjs theme/scale.test.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "exports": {
     ".": {
@@ -108,6 +109,7 @@
     "@typescript/typescript6": "^6.0.2",
     "rollup": "^4.34.8",
     "rollup-plugin-dts": "^6.5.1",
-    "tsup": "^8.5.1"
+    "tsup": "^8.5.1",
+    "typescript": "7.0.2"
   }
 }
