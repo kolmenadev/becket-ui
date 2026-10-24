@@ -3,7 +3,7 @@
 Purpose: This is the single source of truth for creating production‑ready components for the Becket React library built on PandaCSS. It unifies our coding style and folder structure, and sets strict rules for API design, accessibility, UX, styling, and Storybook coverage.
 
 - Repo context: monorepo with `@becket-ui/react` (components) and `@becket-ui/tokens` (PandaCSS tokens/recipes).
-- Tech assumptions: React 19, TypeScript 7, PandaCSS v1, Storybook 10.
+- Tech assumptions: React 19, TypeScript 7, PandaCSS v2, Storybook 10.
 - Styling: use PandaCSS recipes/patterns/tokens from `@becket-ui/tokens`.
 
 ### Golden rules

@@ -39,7 +39,7 @@
     "index.d.ts"
   ],
   "scripts": {
-    "build": "panda codegen && node scripts/rewrite-declaration-imports.mjs && panda cssgen && node scripts/bundle-css.mjs && tsup && node scripts/emit-preset-dts.mjs",
+    "build": "panda codegen && panda cssgen && node scripts/bundle-css.mjs && tsup && node scripts/emit-preset-dts.mjs",
     "prepare": "pnpm build",
     "prepack": "node ../../scripts/assert-built.mjs dist/preset.js styled-system",
     "test": "node --test theme/index.test.mjs theme/contrast.test.mjs theme/derive.test.mjs theme/scale.test.mjs"
@@ -55,28 +55,28 @@
       "default": "./dist/preset.js"
     },
     "./recipes": {
-      "types": "./styled-system/recipes/index.d.mts",
-      "import": "./styled-system/recipes/index.mjs"
+      "types": "./styled-system/recipes/index.d.ts",
+      "import": "./styled-system/recipes/index.js"
     },
     "./patterns": {
-      "types": "./styled-system/patterns/index.d.mts",
-      "import": "./styled-system/patterns/index.mjs"
+      "types": "./styled-system/patterns/index.d.ts",
+      "import": "./styled-system/patterns/index.js"
     },
     "./css": {
-      "types": "./styled-system/css/index.d.mts",
-      "import": "./styled-system/css/index.mjs"
+      "types": "./styled-system/css/index.d.ts",
+      "import": "./styled-system/css/index.js"
     },
     "./tokens": {
-      "types": "./styled-system/tokens/index.d.mts",
-      "import": "./styled-system/tokens/index.mjs"
+      "types": "./styled-system/tokens/index.d.ts",
+      "import": "./styled-system/tokens/index.js"
     },
     "./types": {
-      "types": "./styled-system/types/index.d.mts",
-      "import": "./styled-system/types/index.mjs"
+      "types": "./styled-system/types/index.d.ts",
+      "import": "./styled-system/types/index.js"
     },
     "./jsx": {
-      "types": "./styled-system/jsx/index.d.mts",
-      "import": "./styled-system/jsx/index.mjs"
+      "types": "./styled-system/jsx/index.d.ts",
+      "import": "./styled-system/jsx/index.js"
     },
     "./styles.css": "./styled-system/styles.css",
     "./index.css": "./index.css",
@@ -94,7 +94,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@pandacss/dev": "^1.0.0"
+    "@pandacss/dev": "^2.0.0"
   },
   "peerDependenciesMeta": {
     "@pandacss/dev": {
@@ -102,7 +102,9 @@
     }
   },
   "devDependencies": {
-    "@pandacss/dev": "^1.12.1",
+    "@pandacss/dev": "^2.3.0",
+    "@pandacss/preset-base": "^2.3.0",
+    "@pandacss/preset-panda": "^2.3.0",
     "@typescript/typescript6": "^6.0.2",
     "rollup": "^4.34.8",
     "rollup-plugin-dts": "^6.5.1",
