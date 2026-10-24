@@ -48,6 +48,7 @@ reason.
   - [Prefer native, accessible elements](#prefer-native-accessible-elements)
 - [TypeScript](#typescript)
   - [Must not use `any`](#must-not-use-any)
+  - [Must use `as const` only when you need the literal types](#must-use-as-const-only-when-you-need-the-literal-types)
   - [Prefer unions and `as const` over enums](#prefer-unions-and-as-const-over-enums)
   - [Prefer inference inside, explicit types at boundaries](#prefer-inference-inside-explicit-types-at-boundaries)
   - [Must explain when ignoring a lint or TypeScript rule](#must-explain-when-ignoring-a-lint-or-typescript-rule)
@@ -634,6 +635,37 @@ express it. Target: WCAG 2.2 AA.
 Use `unknown` and narrow it, or write the real type. If a library forces `any`, contain it at the
 boundary and [explain why](#must-explain-when-ignoring-a-lint-or-typescript-rule).
 
+Never write `as any`, even with a comment. It turns off type checking for everything downstream of
+the cast. Write the real type, or `unknown` and a narrowing check, instead.
+
+## Must use `as const` only when you need the literal types
+
+`as const` is a cast. It changes a value's type from `string` to `'sm'`, or from `string[]` to a
+readonly tuple, and nothing else. Use it only when code depends on that literal type, and say which
+in a comment:
+
+- a union derived from a list: `type Size = (typeof SIZES)[number]`;
+- a prop or parameter that only takes certain literals (`placement`, `radius`);
+- a tuple whose positions have different types (`[name, Component]`);
+- a public constant whose literal type is part of the API.
+
+A style object passed to `css()` or a recipe, a list used only as options, or an object read by key
+needs none of these: TypeScript accepts the plain value. If removing `as const` still typechecks and
+leaves the published types unchanged, remove it.
+
+```ts
+// Avoid: nothing here needs a literal type
+const outline = { borderStyle: "solid", borderWidth: "2px" } as const;
+
+// Prefer
+const outline = { borderStyle: "solid", borderWidth: "2px" };
+
+// Fine: Size is derived from the list
+// as const: Size below is the union of these names.
+const SIZES = ["sm", "md", "lg"] as const;
+type Size = (typeof SIZES)[number];
+```
+
 ## Prefer unions and `as const` over enums
 
 String unions and `as const` objects are plain JavaScript
@@ -651,6 +683,7 @@ enum Role {
 // Prefer
 type Role = "owner" | "admin" | "member";
 
+// as const: Role below is the union of these names.
 const ROLES = ["owner", "admin", "member"] as const;
 type Role = (typeof ROLES)[number];
 ```

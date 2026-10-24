@@ -11,7 +11,7 @@ export const visuallyHiddenStyles = {
   clip: 'rect(0, 0, 0, 0)',
   whiteSpace: 'nowrap',
   borderWidth: '0',
-} as const;
+};
 
 export const visuallyHidden = defineRecipe({
   className: 'visuallyHidden',

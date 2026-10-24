@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Card, CardBody, CardTitle } from './Card';
 import { SimpleGrid, type SimpleGridProps } from './SimpleGrid';
-import { GAP_OPTIONS, knobs } from '../helpers/storybookControls';
+import { gapOptions, knobs } from '../helpers/storybookControls';
 
 const meta: Meta<typeof SimpleGrid> = {
   title: 'Layout/SimpleGrid',
@@ -9,10 +9,10 @@ const meta: Meta<typeof SimpleGrid> = {
   args: { columns: 3, gap: 'md' },
   argTypes: {
     columns: { control: { type: 'number', min: 1, max: 6, step: 1 } },
-    gap: { control: { type: 'select' }, options: [...GAP_OPTIONS] },
+    gap: { control: { type: 'select' }, options: [...gapOptions] },
     minChildWidth: { control: { type: 'text' } },
-    rowGap: { control: { type: 'select' }, options: [...GAP_OPTIONS] },
-    columnGap: { control: { type: 'select' }, options: [...GAP_OPTIONS] },
+    rowGap: { control: { type: 'select' }, options: [...gapOptions] },
+    columnGap: { control: { type: 'select' }, options: [...gapOptions] },
   },
   parameters: knobs(['columns', 'gap', 'minChildWidth', 'rowGap', 'columnGap']),
 };

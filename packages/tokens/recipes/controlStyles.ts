@@ -28,7 +28,7 @@ export const controlChrome = {
       boxShadow: '0 0 0 2px color-mix(in srgb, {colors.primary} 35%, transparent)',
     },
   },
-} as const;
+};
 
 export const controlSizeVariants = fieldSizeStyles;
 
@@ -41,4 +41,4 @@ export const controlInvalidVariants = {
     },
   },
   false: {},
-} as const;
+};

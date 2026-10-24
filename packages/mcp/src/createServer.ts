@@ -7,6 +7,7 @@ import { setTheme } from './theme/setTheme';
 import { suggestTheme } from './theme/suggestTheme';
 import { componentExample, componentProps, guidelines, installation, listComponents, theme } from './tools';
 
+// as const: the MCP SDK types a text block's `type` as the literal 'text'.
 const text = (value: string) => ({ content: [{ type: 'text' as const, text: value }] });
 
 export function createServer(data: Data = loadData()): McpServer {

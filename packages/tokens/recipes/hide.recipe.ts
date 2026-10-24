@@ -1,5 +1,6 @@
 import { defineRecipe } from '@pandacss/dev';
 
+// as const: each compound variant's `below`/`from` must be one of the variant keys, not any string.
 const BREAKPOINTS = ['sm', 'md', 'lg', 'xl', '2xl'] as const;
 
 const breakpointVariants = {
@@ -8,7 +9,7 @@ const breakpointVariants = {
   lg: {},
   xl: {},
   '2xl': {},
-} as const;
+};
 
 export const hide = defineRecipe({
   className: 'hide',

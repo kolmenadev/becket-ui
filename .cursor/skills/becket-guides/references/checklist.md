@@ -65,7 +65,10 @@ in the guide, because the guide wins over this summary. Rules marked ⚙ are als
   inputs. Every control has an accessible name. ARIA only where HTML can't do it.
 
 **TypeScript**
-- No `any` ⚙.
+- No `any` ⚙, and never `as any`, even with a comment ⚙.
+- `as const` only when code needs the literal type (a derived union, a literal-only prop, a mixed
+  tuple, a public constant), with a comment saying which ⚙. Try removing it: if the typecheck and
+  published types don't change, it goes.
 - Unions and `as const` over enums ⚙. States that can't coexist are a discriminated union, not
   several booleans.
 - Inference inside, explicit types at boundaries (exported functions, props, public API).

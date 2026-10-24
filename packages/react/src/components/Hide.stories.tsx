@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { BREAKPOINT_OPTIONS, knobs } from '../helpers/storybookControls';
+import { breakpointOptions, knobs } from '../helpers/storybookControls';
 import { Hide, type HideProps } from './Hide';
 import { SimpleGrid } from './SimpleGrid';
 import { Text } from './Text';
@@ -9,8 +9,8 @@ const meta: Meta<typeof Hide> = {
   title: 'Layout/Hide',
   component: Hide,
   argTypes: {
-    below: { control: { type: 'select' }, options: [...BREAKPOINT_OPTIONS] },
-    from: { control: { type: 'select' }, options: [...BREAKPOINT_OPTIONS] },
+    below: { control: { type: 'select' }, options: [...breakpointOptions] },
+    from: { control: { type: 'select' }, options: [...breakpointOptions] },
     asContents: { control: { type: 'boolean' } },
   },
   args: { asContents: true },

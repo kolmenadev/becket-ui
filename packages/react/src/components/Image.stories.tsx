@@ -25,6 +25,7 @@ export const Default: Story = {
 export const Radii: Story = {
   render: () => (
     <SimpleGrid columns={3} gap="md">
+      {/* as const: `radius` takes these literals, not any string. */}
       {(['none', 'md', 'xl'] as const).map((radius) => (
         <Image key={radius} src={SAMPLE_LANDSCAPE} alt={`Radius ${radius}`} radius={radius} />
       ))}

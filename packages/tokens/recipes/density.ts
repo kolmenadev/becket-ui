@@ -14,7 +14,7 @@ export const buttonSizeStyles = {
     paddingInline: 'var(--beckui-button-px-md)',
     paddingBlock: 'var(--beckui-button-py-md)',
   },
-} as const;
+};
 
 export const fieldSizeStyles = {
   sm: {
@@ -32,7 +32,7 @@ export const fieldSizeStyles = {
     paddingInline: 'var(--beckui-field-px-lg)',
     paddingBlock: 'var(--beckui-field-py-lg)',
   },
-} as const;
+};
 
 export const tagSizeStyles = {
   sm: {
@@ -50,4 +50,4 @@ export const tagSizeStyles = {
     paddingInline: 'var(--beckui-tag-px-lg)',
     paddingBlock: 'var(--beckui-tag-py-lg)',
   },
-} as const;
+};

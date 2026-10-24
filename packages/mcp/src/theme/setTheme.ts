@@ -22,6 +22,7 @@ export type SetThemeInput = {
   density?: Record<string, Record<string, { px?: string; py?: string }>>;
 };
 
+// as const: literal group names, so `input[group]` type-checks against SetThemeInput.
 const groups = ['colors', 'fonts', 'radii', 'fontSizes', 'spacing', 'sizes', 'density'] as const;
 
 export function setTheme(input: SetThemeInput): string {
@@ -36,6 +37,7 @@ export function setTheme(input: SetThemeInput): string {
   const theme: BecketTheme = {};
 
   // px → rem (em for the text unit), so browser text-size settings still scale it (WCAG 1.4.4).
+  // as const: literal group names, so `input[group]` type-checks.
   for (const group of ['spacing', 'fontSizes', 'radii'] as const) {
     if (!input[group]) continue;
     const cleaned: Record<string, string> = {};
