@@ -64,7 +64,7 @@ export const Button = forwardRef<HTMLElement, ButtonOwnProps & { as?: ElementTyp
     return (
       <ButtonComponent
         ref={ref}
-        {...(ButtonComponent === 'button' ? { type: 'button' as const } : {})}
+        {...(ButtonComponent === 'button' ? { type: 'button' } : {})}
         {...props}
         className={mergeClassName(recipeClassName, className)}
       />

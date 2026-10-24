@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { css } from '@becket-ui/tokens';
 import {
-  ALIGN_OPTIONS,
-  GAP_OPTIONS,
-  GRADIENT_BORDER_OPTIONS,
-  JUSTIFY_OPTIONS,
-  STACK_DIRECTION_OPTIONS,
+  alignOptions,
+  gapOptions,
+  gradientBorderOptions,
+  justifyOptions,
+  stackDirectionOptions,
   knobs,
 } from '../helpers/storybookControls';
 import { demoChipBlock } from '../helpers/storybookDemoChip';
@@ -15,14 +15,14 @@ const meta: Meta<typeof Stack> = {
   title: 'Layout/Stack',
   component: Stack,
   argTypes: {
-    direction: { control: { type: 'select' }, options: [...STACK_DIRECTION_OPTIONS] },
+    direction: { control: { type: 'select' }, options: [...stackDirectionOptions] },
     gap: {
       control: { type: 'select' },
-      options: [...GAP_OPTIONS, 0, 1, 2, 3, 5, 8, 13, 21, 34],
+      options: [...gapOptions, 0, 1, 2, 3, 5, 8, 13, 21, 34],
     },
-    align: { control: { type: 'select' }, options: [...ALIGN_OPTIONS] },
-    justify: { control: { type: 'select' }, options: [...JUSTIFY_OPTIONS] },
-    border: { control: { type: 'select' }, options: [...GRADIENT_BORDER_OPTIONS] },
+    align: { control: { type: 'select' }, options: [...alignOptions] },
+    justify: { control: { type: 'select' }, options: [...justifyOptions] },
+    border: { control: { type: 'select' }, options: [...gradientBorderOptions] },
     order: { control: { type: 'number', min: -5, max: 5, step: 1 } },
   },
   parameters: knobs(['direction', 'gap', 'align', 'justify', 'border', 'order']),
@@ -96,7 +96,7 @@ export const WithGradientBorder: Story = {
 export const GradientBorderVariants: Story = {
   render: () => (
     <VStack gap="md" className={css({ maxW: 55 })}>
-      {GRADIENT_BORDER_OPTIONS.map((border) => (
+      {gradientBorderOptions.map((border) => (
         <Stack
           key={border}
           border={border}

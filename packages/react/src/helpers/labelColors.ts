@@ -5,7 +5,7 @@ export const LABEL_COLOR_VARS = {
   border: '--mav-label-border',
   color: '--mav-label-color',
   gradient: '--mav-label-gradient',
-} as const;
+};
 
 /** Downstream apps pass CSS values (tokens, vars, or literals) for label surfaces. */
 export type LabelCustomColors = {

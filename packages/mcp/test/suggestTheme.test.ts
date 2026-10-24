@@ -127,6 +127,7 @@ describe('reading a brand manual PDF', () => {
       // A valid hex.
       color: parseColor('#e0169c')!,
       share: 0.03,
+      // as const: pickBrand's findings type takes the 'brand' literal, not any string.
       role: 'brand' as const,
     };
     const findings = {

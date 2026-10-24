@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { css } from '@becket-ui/tokens';
 import {
-  ALIGN_OPTIONS,
-  FLEX_BASIS_OPTIONS,
-  FLEX_DIRECTION_OPTIONS,
-  FLEX_WRAP_OPTIONS,
-  GAP_OPTIONS,
-  GRADIENT_BORDER_OPTIONS,
-  JUSTIFY_OPTIONS,
+  alignOptions,
+  flexBasisOptions,
+  flexDirectionOptions,
+  flexWrapOptions,
+  gapOptions,
+  gradientBorderOptions,
+  justifyOptions,
   knobs,
 } from '../helpers/storybookControls';
 import { demoChip, demoChipLg, demoChipMd, demoChipWide } from '../helpers/storybookDemoChip';
@@ -17,16 +17,16 @@ const meta: Meta<typeof Flex> = {
   title: 'Layout/Flex',
   component: Flex,
   argTypes: {
-    direction: { control: { type: 'select' }, options: [...FLEX_DIRECTION_OPTIONS] },
-    gap: { control: { type: 'select' }, options: [...GAP_OPTIONS] },
-    align: { control: { type: 'select' }, options: [...ALIGN_OPTIONS] },
-    justify: { control: { type: 'select' }, options: [...JUSTIFY_OPTIONS] },
-    wrap: { control: { type: 'select' }, options: [...FLEX_WRAP_OPTIONS] },
-    basis: { control: { type: 'select' }, options: [...FLEX_BASIS_OPTIONS] },
+    direction: { control: { type: 'select' }, options: [...flexDirectionOptions] },
+    gap: { control: { type: 'select' }, options: [...gapOptions] },
+    align: { control: { type: 'select' }, options: [...alignOptions] },
+    justify: { control: { type: 'select' }, options: [...justifyOptions] },
+    wrap: { control: { type: 'select' }, options: [...flexWrapOptions] },
+    basis: { control: { type: 'select' }, options: [...flexBasisOptions] },
     grow: { control: { type: 'number', min: 0, max: 5, step: 1 } },
     shrink: { control: { type: 'number', min: 0, max: 5, step: 1 } },
     order: { control: { type: 'number', min: -5, max: 5, step: 1 } },
-    border: { control: { type: 'select' }, options: [...GRADIENT_BORDER_OPTIONS] },
+    border: { control: { type: 'select' }, options: [...gradientBorderOptions] },
     inline: { control: { type: 'boolean' } },
   },
   parameters: knobs([
@@ -152,7 +152,7 @@ export const Gaps: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <Flex direction="column" gap="lg">
-      {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((gap) => (
+      {(['xs', 'sm', 'md', 'lg', 'xl']).map((gap) => (
         <Flex key={gap} gap={gap} className={containerClass} align="center">
           <span className={gapLabelClass}>{gap}</span>
           <div className={boxClass200}>Item 1</div>
@@ -185,7 +185,7 @@ export const GradientBorderVariants: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <Flex direction="column" gap="md">
-      {GRADIENT_BORDER_OPTIONS.map((border) => (
+      {gradientBorderOptions.map((border) => (
         <Flex
           key={border}
           border={border}

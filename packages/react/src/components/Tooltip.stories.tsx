@@ -44,6 +44,7 @@ export const Default: Story = {
 export const Placements: Story = {
   render: () => (
     <HStack gap="lg" align="center" style={{ padding: '5rem', flexWrap: 'wrap' }}>
+      {/* as const: `placement` takes these literals, not any string. */}
       {(['top', 'bottom', 'left', 'right'] as const).map((placement) => (
         <Tooltip key={placement} content={`Placement: ${placement}`} placement={placement}>
           <Button size="sm" visual="neutral">

@@ -29,8 +29,10 @@ export type BreakpointMap<T> = Partial<Record<BreakpointAlias, T>>;
  */
 export type ResponsiveValue<T> = ConditionalValue<T> | BreakpointMap<T>;
 
+// as const: public API; consumers get the breakpoint names as literal types, not string[].
 export const BREAKPOINTS = ['base', 'sm', 'md', 'lg', 'xl', '2xl'] as const satisfies readonly Breakpoint[];
 
+// as const: public API, same reason as BREAKPOINTS.
 export const SEMANTIC_BREAKPOINTS = [
   'mobile',
   'tablet',
@@ -38,7 +40,7 @@ export const SEMANTIC_BREAKPOINTS = [
   'largeDesktop',
 ] as const satisfies readonly SemanticBreakpoint[];
 
-/** Semantic → token breakpoint (Chakra mobile-first scale). */
+/** Semantic → token breakpoint (Chakra mobile-first scale). as const keeps each value a literal Breakpoint. */
 export const SEMANTIC_TO_BREAKPOINT = {
   mobile: 'base',
   tablet: 'md',
@@ -46,7 +48,7 @@ export const SEMANTIC_TO_BREAKPOINT = {
   largeDesktop: 'xl',
 } as const satisfies Record<SemanticBreakpoint, Breakpoint>;
 
-/** Becket-authored spacing steps (Fibonacci + zero). */
+/** Becket-authored spacing steps (Fibonacci + zero). as const: SpacingStep below is derived from them. */
 export const SPACING_SCALE = [0, 1, 2, 3, 5, 8, 13, 21, 34] as const;
 
 export type SpacingStep = (typeof SPACING_SCALE)[number];

@@ -48,6 +48,7 @@ export const Default: Story = {
   ),
 };
 
+// as const: keeps each entry a [name, component] tuple, so `Glyph` renders as a component.
 const GLYPHS = [
   ['ChevronDownIcon', ChevronDownIcon],
   ['ChevronRightIcon', ChevronRightIcon],

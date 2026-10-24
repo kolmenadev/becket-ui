@@ -1,27 +1,27 @@
 /** Shared Storybook knob values. ConditionalValue props infer as object controls — always override. */
 
-export const GAP_OPTIONS = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const;
+export const gapOptions = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 
-export const FLEX_DIRECTION_OPTIONS = [
+export const flexDirectionOptions = [
   'row',
   'column',
   'row-reverse',
   'column-reverse',
-] as const;
+];
 
-export const STACK_DIRECTION_OPTIONS = ['row', 'column'] as const;
+export const stackDirectionOptions = ['row', 'column'];
 
-export const ALIGN_OPTIONS = ['start', 'center', 'end', 'stretch', 'baseline'] as const;
+export const alignOptions = ['start', 'center', 'end', 'stretch', 'baseline'];
 
-export const JUSTIFY_OPTIONS = ['start', 'center', 'end', 'between', 'around', 'evenly'] as const;
+export const justifyOptions = ['start', 'center', 'end', 'between', 'around', 'evenly'];
 
-export const FLEX_WRAP_OPTIONS = ['wrap', 'nowrap', 'wrap-reverse'] as const;
+export const flexWrapOptions = ['wrap', 'nowrap', 'wrap-reverse'];
 
-export const FLEX_BASIS_OPTIONS = ['auto', '0', 'full', '8', '13', '21', '34', '1/2', '1/3'] as const;
+export const flexBasisOptions = ['auto', '0', 'full', '8', '13', '21', '34', '1/2', '1/3'];
 
-export const GRADIENT_BORDER_OPTIONS = ['primary', 'secondary', 'neutral'] as const;
+export const gradientBorderOptions = ['primary', 'secondary', 'neutral'];
 
-export const BREAKPOINT_OPTIONS = [
+export const breakpointOptions = [
   'sm',
   'md',
   'lg',
@@ -31,7 +31,7 @@ export const BREAKPOINT_OPTIONS = [
   'tablet',
   'desktop',
   'largeDesktop',
-] as const;
+];
 
 export function knobs(include: string[]) {
   return { controls: { include } };

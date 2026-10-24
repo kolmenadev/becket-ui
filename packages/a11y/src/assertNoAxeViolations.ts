@@ -9,8 +9,6 @@ export const JSDOM_DISABLED_AXE_RULES: NonNullable<RunOptions['rules']> = {
   'target-size': { enabled: false },
 };
 
-const DEFAULT_TAGS = ['wcag2a', 'wcag2aa', 'wcag22aa'] as const;
-
 function formatViolations(violations: axe.Result[]): string {
   return violations
     .map((violation) => {
@@ -32,7 +30,8 @@ export async function assertNoAxeViolations(
   const results = await axe.run(container, {
     runOnly: {
       type: 'tag',
-      values: [...DEFAULT_TAGS],
+      // WCAG 2.0 A and AA, plus 2.2 AA: the level Becket targets.
+      values: ['wcag2a', 'wcag2aa', 'wcag22aa'],
     },
     ...options,
     rules: {

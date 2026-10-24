@@ -42,6 +42,7 @@ export function detectKind(bytes: Buffer): SourceKind {
  * carrier-grade NAT, multicast, reserved, and their IPv4-mapped IPv6 forms.
  */
 const blocked = new BlockList();
+// as const: each entry stays a [network, prefix] tuple, the shape addSubnet takes.
 for (const [network, prefix] of [
   ['0.0.0.0', 8],
   ['10.0.0.0', 8],
@@ -60,6 +61,7 @@ for (const [network, prefix] of [
 ] as const) {
   blocked.addSubnet(network, prefix, 'ipv4');
 }
+// as const: each entry stays a [network, prefix] tuple, the shape addSubnet takes.
 for (const [network, prefix] of [
   ['::', 128],
   ['::1', 128],
