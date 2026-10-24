@@ -10,7 +10,7 @@ const outline = {
   borderColor: 'transparent',
   backgroundOrigin: 'border-box',
   backgroundClip: 'padding-box, border-box',
-} as const;
+};
 
 // Each backgroundImage is written out: Panda only generates CSS for values it can read at build
 // time, and a template string filled in at runtime has none (MAV-143 caught the missing borders).
