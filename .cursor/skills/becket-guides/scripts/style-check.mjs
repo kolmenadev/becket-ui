@@ -266,7 +266,8 @@ for (const [file, lines] of scope) {
         node,
         level: 'must',
         rule: 'CODING-STYLE § Must not use any',
-        message: '`any`; use `unknown` and narrow it, or write the real type',
+        message:
+          '`any` (and `as any`, even with a comment); use `unknown` and narrow it, or write the real type',
       });
     if (ts.isEnumDeclaration(node))
       report({
@@ -275,27 +276,33 @@ for (const [file, lines] of scope) {
         rule: 'CODING-STYLE § Prefer unions and as const over enums',
         message: `enum ${node.name.text}; use a string union or an \`as const\` array`,
       });
-    if (
-      (ts.isAsExpression(node) &&
-        !(ts.isTypeReferenceNode(node.type) && node.type.typeName.getText(source) === 'const')) ||
-      ts.isNonNullExpression(node)
-    ) {
+    if (ts.isAsExpression(node) || ts.isNonNullExpression(node)) {
       // A reason is a comment on the same line, right above the cast, or right above its statement.
+      // Inside JSX the only comment is `{/* … */}`.
       let statement = node;
       while (statement.parent && !ts.isStatement(statement) && !ts.isPropertyAssignment(statement))
         statement = statement.parent;
       if (
         !/\/\/|\/\*/.test(text[lineOf(node) - 1]) &&
         ![lineOf(node), lineOf(statement)].some((line) =>
-          /^\s*(\/\/|\*|\/\*)/.test(text[line - 2] ?? ''),
+          /^\s*(\/\/|\*|\/\*|\{\/\*)/.test(text[line - 2] ?? ''),
         )
       )
-        report({
-          node,
-          level: 'must',
-          rule: 'CODING-STYLE § Prefer inference inside, explicit types at boundaries',
-          message: `${ts.isAsExpression(node) ? `\`as ${node.type.getText(source)}\`` : '`!`'} without a comment saying why`,
-        });
+        report(
+          ts.isAsExpression(node) && node.type.getText(source) === 'const'
+            ? {
+                node,
+                level: 'must',
+                rule: 'CODING-STYLE § Must use as const only when you need the literal types',
+                message: '`as const` without a comment saying which literal types it keeps',
+              }
+            : {
+                node,
+                level: 'must',
+                rule: 'CODING-STYLE § Prefer inference inside, explicit types at boundaries',
+                message: `${ts.isAsExpression(node) ? `\`as ${node.type.getText(source)}\`` : '`!`'} without a comment saying why`,
+              },
+        );
     }
 
     // docs/CODING-STYLE.md: mutation, nesting.
