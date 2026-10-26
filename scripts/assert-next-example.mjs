@@ -38,6 +38,7 @@ for (const needle of [
   'beckui--d_flex',
   'beckui--card__root',
   'beckui--gap_md',
+  'beckui--pagination__link',
 ]) {
   if (!haystack.includes(needle)) missing.push(needle);
 }

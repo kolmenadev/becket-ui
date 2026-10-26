@@ -619,6 +619,7 @@ for (const [file, lines] of scope) {
         'Disclosure',
         'Feedback',
         'Data Display',
+        'Navigation',
       ].includes(title[1]) &&
       (lines === null || lines.has(source.getFullText().slice(0, title.index).split('\n').length))
     )
@@ -626,7 +627,7 @@ for (const [file, lines] of scope) {
         line: source.getFullText().slice(0, title.index).split('\n').length,
         level: 'prefer',
         rule: 'becket.mdc § Storybook rules',
-        message: `story group "${title[1]}" isn't one of Layout, Typography, Buttons, Forms, Overlays, Disclosure, Feedback, Data Display`,
+        message: `story group "${title[1]}" isn't one of Layout, Typography, Buttons, Forms, Overlays, Disclosure, Feedback, Data Display, Navigation`,
       });
   }
 }

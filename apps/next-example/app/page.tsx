@@ -1,3 +1,4 @@
+import NextLink from 'next/link';
 import {
   Button,
   Card,
@@ -5,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
   Heading,
+  Pagination,
   Stack,
   Text,
   TextField,
@@ -38,6 +40,8 @@ export default function Page() {
           <Text>This copy is rendered on the server. Disable JavaScript: it stays styled.</Text>
         </CardBody>
       </Card>
+      {/* A Server Component with a function prop and Next's router link: no client JS of its own. */}
+      <Pagination page={2} pageCount={8} href={(page) => `/?page=${page}`} linkAs={NextLink} />
       <Tooltip content="Client leaf imported from a Server Component">
         <Button type="button" visual="outline">
           Tooltip target

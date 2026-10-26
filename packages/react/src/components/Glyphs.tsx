@@ -27,6 +27,8 @@ function createGlyph(displayName: string, shapes: ReactNode) {
 
 export const ChevronDownIcon = /* @__PURE__ */ createGlyph('ChevronDownIcon', <path d="M6 9l6 6 6-6" />);
 
+export const ChevronLeftIcon = /* @__PURE__ */ createGlyph('ChevronLeftIcon', <path d="M15 6l-6 6 6 6" />);
+
 export const ChevronRightIcon = /* @__PURE__ */ createGlyph('ChevronRightIcon', <path d="M9 6l6 6-6 6" />);
 
 export const CloseIcon = /* @__PURE__ */ createGlyph('CloseIcon', <path d="M6 6l12 12M18 6L6 18" />);
