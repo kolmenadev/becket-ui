@@ -40,14 +40,12 @@ if (args.includes('--hook')) {
   const command = event.tool_input?.command ?? '';
   // A quoted `-C` path may hold spaces; `\S+` alone would miss the commit and skip the check.
   if (!/\bgit\b(?:\s+-C\s+("[^"]+"|'[^']+'|\S+))?\s+commit\b/.test(command)) process.exit(0);
-  // Commits run as `cd <checkout> && git commit …` or `git -C <checkout> commit …`.
+  // Commits run as `cd <checkout> && git commit …`, `git -C <checkout> commit …` or both. Resolve
+  // them in Git's order: the `cd` first, then `-C` from there (an absolute `-C` wins).
   repo = resolve(
     event.cwd ?? process.cwd(),
-    (
-      command.match(/\bcd\s+("[^"]+"|'[^']+'|\S+)\s*&&/)?.[1] ??
-      command.match(/\bgit\s+-C\s+("[^"]+"|'[^']+'|\S+)/)?.[1] ??
-      '.'
-    ).replace(/^["']|["']$/g, ''),
+    (command.match(/\bcd\s+("[^"]+"|'[^']+'|\S+)\s*&&/)?.[1] ?? '.').replace(/^["']|["']$/g, ''),
+    (command.match(/\bgit\s+-C\s+("[^"]+"|'[^']+'|\S+)/)?.[1] ?? '.').replace(/^["']|["']$/g, ''),
   );
   // A branch can change these rules, and the git hook always runs the committing checkout's copy.
   // Run that copy here too, so both gates report the same findings and pass on the same retry.
