@@ -38,7 +38,8 @@ let mode = ['--all', '--paths', '--staged'].find((flag) => args.includes(flag))?
 if (args.includes('--hook')) {
   const event = JSON.parse(readFileSync(0, 'utf8'));
   const command = event.tool_input?.command ?? '';
-  if (!/\bgit\b(?:\s+-C\s+\S+)?\s+commit\b/.test(command)) process.exit(0);
+  // A quoted `-C` path may hold spaces; `\S+` alone would miss the commit and skip the check.
+  if (!/\bgit\b(?:\s+-C\s+("[^"]+"|'[^']+'|\S+))?\s+commit\b/.test(command)) process.exit(0);
   // Commits run as `cd <checkout> && git commit …` or `git -C <checkout> commit …`.
   repo = resolve(
     event.cwd ?? process.cwd(),
@@ -220,6 +221,22 @@ for (const [file, lines] of scope) {
         );
     }
 
+    // docs/CODING-STYLE.md: mutation. Checked before the scope test below, by the method's line
+    // rather than the chain's first, so a `.sort()` added under an unchanged line is still caught,
+    // and its annotation and keep marker sit next to it.
+    if (
+      ts.isCallExpression(node) &&
+      ts.isPropertyAccessExpression(node.expression) &&
+      ['sort', 'reverse', 'splice'].includes(node.expression.name.text) &&
+      inScope(node.expression.name)
+    )
+      report({
+        node: node.expression.name,
+        level: 'prefer',
+        rule: 'CODING-STYLE § Must not mutate arrays or objects you don’t own',
+        message: `.${node.expression.name.text}() mutates in place; use .${{ sort: 'toSorted', reverse: 'toReversed', splice: 'toSpliced' }[node.expression.name.text]}()`,
+      });
+
     if (!inScope(node)) return ts.forEachChild(node, visit);
 
     // docs/CODING-STYLE.md: naming.
@@ -331,20 +348,7 @@ for (const [file, lines] of scope) {
         rule: 'CODING-STYLE § Prefer unions and as const over enums',
         message: `enum ${node.name.text}; use a string union or an \`as const\` array`,
       });
-    // docs/CODING-STYLE.md: mutation, nesting.
-    if (
-      ts.isCallExpression(node) &&
-      ts.isPropertyAccessExpression(node.expression) &&
-      ['sort', 'reverse', 'splice'].includes(node.expression.name.text)
-    )
-      report({
-        // The method's line, not the chain's first: that's where a PR annotation and a keep
-        // marker belong when the call sits deep in a multi-line chain.
-        node: node.expression.name,
-        level: 'prefer',
-        rule: 'CODING-STYLE § Must not mutate arrays or objects you don’t own',
-        message: `.${node.expression.name.text}() mutates in place; use .${{ sort: 'toSorted', reverse: 'toReversed', splice: 'toSpliced' }[node.expression.name.text]}()`,
-      });
+    // docs/CODING-STYLE.md: nesting.
     if (
       ts.isIfStatement(node) &&
       node.elseStatement &&
@@ -664,11 +668,14 @@ for (const [file, lines] of scope) {
 }
 
 // A `// style-check keep: <reason>` line right above a finding moves it to the kept list. `any`,
-// `as any` and `@ts-ignore` stay findings: the guide never excuses them, reason or not.
+// `as any` and `@ts-ignore` stay findings: the guide never excuses them, reason or not. The marker
+// is read from the content that was checked (the index for --staged), so an unstaged marker can't
+// keep a staged finding.
 const { kept = [], blocking = [] } = Object.groupBy(
   findings.map((finding) => ({
     ...finding,
-    reason: readFileSync(join(repo, finding.file), 'utf8')
+    reason: contents
+      .get(join(repo, finding.file))
       .split('\n')
       [finding.line - 2]?.match(/^\s*\/\/\s*style-check keep:\s*(\S.*)$/)?.[1],
   })),
