@@ -116,7 +116,16 @@ project MAV, epic MAV-133, one story per package.
    - inlining would change behavior: work repeated in a loop or callback, evaluation order (a timer
      started before the work it measures, a value read before it changes), or TypeScript narrowing
 
-   Write the reason in a comment.
+   Write the reason as a keep marker on the line right above the finding, so the checker reads it:
+
+   ```ts
+   // style-check keep: one user-event session for the whole walk; inlined, each tab starts a new one.
+   const user = userEvent.setup();
+   ```
+
+   A kept finding stops blocking and failing, and reports list it under "Kept on purpose" (a notice
+   on PRs). A marker with no reason is a `must`. `any`, `as any` and `@ts-ignore` can't be kept:
+   the guide never excuses them. Use the marker only for a reason the guide accepts.
 3. **Prove nothing changed.** Tests and the type check must pass. Where code produces output (MCP
    tool text, generated CSS, recipe classes, built data), compare old and new on real inputs.
    Snapshot the base version of the changed modules into a temp folder (`git archive <base> <paths>`),
@@ -139,7 +148,12 @@ kept name with a written reason never deadlocks. Wire it in `.claude/settings.lo
   "command": "node \"$CLAUDE_PROJECT_DIR/.cursor/skills/becket-guides/scripts/style-check.mjs\" --hook" }] }] } }
 ```
 
-When it blocks, fix the findings. Never commit again just to get past it.
+The hook runs the copy of the checker inside the checkout being committed, even when the session
+started in another one (a worktree). A branch that changes the rules is checked by its own rules,
+like the git hook does.
+
+When it blocks, fix the findings, or mark a finding the guide allows you to keep with a
+`// style-check keep: <reason>` line (step 6). Never commit again just to get past it.
 
 The same gate runs for every contributor as a git hook: `.githooks/pre-commit` calls
 `--staged --once`, and `pnpm install` sets `core.hooksPath` to `.githooks`. Both gates share one

@@ -108,7 +108,8 @@ Keep a name only when:
 - it's used three or more times, a function calls itself, or it's part of a public API, or
 - inlining would change what the code does: work repeated on every pass of a loop or callback,
   evaluation order (a timer started before the work it measures, a value read before it's
-  changed), or TypeScript's narrowing. Say which in a comment.
+  changed), or TypeScript's narrowing. Say which in a comment. Write it as
+  `// style-check keep: <reason>` on the line above, so `pnpm lint:style` reads it too.
 
 Before you commit, check every new name, top-level and local: if it has one use (or it only
 renames something), inline it.

@@ -15,12 +15,18 @@
  * Exit 1 on any finding. --hook and --once block a commit the first time they see a set of findings
  * and pass the same set on the next try, so a name kept on purpose (with its reason) can't block
  * forever. Both share one record, so a commit that passed the Claude Code hook passes the git hook.
+ *
+ * `// style-check keep: <reason>` on the line above a finding keeps it: it no longer blocks or
+ * fails, and reports list it under "Kept on purpose" with its reason. Use it only where the guide
+ * allows a keep (for names: 3+ uses, recursion, public API, or inlining would change behavior).
+ * `any`, `as any` and `@ts-ignore` can't be kept, because the guide never excuses them.
  */
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const args = process.argv.slice(2);
 let [repo, base] = [
@@ -42,6 +48,19 @@ if (args.includes('--hook')) {
       '.'
     ).replace(/^["']|["']$/g, ''),
   );
+  // A branch can change these rules, and the git hook always runs the committing checkout's copy.
+  // Run that copy here too, so both gates report the same findings and pass on the same retry.
+  const own = join(
+    execFileSync('git', ['-C', repo, 'rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim(),
+    '.cursor/skills/becket-guides/scripts/style-check.mjs',
+  );
+  if (existsSync(own) && realpathSync(own) !== realpathSync(fileURLToPath(import.meta.url)))
+    process.exit(
+      spawnSync(process.execPath, [own, ...args], {
+        input: JSON.stringify(event),
+        stdio: ['pipe', 'inherit', 'inherit'],
+      }).status ?? 1,
+    );
   // `commit -a` stages tracked changes at commit time, so check the working tree instead.
   mode = /\bcommit\b[^|;&]*\s-[a-zA-Z]*a/.test(command) ? 'head' : 'staged';
   base = 'HEAD';
@@ -581,6 +600,17 @@ for (const [file, lines] of scope) {
         rule: 'CODING-STYLE § Must explain when ignoring a lint or TypeScript rule',
         message: '@ts-ignore; use @ts-expect-error so it fails once the error is gone',
       });
+    if (
+      /^\/\/\s*style-check keep\b/.test(comment) &&
+      !/^\/\/\s*style-check keep:\s*\S/.test(comment)
+    )
+      report({
+        line,
+        level: 'must',
+        rule: 'becket-guides § Kept on purpose',
+        message:
+          '`style-check keep` without a reason: // style-check keep: <why the guide allows it>',
+      });
     // A to-do starts a comment line (`// TODO …`, ` * TODO …`); prose that mentions one doesn't count.
     if (/(^|\n)\s*(\/\/|\/\*+|\*)\s*TODO\b/.test(comment) && !/TODO \([A-Z]+-\d+\)/.test(comment))
       report({
@@ -631,10 +661,45 @@ for (const [file, lines] of scope) {
   }
 }
 
-if (findings.length === 0) process.exit(0);
+// A `// style-check keep: <reason>` line right above a finding moves it to the kept list. `any`,
+// `as any` and `@ts-ignore` stay findings: the guide never excuses them, reason or not.
+const { kept = [], blocking = [] } = Object.groupBy(
+  findings.map((finding) => ({
+    ...finding,
+    reason: readFileSync(join(repo, finding.file), 'utf8')
+      .split('\n')
+      [finding.line - 2]?.match(/^\s*\/\/\s*style-check keep:\s*(\S.*)$/)?.[1],
+  })),
+  (finding) =>
+    finding.reason &&
+    finding.rule !== 'CODING-STYLE § Must not use any' &&
+    !finding.message.startsWith('@ts-ignore')
+      ? 'kept'
+      : 'blocking',
+);
+// Kept findings stay visible to a reviewer: listed in reports, and notices (not warnings) on a PR.
+if (process.env.GITHUB_ACTIONS === 'true')
+  for (const finding of kept)
+    console.log(
+      `::notice file=${finding.file},line=${finding.line}::kept: ${finding.reason} — [${finding.level}] ${finding.message}`,
+    );
+if (kept.length > 0 && !args.includes('--hook') && !args.includes('--once'))
+  console.log(
+    [
+      `Kept on purpose: ${kept.length}`,
+      ...kept
+        .toSorted((a, b) => a.file.localeCompare(b.file) || a.line - b.line)
+        .map(
+          (finding) =>
+            `${finding.file}:${finding.line}  [${finding.level}] ${finding.message}\n    kept: ${finding.reason}`,
+        ),
+    ].join('\n'),
+  );
+
+if (blocking.length === 0) process.exit(0);
 const reportText = [
-  `Becket guides check: ${findings.length} finding(s) (${['must', 'prefer', 'review'].map((level) => `${findings.filter((finding) => finding.level === level).length} ${level}`).join(', ')})`,
-  ...findings
+  `Becket guides check: ${blocking.length} finding(s) (${['must', 'prefer', 'review'].map((level) => `${blocking.filter((finding) => finding.level === level).length} ${level}`).join(', ')})`,
+  ...blocking
     .toSorted((a, b) => a.file.localeCompare(b.file) || a.line - b.line)
     .map(
       (finding) =>
@@ -644,7 +709,7 @@ const reportText = [
 
 // GitHub Actions turns these lines into annotations on the PR's changed lines.
 if (process.env.GITHUB_ACTIONS === 'true')
-  for (const finding of findings)
+  for (const finding of blocking)
     console.log(
       `::warning file=${finding.file},line=${finding.line}::[${finding.level}] ${finding.message} — ${finding.rule}`,
     );
@@ -657,6 +722,6 @@ const hash = createHash('sha256').update(reportText).digest('hex');
 if (existsSync(seenPath) && readFileSync(seenPath, 'utf8') === hash) process.exit(0);
 writeFileSync(seenPath, hash);
 console.error(
-  `${reportText}\n\nCommit blocked once by the becket-guides check. Fix every finding, restage and commit again. Keep something only for a reason the guide accepts (for names: 3+ uses, recursion, public API, or inlining would change behavior) and write that reason in a comment. "review" items need a look, not necessarily a change. Re-running the same commit unchanged passes.`,
+  `${reportText}\n\nCommit blocked once by the becket-guides check. Fix every finding, restage and commit again. Keep something only for a reason the guide accepts (for names: 3+ uses, recursion, public API, or inlining would change behavior), written on the line above it as // style-check keep: <reason>. "review" items need a look, not necessarily a change. Re-running the same commit unchanged passes.`,
 );
 process.exit(2);

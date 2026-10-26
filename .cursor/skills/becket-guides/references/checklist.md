@@ -13,6 +13,9 @@ in the guide, because the guide wins over this summary. Rules marked ⚙ are als
   - a component, hook or file that wraps one call
   - an options object or config table read in exactly one place
   - a wrapper type that only renames another type
+- Every `// style-check keep: <reason>` ⚙ names a reason the guide accepts (for names: 3+ uses,
+  recursion, public API, or inlining would change behavior). A marker that only silences the
+  checker is a finding: fix the code instead.
 - Prefer inline logic and styling. In JSX: no named styled wrappers, no one-off classes, no style
   objects defined away from the element. Values come from tokens.
 - Prefer inversion of control. A function that branches on its caller's identity (`if (clientName ===
