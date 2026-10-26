@@ -49,7 +49,7 @@ describe('Pagination', () => {
   });
 
   it('tabs through the links in reading order', async () => {
-    // One session for the whole walk: inlined in the loop, each tab would start a fresh session.
+    // style-check keep: one user-event session for the whole walk; inlined, each tab starts a new one.
     const user = userEvent.setup();
     render(<Pagination page={2} pageCount={3} href={(page) => `?page=${page}`} />);
     for (const name of ['Previous', 'Page 1', 'Page 2', 'Page 3', 'Next']) {

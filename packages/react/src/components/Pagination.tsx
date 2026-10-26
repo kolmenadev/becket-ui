@@ -73,7 +73,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
             ]),
           ]
             .filter((shown) => shown >= 1 && shown <= pageCount)
-            // `sort` over `toSorted`: the build's lib predates ES2023, and `filter` returned a new array.
+            // style-check keep: `filter` returned a new array this owns; the build's lib predates `toSorted`.
             .sort((a, b) => a - b)
             // A gap of one page shows that page: an ellipsis there would hide nothing.
             .flatMap((shown, index, all) => {
