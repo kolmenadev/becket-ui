@@ -338,7 +338,9 @@ for (const [file, lines] of scope) {
       ['sort', 'reverse', 'splice'].includes(node.expression.name.text)
     )
       report({
-        node,
+        // The method's line, not the chain's first: that's where a PR annotation and a keep
+        // marker belong when the call sits deep in a multi-line chain.
+        node: node.expression.name,
         level: 'prefer',
         rule: 'CODING-STYLE § Must not mutate arrays or objects you don’t own',
         message: `.${node.expression.name.text}() mutates in place; use .${{ sort: 'toSorted', reverse: 'toReversed', splice: 'toSpliced' }[node.expression.name.text]}()`,
