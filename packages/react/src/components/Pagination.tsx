@@ -4,12 +4,16 @@ import { pagination as paginationRecipe } from '@becket-ui/tokens/recipes';
 import { ChevronLeftIcon, ChevronRightIcon } from './Glyphs';
 
 export type PaginationProps = Omit<ComponentPropsWithoutRef<'nav'>, 'children'> & {
-  /** The current page, counting from 1. */
+  /** The current page, counting from 1. Past `pageCount`, Previous goes to the last page. */
   page: number;
+  /** Below 1 renders nothing: an empty list has no pages to link. */
   pageCount: number;
   /** The URL of a page. Every page is a plain link, so it works with server routing and no JS. */
   href: (page: number) => string;
-  /** Pages shown on each side of the current one. First and last always show. Default `1`. */
+  /**
+   * Pages shown on each side of the current one, as a whole number (rounded down, at least 0).
+   * First and last always show. Default `1`.
+   */
   siblings?: number;
   size?: 'sm' | 'md';
   /** Router link component (for example Next's `Link`) to render each link with. Default `a`. */
@@ -43,6 +47,7 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
     },
     ref,
   ) => {
+    if (pageCount < 1) return null;
     const styles = paginationRecipe({ size });
     return (
       <nav
@@ -54,7 +59,12 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
         <ol className={styles.list}>
           <li>
             {page > 1 ? (
-              <LinkComponent href={href(page - 1)} rel="prev" className={styles.link}>
+              // A stale `page` past the end (the list shrank) steps back onto the last real page.
+              <LinkComponent
+                href={href(Math.min(page - 1, pageCount))}
+                rel="prev"
+                className={styles.link}
+              >
                 <ChevronLeftIcon />
                 {labels?.previous ?? 'Previous'}
               </LinkComponent>
@@ -68,7 +78,10 @@ export const Pagination = forwardRef<HTMLElement, PaginationProps>(
           {[
             ...new Set([
               1,
-              ...Array.from({ length: 2 * siblings + 1 }, (_, i) => page - siblings + i),
+              // A whole, non-negative count: a fractional one would ask `href` for page 5.5.
+              ...Array.from({ length: 2 * Math.max(0, Math.floor(siblings)) + 1 }).map(
+                (_, i, window) => page - (window.length - 1) / 2 + i,
+              ),
               pageCount,
             ]),
           ]

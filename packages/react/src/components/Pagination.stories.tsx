@@ -10,9 +10,9 @@ export default {
   component: Pagination,
   args: { page: 1, pageCount: 12, siblings: 1, size: 'md', href: (page) => `#page-${page}` },
   argTypes: {
-    page: { control: { type: 'number', min: 1 } },
-    pageCount: { control: { type: 'number', min: 1 } },
-    siblings: { control: { type: 'number', min: 0, max: 3 } },
+    page: { control: { type: 'number', min: 1, step: 1 } },
+    pageCount: { control: { type: 'number', min: 1, step: 1 } },
+    siblings: { control: { type: 'number', min: 0, max: 3, step: 1 } },
     size: { control: { type: 'select' }, options: paginationRecipe.variantMap.size },
   },
   parameters: { controls: { include: ['page', 'pageCount', 'siblings', 'size'] } },

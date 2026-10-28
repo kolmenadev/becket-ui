@@ -48,6 +48,26 @@ describe('Pagination', () => {
     expect(screen.getByRole('link', { name: 'Previous' })).toBeTruthy();
   });
 
+  it('steps back onto the last page when the list shrank under the current page', () => {
+    render(<Pagination page={8} pageCount={3} href={(page) => `?page=${page}`} />);
+    expect(screen.getByRole('link', { name: 'Previous' }).getAttribute('href')).toBe('?page=3');
+    expect(screen.queryByRole('link', { name: 'Next' })).toBeNull();
+    // Page 8 isn't in the list, so no link claims to be the current page.
+    expect(screen.queryByRole('link', { current: 'page' })).toBeNull();
+  });
+
+  it('renders nothing for an empty list', () => {
+    render(<Pagination page={1} pageCount={0} href={(page) => `?page=${page}`} />);
+    expect(screen.queryByRole('navigation')).toBeNull();
+  });
+
+  it('rounds siblings down to a whole number', () => {
+    render(<Pagination page={6} pageCount={12} siblings={0.5} href={(page) => `?page=${page}`} />);
+    expect(
+      screen.getAllByRole('link', { name: /^Page / }).map((link) => link.getAttribute('href')),
+    ).toEqual(['?page=1', '?page=6', '?page=12']);
+  });
+
   it('tabs through the links in reading order', async () => {
     // style-check keep: one user-event session for the whole walk; inlined, each tab starts a new one.
     const user = userEvent.setup();
