@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 /**
- * After `next build`, prove the prerendered page includes Becket CSS classes
- * (JS-disabled / view-source still styled) plus a no-Panda brand retint.
+ * After `next build`, start the built app and prove the HTML a request gets (before any client
+ * JS) carries Becket's recipe classes and the current page from `?page=`, plus the packed CSS
+ * and a no-Panda brand retint.
  */
+import { spawn } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { createServer } from 'node:net';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -31,19 +34,69 @@ const haystack = files
   .map((f) => readFileSync(f, 'utf8'))
   .join('\n');
 
-const missing = [];
-for (const needle of [
+// The page renders per request (`?page=` picks the current page), so the build has no HTML to read.
+// Serve the build on a free port and check what a request gets. Searching the build's files can't
+// tell server-rendered HTML from class names that only sit in a JS bundle.
+const port = await new Promise((resolvePort) => {
+  const probe = createServer().listen(0, () => {
+    const { port: free } = probe.address();
+    probe.close(() => resolvePort(free));
+  });
+});
+// style-check keep: evaluation order; the server starts before the requests and is stopped after them.
+const server = spawn(
+  join(exampleDir, 'node_modules/.bin/next'),
+  ['start', '--port', String(port)],
+  {
+    cwd: exampleDir,
+    stdio: 'ignore',
+  },
+);
+const pages = {};
+try {
+  for (const path of ['/', '/?page=5', '/?page=abc']) {
+    for (let attempt = 0; pages[path] === undefined; attempt += 1) {
+      try {
+        pages[path] = await (await fetch(`http://localhost:${port}${path}`)).text();
+      } catch (error) {
+        if (attempt === 60) throw new Error(`next start never answered ${path}: ${error.message}`);
+        await new Promise((wait) => setTimeout(wait, 500));
+      }
+    }
+  }
+} finally {
+  server.kill();
+}
+
+const missing = [
   'beckui--button',
   'beckui--heading',
   'beckui--d_flex',
   'beckui--card__root',
   'beckui--gap_md',
   'beckui--pagination__link',
-]) {
-  if (!haystack.includes(needle)) missing.push(needle);
-}
+].filter((needle) => !pages['/'].includes(needle));
 if (missing.length) {
-  throw new Error(`Prerendered Next output missing recipe classes: ${missing.join(', ')}`);
+  throw new Error(`Server-rendered HTML missing recipe classes: ${missing.join(', ')}`);
+}
+
+// The current page is the one link with aria-current="page"; an invalid `?page=` falls back to 1.
+for (const [path, expected] of [
+  ['/', 'Page 1'],
+  ['/?page=5', 'Page 5'],
+  ['/?page=abc', 'Page 1'],
+]) {
+  const current = [...pages[path].matchAll(/<a\b[^>]*aria-current="page"[^>]*>/g)].map(
+    ([tag]) => tag.match(/aria-label="([^"]*)"/)?.[1],
+  );
+  if (current.length !== 1 || current[0] !== expected) {
+    throw new Error(
+      `${path}: expected only "${expected}" as the current page, got ${JSON.stringify(current)}`,
+    );
+  }
+}
+if (!pages['/?page=5'].includes('href="/?page=4"')) {
+  throw new Error('/?page=5: Previous should link to /?page=4');
 }
 
 const hasCss =
@@ -81,4 +134,4 @@ for (const name of ['panda.config.ts', 'panda.config.js', 'panda.config.mjs']) {
   }
 }
 
-console.log('next-example prerender includes Becket recipe classes + CSS + brand theme');
+console.log('next-example server HTML includes Becket recipe classes + ?page= + CSS + brand theme');

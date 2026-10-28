@@ -66,6 +66,8 @@ pnpm example:build
 node scripts/assert-next-example.mjs
 ```
 
+The page renders per request (`?page=` picks the current page), so the assertion starts the built app on a free port and checks the HTML it serves, before any client JS.
+
 Example app: `http://localhost:3002`.
 
 Root scripts: `pnpm dev` / `pnpm build` / `pnpm lint` run Turbo. `pnpm lint` has no package linters yet.

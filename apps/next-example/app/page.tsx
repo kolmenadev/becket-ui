@@ -5,6 +5,7 @@ import {
   CardBody,
   CardHeader,
   CardTitle,
+  Code,
   Heading,
   Pagination,
   Stack,
@@ -14,16 +15,20 @@ import {
 } from '@becket-ui/react';
 import { ClientIsland } from './client-island';
 
-export default function Page() {
+// `?page=` picks the current page, so this route renders on each request rather than at build
+// time. The HTML is still complete and styled before any client JS runs.
+export default async function Page({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  // Named for its four uses below: the three range checks and the page itself.
+  const requested = Number((await searchParams).page);
   return (
     <Stack gap="md" align="start" style={{ padding: '2rem', maxWidth: '40rem' }}>
       <Heading as="h1" size="2xl">
         Becket UI Next example
       </Heading>
       <Text>
-        Server Component: Button, Stack, Heading, Card, Field. Packed tarballs, no{' '}
-        <code>panda.config</code>. Brand primary is a CSS-variable override after{' '}
-        <code>index.css</code>.
+        Server Component, rendered per request: Button, Stack, Heading, Card, Field, Pagination.
+        Packed tarballs, no <Code>panda.config</Code>. Brand primary is a CSS-variable override
+        after <Code>index.css</Code>.
       </Text>
       <Button type="button" visual="primary">
         Server button
@@ -40,8 +45,14 @@ export default function Page() {
           <Text>This copy is rendered on the server. Disable JavaScript: it stays styled.</Text>
         </CardBody>
       </Card>
-      {/* A Server Component with a function prop and Next's router link: no client JS of its own. */}
-      <Pagination page={2} pageCount={8} href={(page) => `/?page=${page}`} linkAs={NextLink} />
+      {/* A function prop and Next's router link from a Server Component: no client JS of its own.
+          A missing or invalid `?page=` falls back to the first page. */}
+      <Pagination
+        page={Number.isInteger(requested) && requested >= 1 && requested <= 8 ? requested : 1}
+        pageCount={8}
+        href={(page) => `/?page=${page}`}
+        linkAs={NextLink}
+      />
       <Tooltip content="Client leaf imported from a Server Component">
         <Button type="button" visual="outline">
           Tooltip target
