@@ -95,8 +95,13 @@ for (const [path, expected] of [
     );
   }
 }
-if (!pages['/?page=5'].includes('href="/?page=4"')) {
-  throw new Error('/?page=5: Previous should link to /?page=4');
+// Read the href off the rel="prev" anchor itself: the numbered Page 4 link has the same href, so
+// finding it anywhere in the page would pass with Previous missing.
+const previous = pages['/?page=5']
+  .match(/<a\b[^>]*\brel="prev"[^>]*>/)?.[0]
+  .match(/\bhref="([^"]*)"/)?.[1];
+if (previous !== '/?page=4') {
+  throw new Error(`/?page=5: Previous should link to /?page=4, got ${JSON.stringify(previous)}`);
 }
 
 const hasCss =
