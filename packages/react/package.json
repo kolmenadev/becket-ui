@@ -1,6 +1,6 @@
 {
   "name": "@becket-ui/react",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Becket React component library",
   "type": "module",
   "license": "MIT",
@@ -56,7 +56,7 @@
     "build-storybook": "storybook build -c ../../apps/docs/.storybook --project-root ../../apps/docs"
   },
   "peerDependencies": {
-    "@becket-ui/tokens": "^0.6.1",
+    "@becket-ui/tokens": "^0.7.0",
     "react": ">=19",
     "react-dom": ">=19"
   },
