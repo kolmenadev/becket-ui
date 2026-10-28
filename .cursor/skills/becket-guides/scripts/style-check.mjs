@@ -15,12 +15,18 @@
  * Exit 1 on any finding. --hook and --once block a commit the first time they see a set of findings
  * and pass the same set on the next try, so a name kept on purpose (with its reason) can't block
  * forever. Both share one record, so a commit that passed the Claude Code hook passes the git hook.
+ *
+ * `// style-check keep: <reason>` on the line above a finding keeps it: it no longer blocks or
+ * fails, and reports list it under "Kept on purpose" with its reason. Use it only where the guide
+ * allows a keep (for names: 3+ uses, recursion, public API, or inlining would change behavior).
+ * `any`, `as any` and `@ts-ignore` can't be kept, because the guide never excuses them.
  */
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const args = process.argv.slice(2);
 let [repo, base] = [
@@ -32,16 +38,33 @@ let mode = ['--all', '--paths', '--staged'].find((flag) => args.includes(flag))?
 if (args.includes('--hook')) {
   const event = JSON.parse(readFileSync(0, 'utf8'));
   const command = event.tool_input?.command ?? '';
-  if (!/\bgit\b(?:\s+-C\s+\S+)?\s+commit\b/.test(command)) process.exit(0);
-  // Commits run as `cd <checkout> && git commit …` or `git -C <checkout> commit …`.
+  // A quoted `-C` path may hold spaces; `\S+` alone would miss the commit and skip the check.
+  // Named for its three uses: the gate, its `-C` operand, and where it starts in the command.
+  const commit = command.match(/\bgit\b(?:\s+-C\s+("[^"]+"|'[^']+'|\S+))?\s+commit\b/);
+  if (!commit) process.exit(0);
+  // Commits run as `cd <checkout> && git commit …`, `git -C <checkout> commit …` or both. Resolve
+  // them in Git's order: each `cd` before the commit, then that commit's own `-C` (an absolute path
+  // wins). Text after the commit, like its message, can't move the checkout.
   repo = resolve(
     event.cwd ?? process.cwd(),
-    (
-      command.match(/\bcd\s+("[^"]+"|'[^']+'|\S+)\s*&&/)?.[1] ??
-      command.match(/\bgit\s+-C\s+("[^"]+"|'[^']+'|\S+)/)?.[1] ??
-      '.'
-    ).replace(/^["']|["']$/g, ''),
+    ...[...command.slice(0, commit.index).matchAll(/\bcd\s+("[^"]+"|'[^']+'|\S+)\s*&&/g)].map(
+      ([, path]) => path.replace(/^["']|["']$/g, ''),
+    ),
+    (commit[1] ?? '.').replace(/^["']|["']$/g, ''),
   );
+  // A branch can change these rules, and the git hook always runs the committing checkout's copy.
+  // Run that copy here too, so both gates report the same findings and pass on the same retry.
+  const own = join(
+    execFileSync('git', ['-C', repo, 'rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim(),
+    '.cursor/skills/becket-guides/scripts/style-check.mjs',
+  );
+  if (existsSync(own) && realpathSync(own) !== realpathSync(fileURLToPath(import.meta.url)))
+    process.exit(
+      spawnSync(process.execPath, [own, ...args], {
+        input: JSON.stringify(event),
+        stdio: ['pipe', 'inherit', 'inherit'],
+      }).status ?? 1,
+    );
   // `commit -a` stages tracked changes at commit time, so check the working tree instead.
   mode = /\bcommit\b[^|;&]*\s-[a-zA-Z]*a/.test(command) ? 'head' : 'staged';
   base = 'HEAD';
@@ -201,6 +224,22 @@ for (const [file, lines] of scope) {
         );
     }
 
+    // docs/CODING-STYLE.md: mutation. Checked before the scope test below, by the method's line
+    // rather than the chain's first, so a `.sort()` added under an unchanged line is still caught,
+    // and its annotation and keep marker sit next to it.
+    if (
+      ts.isCallExpression(node) &&
+      ts.isPropertyAccessExpression(node.expression) &&
+      ['sort', 'reverse', 'splice'].includes(node.expression.name.text) &&
+      inScope(node.expression.name)
+    )
+      report({
+        node: node.expression.name,
+        level: 'prefer',
+        rule: 'CODING-STYLE § Must not mutate arrays or objects you don’t own',
+        message: `.${node.expression.name.text}() mutates in place; use .${{ sort: 'toSorted', reverse: 'toReversed', splice: 'toSpliced' }[node.expression.name.text]}()`,
+      });
+
     if (!inScope(node)) return ts.forEachChild(node, visit);
 
     // docs/CODING-STYLE.md: naming.
@@ -312,18 +351,7 @@ for (const [file, lines] of scope) {
         rule: 'CODING-STYLE § Prefer unions and as const over enums',
         message: `enum ${node.name.text}; use a string union or an \`as const\` array`,
       });
-    // docs/CODING-STYLE.md: mutation, nesting.
-    if (
-      ts.isCallExpression(node) &&
-      ts.isPropertyAccessExpression(node.expression) &&
-      ['sort', 'reverse', 'splice'].includes(node.expression.name.text)
-    )
-      report({
-        node,
-        level: 'prefer',
-        rule: 'CODING-STYLE § Must not mutate arrays or objects you don’t own',
-        message: `.${node.expression.name.text}() mutates in place; use .${{ sort: 'toSorted', reverse: 'toReversed', splice: 'toSpliced' }[node.expression.name.text]}()`,
-      });
+    // docs/CODING-STYLE.md: nesting.
     if (
       ts.isIfStatement(node) &&
       node.elseStatement &&
@@ -581,6 +609,17 @@ for (const [file, lines] of scope) {
         rule: 'CODING-STYLE § Must explain when ignoring a lint or TypeScript rule',
         message: '@ts-ignore; use @ts-expect-error so it fails once the error is gone',
       });
+    if (
+      /^\/\/\s*style-check keep\b/.test(comment) &&
+      !/^\/\/\s*style-check keep:\s*\S/.test(comment)
+    )
+      report({
+        line,
+        level: 'must',
+        rule: 'becket-guides § Kept on purpose',
+        message:
+          '`style-check keep` without a reason: // style-check keep: <why the guide allows it>',
+      });
     // A to-do starts a comment line (`// TODO …`, ` * TODO …`); prose that mentions one doesn't count.
     if (/(^|\n)\s*(\/\/|\/\*+|\*)\s*TODO\b/.test(comment) && !/TODO \([A-Z]+-\d+\)/.test(comment))
       report({
@@ -631,10 +670,48 @@ for (const [file, lines] of scope) {
   }
 }
 
-if (findings.length === 0) process.exit(0);
+// A `// style-check keep: <reason>` line right above a finding moves it to the kept list. `any`,
+// `as any` and `@ts-ignore` stay findings: the guide never excuses them, reason or not. The marker
+// is read from the content that was checked (the index for --staged), so an unstaged marker can't
+// keep a staged finding.
+const { kept = [], blocking = [] } = Object.groupBy(
+  findings.map((finding) => ({
+    ...finding,
+    reason: contents
+      .get(join(repo, finding.file))
+      .split('\n')
+      [finding.line - 2]?.match(/^\s*\/\/\s*style-check keep:\s*(\S.*)$/)?.[1],
+  })),
+  (finding) =>
+    finding.reason &&
+    finding.rule !== 'CODING-STYLE § Must not use any' &&
+    !finding.message.startsWith('@ts-ignore')
+      ? 'kept'
+      : 'blocking',
+);
+// Kept findings stay visible to a reviewer: listed in reports, and notices (not warnings) on a PR.
+if (process.env.GITHUB_ACTIONS === 'true')
+  for (const finding of kept)
+    console.log(
+      `::notice file=${finding.file},line=${finding.line}::kept: ${finding.reason} — [${finding.level}] ${finding.message}`,
+    );
+if (kept.length > 0 && !args.includes('--hook') && !args.includes('--once'))
+  console.log(
+    [
+      `Kept on purpose: ${kept.length}`,
+      ...kept
+        .toSorted((a, b) => a.file.localeCompare(b.file) || a.line - b.line)
+        .map(
+          (finding) =>
+            `${finding.file}:${finding.line}  [${finding.level}] ${finding.message}\n    kept: ${finding.reason}`,
+        ),
+    ].join('\n'),
+  );
+
+if (blocking.length === 0) process.exit(0);
 const reportText = [
-  `Becket guides check: ${findings.length} finding(s) (${['must', 'prefer', 'review'].map((level) => `${findings.filter((finding) => finding.level === level).length} ${level}`).join(', ')})`,
-  ...findings
+  `Becket guides check: ${blocking.length} finding(s) (${['must', 'prefer', 'review'].map((level) => `${blocking.filter((finding) => finding.level === level).length} ${level}`).join(', ')})`,
+  ...blocking
     .toSorted((a, b) => a.file.localeCompare(b.file) || a.line - b.line)
     .map(
       (finding) =>
@@ -644,7 +721,7 @@ const reportText = [
 
 // GitHub Actions turns these lines into annotations on the PR's changed lines.
 if (process.env.GITHUB_ACTIONS === 'true')
-  for (const finding of findings)
+  for (const finding of blocking)
     console.log(
       `::warning file=${finding.file},line=${finding.line}::[${finding.level}] ${finding.message} — ${finding.rule}`,
     );
@@ -657,6 +734,6 @@ const hash = createHash('sha256').update(reportText).digest('hex');
 if (existsSync(seenPath) && readFileSync(seenPath, 'utf8') === hash) process.exit(0);
 writeFileSync(seenPath, hash);
 console.error(
-  `${reportText}\n\nCommit blocked once by the becket-guides check. Fix every finding, restage and commit again. Keep something only for a reason the guide accepts (for names: 3+ uses, recursion, public API, or inlining would change behavior) and write that reason in a comment. "review" items need a look, not necessarily a change. Re-running the same commit unchanged passes.`,
+  `${reportText}\n\nCommit blocked once by the becket-guides check. Fix every finding, restage and commit again. Keep something only for a reason the guide accepts (for names: 3+ uses, recursion, public API, or inlining would change behavior), written on the line above it as // style-check keep: <reason>. "review" items need a look, not necessarily a change. Re-running the same commit unchanged passes.`,
 );
 process.exit(2);

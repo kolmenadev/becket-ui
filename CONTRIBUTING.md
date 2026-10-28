@@ -21,7 +21,7 @@ To check a change against all of these guides, run `pnpm lint:style` (your branc
 
 The same check runs in two more places:
 
-- **On every commit.** `pnpm install` points git at `.githooks/`, whose `pre-commit` checks the lines you staged. It blocks the first time it sees a set of findings. Fix them, or keep a name for a reason the guide accepts and write that reason in a comment, then commit again: the same findings pass the second time. Turn it off with `git config --unset core.hooksPath`.
+- **On every commit.** `pnpm install` points git at `.githooks/`, whose `pre-commit` checks the lines you staged. It blocks the first time it sees a set of findings. Fix them, or keep one for a reason the guide accepts by writing `// style-check keep: <reason>` on the line above it. A kept finding doesn't block, and the same findings also pass the second time you commit. Turn it off with `git config --unset core.hooksPath`.
 - **On pull requests.** CI checks the lines the PR adds against its base branch and puts each finding on the PR as an annotation. It warns for now and doesn't fail the build.
 
 ## Develop
