@@ -39,13 +39,18 @@ if (args.includes('--hook')) {
   const event = JSON.parse(readFileSync(0, 'utf8'));
   const command = event.tool_input?.command ?? '';
   // A quoted `-C` path may hold spaces; `\S+` alone would miss the commit and skip the check.
-  if (!/\bgit\b(?:\s+-C\s+("[^"]+"|'[^']+'|\S+))?\s+commit\b/.test(command)) process.exit(0);
+  // Named for its three uses: the gate, its `-C` operand, and where it starts in the command.
+  const commit = command.match(/\bgit\b(?:\s+-C\s+("[^"]+"|'[^']+'|\S+))?\s+commit\b/);
+  if (!commit) process.exit(0);
   // Commits run as `cd <checkout> && git commit …`, `git -C <checkout> commit …` or both. Resolve
-  // them in Git's order: the `cd` first, then `-C` from there (an absolute `-C` wins).
+  // them in Git's order: each `cd` before the commit, then that commit's own `-C` (an absolute path
+  // wins). Text after the commit, like its message, can't move the checkout.
   repo = resolve(
     event.cwd ?? process.cwd(),
-    (command.match(/\bcd\s+("[^"]+"|'[^']+'|\S+)\s*&&/)?.[1] ?? '.').replace(/^["']|["']$/g, ''),
-    (command.match(/\bgit\s+-C\s+("[^"]+"|'[^']+'|\S+)/)?.[1] ?? '.').replace(/^["']|["']$/g, ''),
+    ...[...command.slice(0, commit.index).matchAll(/\bcd\s+("[^"]+"|'[^']+'|\S+)\s*&&/g)].map(
+      ([, path]) => path.replace(/^["']|["']$/g, ''),
+    ),
+    (commit[1] ?? '.').replace(/^["']|["']$/g, ''),
   );
   // A branch can change these rules, and the git hook always runs the committing checkout's copy.
   // Run that copy here too, so both gates report the same findings and pass on the same retry.
