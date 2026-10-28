@@ -32,6 +32,7 @@ export * from './blockquote.slot-recipe';
 export * from './image.recipe';
 export * from './figure.slot-recipe';
 export * from './avatar.slot-recipe';
+export * from './pagination.slot-recipe';
 export * from './visually-hidden.recipe';
 export * from './skip-link.recipe';
 export * from './center.recipe';

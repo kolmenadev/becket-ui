@@ -81,6 +81,7 @@ export type { IconProps } from './components/Icon';
 export {
   CheckIcon,
   ChevronDownIcon,
+  ChevronLeftIcon,
   ChevronRightIcon,
   CloseIcon,
   CopyIcon,
@@ -109,6 +110,8 @@ export { Figure } from './components/Figure';
 export type { FigureProps } from './components/Figure';
 export { Avatar } from './components/Avatar';
 export type { AvatarProps } from './components/Avatar';
+export { Pagination } from './components/Pagination';
+export type { PaginationProps } from './components/Pagination';
 export { SkipLink } from './components/SkipLink';
 export { VisuallyHidden } from './components/VisuallyHidden';
 export { Center } from './components/Center';

@@ -215,7 +215,7 @@ Note: When adding new recipes, regenerate Panda artifacts for `@becket-ui/tokens
 ## Storybook rules
 
 - Stories colocate with components and export `Meta`/`StoryObj`.
-- Group titles like Chakra's component overview: Layout, Typography, Buttons, Forms, Overlays, Disclosure, Feedback, Data Display (e.g. `Forms/Textarea`, `Layout/Flex`).
+- Group titles like Chakra's component overview: Layout, Typography, Buttons, Forms, Overlays, Disclosure, Feedback, Data Display, Navigation (e.g. `Forms/Textarea`, `Layout/Flex`, `Navigation/Pagination`).
 - Add controls for all recipe variant props using `variantMap`.
 - Panda `ConditionalValue` props (gap, wrap, grow, direction, style props) infer as Storybook **object** controls. Override with select / boolean / number, and set `parameters.controls.include` to the knobs for that component. Do not leave "Set object" editors for layout props.
 - Provide at least these stories: Default, Disabled, Sizes, States (hover/focus via pseudo‑class style if demonstrable), and With label/description if applicable.
