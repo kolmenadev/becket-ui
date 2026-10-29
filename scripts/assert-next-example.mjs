@@ -75,6 +75,7 @@ const missing = [
   'beckui--card__root',
   'beckui--gap_md',
   'beckui--pagination__link',
+  'beckui--prose',
 ].filter((needle) => !pages['/'].includes(needle));
 if (missing.length) {
   throw new Error(`Server-rendered HTML missing recipe classes: ${missing.join(', ')}`);
