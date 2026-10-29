@@ -34,6 +34,7 @@ jobs:
       - run: pnpm --filter @becket-ui/react test
       - run: pnpm --filter @becket-ui/tokens test
       - run: pnpm --filter @becket-ui/mcp test
+      - run: pnpm test:style-check
       - run: pnpm pack:check
       - run: pnpm example:build
       - run: node scripts/assert-next-example.mjs
