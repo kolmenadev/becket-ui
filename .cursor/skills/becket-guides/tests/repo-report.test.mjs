@@ -19,15 +19,24 @@ const repo = makeRepo();
 after(() => removeRepo(repo));
 
 it(`reports the same findings on ${pinned.slice(0, 7)} as it did`, () => {
-  spawnSync('tar', ['-x', '-C', repo], {
-    input: spawnSync('git', ['-C', root, 'archive', '--format=tar', pinned], {
-      maxBuffer: 256 * 1024 * 1024,
-    }).stdout,
+  // A shallow clone may lack the pinned commit: fetch just that commit, then fail loudly if it's
+  // still missing, rather than checking an empty tree.
+  if (spawnSync('git', ['-C', root, 'cat-file', '-e', `${pinned}^{commit}`]).status !== 0)
+    spawnSync('git', ['-C', root, 'fetch', '-q', '--depth=1', 'origin', pinned]);
+  const archive = spawnSync('git', ['-C', root, 'archive', '--format=tar', pinned], {
+    maxBuffer: 256 * 1024 * 1024,
   });
+  assert.equal(archive.status, 0, `can't read pinned commit ${pinned}: ${archive.stderr}`);
+  assert.equal(spawnSync('tar', ['-x', '-C', repo], { input: archive.stdout }).status, 0);
   // makeRepo linked packages/tokens/node_modules; the pinned tree brings the real package.json.
   git(repo, 'add', '-A');
   git(repo, 'commit', '-q', '-m', 'pinned tree');
-  const { status, output } = check({ repo });
+  const { status, output, findings } = check({ repo });
+  // A crash also exits 1; only a complete report (summary line, findings, no stack trace) may
+  // become the snapshot.
+  assert.match(output, /^Becket guides check: \d+ finding\(s\)/m, 'not a checker report');
+  assert.doesNotMatch(output, /^\s+at .+:\d+:\d+\)?$/m, 'the checker crashed');
+  assert.ok(findings.length > 0, 'report has no findings');
   if (process.env.UPDATE_REPO_REPORT) writeFileSync(snapshot, output);
   assert.equal(status, 1);
   assert.equal(output, readFileSync(snapshot, 'utf8'));

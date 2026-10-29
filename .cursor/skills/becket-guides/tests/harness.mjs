@@ -19,7 +19,13 @@ import { fileURLToPath } from 'node:url';
 export const root = fileURLToPath(new URL('../../../../', import.meta.url));
 export const checker = join(root, '.cursor/skills/becket-guides/scripts/style-check.mjs');
 
-export const git = (repo, ...args) => spawnSync('git', ['-C', repo, ...args], { encoding: 'utf8' });
+// Throws on failure, so a broken setup step names itself instead of surfacing later as a confusing
+// checker error.
+export function git(repo, ...args) {
+  const result = spawnSync('git', ['-C', repo, ...args], { encoding: 'utf8' });
+  if (result.status !== 0) throw new Error(`git ${args.join(' ')} failed: ${result.stderr.trim()}`);
+  return result;
+}
 
 /** Writes `files` ({ path: contents }) into the repo at `repo` (created when missing). */
 export function write(repo, files) {
@@ -41,6 +47,8 @@ export function makeRepo(files = {}, prefix = 'style-check-') {
   git(repo, 'config', 'user.name', 'Style check tests');
   // No hooks: the repo under test must not run this repo's own pre-commit gate.
   git(repo, 'config', 'core.hooksPath', '/dev/null');
+  // A global commit.gpgsign would make every commit here prompt or fail.
+  git(repo, 'config', 'commit.gpgsign', 'false');
   write(repo, { 'packages/tokens/package.json': '{ "name": "stub" }\n', ...files });
   symlinkSync(
     join(root, 'packages/tokens/node_modules'),
