@@ -8,6 +8,7 @@ import {
   Code,
   Heading,
   Pagination,
+  Prose,
   Stack,
   Text,
   TextField,
@@ -26,9 +27,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ p
         Becket UI Next example
       </Heading>
       <Text>
-        Server Component, rendered per request: Button, Stack, Heading, Card, Field, Pagination.
-        Packed tarballs, no <Code>panda.config</Code>. Brand primary is a CSS-variable override
-        after <Code>index.css</Code>.
+        Server Component, rendered per request: Button, Stack, Heading, Card, Field, Pagination,
+        Prose. Packed tarballs, no <Code>panda.config</Code>. Brand primary is a CSS-variable
+        override after <Code>index.css</Code>.
       </Text>
       <Button type="button" visual="primary">
         Server button
@@ -52,6 +53,15 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ p
         pageCount={8}
         href={(page) => `/?page=${page}`}
         linkAs={NextLink}
+      />
+      {/* What a Markdown renderer hands over: an HTML string, styled only by the packed
+          index.css, with no Panda in this app (MAV-112). */}
+      <Prose
+        as="article"
+        dangerouslySetInnerHTML={{
+          __html:
+            '<h2>From Markdown</h2><p>Plain HTML, styled by Prose.</p><ul><li>No provider</li><li>One CSS import</li></ul>',
+        }}
       />
       <Tooltip content="Client leaf imported from a Server Component">
         <Button type="button" visual="outline">

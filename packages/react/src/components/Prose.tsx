@@ -16,7 +16,8 @@ function mergeClassName(...classes: (string | undefined)[]): string {
 
 /**
  * Styles HTML from Markdown or MDX with Becket tokens. CSS only, no JS.
- * Wrap embedded components in `data-not-prose` to keep their own styles.
+ * Embedded Becket components keep their own styles, markup inside them included. Wrap markup
+ * from anywhere else in `data-not-prose` to leave it unstyled.
  */
 export const Prose = forwardRef<HTMLDivElement, ProseProps>(
   ({ size = 'md', as: Component = 'div', className, ...props }, ref) => (

@@ -42,7 +42,7 @@ Raw elements with inline styles are the most common mistake. Use this table:
 | inline `svg` icon                                    | `Icon` around your SVG, or a built-in glyph (`SearchIcon`, `ChevronDownIcon`, …); add `label` only when it carries meaning |
 | `a`                                                  | `Link`                                                                                                                     |
 | `a` styled as a button (call to action)              | `Button as="a" href="…"` (anchor props are typed)                                                                          |
-| HTML from Markdown or MDX (blog posts, docs)         | `<Prose as="article">`; wrap embedded components in `data-not-prose`                                                       |
+| HTML from Markdown or MDX (blog posts, docs)         | `<Prose as="article">`; Becket components inside keep their styles, other markup opts out with `data-not-prose`            |
 | `ul` / `ol` with `li`                                | `List` (`as="ol"` for steps, `marker="none"` for nav) + `ListItem`                                                         |
 | inline `code`, `kbd`, `mark`                         | `Code`, `Kbd`, `Mark`                                                                                                      |
 | `blockquote` (+ attribution)                         | `Blockquote cite` + `BlockquoteCaption`                                                                                    |

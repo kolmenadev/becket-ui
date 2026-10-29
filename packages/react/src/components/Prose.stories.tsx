@@ -104,27 +104,45 @@ export const Sizes: Story = {
   ),
 };
 
-/** Components inside `data-not-prose` keep their own styles. */
+/** Becket components keep their own styles, markup inside them included, with no wrapper. */
 export const WithComponents: Story = {
   render: () => (
     <Prose>
       <p>A post can embed Becket components:</p>
-      <div data-not-prose>
-        <Card visual="outline">
-          <CardHeader>
-            <CardTitle>Release 0.2.0</CardTitle>
-            <Badge visual="primary" size="sm">
-              New
-            </Badge>
-          </CardHeader>
-          <CardBody>
-            <Text fontSize="sm" color="muted">
-              Container, Box and Icon.
-            </Text>
-          </CardBody>
-        </Card>
-      </div>
+      <Card visual="outline">
+        <CardHeader>
+          <CardTitle>Release 0.2.0</CardTitle>
+          <Badge visual="primary" size="sm">
+            New
+          </Badge>
+        </CardHeader>
+        <CardBody>
+          <Text fontSize="sm" color="muted">
+            Container, Box and Icon.
+          </Text>
+          <ul>
+            <li>This list keeps the card's styles, not the article's.</li>
+          </ul>
+        </CardBody>
+      </Card>
       <p>The text after it is styled by Prose again.</p>
+    </Prose>
+  ),
+};
+
+/** Markup that isn't Becket's opts out with `data-not-prose`. */
+export const NotProse: Story = {
+  render: () => (
+    <Prose>
+      <p>A widget from another library sits in the post:</p>
+      <div data-not-prose>
+        <ul>
+          <li>This list is left unstyled by Prose.</li>
+        </ul>
+      </div>
+      <ul>
+        <li>This one is an article list.</li>
+      </ul>
     </Prose>
   ),
 };

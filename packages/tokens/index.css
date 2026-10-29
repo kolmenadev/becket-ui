@@ -893,13 +893,13 @@
       line-height: var(--beckui--line-heights-loose);
       max-width: var(--beckui--sizes-prose);
     }
-    [data-theme='light'] :is(.beckui--prose :where(hr):not(:where([data-not-prose], [data-not-prose] *))) {
+    [data-theme='light'] :is(.beckui--prose :where(hr):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *))) {
       border-top-color: var(--beckui--colors-border);
     }
-    [data-theme='light'] :is(.beckui--prose :where(kbd):not(:where([data-not-prose], [data-not-prose] *))), [data-theme='light'] :is(.beckui--prose :where(pre):not(:where([data-not-prose], [data-not-prose] *))) {
+    [data-theme='light'] :is(.beckui--prose :where(kbd):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *))), [data-theme='light'] :is(.beckui--prose :where(pre):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *))) {
       border-color: var(--beckui--colors-border);
     }
-    [data-theme='light'] :is(.beckui--prose :where(tbody tr):not(:where([data-not-prose], [data-not-prose] *))), [data-theme='light'] :is(.beckui--prose :where(thead th):not(:where([data-not-prose], [data-not-prose] *))) {
+    [data-theme='light'] :is(.beckui--prose :where(tbody tr):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *))), [data-theme='light'] :is(.beckui--prose :where(thead th):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *))) {
       border-bottom-color: var(--beckui--colors-border);
     }
     .beckui--prose.beckui--prose > :where(:first-child) {
@@ -908,20 +908,20 @@
     .beckui--prose.beckui--prose > :where(:last-child) {
       margin-bottom: var(--beckui--spacing-0);
     }
-    .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       text-decoration: underline;
       color: var(--beckui--colors-link);
       text-underline-offset: var(--beckui--spacing-text-1);
     }
-    .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *)):is(:hover, [data-hover]) {
+    .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)):is(:hover, [data-hover]) {
       color: var(--beckui--colors-link-hover);
     }
-    .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *)):is(:focus-visible, [data-focus-visible]) {
+    .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)):is(:focus-visible, [data-focus-visible]) {
       outline: var(--beckui--borders-none);
       border-radius: var(--beckui--radii-sm);
       box-shadow: var(--beckui--shadows-outline);
     }
-    .beckui--prose :where(blockquote):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(blockquote):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-block: var(--beckui--spacing-text-8);
       padding-inline-start: var(--beckui--spacing-text-5);
       border-inline-start-width: 3px;
@@ -930,61 +930,61 @@
       color: var(--beckui--colors-muted);
       font-style: italic;
     }
-    .beckui--prose :where(dd):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(dd):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       padding-inline-start: var(--beckui--spacing-text-5);
       margin-top: var(--beckui--spacing-text-2);
     }
-    .beckui--prose :where(dt):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(dt):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       font-weight: var(--beckui--font-weights-bold);
       margin-top: var(--beckui--spacing-text-5);
     }
-    .beckui--prose :where(figcaption):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(figcaption):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       font-size: var(--beckui--font-sizes-text-sm);
       color: var(--beckui--colors-muted);
       margin-top: var(--beckui--spacing-text-3);
     }
-    .beckui--prose :where(figure > img, figure > video):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(figure > img, figure > video):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-block: var(--beckui--spacing-0);
     }
-    .beckui--prose :where(figure):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(figure):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-block: var(--beckui--spacing-text-8);
     }
-    .beckui--prose :where(h1):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(h1):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-block: 0 var(--beckui--spacing-text-3);
       font-size: var(--beckui--font-sizes-text-2xl);
     }
-    .beckui--prose :where(h1, h2, h3, h4):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(h1, h2, h3, h4):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       font-weight: var(--beckui--font-weights-bold);
       line-height: var(--beckui--line-heights-tight);
       color: var(--beckui--colors-text);
       scroll-margin-top: var(--beckui--spacing-5);
     }
-    .beckui--prose :where(h2):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(h2):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-block: var(--beckui--spacing-text-8) var(--beckui--spacing-text-3);
       font-size: var(--beckui--font-sizes-text-xl);
     }
-    .beckui--prose :where(h3):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(h3):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-block: var(--beckui--spacing-text-8) var(--beckui--spacing-text-2);
       font-size: var(--beckui--font-sizes-text-lg);
     }
-    .beckui--prose :where(h4):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(h4):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-block: var(--beckui--spacing-text-5) var(--beckui--spacing-text-2);
       font-size: var(--beckui--font-sizes-text-md);
     }
-    .beckui--prose :where(hr):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(hr):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       border: var(--beckui--borders-none);
       margin-block: var(--beckui--spacing-text-13);
       border-top-width: 1px;
       border-top-style: solid;
       border-top-color: var(--beckui--colors-neutral-700);
     }
-    .beckui--prose :where(img, video):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(img, video):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       border-radius: var(--beckui--radii-md);
       display: block;
       max-width: 100%;
       height: auto;
     }
-    .beckui--prose :where(kbd):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(kbd):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       background: var(--beckui--colors-surface);
       padding-inline: var(--beckui--spacing-text-2);
       padding-block: var(--beckui--spacing-text-1);
@@ -996,26 +996,26 @@
       font-size: var(--beckui--font-sizes-text-sm);
       border-bottom-width: 2px;
     }
-    .beckui--prose :where(li):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(li):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-block: var(--beckui--spacing-text-2);
       padding-inline-start: var(--beckui--spacing-text-1);
     }
-    .beckui--prose :where(mark):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(mark):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       background: var(--beckui--colors-primary);
       padding-inline: var(--beckui--spacing-text-1);
       border-radius: var(--beckui--radii-sm);
       color: var(--beckui--colors-neutral-900);
     }
-    .beckui--prose :where(p):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(p):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-block: var(--beckui--spacing-text-5);
     }
-    .beckui--prose :where(pre code):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(pre code):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       background: var(--beckui--colors-transparent);
       padding: var(--beckui--spacing-0);
       font-family: inherit;
       font-size: inherit;
     }
-    .beckui--prose :where(pre):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(pre):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       padding: var(--beckui--spacing-md);
       background: var(--beckui--colors-surface);
       margin-block: var(--beckui--spacing-text-8);
@@ -1028,54 +1028,54 @@
       line-height: var(--beckui--line-heights-normal);
       overflow-x: auto;
     }
-    .beckui--prose :where(strong):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(strong):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       font-weight: var(--beckui--font-weights-bold);
       color: var(--beckui--colors-text);
     }
-    .beckui--prose :where(sup):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(sup):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       font-size: var(--beckui--font-sizes-text-xs);
     }
-    .beckui--prose :where(table):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(table):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-block: var(--beckui--spacing-text-8);
       border-collapse: collapse;
       font-size: var(--beckui--font-sizes-text-sm);
       line-height: var(--beckui--line-heights-normal);
       width: 100%;
     }
-    .beckui--prose :where(tbody tr):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(tbody tr):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       border-bottom-width: 1px;
       border-bottom-style: solid;
       border-bottom-color: var(--beckui--colors-neutral-700);
     }
-    .beckui--prose :where(th, td):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(th, td):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       padding-inline: var(--beckui--spacing-text-3);
       padding-block: var(--beckui--spacing-text-2);
     }
-    .beckui--prose :where(thead th):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(thead th):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       text-align: start;
       font-weight: var(--beckui--font-weights-bold);
       border-bottom-width: 1px;
       border-bottom-style: solid;
       border-bottom-color: var(--beckui--colors-neutral-700);
     }
-    .beckui--prose :where(ul):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(ul):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       list-style-type: disc;
     }
-    .beckui--prose :where(ul, ol):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(ul, ol):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-block: var(--beckui--spacing-text-5);
       padding-inline-start: var(--beckui--spacing-text-5);
     }
-    .beckui--prose.beckui--prose :where(h2 + *, h3 + *, h4 + *):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose.beckui--prose :where(h2 + *, h3 + *, h4 + *):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-top: var(--beckui--spacing-0);
     }
-    .beckui--prose.beckui--prose :where(li > ul, li > ol):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose.beckui--prose :where(li > ul, li > ol):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       margin-block: var(--beckui--spacing-text-2);
     }
-    .beckui--prose.beckui--prose :where(ol):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose.beckui--prose :where(ol):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       padding-inline-start: var(--beckui--spacing-text-8);
       list-style-type: decimal;
     }
-    .beckui--prose :where(:not(pre) > code):not(:where([data-not-prose], [data-not-prose] *)) {
+    .beckui--prose :where(:not(pre) > code):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
       background: var(--beckui--colors-surface);
       padding-inline: var(--beckui--spacing-text-1);
       padding-block: var(--beckui--spacing-text-1);
@@ -1083,7 +1083,7 @@
       font-family: var(--beckui--fonts-mono);
       font-size: var(--beckui--font-sizes-text-sm);
     }
-    .beckui--prose :where(li):not(:where([data-not-prose], [data-not-prose] *))::marker {
+    .beckui--prose :where(li):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *))::marker {
       color: var(--beckui--colors-muted);
     }
     .beckui--select {
@@ -3228,6 +3228,9 @@
   }
   .beckui--page_6 {
     page: 6px;
+  }
+  .beckui--page_8 {
+    page: 8px;
   }
   .beckui--rg_sm {
     row-gap: var(--beckui--spacing-sm);

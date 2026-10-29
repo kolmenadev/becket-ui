@@ -77,7 +77,6 @@ import '@becket-ui/tokens/index.css';</code>
 <div>
 <div class="beckui--prose beckui--prose--size_md">
 <p>A post can embed Becket components:</p>
-<div data-not-prose="true">
 <div class="beckui--card__root beckui--card__root--fullWidth_false beckui--card__root--size_md beckui--card__root--visual_outline">
 <div class="beckui--card__header beckui--card__header--fullWidth_false beckui--card__header--size_md beckui--card__header--visual_outline">
 <h3 class="beckui--card__title beckui--card__title--fullWidth_false beckui--card__title--size_md beckui--card__title--visual_outline">Release 0.2.0</h3>
@@ -85,9 +84,26 @@ import '@becket-ui/tokens/index.css';</code>
 </div>
 <div class="beckui--card__body beckui--card__body--fullWidth_false beckui--card__body--size_md beckui--card__body--visual_outline">
 <p class="beckui--c_muted beckui--fs_sm">Container, Box and Icon.</p>
-</div>
+<ul>
+<li>This list keeps the card's styles, not the article's.</li>
+</ul>
 </div>
 </div>
 <p>The text after it is styled by Prose again.</p>
+</div>
+</div>
+
+<!-- NotProse -->
+<div>
+<div class="beckui--prose beckui--prose--size_md">
+<p>A widget from another library sits in the post:</p>
+<div data-not-prose="true">
+<ul>
+<li>This list is left unstyled by Prose.</li>
+</ul>
+</div>
+<ul>
+<li>This one is an article list.</li>
+</ul>
 </div>
 </div>
