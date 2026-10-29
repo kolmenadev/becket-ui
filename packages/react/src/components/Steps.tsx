@@ -18,6 +18,8 @@ export const Steps = forwardRef<HTMLOListElement, StepsProps>(
   ({ orientation = 'horizontal', size = 'md', className, ...props }, ref) => (
     <ol
       ref={ref}
+      // Safari drops list semantics from an unmarked list outside `nav`; the role keeps the count.
+      role="list"
       {...props}
       className={[stepsRecipe({ orientation, size }).root, className].filter(Boolean).join(' ')}
     />

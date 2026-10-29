@@ -15,6 +15,10 @@ describe('Steps', () => {
     );
     const steps = screen.getAllByRole('listitem');
     expect(steps).toHaveLength(3);
+    // jsdom can't show Safari dropping the list role from an unmarked list, so check it's explicit.
+    expect(screen.getByRole('list', { name: 'Sign-up progress' }).getAttribute('role')).toBe(
+      'list',
+    );
     expect(steps.map((step) => step.getAttribute('aria-current'))).toEqual([null, 'step', null]);
     // Screen readers hear each step's state after its title; the current one has aria-current.
     expect(steps.map((step) => step.textContent)).toEqual([
