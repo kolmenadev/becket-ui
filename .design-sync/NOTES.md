@@ -44,4 +44,4 @@
 - Card "elevated" shadows spill outside the decorator surface onto white card chrome (framing, graded match).
 - Fonts come from `@fontsource/*@5.3.0` devDeps of apps/docs; bumping them changes shipped font bytes (zero-regrade, re-upload).
 - Cambria serif substitute accepted by Miguel 2026-10-13 (unused by Becket).
-- Converter toolchain: design-sync skill bundled with Claude Code 2.1.295; Storybook 10; React 19.3.
+- Converter toolchain: design-sync skill bundled with Claude Code 2.1.309; Storybook 10; React 19.3.
