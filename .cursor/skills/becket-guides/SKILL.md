@@ -159,3 +159,18 @@ The same gate runs for every contributor as a git hook: `.githooks/pre-commit` c
 `--staged --once`, and `pnpm install` sets `core.hooksPath` to `.githooks`. Both gates share one
 record of the findings they've seen, so a commit that passed one passes the other. CI runs
 `pnpm lint:style --base origin/<base>` on pull requests in warn mode.
+
+## 8. Changing the checker
+
+`tests/` pins what the checker does (MAV-170). Run `pnpm test:style-check` (also part of
+`pnpm test` and CI) after any change to `scripts/style-check.mjs`:
+
+- `rules.fixtures.mjs`: an `invalid` and a `valid` sample per rule. A new rule gets its fixtures
+  here, and `guides.test.mjs` fails until it does.
+- `modes.test.mjs`: `--staged`, `--base`, `--paths`, the keep marker, both commit gates, the
+  hook's checkout resolution and hand-off, and GitHub annotations, in throwaway git repos.
+- `guides.test.mjs`: every rule label points to a section that exists, and every ⚙ item in
+  `references/checklist.md` maps to a rule. A new ⚙ item needs an entry in its `checkedBy` table.
+- `repo-report.test.mjs`: the `--all` report on a pinned commit of this repo, byte for byte
+  (`repo-report.txt`). When a change is meant to alter results, rewrite it with
+  `UPDATE_REPO_REPORT=1 pnpm test:style-check` and review the diff in the PR.

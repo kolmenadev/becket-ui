@@ -1,0 +1,600 @@
+Kept on purpose: 3
+packages/react/src/components/Pagination.test.tsx:73  [must] user: used once (line 76); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)
+    kept: one user-event session for the whole walk; inlined, each tab starts a new one.
+packages/react/src/components/Pagination.tsx:90  [prefer] .sort() mutates in place; use .toSorted()
+    kept: `filter` returned a new array this owns; the build's lib predates `toSorted`.
+scripts/assert-next-example.mjs:47  [must] server: used once (line 68); inline it
+    kept: evaluation order; the server starts before the requests and is stopped after them.
+Becket guides check: 592 finding(s) (563 must, 19 prefer, 10 review)
+apps/docs/.storybook/main.ts:5  [must] config: used once (line 58); inline it  — CODING-STYLE § Avoid hasty abstraction
+apps/docs/.storybook/main.ts:31  [must] conditions: used once (line 32); inline it  — CODING-STYLE § Avoid hasty abstraction
+apps/docs/.storybook/main.ts:34  [must] aliasList: used once (line 38); inline it  — CODING-STYLE § Avoid hasty abstraction
+apps/docs/.storybook/preview.ts:5  [must] preview: used once (line 58); inline it  — CODING-STYLE § Avoid hasty abstraction
+apps/docs/.storybook/preview.ts:11  [must] selectedBackground: alias of `context.globals.backgrounds?.value`, used 2×; write `context.globals.backgrounds?.value` where it's used  — CODING-STYLE § Avoid hasty abstraction
+apps/next-example/app/client-island.tsx:7  [must] enabled: booleans start with is, has, does, should or can  — CODING-STYLE § Name consistency › Boolean
+apps/next-example/app/layout.tsx:12  [must] brandThemeCss: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+apps/next-example/app/layout.tsx:12  [must] brandThemeCss: used once (line 22); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+apps/next-example/app/layout.tsx:13  [must] literal color 'oklch(0.55 0.22 280)'; use a token (prop or var(--beckui--colors-…))  — building-with-becket § 3 / becket.mdc § Styling
+apps/next-example/app/layout.tsx:14  [must] raw length '4px'; use a size prop or var(--beckui--spacing-…)  — building-with-becket § 3
+apps/next-example/app/layout.tsx:15  [must] raw length '16rem'; use a size prop or var(--beckui--spacing-…)  — building-with-becket § 3
+apps/next-example/app/page.tsx:24  [must] inline style without a `// TODO (MAV-…)` naming the gap it covers  — building-with-becket § 2 Known gaps / § 11
+apps/next-example/app/page.tsx:24  [must] raw length '2rem'; use a size prop or var(--beckui--spacing-…)  — building-with-becket § 3
+apps/next-example/app/page.tsx:24  [must] raw length '40rem'; use a size prop or var(--beckui--spacing-…)  — building-with-becket § 3
+apps/next-example/app/page.tsx:39  [must] raw length "sizes.field → 16rem"; use a size prop or var(--beckui--spacing-…)  — building-with-becket § 3
+apps/next-example/next.config.ts:4  [must] nextConfig: used once (line 8); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/a11y/src/assertNoAxeViolations.test.ts:12  [must] button: used once (line 13); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/a11y/src/assertNoAxeViolations.ts:7  [must] JSDOM_DISABLED_AXE_RULES: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/a11y/src/assertNoAxeViolations.ts:12  [must] formatViolations: used once (line 47); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/a11y/src/assertNoAxeViolations.ts:15  [must] nodes: used once (line 18); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/design-system/scripts/browserGlobals.mjs:4  [must] filter: used once (line 8); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/design-system/scripts/bundle.mjs:8  [must] reactEntry: used once (line 15); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/design-system/scripts/bundle.mjs:9  [must] tokensCSS: used once (line 33); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/design-system/scripts/bundle.mjs:14  [must] result: used once (line 34); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/design-system/scripts/spike.mjs:12  [must] components: used once (line 25); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/design-system/scripts/spike.mjs:25  [must] header: used once (line 26); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/design-system/scripts/spike.mjs:28  [must] neutral: used once (line 50); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/design-system/scripts/spike.mjs:38  [must] tokens: used once (line 87); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/design-system/scripts/spike.mjs:127  [must] previews: used once (line 198); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:19  [must] tokensDir: used once (line 175); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:25  [must] parseExports: used once (line 134); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:27  [must] statement: used once (line 28); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:31  [must] list: used once (line 32); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:39  [must] parseStories: used once (line 145); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:40  [must] title: used once (line 55); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:50  [must] docStart: used once (line 53); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:58  [must] summaryOf: used once (line 162); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:63  [must] doc: used once (line 64); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:67  [must] loadRecipes: used once (line 129); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:68  [must] recipes: used once (line 70); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:76  [must] recipeFor: used once (line 152); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:82  [must] parseTheme: used once (line 175); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:83  [must] block: helper used 2× (lines 96, 97); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:94  [must] vars: helper used 2× (lines 96, 97); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:99  [must] multiply: used once (line 103); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:100  [prefer] 3 positional parameters; pass one object  — CODING-STYLE § Prefer object parameters when there are more than 2
+packages/mcp/scripts/build-data.mjs:105  [must] groups: used once (line 114); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:139  [must] sourcePath: used once (line 144); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/scripts/build-data.mjs:149  [must] hooks: used once (line 157); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/data.ts:39  [must] `as Catalog` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/mcp/src/data.ts:40  [must] `as Theme` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/mcp/src/review.ts:5  [must] Rule: used once (line 17); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/review.ts:17  [must] LINE_RULES: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/mcp/src/review.ts:17  [must] LINE_RULES: used once (line 109); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/review.ts:81  [must] unknownImports: used once (line 113); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/review.ts:82  [must] known: used once (line 92); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/review.ts:87  [must] statement: used once (line 88); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/review.ts:89  [must] line: used once (line 94); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/review.ts:113  [prefer] .sort() mutates in place; use .toSorted()  — CODING-STYLE § Must not mutate arrays or objects you don’t own
+packages/mcp/src/review.ts:120  [must] rows: used once (line 121); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/theme/extractColors.ts:175  [must] total: used once (line 181); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/theme/extractPDF.ts:163  [must] total: used once (line 175); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/tools.ts:36  [must] sections: used once (line 46); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/tools.ts:37  [must] rows: used once (line 44); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/tools.ts:39  [must] tags: used once (line 42); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/tools.ts:60  [must] notFound: helper used 2× (lines 67, 87); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/tools.ts:61  [must] names: used once (line 62); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/tools.ts:85  [prefer] 3 positional parameters; pass one object  — CODING-STYLE § Prefer object parameters when there are more than 2
+packages/mcp/src/tools.ts:97  [must] note: used once (line 99); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/tools.ts:105  [must] sections: used once (line 109); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/tools.ts:106  [must] rows: used once (line 107); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/tools.ts:116  [must] wanted: used once (line 117); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/src/tools.ts:119  [must] titles: used once (line 120); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/test/brandFixtures.ts:149  [must] xref: alias of `out.length`, used 1×; write `out.length` where it's used  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/test/stdio.test.ts:9  [must] serverPath: used once (line 14); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/test/stdio.test.ts:22  [must] `as { type: string; text: string }[]` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/mcp/test/stdio.test.ts:27  [prefer] .sort() mutates in place; use .toSorted()  — CODING-STYLE § Must not mutate arrays or objects you don’t own
+packages/mcp/test/stdio.test.ts:60  [must] result: used once (line 61); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/test/suggestTheme.test.ts:90  [must] bytes: used once (line 92); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/test/suggestTheme.test.ts:91  [must] start: used once (line 93); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/test/tools.test.ts:19  [must] index: used once (line 20); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/test/tools.test.ts:20  [must] exported: used once (line 25); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/test/tools.test.ts:24  [must] catalogued: used once (line 25); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/test/tools.test.ts:61  [must] text: used once (line 62); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/test/tools.test.ts:63  [must] `as never` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/mcp/test/tools.test.ts:78  [must] handoff: used once (line 87); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/test/tools.test.ts:87  [must] rules: used once (line 88); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/mcp/test/tools.test.ts:103  [must] clean: used once (line 112); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/scripts/add-js-extensions.mjs:17  [must] SPECIFIER: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/scripts/add-js-extensions.mjs:17  [must] SPECIFIER: used once (line 33); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/scripts/add-js-extensions.mjs:37  [must] fileProbe: used once (line 40); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/scripts/add-js-extensions.mjs:38  [must] indexProbe: used once (line 41); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/AspectRatio.stories.tsx:9  [must] meta: used once (line 10); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/AspectRatio.stories.tsx:12  [must] Story: helper used 2× (lines 14, 22); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/AspectRatio.stories.tsx:34  [must] `as AspectRatioProps['ratio']` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/AspectRatio.tsx:4  [must] AspectRatioValue: used once (line 8); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/AspectRatio.tsx:11  [must] mergeClassName: used once (line 21); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Avatar.stories.tsx:7  [must] meta: used once (line 17); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Avatar.tsx:6  [must] AvatarSize: used once (line 14); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Avatar.tsx:17  [must] mergeClassName: used once (line 39); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Avatar.tsx:21  [must] initialsOf: used once (line 45); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Avatar.tsx:24  [must] first: used once (line 26); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Avatar.tsx:25  [must] last: used once (line 26); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Avatar.tsx:37  [must] showImage: used once (line 40); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Badge.stories.tsx:4  [prefer] a package import after a relative one; third-party, then absolute, then relative  — CODING-STYLE § Prefer sorted imports
+packages/react/src/components/Badge.stories.tsx:6  [must] meta: used once (line 32); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Badge.tsx:10  [must] BadgeSize: used once (line 14); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Badge.tsx:11  [must] BadgeBorderRadius: used once (line 16); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Badge.tsx:22  [must] mergeClassName: used once (line 49); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Badge.tsx:41  [must] recipeClassName: used once (line 49); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Badge.tsx:42  [must] colorVars: used once (line 48); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Blockquote.stories.tsx:4  [must] meta: used once (line 5); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Blockquote.stories.tsx:7  [must] Story: helper used 2× (lines 9, 17); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Blockquote.tsx:12  [must] mergeClassName: helper used 2× (lines 17, 32); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Blockquote.tsx:29  [must] captions: used once (line 36); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Blockquote.tsx:30  [must] quote: used once (line 34); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Box.stories.tsx:7  [must] meta: used once (line 20); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Box.tsx:4  [must] BoxSpacing: used once (line 9); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Box.tsx:5  [must] BoxBackground: used once (line 11); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Box.tsx:6  [must] BoxRadius: used once (line 12); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Box.tsx:16  [must] mergeClassName: used once (line 28); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Button.stories.tsx:8  [must] brandThemeCss: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Button.stories.tsx:8  [must] brandThemeCss: used once (line 83); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Button.stories.tsx:12  [must] densityCss: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Button.stories.tsx:12  [must] densityCss: used once (line 126); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Button.stories.tsx:16  [must] meta: used once (line 53); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Button.test.tsx:42  [must] typed: used once (line 55); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Button.test.tsx:60  [must] user: used once (line 72); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Button.tsx:6  [must] ButtonSize: used once (line 18); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Button.tsx:7  [must] ButtonBorderRadius: used once (line 19); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Button.tsx:9  [must] VISUAL_TO_RECIPE: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/components/Button.tsx:9  [must] VISUAL_TO_RECIPE: used once (line 57); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Button.tsx:33  [must] PolymorphicButton: used once (line 73); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Button.tsx:37  [must] mergeClassName: used once (line 69); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Button.tsx:56  [must] recipeClassName: used once (line 69); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Card.stories.tsx:16  [must] meta: used once (line 38); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Card.tsx:13  [must] CardSize: helper used 2× (lines 17, 28); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Card.tsx:14  [must] CardVisual: helper used 2× (lines 18, 29); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Card.tsx:16  [must] CardContextValue: used once (line 21); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Card.tsx:48  [must] styles: used once (line 52); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Card.tsx:74  [must] styles: used once (line 76); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Card.tsx:84  [must] styles: used once (line 86); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Card.tsx:94  [must] styles: used once (line 96); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Card.tsx:104  [must] styles: used once (line 106); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Card.tsx:114  [must] styles: used once (line 116); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Center.stories.tsx:7  [must] meta: used once (line 8); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Center.stories.tsx:10  [must] Story: helper used 2× (lines 12, 22); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Center.tsx:10  [must] mergeClassName: used once (line 16); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Checkbox.stories.tsx:7  [must] meta: used once (line 25); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Checkbox.tsx:4  [must] CheckboxSize: used once (line 9); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Checkbox.tsx:12  [must] mergeClassName: used once (line 25); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Checkbox.tsx:18  [must] autoId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Checkbox.tsx:18  [must] autoId: used once (line 19); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Checkbox.tsx:19  [must] inputId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Checkbox.tsx:20  [must] descriptionId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Code.stories.tsx:5  [must] meta: used once (line 6); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Code.stories.tsx:8  [must] Story: used once (line 10); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Code.tsx:6  [must] mergeClassName: used once (line 12); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Container.stories.tsx:9  [must] meta: used once (line 21); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Container.tsx:4  [must] ContainerSize: used once (line 9); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Container.tsx:5  [must] ContainerPadding: used once (line 11); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Container.tsx:16  [must] mergeClassName: used once (line 25); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.stories.tsx:7  [must] meta: used once (line 14); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.test.tsx:11  [must] `as 'dialog' | 'alertdialog'` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Dialog.test.tsx:47  [must] labelledBy: used once (line 49); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.test.tsx:48  [must] describedBy: used once (line 50); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.test.tsx:49  [must] `as string` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Dialog.test.tsx:50  [must] `as string` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Dialog.test.tsx:55  [must] dialog: used once (line 56); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.test.tsx:68  [must] user: used once (line 73); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.tsx:18  [must] DialogRole: used once (line 54); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.tsx:20  [must] DialogContextValue: used once (line 28); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.tsx:22  [must] titleId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Dialog.tsx:23  [must] descriptionId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Dialog.tsx:83  [must] styles: used once (line 98); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.tsx:84  [must] composeChrome: used once (line 110); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.tsx:85  [must] lightDismiss: used once (line 105); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.tsx:134  [must] styles: used once (line 135); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.tsx:140  [must] DialogTitleProps: used once (line 142); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.tsx:145  [must] styles: used once (line 151); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.tsx:146  [review] an effect: confirm it syncs with something outside React (not derived state or an event)  — CODING-STYLE § Use effects only to sync with something outside React
+packages/react/src/components/Dialog.tsx:160  [must] styles: used once (line 171); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.tsx:162  [review] an effect: confirm it syncs with something outside React (not derived state or an event)  — CODING-STYLE § Use effects only to sync with something outside React
+packages/react/src/components/Dialog.tsx:182  [must] styles: used once (line 188); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.tsx:195  [must] DialogCloseProps: used once (line 197); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Dialog.tsx:200  [must] styles: used once (line 208); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.stories.tsx:8  [must] meta: used once (line 19); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.test.tsx:10  [must] `as 'dialog' | 'alertdialog'` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Drawer.test.tsx:36  [must] labelledBy: used once (line 38); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.test.tsx:37  [must] describedBy: used once (line 39); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.test.tsx:38  [must] `as string` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Drawer.test.tsx:39  [must] `as string` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Drawer.tsx:18  [must] DrawerPlacement: used once (line 47); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.tsx:19  [must] DrawerRole: used once (line 53); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.tsx:21  [must] DrawerContextValue: used once (line 29); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.tsx:23  [must] titleId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Drawer.tsx:24  [must] descriptionId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Drawer.tsx:83  [must] styles: used once (line 98); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.tsx:84  [must] composeChrome: used once (line 110); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.tsx:85  [must] lightDismiss: used once (line 105); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.tsx:134  [must] styles: used once (line 135); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.tsx:140  [must] DrawerTitleProps: used once (line 142); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.tsx:145  [must] styles: used once (line 151); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.tsx:146  [review] an effect: confirm it syncs with something outside React (not derived state or an event)  — CODING-STYLE § Use effects only to sync with something outside React
+packages/react/src/components/Drawer.tsx:160  [must] styles: used once (line 171); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.tsx:162  [review] an effect: confirm it syncs with something outside React (not derived state or an event)  — CODING-STYLE § Use effects only to sync with something outside React
+packages/react/src/components/Drawer.tsx:182  [must] styles: used once (line 188); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Drawer.tsx:198  [must] styles: used once (line 206); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.stories.tsx:14  [must] fieldDensityCss: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Field.stories.tsx:14  [must] fieldDensityCss: used once (line 85); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.stories.tsx:18  [must] meta: used once (line 35); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.test.tsx:18  [must] `as string` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Field.test.tsx:25  [must] `as string` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Field.tsx:24  [must] helperId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Field.tsx:25  [must] errorId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Field.tsx:29  [must] DescribedBySlot: helper used 2× (lines 32, 96); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:37  [must] toPublicField: helper used 2× (lines 47, 56); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:59  [must] useFieldInternal: helper used 2× (lines 135, 156); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:91  [must] autoId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Field.tsx:91  [must] autoId: used once (line 92); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:93  [must] helperId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Field.tsx:94  [must] errorId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Field.tsx:96  [must] registerDescribedBy: used once (line 105); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:99  [must] describedBy: used once (line 105); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:101  [must] styles: used once (line 107); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:117  [must] FieldLabelProps: used once (line 119); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:122  [must] styles: used once (line 124); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:131  [must] FieldHelperProps: helper used 2× (lines 133, 154); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:136  [must] styles: used once (line 146); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:137  [review] an effect: confirm it syncs with something outside React (not derived state or an event)  — CODING-STYLE § Use effects only to sync with something outside React
+packages/react/src/components/Field.tsx:157  [must] styles: used once (line 168); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:158  [review] an effect: confirm it syncs with something outside React (not derived state or an event)  — CODING-STYLE § Use effects only to sync with something outside React
+packages/react/src/components/Field.tsx:176  [must] FieldControlProps: used once (line 179); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:182  [must] controlClass: used once (line 190); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:198  [must] FieldSelectProps: used once (line 200); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:203  [must] controlClass: used once (line 211); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:219  [must] FieldTextareaProps: used once (line 221); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Field.tsx:224  [must] controlClass: used once (line 232); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Figure.stories.tsx:6  [must] meta: used once (line 7); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Figure.stories.tsx:9  [must] Story: used once (line 11); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Figure.tsx:9  [must] mergeClassName: used once (line 17); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Flex.stories.tsx:16  [must] meta: used once (line 46); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Flex.stories.tsx:149  [must] gapLabelClass: used once (line 157); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Flex.tsx:12  [must] AlignVariant: helper used 2× (lines 16, 40); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Flex.tsx:13  [must] JustifyVariant: helper used 2× (lines 24, 41); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Flex.tsx:14  [must] BorderProp: used once (line 47); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Flex.tsx:16  [must] ALIGN_MAP: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/components/Flex.tsx:16  [must] ALIGN_MAP: used once (line 82); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Flex.tsx:24  [must] JUSTIFY_MAP: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/components/Flex.tsx:24  [must] JUSTIFY_MAP: used once (line 83); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Flex.tsx:33  [must] mergeClassName: used once (line 103); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Flex.tsx:74  [must] resolvedGap: used once (line 81); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Flex.tsx:75  [must] resolvedDirection: used once (line 80); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Flex.tsx:78  [must] recipeClassName: used once (line 104); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Flex.tsx:80  [must] `as FlexOptions['direction']` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Flex.tsx:81  [must] `as FlexOptions['gap']` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Flex.tsx:94  [must] gradientBorderClassName: used once (line 105); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Glyphs.tsx:1  [must] no Glyphs.stories.tsx next to the component  — becket.mdc § Storybook rules
+packages/react/src/components/Grid.stories.tsx:6  [must] meta: used once (line 7); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Grid.stories.tsx:9  [must] Story: helper used 2× (lines 18, 35); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Grid.tsx:7  [must] Span: helper used 2× (lines 18, 42); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Grid.tsx:22  [must] mergeClassName: helper used 2× (lines 50, 69); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Grid.tsx:29  [must] mapResponsive: helper used 2× (lines 53, 70); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Grid.tsx:30  [must] `as unknown` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Grid.tsx:30  [must] `as never` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Grid.tsx:32  [must] `as T` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Grid.tsx:35  [must] `as Record<string, T>` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Grid.tsx:38  [must] `as T` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Grid.tsx:41  [must] toTemplate: used once (line 53); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Grid.tsx:42  [must] toSpan: used once (line 70); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Grid.tsx:53  [must] `as never` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Grid.tsx:54  [must] `as never` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Grid.tsx:70  [must] `as never` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Heading.stories.tsx:3  [prefer] a package import after a relative one; third-party, then absolute, then relative  — CODING-STYLE § Prefer sorted imports
+packages/react/src/components/Heading.stories.tsx:6  [must] meta: used once (line 23); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Heading.tsx:4  [must] HeadingSize: used once (line 7); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Heading.tsx:12  [must] mergeClassName: used once (line 36); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Heading.tsx:27  [must] recipeClassName: used once (line 36); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Hide.stories.tsx:8  [must] meta: used once (line 20); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Hide.stories.tsx:21  [must] Story: helper used 2× (lines 23, 32); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Hide.tsx:12  [must] mergeClassName: used once (line 78); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Hide.tsx:16  [must] HideBreakpoint: used once (line 18); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Hide.tsx:18  [must] asHideBreakpoint: helper used 2× (lines 64, 65); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Hide.tsx:67  [must] recipeClassName: used once (line 78); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Icon.stories.tsx:24  [must] meta: used once (line 36); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Icon.stories.tsx:52  [must] GLYPHS: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/components/Icon.stories.tsx:52  [must] GLYPHS: used once (line 72); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Icon.test.tsx:15  [must] icon: used once (line 16); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Icon.test.tsx:23  [must] icon: used once (line 24); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Icon.tsx:4  [must] IconSize: used once (line 8); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Icon.tsx:15  [must] mergeClassName: used once (line 25); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Image.stories.tsx:7  [must] meta: used once (line 17); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Image.stories.tsx:19  [must] Story: helper used 2× (lines 21, 25); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Image.tsx:4  [must] ImageFit: used once (line 10); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Image.tsx:5  [must] ImageRadius: used once (line 11); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Image.tsx:14  [must] mergeClassName: used once (line 26); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Kbd.stories.tsx:5  [must] meta: used once (line 6); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Kbd.stories.tsx:8  [must] Story: used once (line 10); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Kbd.tsx:6  [must] mergeClassName: used once (line 12); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Link.stories.tsx:7  [must] meta: used once (line 26); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Link.tsx:4  [must] LinkVisual: used once (line 7); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Link.tsx:12  [must] mergeClassName: used once (line 22); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/List.stories.tsx:5  [must] meta: used once (line 15); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/List.tsx:4  [must] ListSpacing: used once (line 10); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/List.tsx:5  [must] ListMarker: used once (line 11); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/List.tsx:14  [must] mergeClassName: used once (line 23); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Mark.stories.tsx:5  [must] meta: used once (line 6); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Mark.stories.tsx:8  [must] Story: used once (line 10); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Mark.tsx:6  [must] mergeClassName: used once (line 12); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.stories.tsx:6  [must] meta: used once (line 17); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.stories.tsx:19  [must] Story: helper used 2× (lines 21, 38); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.test.tsx:10  [must] user: used once (line 22); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.tsx:17  [must] MenuContextValue: used once (line 21); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.tsx:23  [must] mergeClassName: helper used 2× (lines 105, 147); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.tsx:48  [must] next: used once (line 49); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.tsx:52  [must] onMenuKeyDown: a handler inside a component is handleMenuKeyDown  — CODING-STYLE § Name props onX and handlers handleX
+packages/react/src/components/Menu.tsx:52  [must] onMenuKeyDown: used once (line 114); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.tsx:77  [must] items: used once (line 78); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.tsx:91  [must] current: alias of `document.activeElement`, used 1×; write `document.activeElement` where it's used  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.tsx:93  [must] delta: used once (line 94); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.tsx:108  [must] next: alias of `event.currentTarget.open`, used 2×; write `event.currentTarget.open` where it's used  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.tsx:134  [must] MenuItemProps: used once (line 136); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.tsx:138  [must] menu: used once (line 150); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Menu.tsx:139  [must] styles: used once (line 147); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Prose.stories.tsx:8  [must] meta: used once (line 19); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Prose.test.tsx:7  [must] markdownOutput: used once (line 19); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Prose.test.tsx:20  [must] article: used once (line 21); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Prose.tsx:4  [must] ProseSize: used once (line 8); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Prose.tsx:13  [must] mergeClassName: used once (line 23); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Radio.stories.tsx:10  [must] meta: used once (line 30); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Radio.stories.tsx:116  [must] data: used once (line 117); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Radio.tsx:19  [must] RadioGroupContextValue: used once (line 29); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Radio.tsx:31  [must] mergeClassName: helper used 2× (lines 99, 155); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Radio.tsx:35  [must] fieldRadioSize: used once (line 74); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Radio.tsx:70  [must] autoName: used once (line 72); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Radio.tsx:75  [must] describedBy: used once (line 98); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Radio.tsx:78  [must] ctx: used once (line 92); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Radio.tsx:136  [must] autoId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Radio.tsx:136  [must] autoId: used once (line 138); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Radio.tsx:138  [must] inputId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Radio.tsx:139  [must] descriptionId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Radio.tsx:140  [must] name: used once (line 163); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Radio.tsx:142  [must] invalid: alias of `group?.invalid`, used 1×; write `group?.invalid` where it's used  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Radio.tsx:143  [must] size: used once (line 151); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Select.stories.tsx:15  [must] meta: used once (line 37); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Separator.stories.tsx:7  [must] meta: used once (line 25); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Separator.tsx:4  [must] SeparatorOrientation: used once (line 7); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Separator.tsx:12  [must] mergeClassName: used once (line 22); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SimpleGrid.stories.tsx:6  [must] meta: used once (line 19); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SimpleGrid.tsx:9  [must] ColumnCount: helper used 2× (lines 19, 20); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SimpleGrid.tsx:11  [must] mergeClassName: used once (line 121); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SimpleGrid.tsx:19  [must] resolveGridTemplateColumns: used once (line 53); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SimpleGrid.tsx:20  [must] `as ColumnCount` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/SimpleGrid.tsx:37  [must] buildGridStyles: used once (line 97); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SimpleGrid.tsx:96  [must] recipeClassName: used once (line 121); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SimpleGrid.tsx:100  [must] `as GridOptions['gap']` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/SimpleGrid.tsx:101  [must] `as GridOptions['rowGap']` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/SimpleGrid.tsx:102  [must] `as GridOptions['columnGap']` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/SiteKit.test.tsx:72  [must] img: used once (line 73); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SiteKit.test.tsx:75  [must] ignore without a comment above saying why  — CODING-STYLE § Must explain when ignoring a lint or TypeScript rule
+packages/react/src/components/SiteKit.test.tsx:76  [must] missingAlt: used once (line 77); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SiteKit.test.tsx:89  [must] `as HTMLImageElement` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/SiteKit.test.tsx:129  [must] css: used once (line 141); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SiteKit.test.tsx:138  [must] classes: used once (line 139); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SiteKit.test.tsx:139  [must] missing: used once (line 142); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SkipLink.stories.tsx:5  [must] meta: used once (line 6); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SkipLink.stories.tsx:5  [prefer] story group "Accessibility" isn't one of Layout, Typography, Buttons, Forms, Overlays, Disclosure, Feedback, Data Display, Navigation  — becket.mdc § Storybook rules
+packages/react/src/components/SkipLink.stories.tsx:8  [must] Story: used once (line 11); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/SkipLink.tsx:6  [must] mergeClassName: used once (line 16); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Spinner.stories.tsx:6  [must] meta: used once (line 17); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Spinner.stories.tsx:19  [must] Story: helper used 2× (lines 21, 23); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Spinner.tsx:4  [must] SpinnerSize: used once (line 7); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Spinner.tsx:10  [must] mergeClassName: used once (line 22); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Stack.stories.tsx:14  [must] meta: used once (line 30); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Stack.tsx:12  [must] AlignVariant: helper used 2× (lines 16, 40); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Stack.tsx:13  [must] JustifyVariant: helper used 2× (lines 24, 41); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Stack.tsx:14  [must] BorderProp: used once (line 42); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Stack.tsx:16  [must] ALIGN_MAP: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/components/Stack.tsx:16  [must] ALIGN_MAP: used once (line 73); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Stack.tsx:24  [must] JUSTIFY_MAP: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/components/Stack.tsx:24  [must] JUSTIFY_MAP: used once (line 74); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Stack.tsx:33  [must] mergeClassName: used once (line 89); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Stack.tsx:65  [must] resolvedGap: used once (line 72); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Stack.tsx:66  [must] resolvedDirection: used once (line 71); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Stack.tsx:69  [must] recipeClassName: used once (line 90); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Stack.tsx:71  [must] `as StackOptions['direction']` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Stack.tsx:72  [must] `as StackOptions['gap']` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Stack.tsx:80  [must] gradientBorderClassName: used once (line 91); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Switch.stories.tsx:5  [must] meta: used once (line 22); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Switch.stories.tsx:64  [must] on: booleans start with is, has, does, should or can  — CODING-STYLE § Name consistency › Boolean
+packages/react/src/components/Switch.tsx:14  [must] SwitchSize: used once (line 20); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Switch.tsx:25  [must] mergeClassName: used once (line 75); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Switch.tsx:46  [must] generatedId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Switch.tsx:46  [must] generatedId: used once (line 47); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Switch.tsx:52  [must] setChecked: used once (line 62); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Switch.tsx:60  [must] toggle: helper used 2× (lines 79, 86); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Table.stories.tsx:6  [must] meta: used once (line 17); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Table.stories.tsx:19  [must] Story: helper used 2× (lines 21, 54); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Table.tsx:6  [must] TableSize: helper used 2× (lines 8, 15); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Table.tsx:20  [must] styles: used once (line 23); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Table.tsx:37  [must] styles: used once (line 38); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Table.tsx:45  [must] styles: used once (line 46); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Table.tsx:53  [must] styles: used once (line 54); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Table.tsx:61  [must] styles: used once (line 62); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Table.tsx:69  [must] styles: used once (line 70); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Table.tsx:77  [must] styles: used once (line 78); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Table.tsx:85  [must] styles: used once (line 86); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.stories.tsx:5  [must] meta: used once (line 12); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.stories.tsx:14  [must] Story: used once (line 16); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.tsx:17  [must] TabsContextValue: used once (line 23); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.tsx:20  [must] baseId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Tabs.tsx:25  [must] useTabs: helper used 2× (lines 128, 159); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.tsx:49  [must] baseId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Tabs.tsx:50  [must] styles: used once (line 64); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.tsx:52  [must] setValue: used once (line 58); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.tsx:57  [must] ctx: used once (line 63); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.tsx:76  [must] styles: used once (line 113); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.tsx:78  [must] onListKeyDown: a handler inside a component is handleListKeyDown  — CODING-STYLE § Name props onX and handlers handleX
+packages/react/src/components/Tabs.tsx:78  [must] onListKeyDown: used once (line 114); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.tsx:103  [must] delta: used once (line 104); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.tsx:122  [must] TabProps: used once (line 126); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.tsx:129  [must] styles: used once (line 141); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.tsx:153  [must] TabPanelProps: used once (line 157); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tabs.tsx:160  [must] styles: used once (line 170); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tag.stories.tsx:7  [must] tagDensityCss: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Tag.stories.tsx:7  [must] tagDensityCss: used once (line 114); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tag.stories.tsx:11  [must] meta: used once (line 37); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tag.tsx:10  [must] TagSize: used once (line 14); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tag.tsx:11  [must] TagBorderRadius: used once (line 16); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tag.tsx:22  [must] mergeClassName: used once (line 49); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tag.tsx:41  [must] recipeClassName: used once (line 49); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tag.tsx:42  [must] colorVars: used once (line 48); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Text.stories.tsx:5  [must] meta: used once (line 19); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Text.tsx:4  [must] BaseElement: used once (line 6); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Text.tsx:11  [must] mergeClassName: used once (line 20); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Text.tsx:17  [must] `as ElementType` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Text.tsx:18  [must] `as JsxStyleProps` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Text.tsx:18  [must] styleClassName: used once (line 20); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Text.tsx:20  [must] `as any` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Text.tsx:20  [must] `any` (and `as any`, even with a comment); use `unknown` and narrow it, or write the real type  — CODING-STYLE § Must not use any
+packages/react/src/components/Textarea.stories.tsx:6  [must] meta: used once (line 28); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Textarea.tsx:35  [must] rowCount: used once (line 39); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/TextField.stories.tsx:5  [prefer] a package import after a relative one; third-party, then absolute, then relative  — CODING-STYLE § Prefer sorted imports
+packages/react/src/components/TextField.stories.tsx:7  [must] meta: used once (line 28); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.stories.tsx:6  [must] meta: used once (line 22); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.stories.tsx:24  [must] Story: helper used 2× (lines 26, 44); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.test.tsx:52  [must] tip: used once (line 53); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.test.tsx:60  [must] user: used once (line 72); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:41  [must] OFFSET_PX: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/components/Tooltip.tsx:43  [must] NATIVE_FOCUSABLE: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/components/Tooltip.tsx:43  [must] NATIVE_FOCUSABLE: used once (line 87); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:45  [must] TriggerProps: helper used 2× (lines 83, 229); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:56  [must] mergeClassName: used once (line 269); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:60  [must] assignRef: helper used 2× (lines 71, 160); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:68  [must] mergeRefs: used once (line 235); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:83  [must] triggerNeedsTabIndex: used once (line 241); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:96  [prefer] 3 positional parameters; pass one object  — CODING-STYLE § Prefer object parameters when there are more than 2
+packages/react/src/components/Tooltip.tsx:96  [must] computePosition: used once (line 206); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:129  [prefer] 3 positional parameters; pass one object  — CODING-STYLE § Prefer object parameters when there are more than 2
+packages/react/src/components/Tooltip.tsx:129  [must] clampToViewport: used once (line 207); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:131  [must] maxLeft: used once (line 135); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:132  [must] maxTop: used once (line 134); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:150  [must] tipId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/components/Tooltip.tsx:184  [review] an effect: confirm it syncs with something outside React (not derived state or an event)  — CODING-STYLE § Use effects only to sync with something outside React
+packages/react/src/components/Tooltip.tsx:186  [review] an effect: confirm it syncs with something outside React (not derived state or an event)  — CODING-STYLE § Use effects only to sync with something outside React
+packages/react/src/components/Tooltip.tsx:188  [must] onKey: a handler inside a component is handleKey  — CODING-STYLE § Name props onX and handlers handleX
+packages/react/src/components/Tooltip.tsx:188  [must] onKey: helper used 2× (lines 192, 196); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:191  [must] onScroll: a handler inside a component is handleScroll  — CODING-STYLE § Name props onX and handlers handleX
+packages/react/src/components/Tooltip.tsx:202  [review] an effect: confirm it syncs with something outside React (not derived state or an event)  — CODING-STYLE § Use effects only to sync with something outside React
+packages/react/src/components/Tooltip.tsx:204  [must] trigger: used once (line 206); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:210  [must] tipStyle: used once (line 270); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:229  [must] `as ReactElement<TriggerProps>` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Tooltip.tsx:230  [must] `as { ref?: Ref<HTMLElement> }` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/components/Tooltip.tsx:230  [must] childRef: used once (line 235); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/Tooltip.tsx:231  [must] describedBy: used once (line 240); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/VisuallyHidden.stories.tsx:6  [must] meta: used once (line 7); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/VisuallyHidden.stories.tsx:6  [prefer] story group "Accessibility" isn't one of Layout, Typography, Buttons, Forms, Overlays, Disclosure, Feedback, Data Display, Navigation  — becket.mdc § Storybook rules
+packages/react/src/components/VisuallyHidden.stories.tsx:9  [must] Story: used once (line 12); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/components/VisuallyHidden.tsx:8  [must] mergeClassName: used once (line 15); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/gradientBorder.ts:33  [must] getGradientBorderClassName: drop the get prefix and name what it does (select, find, format, to…)  — CODING-STYLE § Avoid implied keywords in function names
+packages/react/src/helpers/labelColors.ts:3  [must] LABEL_COLOR_VARS: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/helpers/labelColors.ts:20  [must] VISUAL_DEFAULTS: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/helpers/labelColors.ts:20  [must] VISUAL_DEFAULTS: used once (line 55); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/labelColors.ts:43  [must] GRADIENT_DEFAULTS: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/helpers/labelColors.ts:43  [must] GRADIENT_DEFAULTS: used once (line 66); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/labelColors.ts:50  [prefer] 3 positional parameters; pass one object  — CODING-STYLE § Prefer object parameters when there are more than 2
+packages/react/src/helpers/labelColors.ts:55  [must] defaults: used once (line 56); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/labelColors.ts:71  [must] `as CSSProperties` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/helpers/nativeDialog.ts:11  [must] NativeDialogOptions: used once (line 29); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/nativeDialog.ts:34  [must] titleId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/helpers/nativeDialog.ts:35  [must] descriptionId: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+packages/react/src/helpers/nativeDialog.ts:38  [must] registerTitle: used once (line 95); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/nativeDialog.ts:42  [must] registerDescription: used once (line 96); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/nativeDialog.ts:46  [must] setOpen: used once (line 90); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/nativeDialog.ts:54  [review] an effect: confirm it syncs with something outside React (not derived state or an event)  — CODING-STYLE § Use effects only to sync with something outside React
+packages/react/src/helpers/nativeDialog.ts:71  [must] focusInitial: used once (line 80); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/nativeDialog.ts:73  [must] marked: used once (line 75); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/nativeDialog.ts:74  [must] footerBtn: used once (line 75); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/nativeDialog.ts:75  [must] target: used once (line 76); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/nativeDialog.ts:79  [must] frame: used once (line 82); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/nativeDialog.ts:85  [must] labelledBy: used once (line 93); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/nativeDialog.ts:86  [must] describedBy: used once (line 94); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/nativeDialog.ts:106  [must] `as MutableRefObject<T | null>` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/helpers/responsive.ts:33  [must] BREAKPOINTS: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/helpers/responsive.ts:36  [must] SEMANTIC_BREAKPOINTS: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/helpers/responsive.ts:44  [must] SEMANTIC_TO_BREAKPOINT: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/helpers/responsive.ts:52  [must] SPACING_SCALE: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/helpers/responsive.ts:75  [must] `as readonly string[]` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/helpers/responsive.ts:79  [must] `as readonly string[]` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/helpers/responsive.ts:97  [must] `as Record<string, unknown>` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/helpers/responsive.ts:120  [must] `as T` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/helpers/responsive.ts:130  [must] `as T` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/helpers/responsive.ts:133  [must] `as T` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/helpers/responsive.ts:136  [must] `as Record<string, unknown>` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/helpers/responsive.ts:136  [must] withBreakpoints: used once (line 138); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/responsive.ts:141  [must] `as T` without a comment saying why  — CODING-STYLE § Prefer inference inside, explicit types at boundaries
+packages/react/src/helpers/storybookImages.ts:5  [prefer] 3 positional parameters; pass one object  — CODING-STYLE § Prefer object parameters when there are more than 2
+packages/react/src/helpers/storybookImages.ts:5  [must] svg: helper used 2× (lines 10, 14); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/react/src/helpers/storybookImages.ts:10  [must] SAMPLE_LANDSCAPE: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/react/src/helpers/storybookImages.ts:14  [must] SAMPLE_PORTRAIT: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/preset/index.ts:60  [must] BECKET_PREFIX: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/recipes/checkbox.recipe.ts:3  [must] checkMark: used once (line 34); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/recipes/hide.recipe.ts:4  [must] BREAKPOINTS: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/recipes/hide.recipe.ts:4  [must] BREAKPOINTS: used once (line 25); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/recipes/prose.recipe.ts:20  [must] elementRules: used once (line 142); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/recipes/radio.recipe.ts:3  [must] radioDot: used once (line 52); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/recipes/select.recipe.ts:4  [must] chevron: used once (line 16); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/scripts/bundle-css.mjs:6  [must] styles: used once (line 22); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/scripts/bundle-css.mjs:7  [must] theme: used once (line 22); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/scripts/bundle-css.mjs:9  [must] header: used once (line 22); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/contrast.test.mjs:21  [must] block: used once (line 36); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/index.mjs:7  [must] PREFIX: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/index.mjs:7  [must] PREFIX: used once (line 50); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/index.mjs:9  [must] COLOR_FLAT: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/index.mjs:20  [must] COLOR_THEMED: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/index.mjs:32  [must] NEUTRAL_STEPS: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/index.mjs:33  [must] RADII: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/index.mjs:35  [must] FONT_SIZES: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/index.mjs:37  [must] SPACING: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/index.mjs:38  [must] FONTS: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/index.mjs:39  [must] DENSITY_SIZES: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/index.mjs:45  [must] kebab: used once (line 50); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/index.mjs:53  [prefer] 3 positional parameters; pass one object  — CODING-STYLE § Prefer object parameters when there are more than 2
+packages/tokens/theme/index.mjs:61  [prefer] 3 positional parameters; pass one object  — CODING-STYLE § Prefer object parameters when there are more than 2
+packages/tokens/theme/index.mjs:66  [prefer] 4 positional parameters; pass one object  — CODING-STYLE § Prefer object parameters when there are more than 2
+packages/tokens/theme/index.mjs:66  [must] pushThemed: used once (line 89); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/index.mjs:76  [prefer] 3 positional parameters; pass one object  — CODING-STYLE § Prefer object parameters when there are more than 2
+packages/tokens/theme/index.mjs:76  [must] colorDecls: used once (line 139); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/index.mjs:100  [must] densityDecls: used once (line 174); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/index.mjs:117  [must] sheet: helper used 2× (lines 176, 176); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/index.mjs:183  [must] BECKET_PUBLIC_COLOR_KEYS: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/index.mjs:184  [must] BECKET_PUBLIC_NEUTRAL_STEPS: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/index.test.mjs:62  [must] built: used once (line 64); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/index.test.mjs:90  [must] pkg: used once (line 91); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/index.test.mjs:107  [must] css: used once (line 108); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/scale.test.mjs:15  [must] FIBONACCI: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/scale.test.mjs:16  [must] SEMANTIC_SPACING: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/scale.test.mjs:16  [must] SEMANTIC_SPACING: used once (line 22); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/scale.test.mjs:18  [must] TEXT_SPACING: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/scale.test.mjs:20  [must] LAYOUT_SIZES: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/scale.test.mjs:20  [must] LAYOUT_SIZES: used once (line 23); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/scale.test.mjs:21  [must] ALLOWED: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/scale.test.mjs:21  [must] ALLOWED: used once (line 28); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/scale.test.mjs:27  [must] offScale: used once (line 30); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/scale.test.mjs:34  [must] defined: used once (line 37); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/scale.test.mjs:35  [must] missing: used once (line 38); inline it  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/scale.test.mjs:42  [must] HAIRLINE_PROPERTY: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/scale.test.mjs:42  [must] HAIRLINE_PROPERTY: used once (line 49); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/scale.test.mjs:44  [must] TARGET_MINIMUM: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+packages/tokens/theme/scale.test.mjs:44  [must] TARGET_MINIMUM: used once (line 50); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+packages/tokens/theme/scale.test.mjs:47  [must] raw: used once (line 53); inline it  — CODING-STYLE § Avoid hasty abstraction
+scripts/assert-next-example.mjs:107  [must] hasCss: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+scripts/assert-next-example.mjs:107  [must] hasCss: used once (line 110); inline it  — CODING-STYLE § Avoid hasty abstraction
+scripts/assert-next-example.mjs:120  [must] packedCssPath: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+scripts/assert-next-example.mjs:124  [must] packedCss: initialisms keep one case (userID, inviteURL, parseHTML)  — CODING-STYLE § Initialisms
+scripts/check-publishable.mjs:15  [must] PUBLISHABLE: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+scripts/check-publishable.mjs:19  [must] readPackage: helper used 2× (lines 29, 33); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+scripts/check-publishable.mjs:33  [must] rootPackage: used once (line 37); inline it  — CODING-STYLE § Avoid hasty abstraction
+scripts/check-publishable.mjs:34  [must] privateNames: used once (line 53); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
+scripts/pack-check.mjs:26  [must] json: used once (line 27); inline it  — CODING-STYLE § Avoid hasty abstraction
+scripts/pack-check.mjs:27  [must] files: used once (line 28); inline it  — CODING-STYLE § Avoid hasty abstraction
+scripts/pack-check.mjs:31  [prefer] 3 positional parameters; pass one object  — CODING-STYLE § Prefer object parameters when there are more than 2
+scripts/pack-check.mjs:40  [prefer] 3 positional parameters; pass one object  — CODING-STYLE § Prefer object parameters when there are more than 2
+scripts/pack-check.mjs:56  [must] assertConsumer: used once (line 235); inline it  — CODING-STYLE § Avoid hasty abstraction
+scripts/pack-check.mjs:79  [must] probe: used once (line 82); inline it  — CODING-STYLE § Avoid hasty abstraction
+scripts/pack-check.mjs:181  [must] requests: used once (line 188); inline it  — CODING-STYLE § Avoid hasty abstraction
+scripts/prepare-next-example.mjs:16  [must] TOKENS_TGZ: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+scripts/prepare-next-example.mjs:16  [must] TOKENS_TGZ: used once (line 41); inline it  — CODING-STYLE § Avoid hasty abstraction
+scripts/prepare-next-example.mjs:17  [must] REACT_TGZ: UPPER_SNAKE_CASE is for environment variables; use camelCase  — CODING-STYLE § Name consistency
+scripts/prepare-next-example.mjs:17  [must] REACT_TGZ: used once (line 42); inline it  — CODING-STYLE § Avoid hasty abstraction
+scripts/prepare-next-example.mjs:19  [must] pack: helper used 2× (lines 41, 42); the guide abstracts at the third copy, so write it out at each use or restructure so it's needed once  — CODING-STYLE § Avoid hasty abstraction
+scripts/prepare-next-example.mjs:20  [must] before: used once (line 25); inline it (the use is inside a loop or callback: keep it only if inlining would repeat real work, and say so in a comment)  — CODING-STYLE § Avoid hasty abstraction
