@@ -1,5 +1,30 @@
 # @becket-ui/tokens
 
+## 0.8.0
+
+### Minor Changes
+
+- d54b0a1: Add `Breadcrumb` and `Steps`, the rest of the navigation basics. Both render without
+  client JS.
+
+  - `Breadcrumb` (`size`, `separator: chevron | slash`) is a `nav` landmark around an ordered list
+    of `BreadcrumbItem`s. An item is a link (`href`, `as` for a router link); `current` marks the
+    page the user is on with `aria-current="page"`, as plain text when it has no `href`. Separators
+    are drawn in CSS, so screen readers don't read them.
+  - `Steps` (`orientation`, `size`) is a display-only list of `Step`s. Each step sets its own
+    `status` (`complete | current | upcoming`); the current one gets `aria-current="step"`, and the
+    others announce "(completed)" or "(not started)" after the title (`statusLabel` translates it).
+
+  The `breadcrumb` and `steps` slot recipes ship in `@becket-ui/tokens`.
+
+- a5c76b2: `Prose` now leaves embedded Becket components alone. Any element inside an article that
+  carries a Becket class (a `Card`, `Alert`, `Code`…), and everything inside it, keeps its own
+  styles with no wrapper, so a list or paragraph inside a card no longer picks up the article's
+  margins and markers. `data-not-prose` still opts out markup that isn't Becket's.
+
+  If you wrapped Becket components in `data-not-prose`, the wrapper still works and is no longer
+  needed. If you relied on Prose styling markup inside a Becket component, style it there instead.
+
 ## 0.7.0
 
 ### Minor Changes
