@@ -24,6 +24,15 @@
     },
     "Box": {
       "cardMode": "column"
+    },
+    "Steps": {
+      "cardMode": "column"
+    },
+    "Prose": {
+      "viewport": "900x1200"
+    },
+    "AspectRatio": {
+      "viewport": "900x1200"
     }
   },
   "readmeHeader": ".design-sync/conventions.md",

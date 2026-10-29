@@ -1,6 +1,7 @@
 # design-sync notes — Becket UI
 
 ## Scope
+- 2026-10-29: re-sync to 46 components. Added (graded match): AspectRatio, Avatar, Blockquote, Breadcrumb, Center, Code, Figure, Grid, Image, Kbd, List, Mark, Pagination, Prose, SkipLink, Steps, VisuallyHidden. Re-graded after story changes: Flex, Hide, Icon, SimpleGrid, Stack, Tooltip, Button. Converter: design-sync skill bundled with Claude Code 2.1.309 (pipeline churn spot-checked: Drawer, Separator, Card, Table, Badge, Textarea, Field all still match).
 - 2026-10-13: full kit synced (the 5-component pilot plus Flex, Tag, Radio, TextField, Badge, Checkbox, Switch, SimpleGrid, Heading, Select, Textarea, Separator, Link, Text, Hide, Drawer, Tooltip, Spinner, Table, Menu, Tabs). The pilot's `titleMap` null exclusions were removed.
 
 ## Repo facts
@@ -24,7 +25,11 @@
 - [GENERAL] Preview cards paint `body{background:#fff}` (converter card chrome, app-contract - not forkable), so dark-theme text (labels, helper text) was white-on-white -> the Storybook decorator in `apps/docs/.storybook/preview.ts` now wraps every story in a div painted with `--beckui--colors-background` / `--beckui--colors-text` (+0.75rem padding). Do NOT switch to `cfg.provider` for this: it would write "Wrap the tree in <X>" into every prompt.md, and Becket needs no provider.
 - Sheet thumbnails downscale 1px borders and can make them look brighter - check raw/ PNGs before grading a border as a mismatch.
 - Box: Backgrounds and Radii rows are wider than a grid cell -> `[GRID_OVERFLOW] wide` -> `cfg.overrides.Box.cardMode: "column"` (presentation only; grades carry).
-- Button has 7 stories since As link (MAV-111); compare caps at 6 by default, so pass `--max-stories 7` when re-capturing Button.
+- Story caps: Button has 7 stories, Pagination 8, Flex 9; compare caps at 6, so pass `--max-stories 9` when re-capturing them.
+- Prose (Article) and AspectRatio (Ratios) stories are taller than the default 700px capture, which cut off the preview side -> `cfg.overrides.<Name>.viewport: "900x1200"`. Grade only once the whole story is visible.
+- Steps: With Descriptions is wider than a grid cell -> `[GRID_OVERFLOW]` -> `cfg.overrides.Steps.cardMode: "column"` (presentation only).
+- A bare `package-build.mjs` run wipes `ds-bundle/_screenshots/`; grades in `.cache/compare/` survive, so re-run compare for the components still to grade.
+- Standalone Claude Design closes by 2026-12-14 (Claude Design now lives in Claude); where this project lives afterwards is an open decision on MAV-73.
 - Switch: Sizes row is wider than a grid cell -> `[GRID_OVERFLOW] wide` -> `cfg.overrides.Switch.cardMode: "column"`. No other component flagged `[GRID_OVERFLOW]` or `[PORTAL?]`.
 - Dialog, Drawer, Menu: the original stories start closed, so cards showed only the trigger -> added an `Open` story to each + `cardMode: "single"`, `primaryStory: "Open"`. compare.mjs crops the Storybook side to `#storybook-root`, which excludes top-layer overlays (`<dialog>` modal, `<details>` popup), so grade Open stories against a full-viewport Storybook capture at 900x700. Tooltip has no open prop; its stories stay resting triggers.
 - Hide: compare captures below the `lg` breakpoint, so `below="desktop"` content is hidden on both sides and Hide Below Desktop shows only the mobile line. Both panels agree. The desktop-visible branch is not in these shots.
@@ -39,4 +44,4 @@
 - Card "elevated" shadows spill outside the decorator surface onto white card chrome (framing, graded match).
 - Fonts come from `@fontsource/*@5.3.0` devDeps of apps/docs; bumping them changes shipped font bytes (zero-regrade, re-upload).
 - Cambria serif substitute accepted by Miguel 2026-10-13 (unused by Becket).
-- Converter toolchain: design-sync skill bundled with Claude Code 2.1.295; Storybook 10; React 19.3.
+- Converter toolchain: design-sync skill bundled with Claude Code 2.1.309; Storybook 10; React 19.3.
