@@ -5,7 +5,8 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
 
-import { checker, root } from './harness.mjs';
+import { rules as engineRules } from '../../../../packages/cli/src/rules/index.mjs';
+import { root } from './harness.mjs';
 import { rules } from './rules.fixtures.mjs';
 
 // style-check keep: a lookup table read inside the loop below; inlined, every pass would rebuild it.
@@ -15,13 +16,7 @@ const guides = {
   'becket.mdc': '.cursor-config/becket.mdc',
   'becket-guides': '.cursor/skills/becket-guides/SKILL.md',
 };
-const labels = [
-  ...new Set(
-    [...readFileSync(checker, 'utf8').matchAll(/rule(?::|\s*=)\s*'([^']+ § [^']+)'/g)].map(
-      ([, label]) => label,
-    ),
-  ),
-];
+const labels = engineRules.map(({ guide }) => guide);
 
 describe('rule labels', () => {
   it('finds every rule label in the checker', () => {

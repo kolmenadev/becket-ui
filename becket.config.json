@@ -1,0 +1,5 @@
+{
+  "preset": "becket-library",
+  "appCode": ["apps/next-example/**", "**/*.examples.tsx"],
+  "components": ["packages/react/src/components/**/*.tsx"]
+}

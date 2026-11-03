@@ -2,11 +2,11 @@
 // marker, the two commit gates, the Claude Code hook's checkout resolution and hand-off, and
 // GitHub annotations.
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { cpSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { after, describe, it } from 'node:test';
 
-import { check, checker, git, makeRepo, removeRepo, write } from './harness.mjs';
+import { check, checker, git, makeRepo, removeRepo, root, write } from './harness.mjs';
 
 const repos = [];
 after(() => repos.forEach(removeRepo));
@@ -216,13 +216,16 @@ describe('hook checkout', () => {
 
   it("hands off to the committing checkout's own checker", () => {
     const target = staged();
-    const [shebang, ...rest] = readFileSync(checker, 'utf8').split('\n');
+    // The checkout's own copy is the entry script and the engine it imports.
+    cpSync(join(root, 'packages/cli/src'), join(target, 'packages/cli/src'), { recursive: true });
+    const [shebang, ...rest] = readFileSync(join(root, 'packages/cli/src/cli.mjs'), 'utf8').split(
+      '\n',
+    );
     write(target, {
-      '.cursor/skills/becket-guides/scripts/style-check.mjs': [
-        shebang,
-        'console.error("target copy ran");',
-        ...rest,
-      ].join('\n'),
+      '.cursor/skills/becket-guides/scripts/style-check.mjs': readFileSync(checker, 'utf8'),
+      'packages/cli/src/cli.mjs': [shebang, 'console.error("target copy ran");', ...rest].join(
+        '\n',
+      ),
     });
     const result = hook({ cwd: target, command: 'git commit -m x', target });
     assert.equal(result.output.match(/target copy ran/g)?.length, 1);

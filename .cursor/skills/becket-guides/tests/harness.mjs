@@ -36,9 +36,8 @@ export function write(repo, files) {
 }
 
 /**
- * A git repo on `main` with `files` committed. The checker loads TypeScript through
- * `packages/tokens` (MAV-171 removes that), so the repo gets a stub of that package linked to the
- * real one's dependencies.
+ * A git repo on `main` with `files` committed, set up like Becket: its `becket.config.json`, and
+ * the TypeScript the checker loads from the checked project, linked from this repo.
  */
 export function makeRepo(files = {}, prefix = 'style-check-') {
   const repo = mkdtempSync(join(tmpdir(), prefix));
@@ -49,10 +48,14 @@ export function makeRepo(files = {}, prefix = 'style-check-') {
   git(repo, 'config', 'core.hooksPath', '/dev/null');
   // A global commit.gpgsign would make every commit here prompt or fail.
   git(repo, 'config', 'commit.gpgsign', 'false');
-  write(repo, { 'packages/tokens/package.json': '{ "name": "stub" }\n', ...files });
+  write(repo, {
+    'becket.config.json': readFileSync(join(root, 'becket.config.json'), 'utf8'),
+    ...files,
+  });
+  mkdirSync(join(repo, 'node_modules/@typescript'), { recursive: true });
   symlinkSync(
-    join(root, 'packages/tokens/node_modules'),
-    join(repo, 'packages/tokens/node_modules'),
+    join(root, 'node_modules/@typescript/typescript6'),
+    join(repo, 'node_modules/@typescript/typescript6'),
   );
   git(repo, 'add', '-A');
   git(repo, 'commit', '-q', '-m', 'base');

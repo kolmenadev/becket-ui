@@ -28,7 +28,6 @@ it(`reports the same findings on ${pinned.slice(0, 7)} as it did`, () => {
   });
   assert.equal(archive.status, 0, `can't read pinned commit ${pinned}: ${archive.stderr}`);
   assert.equal(spawnSync('tar', ['-x', '-C', repo], { input: archive.stdout }).status, 0);
-  // makeRepo linked packages/tokens/node_modules; the pinned tree brings the real package.json.
   git(repo, 'add', '-A');
   git(repo, 'commit', '-q', '-m', 'pinned tree');
   const { status, output, findings } = check({ repo });

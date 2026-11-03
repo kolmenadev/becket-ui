@@ -1,0 +1,18 @@
+{
+  "name": "@becket-ui/cli",
+  "version": "0.8.0",
+  "private": true,
+  "description": "Becket's coding-style check: the becket-ui command.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kolmena de Software",
+  "bin": {
+    "becket-ui": "src/cli.mjs"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "peerDependencies": {
+    "typescript": ">=5"
+  }
+}

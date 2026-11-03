@@ -20,7 +20,8 @@ style, so they never stand in for this check.
 
 Two halves:
 
-1. **Mechanical**: `scripts/style-check.mjs` checks the rules a parser can (single-use names,
+1. **Mechanical**: `scripts/style-check.mjs` (the engine in `packages/cli`, with Becket's
+   `becket.config.json`) checks the rules a parser can (single-use names,
    aliases, helpers below the Rule of 3, naming, casts, `any`, ignores, TODOs, keys, handlers,
    literal colors and lengths in app code, raw elements in app code, missing stories). It's fast, so
    run it first and run it last.
@@ -52,7 +53,7 @@ colors". A branch, commit or PR adds the branch, remotes and versioning rules.
 
 ## 3. Mechanical pass
 
-From the repo root (the script needs `@typescript/typescript6`, which the tokens package installs):
+From the repo root (the check loads `@typescript/typescript6` from the root's dependencies):
 
 ```bash
 node .cursor/skills/becket-guides/scripts/style-check.mjs --paths packages/mcp/src
@@ -162,13 +163,19 @@ record of the findings they've seen, so a commit that passed one passes the othe
 
 ## 8. Changing the checker
 
+The checker is `packages/cli/src` (MAV-171): the engine (`engine.mjs`), one module per rule
+(`rules/`, each with an id and its guide section), the presets (`presets.mjs`) and the config
+loader (`config.mjs`). Becket's own config is `becket.config.json` at the repo root.
+
 `tests/` pins what the checker does (MAV-170). Run `pnpm test:style-check` (also part of
-`pnpm test` and CI) after any change to `scripts/style-check.mjs`:
+`pnpm test` and CI) after any change to it:
 
 - `rules.fixtures.mjs`: an `invalid` and a `valid` sample per rule. A new rule gets its fixtures
   here, and `guides.test.mjs` fails until it does.
 - `modes.test.mjs`: `--staged`, `--base`, `--paths`, the keep marker, both commit gates, the
   hook's checkout resolution and hand-off, and GitHub annotations, in throwaway git repos.
+- `config.test.mjs`: a project without a config gets `coding-style` only; presets, paths, rule
+  levels and config errors.
 - `guides.test.mjs`: every rule label points to a section that exists, and every ⚙ item in
   `references/checklist.md` maps to a rule. A new ⚙ item needs an entry in its `checkedBy` table.
 - `repo-report.test.mjs`: the `--all` report on a pinned commit of this repo, byte for byte
