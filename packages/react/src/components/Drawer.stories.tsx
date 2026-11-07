@@ -46,6 +46,19 @@ export const Default: Story = {
   },
 };
 
+/**
+ * Windows contrast themes drop the shadow ring: Tab here and the focus outline must still show.
+ * No footer, so focus starts on the drawer and the first Tab reaches Close.
+ */
+export const ForcedColors: Story = {
+  render: (args) => (
+    <Drawer {...args} defaultOpen title="Filters">
+      <Text>Close keeps a visible focus outline in a contrast theme.</Text>
+    </Drawer>
+  ),
+  parameters: { forcedColors: true },
+};
+
 export const Start: Story = {
   ...Default,
   args: { placement: 'start' },

@@ -23,7 +23,11 @@ export const breadcrumb: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe(
       textDecoration: 'none',
       borderRadius: 'sm',
       _hover: { color: 'text', textDecoration: 'underline' },
-      _focusVisible: { outline: 'none', boxShadow: 'outline' },
+      _focusVisible: {
+        outline: '2px solid transparent',
+        outlineOffset: '2px',
+        boxShadow: 'outline',
+      },
       '&[aria-current="page"]': { color: 'text', fontWeight: 'medium' },
     },
   },

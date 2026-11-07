@@ -34,6 +34,9 @@ export const Default: Story = {
   },
 };
 
+/** Windows contrast themes drop the shadow ring: Tab here and the focus outline must still show. */
+export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
+
 /** Native `<details open>`: shows the item list without a click. */
 export const Open: Story = {
   render: function OpenMenuDemo(args: MenuProps) {

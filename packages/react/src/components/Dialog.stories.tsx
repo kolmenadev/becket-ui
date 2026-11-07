@@ -47,6 +47,19 @@ export const Default: Story = {
   },
 };
 
+/**
+ * Windows contrast themes drop the shadow ring: Tab here and the focus outline must still show.
+ * No footer, so focus starts on the dialog and the first Tab reaches Close.
+ */
+export const ForcedColors: Story = {
+  render: () => (
+    <Dialog defaultOpen title="Confirm">
+      <Text>Close keeps a visible focus outline in a contrast theme.</Text>
+    </Dialog>
+  ),
+  parameters: { forcedColors: true },
+};
+
 export const Alert: Story = {
   render: function AlertDialogDemo() {
     const [open, setOpen] = useState(false);

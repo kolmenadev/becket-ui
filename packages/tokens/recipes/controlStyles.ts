@@ -13,8 +13,12 @@ export const controlChrome = {
   outline: 'none',
   transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
   _placeholder: { color: 'muted' },
+  // Forced colors repaint the border in one system color and drop the shadow, so only an outline
+  // tells the focused field apart.
   _focusVisible: {
     borderColor: 'primary',
+    outline: '2px solid transparent',
+    outlineOffset: '2px',
     boxShadow: '0 0 0 2px color-mix(in srgb, {colors.primary} 45%, transparent)',
   },
   _disabled: {
@@ -25,6 +29,8 @@ export const controlChrome = {
     borderColor: 'neutral.400',
     _focusVisible: {
       borderColor: 'primary',
+      outline: '2px solid transparent',
+      outlineOffset: '2px',
       boxShadow: '0 0 0 2px color-mix(in srgb, {colors.primary} 35%, transparent)',
     },
   },
@@ -37,6 +43,8 @@ export const controlInvalidVariants = {
     borderColor: 'danger',
     _focusVisible: {
       borderColor: 'danger',
+      outline: '2px solid transparent',
+      outlineOffset: '2px',
       boxShadow: 'outline',
     },
   },

@@ -32,7 +32,11 @@ export const pagination: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe(
       lineHeight: 'normal',
       fontVariantNumeric: 'tabular-nums',
       textDecoration: 'none',
-      _focusVisible: { outline: 'none', boxShadow: 'outline' },
+      _focusVisible: {
+        outline: '2px solid transparent',
+        outlineOffset: '2px',
+        boxShadow: 'outline',
+      },
       // Hover is scoped to plain page links: Panda 2 sorts selectors, so a later override on the
       // current or unavailable link can't be relied on to win.
       '&[href]:not([aria-current="page"])': {

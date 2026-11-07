@@ -34,4 +34,15 @@
     background-color: var(--beckui--colors-background);
     color: var(--beckui--colors-text);
   }
+
+  /*
+   * Forced colors drop every box-shadow, and Becket draws focus rings with one. Recipes add a
+   * transparent outline that the system repaints; this covers a recipe a consumer overrode.
+   */
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+    }
+  }
 }

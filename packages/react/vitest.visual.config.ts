@@ -44,6 +44,15 @@ export default defineConfig({
           },
         },
       }),
+      commands: {
+        // Forced colors are a media feature only CDP can emulate, and tests run inside the page.
+        // An empty value turns the emulation off.
+        emulateForcedColors: async ({ browser }, value: 'active' | '') => {
+          await browser.sendCommandAndGetResult('Emulation.setEmulatedMedia', {
+            features: [{ name: 'forced-colors', value }],
+          });
+        },
+      },
       expect: {
         toMatchScreenshot: {
           // Base and head render on one machine with one Chrome, so any pixel that differs is a

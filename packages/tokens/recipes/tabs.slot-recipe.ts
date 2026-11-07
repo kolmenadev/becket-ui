@@ -39,7 +39,8 @@ export const tabs: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
         borderBottomColor: 'primary',
       },
       _focusVisible: {
-        outline: 'none',
+        outline: '2px solid transparent',
+        outlineOffset: '2px',
         boxShadow: 'outline',
       },
       _disabled: {
@@ -52,7 +53,8 @@ export const tabs: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
       fontSize: 'md',
       color: 'text',
       _focusVisible: {
-        outline: 'none',
+        outline: '2px solid transparent',
+        outlineOffset: '2px',
         boxShadow: 'outline',
       },
     },
