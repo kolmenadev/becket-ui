@@ -54,7 +54,7 @@ describe('tools', () => {
   it('get_component_example returns one story or all of them', () => {
     expect(componentExample(data, 'Dialog', 'Open')).toContain('useState(true)');
     expect(componentExample(data, 'Dialog')).toContain('## Alert');
-    expect(componentExample(data, 'Dialog', 'Nope')).toContain('Available: Default, Alert, Open');
+    expect(componentExample(data, 'Dialog', 'Nope')).toContain('Available: Default, ForcedColors, Alert, Open');
   });
 
   it('get_theme returns dark and light values', () => {
