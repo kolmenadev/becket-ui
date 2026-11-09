@@ -33,11 +33,12 @@ export const Default: Story = {
 };
 
 export const ForcedColors: Story = {
-  parameters: { forcedColors: true },
-  render: () => (
+  // Each box names its own state, so the label control has nothing to drive here.
+  parameters: { forcedColors: true, controls: { include: ['size', 'disabled', 'description'] } },
+  render: (args) => (
     <Stack gap="md">
-      <Checkbox label="Unchecked" />
-      <Checkbox label="Checked" defaultChecked />
+      <Checkbox {...args} label="Unchecked" />
+      <Checkbox {...args} label="Checked" defaultChecked />
     </Stack>
   ),
 };
