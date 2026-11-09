@@ -1,5 +1,7 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
+import { checkedHighContrast } from './controlStyles';
+
 const checkMark =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3.5 8.2 6.6 11.2 12.5 4.8' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")";
 
@@ -35,13 +37,7 @@ export const checkbox: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
           // Forced colors drop the image and repaint `primary` as one system color, so the checked
           // box would match the empty one. Highlight stays, and the check is a shape, not a color.
           _highContrast: {
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'Highlight',
-            borderColor: 'Highlight',
-            color: 'HighlightText',
-            backgroundImage: 'none',
+            ...checkedHighContrast,
             '&::after': {
               content: '"✓"',
               color: 'currentColor',
@@ -53,15 +49,7 @@ export const checkbox: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
             backgroundColor: 'primary',
             borderColor: 'primary',
             // Light's selector outranks a media query, so the same cue has to be restated here.
-            _highContrast: {
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: 'Highlight',
-              borderColor: 'Highlight',
-              color: 'HighlightText',
-              backgroundImage: 'none',
-            },
+            _highContrast: checkedHighContrast,
           },
         },
       },

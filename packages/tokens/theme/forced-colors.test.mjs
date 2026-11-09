@@ -44,4 +44,9 @@ test('checked, selected and current controls keep a non-color cue in forced colo
     rules,
     /\.beckui--pagination__link\[aria-current="page"\][\s\S]*?text-decoration: underline/,
   );
+  assert.match(
+    rules,
+    /\[data-status="current"\] > \.beckui--steps__marker[^{]*\{\s*border-color: Highlight/,
+  );
+  assert.match(rules, /\.beckui--heading--compound__withGradient_true[\s\S]*?color: CanvasText/);
 });

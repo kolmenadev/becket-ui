@@ -1,5 +1,7 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
+import { checkedHighContrast } from './controlStyles';
+
 export const radio: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'radio',
   description: 'Native radio with visible control, label, optional description, and group',
@@ -50,13 +52,7 @@ export const radio: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
           // Forced colors drop the gradient and repaint `primary` as one system color, so the
           // selected radio would match an empty one. Highlight stays, and the dot is a shape.
           _highContrast: {
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'Highlight',
-            borderColor: 'Highlight',
-            color: 'HighlightText',
-            backgroundImage: 'none',
+            ...checkedHighContrast,
             '&::after': {
               content: '"●"',
               color: 'currentColor',
@@ -69,15 +65,7 @@ export const radio: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
           _light: {
             backgroundColor: 'primary',
             borderColor: 'primary',
-            _highContrast: {
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: 'Highlight',
-              borderColor: 'Highlight',
-              color: 'HighlightText',
-              backgroundImage: 'none',
-            },
+            _highContrast: checkedHighContrast,
           },
         },
       },
