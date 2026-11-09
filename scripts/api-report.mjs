@@ -24,39 +24,6 @@ const reportFiles = [
   ['tokens-css-vars.api.txt', '@becket-ui/tokens'],
 ];
 
-// loadFileAndPrepare walks up from api/config and would title every report "becket-ui".
-function extractorReport({ configPath, manifestPath, fileName }) {
-  const loaded = ExtractorConfig.loadFile(resolve(root, configPath));
-  // A fresh folder so --check can read the generated report without rewriting api/.
-  const folder = mkdtempSync(join(tmpdir(), 'becket-api-'));
-  const actualFolder = join(folder, 'actual');
-  const expectedFolder = join(folder, 'expected');
-  mkdirSync(actualFolder);
-  mkdirSync(expectedFolder);
-  loaded.apiReport.reportTempFolder = actualFolder;
-  loaded.apiReport.reportFolder = expectedFolder;
-  const committed = join(root, 'api', fileName);
-  if (existsSync(committed)) copyFileSync(committed, join(expectedFolder, fileName));
-  try {
-    if (
-      !Extractor.invoke(
-        ExtractorConfig.prepare({
-          configObject: loaded,
-          configObjectFullPath: resolve(root, configPath),
-          packageJsonFullPath: resolve(root, manifestPath),
-        }),
-        { localBuild: true, showVerboseMessages: false },
-      ).succeeded
-    ) {
-      throw new Error(`API Extractor failed for ${fileName}`);
-    }
-    const text = readFileSync(join(actualFolder, fileName), 'utf8');
-    return text.endsWith('\n') ? text : `${text}\n`;
-  } finally {
-    rmSync(folder, { recursive: true, force: true });
-  }
-}
-
 const classifyAt = process.argv.indexOf('--classify');
 const classifyDir = classifyAt === -1 ? undefined : resolve(process.argv[classifyAt + 1] ?? '');
 const isCheck = process.argv.includes('--check');
@@ -76,21 +43,44 @@ if (classifyDir && !isCheck) {
 
 const generated = {};
 if (!classifyDir) {
-  generated['react.api.md'] = extractorReport({
-    configPath: 'api/config/react.json',
-    manifestPath: 'packages/react/package.json',
-    fileName: 'react.api.md',
-  });
-  generated['tokens-preset.api.md'] = extractorReport({
-    configPath: 'api/config/tokens-preset.json',
-    manifestPath: 'packages/tokens/package.json',
-    fileName: 'tokens-preset.api.md',
-  });
-  generated['tokens-theme.api.md'] = extractorReport({
-    configPath: 'api/config/tokens-theme.json',
-    manifestPath: 'packages/tokens/package.json',
-    fileName: 'tokens-theme.api.md',
-  });
+  for (const [name, packageFolder] of [
+    ['react', 'react'],
+    ['tokens-preset', 'tokens'],
+    ['tokens-theme', 'tokens'],
+  ]) {
+    // loadFileAndPrepare walks up from api/config and would title every report "becket-ui".
+    const loaded = ExtractorConfig.loadFile(resolve(root, `api/config/${name}.json`));
+    // A fresh folder so --check can read the generated report without rewriting api/.
+    const folder = mkdtempSync(join(tmpdir(), 'becket-api-'));
+    loaded.apiReport.reportTempFolder = join(folder, 'actual');
+    loaded.apiReport.reportFolder = join(folder, 'expected');
+    mkdirSync(loaded.apiReport.reportTempFolder);
+    mkdirSync(loaded.apiReport.reportFolder);
+    if (existsSync(join(root, 'api', `${name}.api.md`))) {
+      copyFileSync(
+        join(root, 'api', `${name}.api.md`),
+        join(loaded.apiReport.reportFolder, `${name}.api.md`),
+      );
+    }
+    try {
+      if (
+        !Extractor.invoke(
+          ExtractorConfig.prepare({
+            configObject: loaded,
+            configObjectFullPath: resolve(root, `api/config/${name}.json`),
+            packageJsonFullPath: resolve(root, `packages/${packageFolder}/package.json`),
+          }),
+          { localBuild: true, showVerboseMessages: false },
+        ).succeeded
+      ) {
+        throw new Error(`API Extractor failed for ${name}.api.md`);
+      }
+      const text = readFileSync(join(folder, 'actual', `${name}.api.md`), 'utf8');
+      generated[`${name}.api.md`] = text.endsWith('\n') ? text : `${text}\n`;
+    } finally {
+      rmSync(folder, { recursive: true, force: true });
+    }
+  }
 
   const extend = (await import(pathToFileURL(join(root, 'packages/tokens/dist/preset.js')).href))
     .becketPreset.theme.extend;
