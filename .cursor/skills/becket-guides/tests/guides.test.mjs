@@ -79,6 +79,7 @@ describe('checklist', () => {
     Initialisms: 'CODING-STYLE § Initialisms',
     'Booleans start with': 'CODING-STYLE § Name consistency › Boolean',
     '(UPPER_SNAKE) ⚙': 'CODING-STYLE § Name consistency',
+    'No documentation comments': 'CODING-STYLE § Avoid documentation comments',
     'TODO names a ticket': 'CODING-STYLE § TODO comments must have a ticket number',
     'Effects ⚙': 'CODING-STYLE § Use effects only to sync with something outside React',
     'Stable keys': 'CODING-STYLE § Must use stable keys',

@@ -4,11 +4,9 @@ import { extractImageColors, neutralChroma, type ExtractedColor } from './extrac
 import { loadSource, type SourceInput } from './loadSource';
 
 export type SuggestThemeInput = SourceInput & {
-  /** Colors the agent read from an image it can see but can't pass as a file (e.g. pasted in chat). */
   colors?: string[];
 };
 
-/** What a source says outright (a brand manual), as opposed to what was sampled from pixels. */
 export type Stated = {
   colors: { hex: string; name?: string; page: number }[];
   fonts: { family: string; page: number }[];
@@ -24,7 +22,6 @@ export type Findings = {
   skipped: string[];
 };
 
-/** Up to three brand colors, most visual weight first, distinct from each other. */
 export function pickBrand(findings: Findings): string[] {
   // Stated colors (a manual) always come first, in the manual's order.
   const candidates = [

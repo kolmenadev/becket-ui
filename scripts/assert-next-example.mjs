@@ -1,9 +1,4 @@
 #!/usr/bin/env node
-/**
- * After `next build`, start the built app and prove the HTML a request gets (before any client
- * JS) carries Becket's recipe classes and the current page from `?page=`, plus the packed CSS
- * and a no-Panda brand retint.
- */
 import { spawn } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { createServer } from 'node:net';

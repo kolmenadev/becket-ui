@@ -4,11 +4,9 @@ import { dirname, join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-/**
- * Recipes stay on Becket's scales (see "Sizing and spacing" in .cursor-config/becket.mdc).
- * Panda's default preset still defines off-scale keys such as sizes-10 or spacing-6, so they
- * compile silently; this reads the built recipe CSS and fails on them and on raw lengths.
- */
+// Recipes stay on Becket's scales (see "Sizing and spacing" in .cursor-config/becket.mdc).
+// Panda's default preset still defines off-scale keys such as sizes-10 or spacing-6, so they
+// compile silently; this reads the built recipe CSS and fails on them and on raw lengths.
 const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'index.css'), 'utf8');
 const recipes = css.slice(css.indexOf('@layer recipes{'), css.indexOf('@layer utilities{'));
 

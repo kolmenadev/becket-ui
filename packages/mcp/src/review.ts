@@ -9,11 +9,7 @@ type Rule = {
   fix: string;
 };
 
-/**
- * Line rules from the app-code guide (packages/react/guides/building-with-becket.md).
- * Heuristic on purpose: it flags the patterns agents most often write instead of
- * Becket components; a TODO naming a ticket on the same line acknowledges a known gap.
- */
+// Heuristic on purpose: it flags the patterns agents most often write instead of Becket components.
 const LINE_RULES: Rule[] = [
   {
     rule: 'no-chakra',
@@ -77,7 +73,6 @@ const LINE_RULES: Rule[] = [
   },
 ];
 
-/** Imports from '@becket-ui/react' that aren't public exports. */
 function unknownImports(code: string, data: Data): Finding[] {
   const known = new Set([
     ...data.catalog.components.flatMap((component) => [...component.exports, ...component.hooks, ...component.types]),

@@ -4,11 +4,9 @@ import { dirname, join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-/**
- * Forced colors (Windows contrast themes) drop every box-shadow, and Becket draws focus rings with
- * one. A focus rule keeps a visible indicator there only if it also sets a real outline, which the
- * system repaints in its own color. Reads the built CSS, so shared styles spread into recipes count.
- */
+// Forced colors (Windows contrast themes) drop every box-shadow, and Becket draws focus rings with
+// one. A focus rule keeps a visible indicator there only if it also sets a real outline, which the
+// system repaints in its own color. Reads the built CSS, so shared styles spread into recipes count.
 const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'index.css'), 'utf8');
 
 test('every recipe focus rule that draws a ring also sets an outline forced colors can paint', () => {

@@ -1,8 +1,3 @@
-/**
- * Resolve a BecketTheme to final colors in both themes, the way the browser would, and check
- * every pair Becket draws text or controls with.
- */
-
 import { contrastRatio, formatOklch, parseColor } from './color.mjs';
 
 /**

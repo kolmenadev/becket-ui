@@ -34,16 +34,13 @@ export const Default: Story = {
   },
 };
 
-/** Windows contrast themes drop the shadow ring: Tab here and the focus outline must still show. */
 export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
 
-/** The same check on an item: Tab to the trigger, then ArrowDown opens the menu and focuses Edit. */
 export const ForcedColorsItem: Story = {
   ...Default,
   parameters: { forcedColors: { keys: '{Tab}{ArrowDown}' } },
 };
 
-/** Native `<details open>`: shows the item list without a click. */
 export const Open: Story = {
   render: function OpenMenuDemo(args: MenuProps) {
     return (

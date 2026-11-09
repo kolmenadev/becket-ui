@@ -56,7 +56,6 @@ type Story = StoryObj<ButtonProps>;
 
 export const Default: Story = {};
 
-/** Windows contrast themes drop the shadow ring: Tab here and the focus outline must still show. */
 export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
 
 export const WithGradient: Story = {
@@ -74,12 +73,6 @@ export const FullWidth: Story = {
   },
 };
 
-/**
- * Product-wide rebrand: unlayered CSS variables after `index.css` (or
- * `defineBecketTheme()`). Hover, focus, and gradients follow `primary`.
- * This is not a React theme provider. Violet is the demo override — default
- * Becket primary stays `becketYellow`.
- */
 export const BrandTheme: Story = {
   render: (args) => (
     <>
@@ -101,10 +94,6 @@ export const BrandTheme: Story = {
   },
 };
 
-/**
- * One control, one-off. `style` / `className` win on this instance only.
- * Do not rebrand an app this way — use BrandTheme / CSS variables.
- */
 export const InstanceOverride: Story = {
   args: {
     children: 'One-off override',
@@ -118,11 +107,6 @@ export const InstanceOverride: Story = {
   },
 };
 
-/**
- * Component density. `--beckui-button-px-md` shrinks this Button; Stack `gap="md"`
- * still uses `--beckui--spacing-md`. Focus ring is a canvas + primary double
- * stroke so it stays visible on yellow (Tab to this Button).
- */
 export const DensityOverride: Story = {
   render: (args) => (
     <>
@@ -141,7 +125,6 @@ export const DensityOverride: Story = {
   },
 };
 
-/** Call-to-action links: `as="a"` renders an anchor with button styling and anchor props. */
 export const AsLink: Story = {
   render: () => (
     <Button as="a" href="https://github.com/kolmenadev/becket-ui" visual="primary">

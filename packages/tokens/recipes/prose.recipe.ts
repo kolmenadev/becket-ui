@@ -1,20 +1,16 @@
 import { defineRecipe } from '@pandacss/dev';
 
-/**
- * Select descendant elements with zero specificity, so consumer classes always win. Skipped:
- * - any element inside the article that carries a Becket class, and everything inside it, so an
- *   embedded component (Card, Alert, Code…) keeps its own styles with no wrapper (MAV-112);
- * - anything inside `[data-not-prose]`, for components that aren't Becket's.
- * The `&` scopes the class check to inside this Prose, whose own root class doesn't count.
- */
+// Select descendant elements with zero specificity, so consumer classes always win. Skipped:
+// - any element inside the article that carries a Becket class, and everything inside it, so an
+//   embedded component (Card, Alert, Code…) keeps its own styles with no wrapper (MAV-112);
+// - anything inside `[data-not-prose]`, for components that aren't Becket's.
+// The `&` scopes the class check to inside this Prose, whose own root class doesn't count.
 const el = (selector: string) =>
   `& :where(${selector}):not(:where([data-not-prose], [data-not-prose] *, & [class*="beckui--"], & [class*="beckui--"] *))`;
 
-/**
- * `el` for a rule that has to beat other prose rules on the same element: a heading's next
- * sibling, nested lists, `ol` over `ul, ol`. The doubled class wins by specificity, since Panda 2
- * sorts nested selectors and the order they're written in no longer decides.
- */
+// `el` for a rule that has to beat other prose rules on the same element: a heading's next
+// sibling, nested lists, `ol` over `ul, ol`. The doubled class wins by specificity, since Panda 2
+// sorts nested selectors and the order they're written in no longer decides.
 const override = (selector: string) => `&${el(selector)}`;
 
 // Kept separate and spread into `base`: next to plain properties like `color`, these computed

@@ -8,7 +8,6 @@ import type { Findings, Stated } from './suggestTheme';
 // Brand manuals put colors, type and spacing up front; past this, pages are mostly imagery.
 const maxPages = 60;
 
-/** Colors, fonts, corner radius and text size from a brand manual PDF. Nothing in the PDF runs. */
 export async function extractPDF(source: Source): Promise<Findings> {
   const { OPS } = await getResolvedPDFJS();
   const pdf = await getDocumentProxy(new Uint8Array(source.bytes));

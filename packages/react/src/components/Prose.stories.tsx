@@ -20,7 +20,6 @@ export default meta;
 
 type Story = StoryObj<ProseProps>;
 
-/** The HTML a Markdown or MDX pipeline produces, styled by one wrapper. */
 export const Article: Story = {
   render: (args) => (
     <Prose {...args} as="article">
@@ -104,7 +103,6 @@ export const Sizes: Story = {
   ),
 };
 
-/** Becket components keep their own styles, markup inside them included, with no wrapper. */
 export const WithComponents: Story = {
   render: () => (
     <Prose>
@@ -130,7 +128,6 @@ export const WithComponents: Story = {
   ),
 };
 
-/** Markup that isn't Becket's opts out with `data-not-prose`. */
 export const NotProse: Story = {
   render: () => (
     <Prose>

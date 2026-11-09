@@ -8,7 +8,6 @@ export default meta;
 
 type Story = StoryObj<VisuallyHiddenProps>;
 
-/** The button shows only an icon; screen readers hear "Close dialog". */
 export const Default: Story = {
   render: () => (
     <Button visual="neutral">

@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-/**
- * Pack @becket-ui/tokens + @becket-ui/react into apps/next-example/vendor
- * and install them as file: tarballs (publishConfig → dist, not workspace src/).
- */
 import { execSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';

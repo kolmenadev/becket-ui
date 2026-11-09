@@ -28,7 +28,6 @@ export const Default: Story = {
   ),
 };
 
-/** Windows contrast themes drop the shadow ring: Tab here and the focus outline must still show. */
 export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
 
 export const Sizes: Story = {
@@ -64,7 +63,6 @@ export const Separators: Story = {
   ),
 };
 
-/** With an `href`, the current page stays a link, marked `aria-current="page"`. */
 export const CurrentAsLink: Story = {
   render: (args) => (
     <Breadcrumb {...args}>
@@ -76,7 +74,6 @@ export const CurrentAsLink: Story = {
   ),
 };
 
-/** Long trails wrap onto the next line. */
 export const LongTrail: Story = {
   render: (args) => (
     // Breadcrumb has no width prop; a size token keeps the trail narrow enough to wrap.
@@ -91,7 +88,6 @@ export const LongTrail: Story = {
   ),
 };
 
-/** `as` takes a router's link component; this stand-in marks the links it renders. */
 export const WithRouterLink: Story = {
   render: (args) => (
     <Breadcrumb {...args}>

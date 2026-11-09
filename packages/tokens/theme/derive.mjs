@@ -1,20 +1,9 @@
-/**
- * Turn one to three brand colors into a full Becket color theme that passes WCAG 2.2 AA in
- * dark and light. Works in OKLCH and only moves lightness (and chroma when a lighter or darker
- * shade leaves sRGB), so the brand hue never changes.
- */
-
 import { contrastRatio, formatOklch, parseColor, toGamut } from './color.mjs';
 import { checkBecketThemeContrast, resolveBecketColors } from './contrast.mjs';
 
 // Aim slightly above 4.5:1 so values rounded for CSS still pass.
 const textTarget = 4.6;
 
-/**
- * Move a color's lightness in one direction, one small step at a time, until it reaches
- * `minimum` against every color in `against`. The first step is the color itself, so one that
- * already passes comes back unchanged. Null when no lightness in that direction works.
- */
 function fitLightness({ color, against, minimum, direction }) {
   for (let L = color.L; L >= 0 && L <= 1; L += direction === 'lighter' ? 0.005 : -0.005) {
     const candidate = toGamut({ ...color, L });

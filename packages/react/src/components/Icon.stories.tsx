@@ -37,7 +37,6 @@ export default meta;
 
 type Story = StoryObj<IconProps>;
 
-/** Wrap any inline SVG drawn with `currentColor`. Give it a `label` when it carries meaning. */
 export const Default: Story = {
   render: (args) => (
     <Icon {...args} label="Favorite">
@@ -65,7 +64,6 @@ const GLYPHS = [
   ['WarningIcon', WarningIcon],
 ] as const;
 
-/** The built-in set: one 24px grid, one stroke width. */
 export const Glyphs: Story = {
   render: () => (
     <Flex wrap="wrap" gap="lg">
@@ -91,7 +89,6 @@ export const Sizes: Story = {
   ),
 };
 
-/** Icons inherit text color, so they follow links, muted text and both themes. */
 export const InText: Story = {
   render: () => (
     <VStack gap="sm">

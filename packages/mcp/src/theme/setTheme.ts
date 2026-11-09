@@ -8,11 +8,8 @@ import {
   type BecketThemeColors,
 } from '@becket-ui/tokens/theme';
 
-/** Every token group set_theme accepts, as plain strings so agents can pass what users say. */
 export type SetThemeInput = {
-  /** One to three brand colors, most important first. Becket derives the rest. */
   brand?: string[];
-  /** Exact color tokens. Kept as given (with `brand`) and checked like every other color. */
   colors?: Record<string, string | Record<string, string>>;
   fonts?: Record<string, string>;
   radii?: Record<string, string>;

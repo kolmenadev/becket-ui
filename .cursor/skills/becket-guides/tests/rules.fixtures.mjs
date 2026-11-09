@@ -388,6 +388,35 @@ console.log(value);
     },
   },
   {
+    rule: 'CODING-STYLE § Avoid documentation comments',
+    invalid: {
+      'scripts/build.mjs': `/** Builds the package. */\nexport const build = () => {};\n`,
+      'packages/react/src/components/Chip.stories.tsx': `export default { title: 'Data Display/Chip' };
+/** The default chip. */
+export const Default = {};
+`,
+    },
+    expect: [
+      'packages/react/src/components/Chip.stories.tsx:2  [prefer] documentation comment; delete it, or keep only the why the code can’t say',
+      'scripts/build.mjs:1  [prefer] documentation comment; delete it, or keep only the why the code can’t say',
+    ],
+    valid: {
+      'scripts/build.mjs': `// tsup can't emit this file, so it's written by hand.
+/** @type {string[]} */
+export const entries = [];
+`,
+      'packages/react/src/components/Chip.tsx': `/** A compact label. */
+export const Chip = (props: {
+  /** Shown before the label. */
+  icon?: string;
+}) => null;
+`,
+      'packages/react/src/components/Chip.stories.tsx': `export default { title: 'Data Display/Chip' };
+export const Default = {};
+`,
+    },
+  },
+  {
     rule: 'CODING-STYLE § TODO comments must have a ticket number',
     invalid: { 'src/todo.ts': `// TODO: replace with Container\nexport const width = 1;\n` },
     expect: ['src/todo.ts:1  [must] TODO without a ticket: // TODO (MAV-123): …'],

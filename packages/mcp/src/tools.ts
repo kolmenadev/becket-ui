@@ -1,10 +1,5 @@
 import type { Component, Data } from './data';
 
-/**
- * Tool handlers as plain functions returning text, so they're testable without
- * a transport. server.ts wires them to MCP.
- */
-
 export function installation(data: Data): string {
   const { version } = data.catalog;
   return `# Installing Becket UI (@becket-ui/react ${version})
@@ -46,7 +41,6 @@ export function listComponents(data: Data): string {
   return `@becket-ui/react ${data.catalog.version}: ${data.catalog.components.length} component files.\nUse get_component_props for exact props and get_component_example for usage.\n\n${sections.join('\n\n')}`;
 }
 
-/** Find a component by its name, any of its exports (e.g. CardHeader, Thead, SearchIcon) or its file. */
 export function findComponent(data: Data, name: string): Component | undefined {
   const wanted = name.trim().toLowerCase();
   return data.catalog.components.find(
@@ -109,7 +103,6 @@ export function theme(data: Data, group?: string): string {
   return `Becket tokens. In components, pass token names as props (gap="md", color="muted"). In your own CSS, use the CSS variables. Never hex, rgb() or px.\n\n${sections.join('\n\n')}`;
 }
 
-/** Topics are the guide's numbered sections, e.g. "layout" matches "2. Must use a Becket component…". */
 export function guidelines(data: Data, topic?: string): string {
   const sections = data.guidelines.split(/\n(?=## )/);
   if (!topic) return data.guidelines;

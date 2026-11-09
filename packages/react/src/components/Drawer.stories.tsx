@@ -46,10 +46,6 @@ export const Default: Story = {
   },
 };
 
-/**
- * Windows contrast themes drop the shadow ring: Tab here and the focus outline must still show.
- * No footer, so focus starts on the drawer and the first Tab reaches Close.
- */
 export const ForcedColors: Story = {
   render: (args) => (
     <Drawer {...args} defaultOpen title="Filters">
@@ -64,7 +60,7 @@ export const Start: Story = {
   args: { placement: 'start' },
 };
 
-/** Starts open so catalogs and design tools show the panel, not only the trigger. */
+// Starts open so catalogs and design tools show the panel, not only the trigger.
 export const Open: Story = {
   render: function OpenDrawerDemo(args: DrawerProps) {
     const [open, setOpen] = useState(true);

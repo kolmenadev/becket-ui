@@ -105,9 +105,6 @@ export const Overflow: Story = {
   ),
 };
 
-/**
- * Tag padding follows `--beckui-tag-px-md`. Stack `gap="md"` does not.
- */
 export const DensityOverride: Story = {
   render: (args) => (
     <>

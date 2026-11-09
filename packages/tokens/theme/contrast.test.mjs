@@ -12,10 +12,8 @@ import {
   resolveBecketColors,
 } from './contrast.mjs';
 
-/**
- * WCAG 2.2 AA contrast for the pairs Becket draws, in both themes. The checker's defaults are
- * compared with the built index.css first, so the test can't pass against stale values.
- */
+// The checker's defaults are compared with the built index.css first, so the test can't pass
+// against stale values.
 const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'index.css'), 'utf8');
 
 function block(selector) {

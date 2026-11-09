@@ -1,14 +1,4 @@
 #!/usr/bin/env node
-/**
- * Build the data the MCP server serves, from the library's own sources:
- *   - catalog.json: every public component (exports, group, props from the
- *     emitted .d.ts, recipe variant values, story examples, client/RSC)
- *   - theme.json: semantic tokens with dark and light values from index.css
- *   - guidelines.md: the app-code guide, copied as-is
- *
- * Everything is copied into dist/data so the server never depends on the
- * workspace at runtime: the published package is just dist/.
- */
 import { mkdirSync, readFileSync, writeFileSync, existsSync, copyFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';

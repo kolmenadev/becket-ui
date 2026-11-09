@@ -46,7 +46,6 @@ export const Sizes: Story = {
   ),
 };
 
-/** Render the page's main landmark directly: `as="main"`. */
 export const AsMain: Story = {
   render: () => (
     <Container as="main" size="md">

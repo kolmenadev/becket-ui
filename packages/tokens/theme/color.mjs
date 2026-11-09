@@ -1,17 +1,10 @@
-/**
- * Color parsing, OKLCH conversion and WCAG 2 contrast. Shared by the contrast test, the theme
- * checker and palette derivation so every one of them measures with the same math.
- */
-
 /** @param {number} value */
 const clamp01 = (value) => Math.min(1, Math.max(0, value));
 
-/** sRGB channel (0–1) → linear light. */
 function toLinear(channel) {
   return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
 }
 
-/** Linear sRGB → OKLCH (CSS Color 4). */
 function linearToOklch([r, g, b]) {
   const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
   const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
@@ -27,7 +20,7 @@ function linearToOklch([r, g, b]) {
   };
 }
 
-/** OKLCH → linear sRGB, unclamped (channels outside 0–1 mean out of gamut). */
+// Unclamped: channels outside 0–1 mean out of gamut.
 function oklchToLinear({ L, C, h }) {
   const radians = (h * Math.PI) / 180;
   const a = C * Math.cos(radians);
@@ -42,7 +35,6 @@ function oklchToLinear({ L, C, h }) {
   ];
 }
 
-/** "50%" → 0.5 of `scale`, "0.5" → 0.5. */
 function number(part, scale = 1) {
   const value = part.trim();
   if (value === 'none') return 0;

@@ -1,6 +1,6 @@
 import type { NextConfig } from 'next';
 
-/** Consume packed tarballs only. Do not alias to monorepo src/. */
+// Packed tarballs only, never an alias to monorepo src/: the example proves what consumers install.
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 };
