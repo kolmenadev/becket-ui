@@ -15,7 +15,7 @@ import {
 import { menu as menuRecipe } from '@becket-ui/tokens/recipes';
 
 type MenuContextValue = {
-  close: () => void;
+  closeAndRestoreFocus: () => void;
 };
 
 const MenuContext = createContext<MenuContextValue | null>(null);
@@ -32,6 +32,7 @@ export type MenuProps = Omit<DetailsHTMLAttributes<HTMLDetailsElement>, 'onToggl
   label: ReactNode;
 };
 
+/** Focus returns to the trigger on activation and on Escape. */
 export const Menu = forwardRef<HTMLDetailsElement, MenuProps>(
   ({ label, className, children, onKeyDown, ...props }, ref) => {
     const detailsRef = useRef<HTMLDetailsElement>(null);
@@ -56,6 +57,7 @@ export const Menu = forwardRef<HTMLDetailsElement, MenuProps>(
       if (!details) return;
 
       if (event.key === 'Escape') {
+        // Same two lines as closeAndRestoreFocus: a helper used only twice stays inline.
         close();
         details.querySelector('summary')?.focus();
         return;
@@ -95,7 +97,24 @@ export const Menu = forwardRef<HTMLDetailsElement, MenuProps>(
     };
 
     return (
-      <MenuContext.Provider value={{ close }}>
+      <MenuContext.Provider
+        value={{
+          closeAndRestoreFocus: () => {
+            const details = detailsRef.current;
+            if (!details) return;
+            // The consumer moved focus outside the menu, so this activation is left alone.
+            if (
+              document.activeElement instanceof Node &&
+              !details.contains(document.activeElement)
+            ) {
+              return;
+            }
+            // Same two lines as Escape: a helper used only twice stays inline.
+            close();
+            details.querySelector('summary')?.focus();
+          },
+        }}
+      >
         <details
           ref={(node) => {
             detailsRef.current = node;
@@ -147,7 +166,7 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
         className={mergeClassName(styles.item, className)}
         onClick={(event) => {
           onClick?.(event);
-          if (!event.defaultPrevented) menu?.close();
+          if (!event.defaultPrevented) menu?.closeAndRestoreFocus();
         }}
       />
     );
