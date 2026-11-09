@@ -17,7 +17,7 @@ const storyFiles = import.meta.glob<Parameters<typeof composeStories>[0]>(
 describe('story markup', () => {
   it.each(Object.keys(storyFiles))('%s', async (path) => {
     const sections = [];
-    for (const [name, Story] of Object.entries<ReturnType<typeof composeStory>>(
+    for (const Story of Object.values<ReturnType<typeof composeStory>>(
       composeStories(storyFiles[path]),
     )) {
       // baseElement, not container: Dialog, Drawer, Menu and Tooltip portal into document.body.
@@ -26,7 +26,7 @@ describe('story markup', () => {
       // different ids depending on which stories ran before it. Number them per story instead.
       const ids: string[] = [];
       sections.push(
-        `<!-- ${name} -->\n${baseElement.innerHTML
+        `${baseElement.innerHTML
           .replace(/«r[0-9a-z]+»|_r_[0-9a-z]+_|:r[0-9a-z]+:/g, (id) => {
             if (!ids.includes(id)) ids.push(id);
             return `id-${ids.indexOf(id) + 1}`;
