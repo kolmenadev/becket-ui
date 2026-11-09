@@ -1,10 +1,5 @@
 'use client';
 
-/**
- * Hover / focus tooltip (generic DS primitive).
- * Default placement top, open delay 200ms.
- */
-
 import {
   Children,
   cloneElement,

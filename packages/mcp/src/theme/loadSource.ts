@@ -8,12 +8,12 @@ export type SourceKind = 'png' | 'jpeg' | 'svg' | 'pdf' | 'webp' | 'gif' | 'unkn
 export type Source = { bytes: Buffer; kind: SourceKind; label: string };
 export type SourceInput = { path?: string; url?: string; base64?: string };
 
-/** Brand manuals run to tens of pages of images; logos are far smaller. */
+// Brand manuals run to tens of pages of images; logos are far smaller.
 const maxBytes = 25 * 1024 * 1024;
 const timeoutMs = 15_000;
 const maxRedirects = 5;
 
-/** Detect the format from the bytes, never from the file name or Content-Type. */
+// From the bytes, never the file name or Content-Type, which the source controls.
 export function detectKind(bytes: Buffer): SourceKind {
   if (bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])))
     return 'png';
@@ -37,10 +37,7 @@ export function detectKind(bytes: Buffer): SourceKind {
   return 'unknown';
 }
 
-/**
- * Addresses a URL fetch must never reach: loopback, private, link-local (cloud metadata),
- * carrier-grade NAT, multicast, reserved, and their IPv4-mapped IPv6 forms.
- */
+// Includes link-local (cloud metadata) and IPv4-mapped IPv6 forms, which a naive check misses.
 const blocked = new BlockList();
 // as const: each entry stays a [network, prefix] tuple, the shape addSubnet takes.
 for (const [network, prefix] of [
@@ -90,7 +87,7 @@ export function isPublicAddress(address: string): boolean {
   return !blocked.check(address, 'ipv6');
 }
 
-/** Every URL, the first and each redirect, is checked here before it's requested. */
+// Every redirect is checked too, or a public URL could bounce the fetch to a private address.
 function download(raw: string, redirects: number): Promise<Buffer> {
   return new Promise((resolvePromise, reject) => {
     // A throw in here rejects the promise.
@@ -200,7 +197,6 @@ function download(raw: string, redirects: number): Promise<Buffer> {
   });
 }
 
-/** Read an image or PDF from a local path, an https URL or base64 (a data: URL works too). */
 export async function loadSource(input: SourceInput): Promise<Source> {
   if ([input.path, input.url, input.base64].filter(Boolean).length !== 1)
     throw new Error('Pass exactly one of path, url or base64.');

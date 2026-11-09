@@ -1,17 +1,10 @@
 #!/usr/bin/env node
-/**
- * Fail if anything other than the published libraries could reach npm.
- *
- * `changeset publish` publishes every package that isn't `"private": true`
- * (Changesets' `ignore` only skips versioning), so apps, examples and internal
- * packages must be private. Published packages must not depend on private ones,
- * or installing them from npm breaks.
- */
+// `changeset publish` publishes every package that isn't `"private": true` (Changesets' `ignore`
+// only skips versioning), and a published package that depends on a private one breaks on install.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-/** The only packages allowed on npm. */
 const PUBLISHABLE = new Set(['@becket-ui/react', '@becket-ui/tokens', '@becket-ui/mcp']);
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');

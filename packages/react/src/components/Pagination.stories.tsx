@@ -22,14 +22,12 @@ type Story = StoryObj<PaginationProps>;
 
 export const Default: Story = {};
 
-/** Windows contrast themes drop the shadow ring: Tab here and the focus outline must still show. */
 export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
 
 export const Middle: Story = { args: { page: 6 } };
 
 export const LastPage: Story = { args: { page: 12 } };
 
-/** With few pages there is no gap to hide, so every page shows. */
 export const FewPages: Story = { args: { page: 2, pageCount: 5 } };
 
 export const Siblings: Story = { args: { page: 10, pageCount: 20, siblings: 2 } };
@@ -52,7 +50,6 @@ export const CustomLabels: Story = {
   },
 };
 
-/** `linkAs` takes a router's link component; this stand-in marks the links it renders. */
 export const WithRouterLink: Story = {
   args: {
     page: 3,

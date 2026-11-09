@@ -14,7 +14,6 @@ const Cell = ({ label }: { label: string }) => (
   </Box>
 );
 
-/** 12 columns; items span 8 + 4 (main and sidebar). */
 export const Default: Story = {
   render: () => (
     <Grid columns={12} gap="md">
@@ -31,7 +30,6 @@ export const Default: Story = {
   ),
 };
 
-/** Stacked on small screens, side by side from md. */
 export const Responsive: Story = {
   render: () => (
     <Grid columns={{ base: 1, md: 12 }} gap="md">

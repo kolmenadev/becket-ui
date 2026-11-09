@@ -1,26 +1,4 @@
 #!/usr/bin/env node
-/**
- * The mechanical half of Becket's guides. The becket-guides skill covers the half a script can't
- * judge. Rules come from docs/CODING-STYLE.md, packages/react/guides/building-with-becket.md and
- * .cursor-config/becket.mdc. When a guide changes, change the check here to match the guide.
- *
- *   node style-check.mjs --paths <file|folder>…   every line of those files
- *   node style-check.mjs --all                    every tracked source file
- *   node style-check.mjs --base main              lines added since main (the default)
- *   node style-check.mjs --staged                 lines added in the index
- *   node style-check.mjs --hook                   Claude Code PreToolUse gate for `git commit`
- *   node style-check.mjs --staged --once          the git pre-commit gate (.githooks/pre-commit)
- *   add --repo <dir> to check another checkout
- *
- * Exit 1 on any finding. --hook and --once block a commit the first time they see a set of findings
- * and pass the same set on the next try, so a name kept on purpose (with its reason) can't block
- * forever. Both share one record, so a commit that passed the Claude Code hook passes the git hook.
- *
- * `// style-check keep: <reason>` on the line above a finding keeps it: it no longer blocks or
- * fails, and reports list it under "Kept on purpose" with its reason. Use it only where the guide
- * allows a keep (for names: 3+ uses, recursion, public API, or inlining would change behavior).
- * `any`, `as any` and `@ts-ignore` can't be kept, because the guide never excuses them.
- */
 import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
@@ -619,6 +597,47 @@ for (const [file, lines] of scope) {
         rule: 'becket-guides § Kept on purpose',
         message:
           '`style-check keep` without a reason: // style-check keep: <why the guide allows it>',
+      });
+    // JSDoc on a published package's exported API and prop types ships in the .d.ts, and a block of
+    // only type tags (`@type`, `@typedef`…) types JS. `@example` and other tags still document.
+    if (
+      comment.startsWith('/**') &&
+      !(
+        /^\/\*\*[\s*]*@/.test(comment) &&
+        comment
+          .replace(/^\/\*\*|\*\/$/g, '')
+          .split('\n')
+          .map((line) => line.replace(/^\s*\*?\s*/, '').trim())
+          .filter(Boolean)
+          .every((line) =>
+            /^@(type|typedef|satisfies|template|import|callback|param|returns?|property|this|enum|overload)\b/.test(
+              line,
+            ),
+          )
+      ) &&
+      !(
+        /^packages\/(react\/src|tokens|a11y\/src)\//.test(file) &&
+        !/\.(stories|test|examples|fixture)\.|\/scripts\//.test(file) &&
+        [
+          source.statements.find(
+            (statement) => statement.pos <= range.pos && range.end <= statement.end,
+          ),
+        ].some(
+          (statement) =>
+            statement &&
+            (ts.isTypeAliasDeclaration(statement) ||
+              ts.isInterfaceDeclaration(statement) ||
+              statement.modifiers?.some(
+                (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword,
+              )),
+        )
+      )
+    )
+      report({
+        line,
+        level: 'prefer',
+        rule: 'CODING-STYLE § Avoid documentation comments',
+        message: 'documentation comment; delete it, or keep only the why the code can’t say',
       });
     // A to-do starts a comment line (`// TODO …`, ` * TODO …`); prose that mentions one doesn't count.
     if (/(^|\n)\s*(\/\/|\/\*+|\*)\s*TODO\b/.test(comment) && !/TODO \([A-Z]+-\d+\)/.test(comment))

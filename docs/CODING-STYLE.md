@@ -37,6 +37,7 @@ reason.
   - [Name consistency](#name-consistency)
 - [Commenting](#commenting)
   - [Comment why, not how](#comment-why-not-how)
+  - [Avoid documentation comments](#avoid-documentation-comments)
   - [TODO comments must have a ticket number](#todo-comments-must-have-a-ticket-number)
 - [React](#react)
   - [Prefer design-system components over raw elements](#prefer-design-system-components-over-raw-elements)
@@ -523,6 +524,31 @@ const total = users.reduce((sum, user) => sum + user.score, 0);
 ```
 
 https://testing.googleblog.com/2017/07/code-health-to-comment-or-not-to-comment.html
+
+## Avoid documentation comments
+
+Don't write comments that document code: JSDoc summaries, file headers, section banners, labels, or
+a sentence that says what a function, story or value is. The name and the code already say it, and
+every comment is read, by people and by agents, on every pass through the file. For agents it costs
+tokens each time.
+
+A comment earns its place only when the code can't say it:
+
+- a decision a reader would otherwise question, or a constraint that forced it
+  ([why, not how](#comment-why-not-how));
+- a `// style-check keep: <reason>`, a lint or TypeScript ignore reason, or a TODO with a ticket.
+
+```ts
+// Avoid: documents what the story is
+/** Windows contrast themes drop the shadow ring: Tab here and the focus outline must still show. */
+export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
+
+// Prefer
+export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
+```
+
+The exception is JSDoc on a published package's exported API (component props, public helpers): it
+ships in the `.d.ts`, and editors and the MCP server show it to consumers. Keep it to one line.
 
 ## TODO comments must have a ticket number
 

@@ -17,14 +17,11 @@ export type ExtractedColor = { hex: string; color: Oklch; share: number; role: C
 const maxPixels = 50_000_000;
 // Colors closer than this (ΔE OK) are one color: anti-aliasing, JPEG noise, gradients' near steps.
 const sameColor = 0.05;
-/** Below this chroma a color reads as white, gray or black. Shared with suggest_theme and PDFs. */
+// Below this chroma a color reads as white, gray or black.
 export const neutralChroma = 0.04;
 
-/**
- * Dominant colors of a bitmap. Transparent pixels are ignored. A color that keeps touching the
- * image's edges is the background (logos have padding; photos behind them touch every edge).
- * Each color is its most common exact shade, not an average, so edges and noise don't tint it.
- */
+// A color that keeps touching the image's edges is the background: logos have padding, photos
+// behind them touch every edge.
 export function colorsFromPixels({
   width,
   height,
@@ -96,7 +93,6 @@ export function colorsFromPixels({
   );
 }
 
-/** Merge near-identical colors (keeping the more common one's exact value), most common first. */
 export function mergeClose(colors: ExtractedColor[]): ExtractedColor[] {
   const merged: ExtractedColor[] = [];
   for (const color of colors.toSorted((a, b) => b.share - a.share)) {
@@ -109,7 +105,6 @@ export function mergeClose(colors: ExtractedColor[]): ExtractedColor[] {
   return merged;
 }
 
-/** Dominant colors of a PNG, JPEG or SVG source. */
 export function extractImageColors(source: Source): {
   colors: ExtractedColor[];
   method: string;

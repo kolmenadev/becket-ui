@@ -1,10 +1,6 @@
 import jpeg from 'jpeg-js';
 import { PNG } from 'pngjs';
 
-/**
- * Brand fixtures drawn in code, so the tests carry no binary files and every expected color is
- * known exactly.
- */
 type RGBA = [number, number, number, number];
 
 const hex = (value: string): RGBA =>
@@ -35,7 +31,6 @@ function encode({
 const inRect = ([x, y]: number[], [left, top, right, bottom]: number[]) =>
   x >= left && x < right && y >= top && y < bottom;
 
-/** Navy block and an anti-aliased orange disc on a transparent canvas. */
 export const transparentLogo = () =>
   encode({
     format: 'png',
@@ -51,7 +46,6 @@ export const transparentLogo = () =>
     },
   });
 
-/** A red mark over a noisy sky-to-grass "photo" background. */
 export const photoLogo = () =>
   encode({
     format: 'jpeg',
@@ -70,7 +64,6 @@ export const photoLogo = () =>
     },
   });
 
-/** Black wordmark on white, the classic one-color logo. */
 export const monoLogo = () =>
   encode({
     format: 'png',
@@ -79,7 +72,6 @@ export const monoLogo = () =>
     paint: (x, y) => (inRect([x, y], [30, 30, 170, 70]) ? hex('#111111') : hex('#ffffff')),
   });
 
-/** Four brand stripes, padded on white. */
 export const stripes = ['#e63946', '#2a9d8f', '#e9c46a', '#264653'];
 export const multicolorLogo = () =>
   encode({
@@ -121,7 +113,6 @@ export const gradientSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0
   <text class="word" y="90">Wave</text>
 </svg>`;
 
-/** A one-page brand manual: stated colors and sizes in the text, a brand font, artwork fills. */
 export function brandManualPDF(): Buffer {
   const stream = [
     '0.039 0.239 0.569 rg 50 600 200 100 re f',

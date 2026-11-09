@@ -32,7 +32,6 @@ export type Theme = Record<string, ThemeToken[]>;
 
 export type Data = { catalog: Catalog; theme: Theme; guidelines: string };
 
-/** Data is generated next to the bundle by scripts/build-data.mjs (dist/data). */
 export function loadData(dataDir = join(dirname(fileURLToPath(import.meta.url)), 'data')): Data {
   const read = (file: string) => readFileSync(join(dataDir, file), 'utf8');
   return {

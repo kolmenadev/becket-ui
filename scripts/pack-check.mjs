@@ -1,8 +1,5 @@
 #!/usr/bin/env node
-/**
- * Fail if packed tarballs are missing the files consumers need.
- * pnpm pack has no --dry-run; pack to a temp dir and delete after.
- */
+// pnpm pack has no --dry-run: pack to a temp dir and delete after.
 import { execSync, spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, renameSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -45,14 +42,7 @@ function assertNone(files, needles, label) {
   }
 }
 
-/**
- * Install the packed tarballs into a throwaway consumer, then:
- * - import the library with plain Node ESM, the way scripts, `node --test` and
- *   bundler-free SSR do (MAV-120). Bundlers forgive extensionless imports; Node doesn't.
- * - typecheck a consumer against the shipped declarations with nodenext and bundler resolution.
- * - start the MCP server from its tarball and list its tools over stdio, the way
- *   `npx @becket-ui/mcp` runs it.
- */
+// Plain Node ESM import (MAV-120): bundlers forgive extensionless imports; Node doesn't.
 function assertConsumer() {
   const consumer = mkdtempSync(join(tmpdir(), 'becket-import-'));
   try {

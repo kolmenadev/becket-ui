@@ -27,7 +27,6 @@ export function git(repo, ...args) {
   return result;
 }
 
-/** Writes `files` ({ path: contents }) into the repo at `repo` (created when missing). */
 export function write(repo, files) {
   for (const [path, contents] of Object.entries(files)) {
     mkdirSync(dirname(join(repo, path)), { recursive: true });
@@ -35,11 +34,8 @@ export function write(repo, files) {
   }
 }
 
-/**
- * A git repo on `main` with `files` committed. The checker loads TypeScript through
- * `packages/tokens` (MAV-171 removes that), so the repo gets a stub of that package linked to the
- * real one's dependencies.
- */
+// The checker loads TypeScript through `packages/tokens` (MAV-171 removes that), so the repo gets a
+// stub of that package linked to the real one's dependencies.
 export function makeRepo(files = {}, prefix = 'style-check-') {
   const repo = mkdtempSync(join(tmpdir(), prefix));
   git(repo, 'init', '-q', '-b', 'main');
@@ -61,10 +57,6 @@ export function makeRepo(files = {}, prefix = 'style-check-') {
 
 export const removeRepo = (repo) => rmSync(repo, { recursive: true, force: true });
 
-/**
- * Runs the checker in `repo`. Returns its exit status, its findings as report lines
- * (`path:line  [level] message  — rule`), the kept findings, and the raw output.
- */
 export function check({ repo, args = ['--all'], input, env = {}, script = checker }) {
   // Output goes to a file, not a pipe: the checker calls process.exit() right after printing, and
   // Node drops whatever a pipe hasn't taken yet (about 64 KB), so a long report arrives cut off.

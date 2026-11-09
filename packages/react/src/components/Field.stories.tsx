@@ -76,9 +76,6 @@ export const Sizes: Story = {
   ),
 };
 
-/**
- * Field padding follows `--beckui-field-px-md`. Stack `gap="md"` does not.
- */
 export const DensityOverride: Story = {
   render: (args: FieldProps) => (
     <>

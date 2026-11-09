@@ -3,7 +3,7 @@ import type { GradientToken } from '@becket-ui/tokens/types';
 
 export type GradientBorderToken = Exclude<GradientToken, 'primaryHover'>;
 
-/** Double-layer border-box fill so left/right caps match the radius (no ::before sliver). */
+// Double-layer border-box fill so left/right caps match the radius (no ::before sliver).
 const outline = {
   borderWidth: '2px',
   borderStyle: 'solid',

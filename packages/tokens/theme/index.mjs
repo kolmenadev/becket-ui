@@ -1,5 +1,3 @@
-/** Public CSS-variable theming. No Panda, no theme provider. */
-
 export { colorDistance, contrastRatio, formatHex, formatOklch, parseColor, rgbToOklch, toGamut } from './color.mjs';
 export { contrastPairs, checkBecketThemeContrast, resolveBecketColors } from './contrast.mjs';
 export { deriveBecketTheme } from './derive.mjs';

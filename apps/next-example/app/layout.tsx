@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: 'App Router consuming packed @becket-ui tarballs',
 };
 
-/** Unlayered :root wins over @layer tokens regardless of stylesheet order. */
+// Unlayered :root wins over @layer tokens regardless of stylesheet order.
 const brandThemeCss = defineBecketTheme({
   colors: { primary: 'oklch(0.55 0.22 280)' },
   radii: { md: '4px' },

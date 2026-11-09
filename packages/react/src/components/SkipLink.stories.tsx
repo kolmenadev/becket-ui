@@ -7,7 +7,6 @@ export default meta;
 
 type Story = StoryObj<SkipLinkProps>;
 
-/** Hidden until focused: press Tab in this story to see it. */
 export const Default: Story = {
   render: () => (
     <>
@@ -18,5 +17,4 @@ export const Default: Story = {
   ),
 };
 
-/** Windows contrast themes drop the shadow ring: Tab here and the focus outline must still show. */
 export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };

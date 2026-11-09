@@ -1,7 +1,4 @@
-/**
- * Story-only sample images as data URIs, so stories render in Storybook and in
- * Claude Design previews without hosting files. Not exported from the package.
- */
+// Data URIs so stories render in Storybook and Claude Design previews without hosting files.
 const svg = (body: string, width = 640, height = 360) =>
   `data:image/svg+xml;utf8,${encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">${body}</svg>`,

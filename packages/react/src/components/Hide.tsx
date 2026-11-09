@@ -1,8 +1,3 @@
-/**
- * Chakra-style visibility helper.
- * Uses CSS media queries — no JS flash; single DOM for UI tests.
- */
-
 import { forwardRef, type ComponentPropsWithoutRef, type ElementType } from 'react';
 import { hide } from '@becket-ui/tokens/recipes';
 import type { HideVariantProps } from '@becket-ui/tokens/recipes';

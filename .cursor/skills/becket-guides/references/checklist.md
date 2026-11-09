@@ -53,6 +53,9 @@ in the guide, because the guide wins over this summary. Rules marked ⚙ are als
 **Commenting**
 - Comments say why, not what. Delete a comment that restates the code. Add one where a reader would
   question a decision, a magic number, or a value kept on purpose.
+- No documentation comments ⚙ (`/** … */` summaries, file headers, section banners, labels). Keep a
+  comment only for a why the code can't say, a keep marker, an ignore reason or a TODO. JSDoc on a
+  published package's exported API and prop types is the exception.
 - Every TODO names a ticket ⚙: `// TODO (MAV-123): …`.
 
 **React**

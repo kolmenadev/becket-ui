@@ -1,12 +1,6 @@
 #!/usr/bin/env node
-/**
- * Add `.js` to relative imports in dist (JS and .d.ts).
- *
- * tsup runs with `bundle: false` and tsc emits declarations, so `dist` keeps the
- * source's extensionless specifiers (`./components/Button`). Bundlers resolve
- * those; Node's ESM loader and TypeScript's `nodenext` resolution don't (MAV-120).
- * Every specifier must point at a file we emitted, otherwise the build fails.
- */
+// tsup runs with `bundle: false` and tsc emits declarations, so dist keeps extensionless
+// specifiers, which bundlers resolve and plain Node ESM doesn't.
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
