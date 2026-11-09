@@ -102,16 +102,14 @@ export const Menu = forwardRef<HTMLDetailsElement, MenuProps>(
           closeAndRestoreFocus: () => {
             const details = detailsRef.current;
             if (!details) return;
-            // The consumer moved focus outside the menu, so this activation is left alone.
-            if (
+            // style-check keep: evaluation order; inlined, activeElement is read after close() hides the item
+            const focusLeftTheMenu =
               document.activeElement instanceof Node &&
-              !details.contains(document.activeElement)
-            ) {
-              return;
-            }
+              !details.contains(document.activeElement);
             // Same two lines as Escape: a helper used only twice stays inline.
             close();
-            details.querySelector('summary')?.focus();
+            // The consumer already placed focus outside the menu, so don't pull it back.
+            if (!focusLeftTheMenu) details.querySelector('summary')?.focus();
           },
         }}
       >

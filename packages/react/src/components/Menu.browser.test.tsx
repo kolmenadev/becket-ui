@@ -50,6 +50,7 @@ describe('Menu', () => {
     await userEvent.keyboard('{ArrowDown}{Enter}');
 
     expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Outside' }));
+    expect(screen.getByText('Actions').closest('details')?.hasAttribute('open')).toBe(false);
   });
 
   it('stays open on the item when the click is cancelled', async () => {

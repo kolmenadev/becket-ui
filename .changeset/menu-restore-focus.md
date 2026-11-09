@@ -4,5 +4,5 @@
 "@becket-ui/mcp": patch
 ---
 
-Activating a menu item returns focus to the trigger. An item that moves focus itself, or that
-cancels the event, is left alone.
+Activating a menu item closes the menu and returns focus to the trigger. An item that moves
+focus itself keeps that focus. An item that cancels the event stays open.
