@@ -27,7 +27,8 @@ export const switchRecipe: ReturnType<typeof defineSlotRecipe> = defineSlotRecip
       padding: 0,
       background: 'transparent',
       _focusVisible: {
-        outline: 'none',
+        outline: '2px solid transparent',
+        outlineOffset: '2px',
         boxShadow: 'outline',
       },
       _disabled: {

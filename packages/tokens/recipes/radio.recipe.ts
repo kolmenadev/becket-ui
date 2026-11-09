@@ -59,7 +59,10 @@ export const radio: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
         },
       },
       _focusVisible: {
+        // The native input is clipped to 1px, so the outline goes on the drawn circle next to it.
         '& + *': {
+          outline: '2px solid transparent',
+          outlineOffset: '2px',
           boxShadow: 'outline',
         },
       },

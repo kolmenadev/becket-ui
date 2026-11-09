@@ -34,4 +34,17 @@
     background-color: var(--beckui--colors-background);
     color: var(--beckui--colors-text);
   }
+
+  /*
+   * Forced colors drop every box-shadow, and Becket draws focus rings with one. Recipes add a
+   * transparent outline that the system repaints; this covers focusable elements that set no
+   * outline of their own. It sits in the base layer, so an explicit `outline: none` in a recipe
+   * override or app CSS still wins: that's the author's call, not something Becket forces.
+   */
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+    }
+  }
 }

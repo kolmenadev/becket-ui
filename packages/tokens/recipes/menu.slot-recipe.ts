@@ -27,7 +27,8 @@ export const menu: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
         borderColor: 'neutral.400',
       },
       _focusVisible: {
-        outline: 'none',
+        outline: '2px solid transparent',
+        outlineOffset: '2px',
         boxShadow: 'outline',
       },
       '&::-webkit-details-marker': { display: 'none' },
@@ -69,7 +70,8 @@ export const menu: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
         _hover: { backgroundColor: 'neutral.100' },
       },
       _focusVisible: {
-        outline: 'none',
+        outline: '2px solid transparent',
+        outlineOffset: '2px',
         boxShadow: 'outline',
       },
       _disabled: {

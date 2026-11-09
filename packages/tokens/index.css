@@ -794,7 +794,8 @@
       cursor: not-allowed;
     }
     .beckui--button:is(:focus, [data-focus]) {
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--center {
@@ -869,8 +870,9 @@
       color: var(--beckui--colors-link-hover);
     }
     .beckui--link:is(:focus-visible, [data-focus-visible]) {
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
       border-radius: var(--beckui--radii-sm);
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--list {
@@ -917,8 +919,9 @@
       color: var(--beckui--colors-link-hover);
     }
     .beckui--prose :where(a):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)):is(:focus-visible, [data-focus-visible]) {
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
       border-radius: var(--beckui--radii-sm);
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--prose :where(blockquote):not(:where([data-not-prose], [data-not-prose] *, .beckui--prose [class*="beckui--"], .beckui--prose [class*="beckui--"] *)) {
@@ -1111,6 +1114,8 @@
     }
     [data-theme='light'] .beckui--select:is(:focus-visible, [data-focus-visible]) {
       border-color: var(--beckui--colors-primary);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: 0 0 0 2px color-mix(in srgb, var(--beckui--colors-primary) 35%, transparent);
     }
     .beckui--select:is(:disabled, [disabled], [data-disabled], [aria-disabled=true]) {
@@ -1119,6 +1124,8 @@
     }
     .beckui--select:is(:focus-visible, [data-focus-visible]) {
       border-color: var(--beckui--colors-primary);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: 0 0 0 2px color-mix(in srgb, var(--beckui--colors-primary) 45%, transparent);
     }
     .beckui--select::placeholder, .beckui--select[data-placeholder] {
@@ -1151,13 +1158,14 @@
       padding-block: var(--beckui--spacing-sm);
       border-radius: var(--beckui--radii-md);
       text-decoration: none;
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
       position: fixed;
       z-index: 1000;
       clip: auto;
       white-space: normal;
       color: var(--beckui--colors-neutral-900);
       font-weight: var(--beckui--font-weights-bold);
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
       top: var(--beckui--spacing-md);
       left: var(--beckui--spacing-md);
@@ -1219,6 +1227,8 @@
     }
     [data-theme='light'] .beckui--textField:is(:focus-visible, [data-focus-visible]) {
       border-color: var(--beckui--colors-primary);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: 0 0 0 2px color-mix(in srgb, var(--beckui--colors-primary) 35%, transparent);
     }
     .beckui--textField:is(:disabled, [disabled], [data-disabled], [aria-disabled=true]) {
@@ -1227,6 +1237,8 @@
     }
     .beckui--textField:is(:focus-visible, [data-focus-visible]) {
       border-color: var(--beckui--colors-primary);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: 0 0 0 2px color-mix(in srgb, var(--beckui--colors-primary) 45%, transparent);
     }
     .beckui--textField::placeholder, .beckui--textField[data-placeholder] {
@@ -1252,6 +1264,8 @@
     }
     [data-theme='light'] .beckui--textarea:is(:focus-visible, [data-focus-visible]) {
       border-color: var(--beckui--colors-primary);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: 0 0 0 2px color-mix(in srgb, var(--beckui--colors-primary) 35%, transparent);
     }
     .beckui--textarea:is(:disabled, [disabled], [data-disabled], [aria-disabled=true]) {
@@ -1260,6 +1274,8 @@
     }
     .beckui--textarea:is(:focus-visible, [data-focus-visible]) {
       border-color: var(--beckui--colors-primary);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: 0 0 0 2px color-mix(in srgb, var(--beckui--colors-primary) 45%, transparent);
     }
     .beckui--textarea::placeholder, .beckui--textarea[data-placeholder] {
@@ -1649,6 +1665,8 @@
     }
     .beckui--select--invalid_true:is(:focus-visible, [data-focus-visible]) {
       border-color: var(--beckui--colors-danger);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--separator--orientation_horizontal {
@@ -1726,6 +1744,8 @@
     }
     .beckui--textField--invalid_true:is(:focus-visible, [data-focus-visible]) {
       border-color: var(--beckui--colors-danger);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--textarea--size_sm {
@@ -1754,6 +1774,8 @@
     }
     .beckui--textarea--invalid_true:is(:focus-visible, [data-focus-visible]) {
       border-color: var(--beckui--colors-danger);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
   }
@@ -2049,7 +2071,8 @@
       color: var(--beckui--colors-text);
     }
     .beckui--breadcrumb__link:is(:focus-visible, [data-focus-visible]) {
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--card__root {
@@ -2125,6 +2148,8 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3.5 8.2 6.6 11.2 12.5 4.8' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     }
     .beckui--checkbox__control:is(:focus-visible, [data-focus-visible]) + * {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--checkbox__indicator {
@@ -2239,7 +2264,8 @@
       color: var(--beckui--colors-text);
     }
     .beckui--dialog__close:is(:focus-visible, [data-focus-visible]) {
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--drawer__root {
@@ -2310,7 +2336,8 @@
       color: var(--beckui--colors-text);
     }
     .beckui--drawer__close:is(:focus-visible, [data-focus-visible]) {
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--field__root {
@@ -2367,7 +2394,8 @@
       border-color: var(--beckui--colors-neutral-400);
     }
     .beckui--menu__trigger:is(:focus-visible, [data-focus-visible]) {
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--menu__trigger::-webkit-details-marker {
@@ -2420,7 +2448,8 @@
       background-color: var(--beckui--colors-neutral-700);
     }
     .beckui--menu__item:is(:focus-visible, [data-focus-visible]) {
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--pagination__list {
@@ -2467,7 +2496,8 @@
       background-color: var(--beckui--colors-neutral-800);
     }
     .beckui--pagination__link:is(:focus-visible, [data-focus-visible]) {
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--pagination__ellipsis {
@@ -2535,6 +2565,8 @@
       border-color: var(--beckui--colors-danger);
     }
     .beckui--radio__control:is(:focus-visible, [data-focus-visible]) + * {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--radio__indicator {
@@ -2648,7 +2680,8 @@
       cursor: not-allowed;
     }
     .beckui--switch__root:is(:focus-visible, [data-focus-visible]) {
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--switch__track {
@@ -2777,7 +2810,8 @@
       color: var(--beckui--colors-text);
     }
     .beckui--tabs__tab:is(:focus-visible, [data-focus-visible]) {
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
     .beckui--tabs__panel {
@@ -2786,7 +2820,8 @@
       color: var(--beckui--colors-text);
     }
     .beckui--tabs__panel:is(:focus-visible, [data-focus-visible]) {
-      outline: var(--beckui--borders-none);
+      outline: 2px solid transparent;
+      outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
     }
   }
@@ -4034,6 +4069,19 @@
   html body {
     background-color: var(--beckui--colors-background);
     color: var(--beckui--colors-text);
+  }
+
+  /*
+   * Forced colors drop every box-shadow, and Becket draws focus rings with one. Recipes add a
+   * transparent outline that the system repaints; this covers focusable elements that set no
+   * outline of their own. It sits in the base layer, so an explicit `outline: none` in a recipe
+   * override or app CSS still wins: that's the author's call, not something Becket forces.
+   */
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+    }
   }
 }
 

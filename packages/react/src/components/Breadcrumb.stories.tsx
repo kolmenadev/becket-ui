@@ -28,6 +28,9 @@ export const Default: Story = {
   ),
 };
 
+/** Windows contrast themes drop the shadow ring: Tab here and the focus outline must still show. */
+export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
+
 export const Sizes: Story = {
   render: (args) => (
     <Stack gap="md">

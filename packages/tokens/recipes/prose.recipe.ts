@@ -39,7 +39,7 @@ const elementRules = {
     textDecoration: 'underline',
     textUnderlineOffset: '{spacing.text-1}',
     _hover: { color: 'linkHover' },
-    _focusVisible: { outline: 'none', boxShadow: 'outline', borderRadius: 'sm' },
+    _focusVisible: { outline: '2px solid transparent', outlineOffset: '2px', boxShadow: 'outline', borderRadius: 'sm' },
   },
   [el('strong')]: { fontWeight: 'bold', color: 'text' },
   [el('ul, ol')]: { marginBlock: 'text-5', paddingInlineStart: 'text-5' },

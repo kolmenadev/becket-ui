@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
 import { composeStories, type composeStory } from '@storybook/react';
 import { cleanup, render } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
-import { page } from 'vitest/browser';
+import { afterEach, describe, expect, it, onTestFinished } from 'vitest';
+import { commands, page, userEvent } from 'vitest/browser';
 import '@becket-ui/tokens/index.css';
 // The faces Becket's font stacks name; the docs Storybook loads the same files.
 import '@fontsource/inter/latin-400.css';
@@ -23,6 +23,13 @@ document.head.insertAdjacentHTML(
   </style>`,
 );
 
+declare module 'vitest/browser' {
+  // style-check keep: module augmentation; TypeScript merges it into Vitest's type for `commands`.
+  interface BrowserCommands {
+    emulateForcedColors: (value: 'active' | '') => Promise<void>;
+  }
+}
+
 // A failed comparison skips the rest of its test; clean up here so the next story starts empty.
 afterEach(cleanup);
 
@@ -39,8 +46,26 @@ describe.each(['dark', 'light'])('%s', (theme) => {
     )) {
       it(`${component} ${name}`, async () => {
         document.documentElement.setAttribute('data-theme', theme);
+        // ForcedColors stories show a focused control in a Windows contrast theme. The parameter is
+        // `true`, or `{ keys }` when one Tab doesn't reach the control (a Menu item).
+        if (Story.parameters.forcedColors) {
+          await commands.emulateForcedColors('active');
+          onTestFinished(() => commands.emulateForcedColors(''));
+        }
         render(<Story />);
         await document.fonts.ready;
+        if (Story.parameters.forcedColors) {
+          // Dialog and Drawer take initial focus two frames after opening; Tab has to start there.
+          await new Promise((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(resolve)),
+          );
+          // Real key presses, because :focus-visible only matches after keyboard input.
+          await userEvent.keyboard(Story.parameters.forcedColors.keys ?? '{Tab}');
+          // Menu focuses its first item a frame after ArrowDown opens it.
+          await new Promise((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(resolve)),
+          );
+        }
         await expect
           .element(page.elementLocator(document.body))
           .toMatchScreenshot(`${component}-${name}-${theme}`);

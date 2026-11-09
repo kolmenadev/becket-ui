@@ -70,7 +70,8 @@ export const drawer: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
       borderRadius: 'sm',
       _hover: { color: 'text' },
       _focusVisible: {
-        outline: 'none',
+        outline: '2px solid transparent',
+        outlineOffset: '2px',
         boxShadow: 'outline',
       },
     },

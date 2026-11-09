@@ -10,7 +10,8 @@ export const link: ReturnType<typeof defineRecipe> = defineRecipe({
     cursor: 'pointer',
     _hover: { color: 'linkHover' },
     _focusVisible: {
-      outline: 'none',
+      outline: '2px solid transparent',
+      outlineOffset: '2px',
       boxShadow: 'outline',
       borderRadius: 'sm',
     },

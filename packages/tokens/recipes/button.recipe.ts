@@ -17,7 +17,7 @@ export const button: ReturnType<typeof defineRecipe> = defineRecipe({
     width: 'field',
     maxWidth: '100%',
     boxSizing: 'border-box',
-    _focus: { outline: 'none', boxShadow: 'outline' },
+    _focus: { outline: '2px solid transparent', outlineOffset: '2px', boxShadow: 'outline' },
     _disabled: { opacity: 0.6, cursor: 'not-allowed' },
   },
   variants: {
