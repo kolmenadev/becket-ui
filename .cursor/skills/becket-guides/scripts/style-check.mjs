@@ -598,11 +598,23 @@ for (const [file, lines] of scope) {
         message:
           '`style-check keep` without a reason: // style-check keep: <why the guide allows it>',
       });
-    // JSDoc on a published package's exported API and prop types ships in the .d.ts, and
-    // `/** @type … */` types JS.
+    // JSDoc on a published package's exported API and prop types ships in the .d.ts, and a block of
+    // only type tags (`@type`, `@typedef`…) types JS. `@example` and other tags still document.
     if (
       comment.startsWith('/**') &&
-      !/^\/\*\*\s*@/.test(comment) &&
+      !(
+        /^\/\*\*[\s*]*@/.test(comment) &&
+        comment
+          .replace(/^\/\*\*|\*\/$/g, '')
+          .split('\n')
+          .map((line) => line.replace(/^\s*\*?\s*/, '').trim())
+          .filter(Boolean)
+          .every((line) =>
+            /^@(type|typedef|satisfies|template|import|callback|param|returns?|property|this|enum|overload)\b/.test(
+              line,
+            ),
+          )
+      ) &&
       !(
         /^packages\/(react\/src|tokens|a11y\/src)\//.test(file) &&
         !/\.(stories|test|examples|fixture)\.|\/scripts\//.test(file) &&

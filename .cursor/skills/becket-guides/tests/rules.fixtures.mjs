@@ -391,6 +391,7 @@ console.log(value);
     rule: 'CODING-STYLE § Avoid documentation comments',
     invalid: {
       'scripts/build.mjs': `/** Builds the package. */\nexport const build = () => {};\n`,
+      'scripts/example.mjs': `/** @example run() */\nexport const run = () => {};\n`,
       'packages/react/src/components/Chip.stories.tsx': `export default { title: 'Data Display/Chip' };
 /** The default chip. */
 export const Default = {};
@@ -399,11 +400,16 @@ export const Default = {};
     expect: [
       'packages/react/src/components/Chip.stories.tsx:2  [prefer] documentation comment; delete it, or keep only the why the code can’t say',
       'scripts/build.mjs:1  [prefer] documentation comment; delete it, or keep only the why the code can’t say',
+      'scripts/example.mjs:1  [prefer] documentation comment; delete it, or keep only the why the code can’t say',
     ],
     valid: {
       'scripts/build.mjs': `// tsup can't emit this file, so it's written by hand.
 /** @type {string[]} */
 export const entries = [];
+/**
+ * @type {string[]}
+ */
+export const externals = [];
 `,
       'packages/react/src/components/Chip.tsx': `/** A compact label. */
 export const Chip = (props: {
