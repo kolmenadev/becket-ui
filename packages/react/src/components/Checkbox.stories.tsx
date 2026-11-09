@@ -32,7 +32,15 @@ export const Default: Story = {
   },
 };
 
-export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
+export const ForcedColors: Story = {
+  parameters: { forcedColors: true },
+  render: () => (
+    <Stack gap="md">
+      <Checkbox label="Unchecked" />
+      <Checkbox label="Checked" defaultChecked />
+    </Stack>
+  ),
+};
 
 export const Checked: Story = {
   args: {

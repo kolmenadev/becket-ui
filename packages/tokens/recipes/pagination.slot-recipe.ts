@@ -47,6 +47,12 @@ export const pagination: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe(
         backgroundColor: 'primary',
         color: 'neutral.900',
         _hover: { backgroundColor: 'primaryHover' },
+        // The fill disappears in forced colors. An inset outline and an underline don't.
+        _highContrast: {
+          outline: '2px solid Highlight',
+          outlineOffset: '-2px',
+          textDecoration: 'underline',
+        },
       },
       // Previous on the first page and Next on the last render without an href.
       '&:not([href])': { color: 'muted', cursor: 'default' },

@@ -40,7 +40,13 @@ export const steps: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
       fontVariantNumeric: 'tabular-nums',
       // The step's number, unless a glyph (the completed check) fills the marker.
       '&:empty::before': { content: 'counter(becket-step)' },
-      '[data-status="current"] > &': { borderColor: 'primary', _light: { borderColor: 'primary' } },
+      // The shape difference from an upcoming step is MAV-213. Here the border is Highlight so
+      // forced colors don't paint the current step with the same border as the others.
+      '[data-status="current"] > &': {
+        borderColor: 'primary',
+        _highContrast: { borderColor: 'Highlight' },
+        _light: { borderColor: 'primary', _highContrast: { borderColor: 'Highlight' } },
+      },
       // Brand fill takes neutral.900 ink: cream on yellow fails AA.
       '[data-status="complete"] > &': {
         backgroundColor: 'primary',

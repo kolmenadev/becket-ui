@@ -32,9 +32,36 @@ export const checkbox: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
           backgroundColor: 'primary',
           borderColor: 'primary',
           backgroundImage: checkMark,
+          // Forced colors drop the image and repaint `primary` as one system color, so the checked
+          // box would match the empty one. Highlight stays, and the check is a shape, not a color.
+          _highContrast: {
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'Highlight',
+            borderColor: 'Highlight',
+            color: 'HighlightText',
+            backgroundImage: 'none',
+            '&::after': {
+              content: '"✓"',
+              color: 'currentColor',
+              fontSize: 'sm',
+              lineHeight: '1',
+            },
+          },
           _light: {
             backgroundColor: 'primary',
             borderColor: 'primary',
+            // Light's selector outranks a media query, so the same cue has to be restated here.
+            _highContrast: {
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'Highlight',
+              borderColor: 'Highlight',
+              color: 'HighlightText',
+              backgroundImage: 'none',
+            },
           },
         },
       },
