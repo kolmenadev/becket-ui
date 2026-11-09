@@ -100,4 +100,53 @@ Becket follows semver, `major.minor.patch`:
 
 Below 1.0, breaking changes ship as `minor` (`^0.3.0` never installs 0.4.0) and the changeset says what to migrate. Releases group every pending changeset, and the largest bump wins. Docs, test and CI-only changes get no changeset. If the bump isn't obvious, ask the owner before committing it.
 
+### Deprecations
+
+An alias lives until the next major, which is 2.0. Nothing is removed without one major of warnings after 1.0.
+
+`warnDeprecated` in `packages/react/src/helpers/deprecate.ts` warns once per key per session and is omitted from production builds. Do not export it from `packages/react/src/index.ts`. Constants and types warn through JSDoc only. A misuse warning stays a plain `console.warn`.
+
+**Prop.** Keep the old prop optional. Resolve `new ?? old ?? default`. Call `warnDeprecated` when `old !== undefined`. Key: `<Component>.<old>`.
+
+```ts
+/** @deprecated Use `new`. Removed in 2.0. */
+```
+
+```text
+`<Component>` prop `<old>` is deprecated; use `<new>`. Removed in 2.0.
+```
+
+**Component.** Warns at runtime. The message names the replacement and includes `Removed in 2.0.`
+
+```tsx
+export const Old = forwardRef<…>((props, ref) => {
+  warnDeprecated('Old', '…');
+  return <New ref={ref} {...props} />;
+});
+Old.displayName = 'Old';
+```
+
+**Constant.** JSDoc only. Add a one-line reason comment so the guides check accepts the alias.
+
+```ts
+/** @deprecated Use `newName`. Removed in 2.0. */
+// style-check keep: public alias of newName until 2.0.
+export const OLD = newName;
+```
+
+**Type.** JSDoc only.
+
+```ts
+/** @deprecated Use `NewType`. Removed in 2.0. */
+export type OldType = NewType;
+```
+
+**CSS variable.** No runtime warning. The recipe sets the new variable from the old one:
+
+```css
+--beckui-x: var(--becket-x, <default>);
+```
+
+Every `@deprecated` tag names the replacement in backticks and includes the text `Removed in`.
+
 That file does not publish. npm and the GitHub Releases sidebar come from the release workflow. Runbook: [`.cursor/skills/publish-becket/SKILL.md`](./.cursor/skills/publish-becket/SKILL.md). Turbo only **builds**.

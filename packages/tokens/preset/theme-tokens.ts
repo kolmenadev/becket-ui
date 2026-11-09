@@ -29,7 +29,7 @@ export const colors = {
   warning: { value: 'oklch(0.72 0.16 42)' },
   /** Hue 165, clear of hiveSage at 125. */
   success: { value: 'oklch(0.68 0.14 165)' },
-  /** @deprecated Prefer semantic `text` / `background`. Kept as CSS-var aliases. */
+  /** @deprecated Prefer semantic `text` / `background`. Kept as CSS-var aliases. Removed in 2.0. */
   lightBackground: { value: '{colors.neutral.50}' },
   lightText: { value: '{colors.neutral.900}' },
 };
