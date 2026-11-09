@@ -21,6 +21,9 @@ import {
 import { createPortal } from 'react-dom';
 import { tooltip as tooltipRecipe } from '@becket-ui/tokens/recipes';
 
+import { Button } from './Button';
+import { Icon } from './Icon';
+
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 export type TooltipProps = {
@@ -34,8 +37,6 @@ export type TooltipProps = {
 };
 
 const OFFSET_PX = 8;
-
-const NATIVE_FOCUSABLE = new Set(['a', 'button', 'input', 'select', 'summary', 'textarea']);
 
 type TriggerProps = {
   ref?: Ref<HTMLElement>;
@@ -75,18 +76,8 @@ function chain<E>(their?: (event: E) => void, ours?: (event: E) => void) {
   };
 }
 
-function triggerNeedsTabIndex(element: ReactElement<TriggerProps>): boolean {
-  if (typeof element.type !== 'string') {
-    return false;
-  }
-  if (NATIVE_FOCUSABLE.has(element.type)) {
-    return false;
-  }
-  if (element.props.tabIndex != null) {
-    return false;
-  }
-  return true;
-}
+// Strict mode renders twice; a module flag keeps the warning to one call per session.
+let hasWarnedUnnamedIcon = false;
 
 function computePosition(
   trigger: DOMRect,
@@ -131,17 +122,9 @@ function clampToViewport(top: number, left: number, tip: DOMRect): { top: number
   };
 }
 
+/** Non-interactive triggers get a focusable wrapper; wrap a disabled button yourself. */
 export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
-  (
-    {
-      content,
-      children,
-      placement = 'top',
-      delayMs = 200,
-      disabled = false,
-    },
-    ref,
-  ) => {
+  ({ content, children, placement = 'top', delayMs = 200, disabled = false }, ref) => {
     const tipId = useId();
     const triggerRef = useRef<HTMLElement | null>(null);
     const tipRef = useRef<HTMLDivElement | null>(null);
@@ -220,7 +203,12 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
     const onlyChild = childArray.length === 1 ? childArray[0] : undefined;
     let trigger: ReactNode;
 
-    if (isValidElement(onlyChild)) {
+    // Button renders a button and forwards handlers, so it stays the only tab stop.
+    // Other components may drop cloned props, so they get a focusable wrapper.
+    if (
+      isValidElement(onlyChild) &&
+      (typeof onlyChild.type === 'string' || onlyChild.type === Button)
+    ) {
       const child = onlyChild as ReactElement<TriggerProps>;
       const childRef = (child as { ref?: Ref<HTMLElement> }).ref ?? child.props.ref;
       const describedBy = [child.props['aria-describedby'], describedByWhenOpen]
@@ -233,9 +221,28 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
         onFocus: chain(child.props.onFocus, hoverHandlers.onFocus),
         onBlur: chain(child.props.onBlur, hoverHandlers.onBlur),
         'aria-describedby': describedBy || undefined,
-        ...(triggerNeedsTabIndex(child) ? { tabIndex: 0 } : {}),
+        ...(typeof child.type === 'string' &&
+        child.props.tabIndex == null &&
+        // An <a> is focusable only with an href. A <button>, including disabled, is left as it is.
+        (child.type === 'a'
+          ? child.props.href == null
+          : !['button', 'input', 'select', 'summary', 'textarea'].includes(child.type))
+          ? { tabIndex: 0 }
+          : {}),
       });
     } else {
+      if (
+        process.env.NODE_ENV !== 'production' &&
+        !hasWarnedUnnamedIcon &&
+        isValidElement<{ label?: string }>(onlyChild) &&
+        onlyChild.type === Icon &&
+        onlyChild.props.label == null
+      ) {
+        hasWarnedUnnamedIcon = true;
+        console.warn(
+          'Tooltip: this Icon trigger has no accessible name. Pass a label so the keyboard stop is named.',
+        );
+      }
       trigger = (
         <span
           ref={setTriggerRef}

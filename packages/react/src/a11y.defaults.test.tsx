@@ -7,6 +7,7 @@ import { Checkbox } from './components/Checkbox';
 import { Dialog } from './components/Dialog';
 import { Drawer } from './components/Drawer';
 import { Field, FieldControl, FieldHelper, FieldLabel } from './components/Field';
+import { Icon } from './components/Icon';
 import { Menu, MenuItem } from './components/Menu';
 import { Radio, RadioGroup } from './components/Radio';
 import { Switch } from './components/Switch';
@@ -65,6 +66,18 @@ describe('Default primitive axe gate', () => {
       </Tooltip>,
     );
     await assertNoAxeViolations(container);
+  });
+
+  it('Tooltip wrapping Icon', async () => {
+    await assertNoAxeViolations(
+      render(
+        <Tooltip content="Info">
+          <Icon label="Info">
+            <svg />
+          </Icon>
+        </Tooltip>,
+      ).container,
+    );
   });
 
   it('Dialog', async () => {
