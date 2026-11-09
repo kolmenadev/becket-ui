@@ -79,6 +79,9 @@ function chain<E>(their?: (event: E) => void, ours?: (event: E) => void) {
 // Strict mode renders twice; a module flag keeps the warning to one call per session.
 let hasWarnedUnnamedIcon = false;
 
+// The component tsconfig does not load @types/node. The typeof guard keeps a page without process from throwing.
+declare const process: { env: { NODE_ENV?: string } } | undefined;
+
 function computePosition(
   trigger: DOMRect,
   tip: DOMRect,
@@ -232,6 +235,7 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
       });
     } else {
       if (
+        typeof process !== 'undefined' &&
         process.env.NODE_ENV !== 'production' &&
         !hasWarnedUnnamedIcon &&
         isValidElement<{ label?: string }>(onlyChild) &&
