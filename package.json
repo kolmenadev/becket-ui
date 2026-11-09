@@ -12,9 +12,12 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "lint:style": "node .cursor/skills/becket-guides/scripts/style-check.mjs",
-    "test": "turbo run test && pnpm test:style-check",
+    "test": "turbo run test && pnpm test:style-check && pnpm test:api-report",
     "test:style-check": "node --test '.cursor/skills/becket-guides/tests/*.test.mjs'",
+    "test:api-report": "node --test scripts/api-report.test.mjs",
     "pack:check": "node scripts/pack-check.mjs",
+    "api:check": "node scripts/api-report.mjs --check",
+    "api:update": "node scripts/api-report.mjs --update",
     "publish:check": "node scripts/check-publishable.mjs",
     "example:prepare": "node scripts/prepare-next-example.mjs",
     "example:dev": "pnpm example:prepare && npm --prefix apps/next-example run dev",
@@ -27,6 +30,7 @@
   ],
   "devDependencies": {
     "@changesets/cli": "^3.0.2",
+    "@microsoft/api-extractor": "^7.60.1",
     "prettier": "^3.9.6",
     "turbo": "2.10.12",
     "typescript": "7.0.2"
