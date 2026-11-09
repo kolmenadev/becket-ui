@@ -12,7 +12,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
   ({ as, children, css: cssProp, className, ...rest }, ref) => {
     // A union of elements rejects one prop spread: each element's event handlers are invariant.
     const Component = (as ?? 'p') as ElementType;
-    // splitCssProps separates style props from DOM props so the DOM remainder can be spread.
+    // Unsplit, style props such as fontWeight would land on the element as unknown attributes.
     const [styleProps, domProps] = splitCssProps(rest);
     return (
       <Component

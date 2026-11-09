@@ -9,7 +9,15 @@ import { Text } from './Text';
 describe('Text', () => {
   it('forwards attributes and inline style to the paragraph', () => {
     render(
-      <Text id="t" lang="es" dir="rtl" role="note" aria-label="x" data-x="1" style={{ color: 'red' }}>
+      <Text
+        id="t"
+        lang="es"
+        dir="rtl"
+        role="note"
+        aria-label="x"
+        data-x="1"
+        style={{ color: 'red' }}
+      >
         Hola
       </Text>,
     );
@@ -24,8 +32,8 @@ describe('Text', () => {
     expect(note.style.color).toBe('red');
   });
 
-  it('labels an input when rendered as a label', () => {
-    render(
+  it('labels an input when rendered as a label', async () => {
+    const { container } = render(
       <>
         <Text as="label" htmlFor="email">
           Email
@@ -35,6 +43,7 @@ describe('Text', () => {
     );
 
     expect(screen.getByLabelText('Email').id).toBe('email');
+    await assertNoAxeViolations(container);
   });
 
   it('forwards click, hover and key handlers', async () => {
@@ -79,17 +88,5 @@ describe('Text', () => {
     expect(text.classList.contains('mine')).toBe(true);
     expect(text.hasAttribute('fontweight')).toBe(false);
     expect(text.hasAttribute('css')).toBe(false);
-  });
-
-  it('has no axe violations when rendered as a label', async () => {
-    const { container } = render(
-      <>
-        <Text as="label" htmlFor="email">
-          Email
-        </Text>
-        <input id="email" />
-      </>,
-    );
-    await assertNoAxeViolations(container);
   });
 });
