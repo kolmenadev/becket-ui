@@ -5,6 +5,7 @@ import { assertNoAxeViolations } from '@becket-ui/a11y';
 
 import { Button } from './Button';
 import { Icon } from './Icon';
+import { Link } from './Link';
 import { Tag } from './Tag';
 import { Tooltip } from './Tooltip';
 
@@ -128,6 +129,20 @@ describe('Tooltip', () => {
     expect(document.activeElement).toBe(link);
     expect(link.getAttribute('tabindex')).toBeNull();
     expect(link.parentElement?.getAttribute('tabindex')).not.toBe('0');
+  });
+
+  it('keeps a Becket Link as the only tab stop', async () => {
+    render(
+      <Tooltip content="Read the docs" delayMs={0}>
+        <Link href="/docs">Docs</Link>
+      </Tooltip>,
+    );
+
+    const link = screen.getByRole('link', { name: 'Docs' });
+    await userEvent.setup().tab();
+    expect(document.activeElement).toBe(link);
+    expect(link.parentElement?.getAttribute('tabindex')).toBeNull();
+    expect(link.getAttribute('aria-describedby')).toBe((await screen.findByRole('tooltip')).id);
   });
 
   it('warns when an Icon trigger has no accessible name', () => {

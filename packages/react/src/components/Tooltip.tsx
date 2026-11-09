@@ -23,6 +23,7 @@ import { tooltip as tooltipRecipe } from '@becket-ui/tokens/recipes';
 
 import { Button } from './Button';
 import { Icon } from './Icon';
+import { Link } from './Link';
 
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
@@ -206,11 +207,11 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
     const onlyChild = childArray.length === 1 ? childArray[0] : undefined;
     let trigger: ReactNode;
 
-    // Button renders a button and forwards handlers, so it stays the only tab stop.
-    // Other components may drop cloned props, so they get a focusable wrapper.
+    // Button and Link render a native control and forward every prop, so they stay the only tab
+    // stop. Other components may drop cloned props, so they get a focusable wrapper.
     if (
       isValidElement(onlyChild) &&
-      (typeof onlyChild.type === 'string' || onlyChild.type === Button)
+      (typeof onlyChild.type === 'string' || onlyChild.type === Button || onlyChild.type === Link)
     ) {
       const child = onlyChild as ReactElement<TriggerProps>;
       const childRef = (child as { ref?: Ref<HTMLElement> }).ref ?? child.props.ref;
@@ -240,7 +241,7 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
         !hasWarnedUnnamedIcon &&
         isValidElement<{ label?: string }>(onlyChild) &&
         onlyChild.type === Icon &&
-        onlyChild.props.label == null
+        !onlyChild.props.label
       ) {
         hasWarnedUnnamedIcon = true;
         console.warn(
