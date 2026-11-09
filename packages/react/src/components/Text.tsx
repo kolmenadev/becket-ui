@@ -19,7 +19,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
         // forwardRef types the ref as HTMLElement; `as` is polymorphic, so the element type is only known at runtime.
         ref={ref as Ref<never>}
         {...domProps}
-        className={[css(styleProps, cssProp), className].filter(Boolean).join(' ')}
+        className={[css(styleProps, cssProp), className].filter(Boolean).join(' ') || undefined}
       >
         {children}
       </Component>
