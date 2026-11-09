@@ -102,9 +102,12 @@ export const Menu = forwardRef<HTMLDetailsElement, MenuProps>(
           closeAndRestoreFocus: () => {
             const details = detailsRef.current;
             if (!details) return;
+            // Focus on <body> means nobody placed it: the item was removed, or Safari didn't focus
+            // the clicked button. The trigger still gets it back.
             // style-check keep: evaluation order; inlined, activeElement is read after close() hides the item
             const focusLeftTheMenu =
               document.activeElement instanceof Node &&
+              document.activeElement !== document.body &&
               !details.contains(document.activeElement);
             // Same two lines as Escape: a helper used only twice stays inline.
             close();
