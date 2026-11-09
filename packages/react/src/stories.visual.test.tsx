@@ -46,7 +46,8 @@ describe.each(['dark', 'light'])('%s', (theme) => {
     )) {
       it(`${component} ${name}`, async () => {
         document.documentElement.setAttribute('data-theme', theme);
-        // ForcedColors stories show a focused control in a Windows contrast theme.
+        // ForcedColors stories show a focused control in a Windows contrast theme. The parameter is
+        // `true`, or `{ keys }` when one Tab doesn't reach the control (a Menu item).
         if (Story.parameters.forcedColors) {
           await commands.emulateForcedColors('active');
           onTestFinished(() => commands.emulateForcedColors(''));
@@ -58,8 +59,12 @@ describe.each(['dark', 'light'])('%s', (theme) => {
           await new Promise((resolve) =>
             requestAnimationFrame(() => requestAnimationFrame(resolve)),
           );
-          // A real key press, because :focus-visible only matches after keyboard input.
-          await userEvent.keyboard('{Tab}');
+          // Real key presses, because :focus-visible only matches after keyboard input.
+          await userEvent.keyboard(Story.parameters.forcedColors.keys ?? '{Tab}');
+          // Menu focuses its first item a frame after ArrowDown opens it.
+          await new Promise((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(resolve)),
+          );
         }
         await expect
           .element(page.elementLocator(document.body))
