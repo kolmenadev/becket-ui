@@ -1,0 +1,529 @@
+{
+  "aspectRatio": {
+    "defaultVariants": {
+      "ratio": "1:1"
+    },
+    "ratio": [
+      "13:8",
+      "16:9",
+      "1:1",
+      "2:3",
+      "3:2",
+      "3:5",
+      "5:3",
+      "5:8",
+      "8:13",
+      "8:5",
+      "9:16"
+    ]
+  },
+  "avatar": {
+    "defaultVariants": {
+      "size": "md"
+    },
+    "size": [
+      "lg",
+      "md",
+      "sm",
+      "xl"
+    ]
+  },
+  "badge": {
+    "borderRadius": [
+      "full",
+      "lg",
+      "md",
+      "none",
+      "sm",
+      "xl"
+    ],
+    "defaultVariants": {
+      "borderRadius": "full",
+      "size": "md",
+      "visual": "neutral",
+      "withGradient": false
+    },
+    "size": [
+      "lg",
+      "md",
+      "sm"
+    ],
+    "visual": [
+      "neutral",
+      "outline",
+      "primary",
+      "secondary"
+    ],
+    "withGradient": [
+      "false",
+      "true"
+    ]
+  },
+  "blockquote": {
+    "defaultVariants": {}
+  },
+  "box": {
+    "background": [
+      "background",
+      "none",
+      "subtle",
+      "surface"
+    ],
+    "defaultVariants": {
+      "background": "none",
+      "padding": "none",
+      "radius": "none"
+    },
+    "padding": [
+      "lg",
+      "md",
+      "none",
+      "sm",
+      "xl",
+      "xs"
+    ],
+    "radius": [
+      "full",
+      "lg",
+      "md",
+      "none",
+      "sm",
+      "xl"
+    ]
+  },
+  "breadcrumb": {
+    "defaultVariants": {
+      "separator": "chevron",
+      "size": "sm"
+    },
+    "separator": [
+      "chevron",
+      "slash"
+    ],
+    "size": [
+      "md",
+      "sm"
+    ]
+  },
+  "button": {
+    "borderRadius": [
+      "full",
+      "lg",
+      "md",
+      "none",
+      "sm",
+      "xl"
+    ],
+    "defaultVariants": {
+      "borderRadius": "md",
+      "fullWidth": false,
+      "size": "md",
+      "visual": "outline",
+      "withGradient": false
+    },
+    "fullWidth": [
+      "false",
+      "true"
+    ],
+    "size": [
+      "md",
+      "sm"
+    ],
+    "visual": [
+      "neutral",
+      "outline",
+      "primary",
+      "secondary"
+    ],
+    "withGradient": [
+      "false",
+      "true"
+    ]
+  },
+  "card": {
+    "defaultVariants": {
+      "fullWidth": false,
+      "size": "md",
+      "visual": "subtle"
+    },
+    "fullWidth": [
+      "false",
+      "true"
+    ],
+    "size": [
+      "lg",
+      "md",
+      "sm"
+    ],
+    "visual": [
+      "elevated",
+      "outline",
+      "subtle"
+    ]
+  },
+  "center": {
+    "defaultVariants": {
+      "inline": false
+    },
+    "inline": [
+      "false",
+      "true"
+    ]
+  },
+  "checkbox": {
+    "defaultVariants": {
+      "size": "md"
+    },
+    "size": [
+      "md",
+      "sm"
+    ]
+  },
+  "code": {
+    "defaultVariants": {}
+  },
+  "container": {
+    "defaultVariants": {
+      "padding": "md",
+      "size": "lg"
+    },
+    "padding": [
+      "lg",
+      "md",
+      "none",
+      "sm",
+      "xl",
+      "xs"
+    ],
+    "size": [
+      "full",
+      "lg",
+      "md",
+      "sm",
+      "xl"
+    ]
+  },
+  "dialog": {
+    "defaultVariants": {}
+  },
+  "drawer": {
+    "defaultVariants": {
+      "placement": "end"
+    },
+    "placement": [
+      "end",
+      "start"
+    ]
+  },
+  "field": {
+    "defaultVariants": {
+      "fullWidth": false,
+      "size": "md"
+    },
+    "fullWidth": [
+      "false",
+      "true"
+    ],
+    "size": [
+      "lg",
+      "md",
+      "sm"
+    ]
+  },
+  "figure": {
+    "defaultVariants": {}
+  },
+  "heading": {
+    "defaultVariants": {
+      "size": "xl",
+      "withGradient": false
+    },
+    "size": [
+      "2xl",
+      "3xl",
+      "4xl",
+      "5xl",
+      "6xl",
+      "lg",
+      "md",
+      "sm",
+      "xl"
+    ],
+    "withGradient": [
+      "false",
+      "true"
+    ]
+  },
+  "hide": {
+    "asContents": [
+      "false",
+      "true"
+    ],
+    "below": [
+      "2xl",
+      "lg",
+      "md",
+      "sm",
+      "xl"
+    ],
+    "defaultVariants": {
+      "asContents": true
+    },
+    "from": [
+      "2xl",
+      "lg",
+      "md",
+      "sm",
+      "xl"
+    ]
+  },
+  "icon": {
+    "defaultVariants": {
+      "size": "md"
+    },
+    "size": [
+      "lg",
+      "md",
+      "sm",
+      "xl"
+    ]
+  },
+  "image": {
+    "defaultVariants": {
+      "fit": "cover",
+      "radius": "none"
+    },
+    "fit": [
+      "contain",
+      "cover"
+    ],
+    "radius": [
+      "full",
+      "lg",
+      "md",
+      "none",
+      "sm",
+      "xl"
+    ]
+  },
+  "kbd": {
+    "defaultVariants": {}
+  },
+  "link": {
+    "defaultVariants": {
+      "visited": false,
+      "visual": "default"
+    },
+    "visited": [
+      "false",
+      "true"
+    ],
+    "visual": [
+      "default",
+      "muted"
+    ]
+  },
+  "list": {
+    "defaultVariants": {
+      "marker": "disc",
+      "spacing": "sm"
+    },
+    "marker": [
+      "decimal",
+      "disc",
+      "none"
+    ],
+    "spacing": [
+      "md",
+      "sm",
+      "xs"
+    ]
+  },
+  "mark": {
+    "defaultVariants": {}
+  },
+  "menu": {
+    "defaultVariants": {}
+  },
+  "pagination": {
+    "defaultVariants": {
+      "size": "md"
+    },
+    "size": [
+      "md",
+      "sm"
+    ]
+  },
+  "prose": {
+    "defaultVariants": {
+      "size": "md"
+    },
+    "size": [
+      "lg",
+      "md",
+      "sm"
+    ]
+  },
+  "radio": {
+    "defaultVariants": {
+      "size": "md"
+    },
+    "size": [
+      "md",
+      "sm"
+    ]
+  },
+  "selectRecipe": {
+    "defaultVariants": {
+      "invalid": false,
+      "size": "md"
+    },
+    "invalid": [
+      "false",
+      "true"
+    ],
+    "size": [
+      "lg",
+      "md",
+      "sm"
+    ]
+  },
+  "separator": {
+    "defaultVariants": {
+      "orientation": "horizontal"
+    },
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ]
+  },
+  "skipLink": {
+    "defaultVariants": {}
+  },
+  "spinner": {
+    "defaultVariants": {
+      "size": "md"
+    },
+    "size": [
+      "lg",
+      "md",
+      "sm"
+    ]
+  },
+  "steps": {
+    "defaultVariants": {
+      "orientation": "horizontal",
+      "size": "md"
+    },
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ],
+    "size": [
+      "md",
+      "sm"
+    ]
+  },
+  "switchRecipe": {
+    "checked": [
+      "false",
+      "true"
+    ],
+    "defaultVariants": {
+      "checked": false,
+      "size": "md"
+    },
+    "size": [
+      "lg",
+      "md",
+      "sm"
+    ]
+  },
+  "table": {
+    "defaultVariants": {
+      "size": "md"
+    },
+    "size": [
+      "md",
+      "sm"
+    ]
+  },
+  "tabs": {
+    "defaultVariants": {}
+  },
+  "tag": {
+    "borderRadius": [
+      "full",
+      "lg",
+      "md",
+      "none",
+      "sm",
+      "xl"
+    ],
+    "defaultVariants": {
+      "borderRadius": "full",
+      "size": "md",
+      "visual": "neutral",
+      "withGradient": false
+    },
+    "size": [
+      "lg",
+      "md",
+      "sm"
+    ],
+    "visual": [
+      "neutral",
+      "outline",
+      "primary",
+      "secondary"
+    ],
+    "withGradient": [
+      "false",
+      "true"
+    ]
+  },
+  "textFieldRecipe": {
+    "defaultVariants": {
+      "invalid": false,
+      "size": "md"
+    },
+    "invalid": [
+      "false",
+      "true"
+    ],
+    "size": [
+      "lg",
+      "md",
+      "sm"
+    ]
+  },
+  "textareaRecipe": {
+    "defaultVariants": {
+      "invalid": false,
+      "size": "md"
+    },
+    "invalid": [
+      "false",
+      "true"
+    ],
+    "size": [
+      "lg",
+      "md",
+      "sm"
+    ]
+  },
+  "tooltip": {
+    "defaultVariants": {
+      "placement": "top"
+    },
+    "placement": [
+      "bottom",
+      "left",
+      "right",
+      "top"
+    ]
+  },
+  "visuallyHidden": {
+    "defaultVariants": {}
+  }
+}

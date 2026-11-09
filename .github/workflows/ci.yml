@@ -28,6 +28,7 @@ jobs:
         run: pnpm lint:style --base origin/${{ github.base_ref }}
       - run: pnpm publish:check
       - run: pnpm build
+      - run: pnpm api:check
       - run: pnpm --filter @becket-ui/react exec tsc --noEmit -p tsconfig.build.json
       - run: pnpm --filter @becket-ui/tokens typecheck
       - run: pnpm --filter @becket-ui/a11y test
