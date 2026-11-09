@@ -20,7 +20,7 @@ for (const [name, brand] of Object.entries({
   'forest green': ['#228b22'],
   'out of gamut': ['oklch(0.7 0.4 150)'],
 })) {
-  test(`${name}: the derived theme passes AA in both themes`, () => {
+  test(`${name}: required pairs reach their threshold in both themes`, () => {
     const { theme, contrast, notes } = deriveBecketTheme({ brand });
     assert.equal(
       contrast.passes,

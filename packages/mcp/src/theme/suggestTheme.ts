@@ -139,7 +139,7 @@ export function formatSuggestion(findings: Findings): string {
         const color = typeof value === 'string' ? parseColor(value) : null;
         return color ? formatHex(color) : String(value);
       });
-      return `${index + 1}. ${option.label}: \`${JSON.stringify(option.brand)}\` — buttons ${button}${notes.some((note) => note.token === 'primary' && /lightened/.test(note.reason)) ? ` (lightened from ${option.brand[0]} for readable labels)` : ''}, light-theme links ${link}; ${contrast.passes ? 'passes AA in dark and light' : `${contrast.failures.length} AA failures`}`;
+      return `${index + 1}. ${option.label}: \`${JSON.stringify(option.brand)}\` — buttons ${button}${notes.some((note) => note.token === 'primary' && /lightened/.test(note.reason)) ? ` (lightened from ${option.brand[0]} for readable labels)` : ''}, light-theme links ${link}; ${contrast.passes ? 'designed toward WCAG 2.2 AA; conformance not yet verified' : `${contrast.failures.length} required pairs below threshold`}`;
     }),
     'Or the user gives their own hex values. Becket shades any color that would fail contrast and says why.',
   );

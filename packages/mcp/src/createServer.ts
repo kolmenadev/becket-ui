@@ -102,7 +102,7 @@ export function createServer(data: Data = loadData()): McpServer {
     {
       title: 'Set a brand theme',
       description:
-        'Turn brand tokens into Becket theme CSS that passes WCAG 2.2 AA in dark and light. Give one to three brand colors (Becket derives every color token) and/or exact tokens. Returns the CSS to write, the same theme as defineBecketTheme() code, why each value was chosen, and a contrast report. Writes nothing; you write the file. For a logo, image URL or brand manual, call suggest_theme first.',
+        'Becket UI is designed toward WCAG 2.2 AA; conformance not yet verified. Give one to three brand colors (Becket derives every color token) and/or exact tokens. Returns the CSS to write, the same theme as defineBecketTheme() code, why each value was chosen, and a contrast report. Writes nothing; you write the file. For a logo, image URL or brand manual, call suggest_theme first.',
       inputSchema: {
         brand: z.array(z.string()).min(1).max(3).optional().describe('Brand colors, most important first: hex, rgb(), hsl() or oklch()'),
         colors: z

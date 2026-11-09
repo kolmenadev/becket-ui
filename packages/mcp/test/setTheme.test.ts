@@ -3,9 +3,9 @@ import { describe, expect, it } from 'vitest';
 import { setTheme } from '../src/theme/setTheme';
 
 describe('set_theme', () => {
-  it('builds a full AA theme from one brand color and explains the shaded values', () => {
+  it('builds a full theme from one brand color and explains the shaded values', () => {
     const text = setTheme({ brand: ['#0a3d91'] });
-    expect(text).toContain('All 34 required pairs pass WCAG 2.2 AA in dark and light.');
+    expect(text).toContain('All 34 required pairs reach their threshold in dark and light.');
     expect(text).toMatch(/```css\n:root \{\n[\s\S]*--beckui--colors-primary: oklch\(/);
     expect(text).toContain("html[data-theme='light']");
     expect(text).toContain("import { defineBecketTheme } from '@becket-ui/tokens/theme';");
@@ -16,7 +16,7 @@ describe('set_theme', () => {
   it('keeps exact tokens and reports the pairs they fail, without calling it shippable', () => {
     const text = setTheme({ colors: { primary: '#0a3d91' } });
     expect(text).toContain('--beckui--colors-primary: #0a3d91;');
-    expect(text).toMatch(/\d+ of 34 required pairs FAIL/);
+    expect(text).toMatch(/\d+ of 34 required pairs below threshold/);
     expect(text).toMatch(
       /\| dark \| label on a filled primary control \| 1\.\d+:1 \| 4\.5:1 \| \*\*FAIL\*\* \|/,
     );
@@ -31,7 +31,7 @@ describe('set_theme', () => {
     expect(text).toContain('--beckui--colors-background: oklch(0.18 0.03 260);');
     expect(text).toContain('--beckui--colors-background: #ffffff;');
     expect(text).toContain('- background: Pinned by you, kept exactly.');
-    expect(text).toContain('required pairs pass');
+    expect(text).toContain('required pairs reach their threshold');
   });
 
   it('writes px lengths as rem (and the text unit as em)', () => {

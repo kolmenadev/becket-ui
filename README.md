@@ -30,7 +30,9 @@ Apps that only use components do **not** need Panda, Tailwind, or a theme provid
 
 Rebrand with CSS variables after `index.css`, or `defineBecketTheme()` from
 `@becket-ui/tokens/theme`. `deriveBecketTheme()` builds a full theme from one to three brand
-colors that passes WCAG AA in dark and light. See [docs/THEMING.md](./docs/THEMING.md).
+colors. Becket UI is designed toward WCAG 2.2 AA and the ARIA Authoring Practices. Conformance
+has not yet been verified. Text and label color pairs are tested at 4.5:1 in both themes. See
+[docs/THEMING.md](./docs/THEMING.md).
 
 ### Optional: Panda already in the app
 

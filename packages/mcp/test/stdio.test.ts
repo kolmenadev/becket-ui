@@ -38,9 +38,13 @@ describe('stdio server', () => {
   });
 
   it('sets a theme over the wire', async () => {
-    const result = await client.callTool({ name: 'set_theme', arguments: { brand: ['#0a3d91'], fonts: { sans: 'Inter' } } });
-    expect(textOf(result)).toContain('required pairs pass WCAG 2.2 AA');
-    expect(textOf(result)).toContain('--beckui--fonts-sans: Inter, system-ui');
+    const text = textOf(
+      await client.callTool({ name: 'set_theme', arguments: { fonts: { sans: 'Inter' } } }),
+    );
+    expect(text).toContain(
+      'All 34 required pairs reach their threshold in dark and light. Advisory pairs are not yet verified: neutral.900 / tertiary in dark, neutral.900 / tertiary in light, primary / background in light, primary / surface in light.',
+    );
+    expect(text).toContain('--beckui--fonts-sans: Inter, system-ui');
   });
 
   it('answers get_component_props for Button and Field', async () => {

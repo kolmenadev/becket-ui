@@ -163,7 +163,7 @@ describe('suggest_theme', () => {
       'Ask the user one step at a time and wait for each answer. 1 step: brand colors.',
     );
     expect(text).toMatch(
-      /1\. Recommended: `\["#[0-9a-f]{6}","#[0-9a-f]{6}"\]` — buttons #[0-9a-f]{6}.*passes AA in dark and light/,
+      /1\. Recommended: `\["#[0-9a-f]{6}","#[0-9a-f]{6}"\]` — buttons #[0-9a-f]{6}.*designed toward WCAG 2\.2 AA; conformance not yet verified/,
     );
     expect(text).toContain('2. Swap the first two');
     expect(text).toContain("Don't guess a font from a logo.");

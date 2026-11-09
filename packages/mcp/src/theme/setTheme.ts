@@ -166,9 +166,18 @@ export function setTheme(input: SetThemeInput): string {
     `# Becket theme${contrast.passes ? '' : ' (contrast failures, see below)'}`,
     '## Contrast',
     [
-      contrast.passes
-        ? `All ${required.length} required pairs pass WCAG 2.2 AA in dark and light.`
-        : `${contrast.failures.length} of ${required.length} required pairs FAIL WCAG 2.2 AA. Don't ship this theme as is.`,
+      [
+        contrast.passes
+          ? `All ${required.length} required pairs reach their threshold in dark and light.`
+          : `${contrast.failures.length} of ${required.length} required pairs below threshold. Don't ship this theme as is.`,
+        // Wrap the joined names instead of gating on `.length`, so a non-empty advisory list is always reported.
+        contrast.advisories
+          .map((result) => `${result.foreground} / ${result.background} in ${result.theme}`)
+          .join(', ')
+          .replace(/^(.+)$/, 'Advisory pairs are not yet verified: $1.'),
+      ]
+        .filter(Boolean)
+        .join(' '),
       flagged.length
         ? [
             '| theme | where | ratio | needs | result |',
@@ -178,9 +187,6 @@ export function setTheme(input: SetThemeInput): string {
                 `| ${result.theme} | ${result.use} | ${result.ratio}:1 | ${result.minimum}:1 | ${result.passes ? 'pass' : result.level === 'advisory' ? 'advisory' : '**FAIL**'} |`,
             ),
           ].join('\n')
-        : null,
-      contrast.advisories.length
-        ? `Advisory rows aren't enforced because Becket's own default theme misses them too, but fix them when you can: ${[...new Set(contrast.advisories.map((result) => result.note))].join(' ')}`
         : null,
     ]
       .filter(Boolean)

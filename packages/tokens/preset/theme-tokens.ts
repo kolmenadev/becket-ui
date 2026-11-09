@@ -73,7 +73,7 @@ export const semanticColors = {
   },
   /**
    * Sage on canvas (outline Button / Badge / Tag). Filled secondary stays
-   * `colors.secondary` — one lightness cannot pass AA on both canvases.
+   * `colors.secondary` — one lightness cannot reach 4.5:1 on both canvases.
    */
   accent: {
     value: {

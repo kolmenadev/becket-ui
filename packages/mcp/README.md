@@ -24,7 +24,7 @@ It ships with the same version number as `@becket-ui/react`: `@becket-ui/mcp@0.4
 | `get_guidelines`        | The app-code guide, whole or one section (`component`, `tokens`, `accessibility`, `example`, `checklist`, …)                                               |
 | `review_usage`          | Checks code for raw layout, text and controls, literal colors, pixel spacing, recipe classes, Chakra imports and unknown exports, each with the Becket fix |
 | `suggest_theme`         | Reads a logo (PNG, JPEG, SVG) or brand manual (PDF) from a path, https URL or base64 and suggests brand tokens, with a step-by-step script for the agent |
-| `set_theme`             | Turns brand colors and tokens into theme CSS and `defineBecketTheme()` code, with a WCAG 2.2 AA report for dark and light. Writes nothing |
+| `set_theme`             | Turns brand colors and tokens into theme CSS and `defineBecketTheme()` code. Becket UI is designed toward WCAG 2.2 AA; conformance not yet verified. Writes nothing |
 
 ## Connect
 
@@ -77,7 +77,7 @@ PDF. It calls `suggest_theme`, then asks you one thing at a time: which brand co
 and the corner radius and text size if the manual states them. Then it calls `set_theme` and
 writes the CSS file. Already know your colors? Ask for `set_theme` with them directly.
 
-- Every theme is checked against WCAG 2.2 AA in dark and light. A brand color too dark for a
+- Becket UI is designed toward WCAG 2.2 AA and the ARIA Authoring Practices. Conformance has not yet been verified. Text and label color pairs are tested at 4.5:1 in both themes. A brand color too dark for a
   button label is lightened for the button and kept as is where it passes (light-theme links, for
   example), and the reply says why.
 - `set_theme` returns code; your agent writes the file. Neither tool changes anything on disk.

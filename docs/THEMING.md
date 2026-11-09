@@ -50,10 +50,12 @@ Changing `primary` alone rarely passes contrast: filled buttons put dark `neutra
 import { defineBecketTheme, deriveBecketTheme } from '@becket-ui/tokens/theme';
 
 const { theme, notes, contrast } = deriveBecketTheme({ brand: ['#0a3d91', '#f5a623'] });
-// contrast.passes: every pair Becket draws reaches WCAG 2.2 AA in dark and light.
+// contrast.passes: every required pair reaches its threshold; advisories (listed in contrast.advisories) are not yet met.
 // notes: why each value is what it is ("lightened from L 0.39 to 0.62 so labels reach 4.5:1").
 const themeCss = defineBecketTheme(theme);
 ```
+
+Becket UI is designed toward WCAG 2.2 AA and the ARIA Authoring Practices. Conformance has not yet been verified. Text and label color pairs are tested at 4.5:1 in both themes.
 
 - One to three brand colors, most important first: hex, `rgb()`, `hsl()` or `oklch()`. Only lightness moves; the hue never does. A color that already passes is used exactly.
 - `pinned: { background: { dark: '…', light: '…' } }` keeps colors you must match. They're checked, never changed, and anything on them is shaded to fit.

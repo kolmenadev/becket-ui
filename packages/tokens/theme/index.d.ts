@@ -150,8 +150,8 @@ export type DerivedBecketTheme = {
 };
 
 /**
- * A full color theme from brand colors that passes WCAG 2.2 AA in dark and light. Only
- * lightness moves (and chroma when a shade leaves sRGB); the brand hue never changes.
+ * A full color theme from brand colors, checked against the contrast pairs Becket draws. Not a conformance claim.
+ * Only lightness moves (and chroma when a shade leaves sRGB); the brand hue never changes.
  * Deterministic: the same input gives the same theme.
  */
 export function deriveBecketTheme(input: DeriveBecketThemeInput): DerivedBecketTheme;
