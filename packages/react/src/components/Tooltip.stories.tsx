@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { Box } from './Box';
 import { Button } from './Button';
 import { Icon } from './Icon';
 import { HStack } from './Stack';
@@ -65,7 +66,7 @@ export const IconTrigger: Story = {
     disabled: false,
   },
   render: (args: TooltipProps) => (
-    <HStack gap="md" align="center" style={{ padding: '4rem' }}>
+    <Box padding="xl">
       <Tooltip {...args}>
         <Icon label="Info">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -74,6 +75,6 @@ export const IconTrigger: Story = {
           </svg>
         </Icon>
       </Tooltip>
-    </HStack>
+    </Box>
   ),
 };
