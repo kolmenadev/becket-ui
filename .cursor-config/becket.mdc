@@ -390,7 +390,7 @@ export type OldType = NewType;
 --beckui-x: var(--becket-x, <default>);
 ```
 
-Every `@deprecated` tag names the replacement in backticks and includes the text `Removed in`.
+Every `@deprecated` tag names the replacement in backticks after `Use` or `Prefer`, then includes the text `Removed in`.
 
 ---
 

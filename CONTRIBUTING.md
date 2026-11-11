@@ -147,6 +147,6 @@ export type OldType = NewType;
 --beckui-x: var(--becket-x, <default>);
 ```
 
-Every `@deprecated` tag names the replacement in backticks and includes the text `Removed in`.
+Every `@deprecated` tag names the replacement in backticks after `Use` or `Prefer`, then includes the text `Removed in`.
 
 That file does not publish. npm and the GitHub Releases sidebar come from the release workflow. Runbook: [`.cursor/skills/publish-becket/SKILL.md`](./.cursor/skills/publish-becket/SKILL.md). Turbo only **builds**.

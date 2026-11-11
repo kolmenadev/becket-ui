@@ -23,7 +23,8 @@ describe('@deprecated tags', () => {
         ) ?? []) {
           if (!comment.includes('@deprecated')) continue;
           tagCount += 1;
-          if (!/`[^`]+`/.test(comment) || !comment.includes('Removed in')) {
+          // The replacement follows `Use` or `Prefer`, so a backticked version alone doesn't pass.
+          if (!/\b(?:Use|Prefer)\b[^`]*`[^`]+`[\s\S]*Removed in/.test(comment)) {
             failures.push(`${sourcePath}: ${comment.replace(/\s+/g, ' ').trim()}`);
           }
         }
