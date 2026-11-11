@@ -27,6 +27,8 @@ export const Horizontal: Story = {
   ),
 };
 
+export const ForcedColors: Story = { ...Horizontal, parameters: { forcedColors: true } };
+
 export const Vertical: Story = {
   render: (args) => (
     <Steps {...args} orientation="vertical" aria-label="Sign-up progress">

@@ -1,7 +1,6 @@
 import { defineSlotRecipe } from '@pandacss/dev';
 
-const radioDot =
-  'radial-gradient(circle, {colors.white} 32%, transparent 34%)';
+import { checkedHighContrast } from './controlStyles';
 
 export const radio: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
   className: 'radio',
@@ -49,12 +48,24 @@ export const radio: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
         '& + *': {
           backgroundColor: 'primary',
           borderColor: 'primary',
-          backgroundImage: radioDot,
+          backgroundImage: 'radial-gradient(circle, {colors.white} 32%, transparent 34%)',
+          // Forced colors drop the gradient and repaint `primary` as one system color, so the
+          // selected radio would match an empty one. Highlight stays, and the dot is a shape.
+          _highContrast: {
+            ...checkedHighContrast,
+            '&::after': {
+              content: '"●"',
+              color: 'currentColor',
+              fontSize: 'xs',
+              lineHeight: '1',
+            },
+          },
           // Same specificity as `_light` on indicator — restate so light does not
-          // keep the idle gray ring / white fill.
+          // keep the idle gray ring / white fill. Light also outranks a media query.
           _light: {
             backgroundColor: 'primary',
             borderColor: 'primary',
+            _highContrast: checkedHighContrast,
           },
         },
       },
