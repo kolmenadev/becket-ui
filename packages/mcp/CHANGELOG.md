@@ -1,5 +1,14 @@
 # @becket-ui/mcp
 
+## 0.9.0
+
+### Patch Changes
+
+- 65d1bc4: Activating a menu item closes the menu and returns focus to the trigger. An item that
+  moves focus itself keeps that focus. An item that cancels the event stays open.
+- e2dba1a: Text forwards DOM attributes, handlers, ref, style, and the css prop to the element it
+  renders.
+
 ## 0.8.1
 
 No changes in this release.

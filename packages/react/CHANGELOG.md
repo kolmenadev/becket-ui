@@ -1,5 +1,32 @@
 # @becket-ui/react
 
+## 0.9.0
+
+### Minor Changes
+
+- 81aa2a9: Checked, selected and current states stay visible in Windows contrast themes (forced
+  colors). Those themes drop background images and repaint brand colors to one system color, so a
+  state drawn only with color disappeared.
+
+  - Checkbox and Radio draw a check or a dot in `HighlightText` on a `Highlight` fill.
+  - The selected tab is 4px thick; unselected tabs stay 2px.
+  - The current page is underlined, with an inset outline.
+  - The current step's marker border is `Highlight`.
+  - A gradient heading falls back to `CanvasText` instead of disappearing.
+
+  Nothing changes outside forced colors.
+
+### Patch Changes
+
+- 65d1bc4: Activating a menu item closes the menu and returns focus to the trigger. An item that
+  moves focus itself keeps that focus. An item that cancels the event stays open.
+- e2dba1a: Text forwards DOM attributes, handlers, ref, style, and the css prop to the element it
+  renders.
+- Updated dependencies [81aa2a9]
+- Updated dependencies [65d1bc4]
+- Updated dependencies [e2dba1a]
+  - @becket-ui/tokens@0.9.0
+
 ## 0.8.1
 
 ### Patch Changes
