@@ -16,9 +16,9 @@ export type BecketThemeColors = {
   link?: BecketColorValue;
   linkHover?: BecketColorValue;
   linkVisited?: BecketColorValue;
-  /** @deprecated Prefer `background: { light }`. Removed in 2.0. */
+  /** @deprecated Prefer `background: { light }`. Removed in 1.0. */
   lightBackground?: string;
-  /** @deprecated Prefer `text: { light }`. Removed in 2.0. */
+  /** @deprecated Prefer `text: { light }`. Removed in 1.0. */
   lightText?: string;
   warning?: string;
   success?: string;

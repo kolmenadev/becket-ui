@@ -102,21 +102,26 @@ Below 1.0, breaking changes ship as `minor` (`^0.3.0` never installs 0.4.0) and 
 
 ### Deprecations
 
-An alias lives until the next major, which is 2.0. Nothing is removed without one major of warnings after 1.0.
+Two periods, two rules:
+
+- **Before 1.0.** Anything deprecated in a 0.x release says `Removed in 1.0.` and is deleted by the alias-removal pull request in 1.0-rc.1. 0.x carries no stability promise, so the alias doesn't have to outlive it.
+- **From 1.0 on.** Anything deprecated in a 1.x release lives until the next major and says `Removed in 2.0.` Nothing is removed without one major of warnings.
+
+The examples below are 0.x deprecations. A 1.x deprecation writes 2.0 instead.
 
 `warnDeprecated` in `packages/react/src/helpers/deprecate.ts` warns once per key per session and is omitted from production builds. Do not export it from `packages/react/src/index.ts`. Constants and types warn through JSDoc only. A misuse warning stays a plain `console.warn`.
 
 **Prop.** Keep the old prop optional. Resolve `new ?? old ?? default`. Call `warnDeprecated` when `old !== undefined`. Key: `<Component>.<old>`.
 
 ```ts
-/** @deprecated Use `new`. Removed in 2.0. */
+/** @deprecated Use `new`. Removed in 1.0. */
 ```
 
 ```text
-`<Component>` prop `<old>` is deprecated; use `<new>`. Removed in 2.0.
+`<Component>` prop `<old>` is deprecated; use `<new>`. Removed in 1.0.
 ```
 
-**Component.** Warns at runtime. The message names the replacement and includes `Removed in 2.0.`
+**Component.** Warns at runtime. The message names the replacement and the version that removes it.
 
 ```tsx
 export const Old = forwardRef<…>((props, ref) => {
@@ -129,15 +134,15 @@ Old.displayName = 'Old';
 **Constant.** JSDoc only. Add a one-line reason comment so the guides check accepts the alias.
 
 ```ts
-/** @deprecated Use `newName`. Removed in 2.0. */
-// style-check keep: public alias of newName until 2.0.
+/** @deprecated Use `newName`. Removed in 1.0. */
+// style-check keep: public alias of newName until 1.0.
 export const OLD = newName;
 ```
 
 **Type.** JSDoc only.
 
 ```ts
-/** @deprecated Use `NewType`. Removed in 2.0. */
+/** @deprecated Use `NewType`. Removed in 1.0. */
 export type OldType = NewType;
 ```
 

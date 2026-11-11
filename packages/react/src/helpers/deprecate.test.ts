@@ -10,7 +10,7 @@ describe('warnDeprecated', () => {
 
   it('warns once for three calls with the same key', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const message = '`Button` prop `visual` is deprecated; use `appearance`. Removed in 2.0.';
+    const message = '`Button` prop `visual` is deprecated; use `appearance`. Removed in 1.0.';
     warnDeprecated('Button.visual', message);
     warnDeprecated('Button.visual', message);
     warnDeprecated('Button.visual', message);
@@ -22,11 +22,11 @@ describe('warnDeprecated', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     warnDeprecated(
       'Field.hint',
-      '`Field` prop `hint` is deprecated; use `helper`. Removed in 2.0.',
+      '`Field` prop `hint` is deprecated; use `helper`. Removed in 1.0.',
     );
     warnDeprecated(
       'Field.caption',
-      '`Field` prop `caption` is deprecated; use `description`. Removed in 2.0.',
+      '`Field` prop `caption` is deprecated; use `description`. Removed in 1.0.',
     );
     expect(console.warn).toHaveBeenCalledTimes(2);
   });
@@ -34,7 +34,7 @@ describe('warnDeprecated', () => {
   it('does not warn in production', () => {
     vi.stubEnv('NODE_ENV', 'production');
     vi.spyOn(console, 'warn').mockImplementation(() => {});
-    warnDeprecated('Tag.tone', '`Tag` prop `tone` is deprecated; use `status`. Removed in 2.0.');
+    warnDeprecated('Tag.tone', '`Tag` prop `tone` is deprecated; use `status`. Removed in 1.0.');
     expect(console.warn).not.toHaveBeenCalled();
     vi.unstubAllEnvs();
   });
