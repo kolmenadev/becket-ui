@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { userEvent } from 'vitest/browser';
@@ -54,18 +53,14 @@ describe('Menu', () => {
     expect(screen.getByText('Actions').closest('details')?.hasAttribute('open')).toBe(false);
   });
 
-  it('returns focus to the summary when the item removes itself', async () => {
-    // style-check keep: useState needs a component; inlined into render() there is no hook owner.
-    function Removable() {
-      const [isShown, setIsShown] = useState(true);
-      return (
-        <Menu label="Actions">
-          <MenuItem>Edit</MenuItem>
-          {isShown && <MenuItem onClick={() => setIsShown(false)}>Delete</MenuItem>}
-        </Menu>
-      );
-    }
-    render(<Removable />);
+  it('returns focus to the summary when focus falls to the body', async () => {
+    render(
+      <Menu label="Actions">
+        <MenuItem>Edit</MenuItem>
+        {/* Safari doesn't focus a clicked button, so focus is on the body when the item runs. */}
+        <MenuItem onClick={(event) => event.currentTarget.blur()}>Duplicate</MenuItem>
+      </Menu>,
+    );
 
     await userEvent.keyboard('{Tab}{Enter}');
     await expect
@@ -73,7 +68,7 @@ describe('Menu', () => {
       .toBe(screen.getByRole('menuitem', { name: 'Edit' }));
     await userEvent.keyboard('{ArrowDown}{Enter}');
 
-    await expect.poll(() => document.activeElement).toBe(screen.getByText('Actions'));
+    expect(document.activeElement).toBe(screen.getByText('Actions'));
   });
 
   it('stays open on the item when the click is cancelled', async () => {
