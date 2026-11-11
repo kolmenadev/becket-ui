@@ -343,6 +343,62 @@ All code in this repo follows `docs/CODING-STYLE.md` (abstraction, inversion of 
 
 ---
 
+## Deprecations
+
+Two periods, two rules:
+
+- **Before 1.0.** Anything deprecated in a 0.x release says `Removed in 1.0.` and is deleted by the alias-removal pull request in 1.0-rc.1. 0.x carries no stability promise, so the alias doesn't have to outlive it.
+- **From 1.0 on.** Anything deprecated in a 1.x release lives until the next major and says `Removed in 2.0.` Nothing is removed without one major of warnings.
+
+The examples below are 0.x deprecations. A 1.x deprecation writes 2.0 instead.
+
+Call `warnDeprecated` from `packages/react/src/helpers/deprecate.ts`. It warns once per key per session, and bundlers omit it from production builds. Do not export it from the package index. Constants and types warn through JSDoc only. A misuse warning (Hide's `console.warn`) is not a deprecation.
+
+**Prop.** Keep `old` optional. Resolve `new ?? old ?? default`. Call `warnDeprecated` when `old !== undefined`. Key: `<Component>.<old>`.
+
+```ts
+/** @deprecated Use `new`. Removed in 1.0. */
+```
+
+```text
+`<Component>` prop `<old>` is deprecated; use `<new>`. Removed in 1.0.
+```
+
+**Component.** Warns at runtime. The message names the replacement and the version that removes it.
+
+```tsx
+export const Old = forwardRef<…>((props, ref) => {
+  warnDeprecated('Old', '…');
+  return <New ref={ref} {...props} />;
+});
+Old.displayName = 'Old';
+```
+
+**Constant.** JSDoc only. Add a one-line reason comment so the guides check accepts the alias.
+
+```ts
+/** @deprecated Use `newName`. Removed in 1.0. */
+// style-check keep: public alias of newName until 1.0.
+export const OLD = newName;
+```
+
+**Type.** JSDoc only.
+
+```ts
+/** @deprecated Use `NewType`. Removed in 1.0. */
+export type OldType = NewType;
+```
+
+**CSS variable.** No runtime warning. The recipe sets the new variable from the old one:
+
+```css
+--beckui-x: var(--becket-x, <default>);
+```
+
+Every `@deprecated` tag names the replacement in backticks after `Use` or `Prefer`, then includes the text `Removed in`.
+
+---
+
 ## Code that uses Becket (examples, compositions, apps)
 
 Anything written *with* Becket rather than *in* it, like `*.examples.tsx`, compositions, `apps/*`, and screens built by Claude Design, Claude Code or the MCP, follows `packages/react/guides/building-with-becket.md`. That file ships in the npm package and syncs to Claude Design, so keep it the single source: change the rule there, not in copies. Stories should follow it too, except where a story deliberately shows a raw element.

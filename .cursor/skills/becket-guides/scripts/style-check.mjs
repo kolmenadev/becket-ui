@@ -150,6 +150,8 @@ for (const [file, lines] of scope) {
         (ts.isClassDeclaration(node) && node.name)) &&
       inScope(node) &&
       !(ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Export) &&
+      // A `declare` only types something that exists at runtime; there's no value to inline.
+      !(ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Ambient) &&
       !(
         ts.isVariableDeclaration(node) &&
         node.parent.parent.modifiers?.some((mod) => mod.kind === ts.SyntaxKind.ExportKeyword)
