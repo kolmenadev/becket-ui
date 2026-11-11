@@ -30,28 +30,59 @@ export default defineConfig({
       enabled: true,
       headless: true,
       viewport: { width: 1024, height: 768 },
-      instances: [{ browser: 'chrome' }],
-      provider: webdriverio({
-        capabilities: {
-          'goog:chromeOptions': {
-            binary: process.env.CI
-              ? '/usr/bin/google-chrome'
-              : computeExecutablePath({ browser: Browser.CHROMEHEADLESSSHELL, ...chrome }),
-            // Hinting and scale vary by host; fix them so the same build gives the same pixels.
-            args: [
-              '--font-render-hinting=none',
-              '--force-device-scale-factor=1',
-              '--hide-scrollbars',
-            ],
-          },
-          'wdio:chromedriverOptions': {
-            // The runner image sets CHROMEWEBDRIVER to the folder of the ChromeDriver that matches its Chrome.
-            binary: process.env.CI
-              ? `${process.env.CHROMEWEBDRIVER}/chromedriver`
-              : computeExecutablePath({ browser: Browser.CHROMEDRIVER, ...chrome }),
-          },
+      instances: [
+        {
+          browser: 'chrome',
+          provider: webdriverio({
+            capabilities: {
+              'goog:chromeOptions': {
+                binary: process.env.CI
+                  ? '/usr/bin/google-chrome'
+                  : computeExecutablePath({ browser: Browser.CHROMEHEADLESSSHELL, ...chrome }),
+                // Hinting and scale vary by host; fix them so the same build gives the same pixels.
+                args: [
+                  '--font-render-hinting=none',
+                  '--force-device-scale-factor=1',
+                  '--hide-scrollbars',
+                ],
+              },
+              'wdio:chromedriverOptions': {
+                // The runner image sets CHROMEWEBDRIVER to the folder of the ChromeDriver that matches its Chrome.
+                binary: process.env.CI
+                  ? `${process.env.CHROMEWEBDRIVER}/chromedriver`
+                  : computeExecutablePath({ browser: Browser.CHROMEDRIVER, ...chrome }),
+              },
+            },
+          }),
         },
-      }),
+        // MAV-188 asks for the key sequence in Firefox too. Safari needs a macOS runner, so it stays
+        // a manual pass.
+        {
+          browser: 'firefox',
+          provider: webdriverio({
+            capabilities: {
+              'moz:firefoxOptions': {
+                // Pinned like Chrome, into the same cache; CI uses the runner's Firefox for the same
+                // reason it uses the runner's Chrome.
+                binary: process.env.CI
+                  ? '/usr/bin/firefox'
+                  : (
+                      await install({
+                        browser: Browser.FIREFOX,
+                        ...chrome,
+                        buildId: 'stable_160.0',
+                      })
+                    ).executablePath,
+              },
+              // The runner image sets GECKOWEBDRIVER to the folder of its geckodriver. Locally
+              // WebdriverIO downloads this version.
+              'wdio:geckodriverOptions': process.env.CI
+                ? { binary: `${process.env.GECKOWEBDRIVER}/geckodriver` }
+                : { geckoDriverVersion: '0.37.1' },
+            },
+          }),
+        },
+      ],
     },
   },
 });
