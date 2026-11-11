@@ -57,7 +57,6 @@ describe('Menu', () => {
     render(
       <Menu label="Actions">
         <MenuItem>Edit</MenuItem>
-        {/* Safari doesn't focus a clicked button, so focus is on the body when the item runs. */}
         <MenuItem onClick={(event) => event.currentTarget.blur()}>Duplicate</MenuItem>
       </Menu>,
     );

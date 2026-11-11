@@ -39,12 +39,6 @@ export default defineConfig({
                 binary: process.env.CI
                   ? '/usr/bin/google-chrome'
                   : computeExecutablePath({ browser: Browser.CHROMEHEADLESSSHELL, ...chrome }),
-                // Hinting and scale vary by host; fix them so the same build gives the same pixels.
-                args: [
-                  '--font-render-hinting=none',
-                  '--force-device-scale-factor=1',
-                  '--hide-scrollbars',
-                ],
               },
               'wdio:chromedriverOptions': {
                 // The runner image sets CHROMEWEBDRIVER to the folder of the ChromeDriver that matches its Chrome.
