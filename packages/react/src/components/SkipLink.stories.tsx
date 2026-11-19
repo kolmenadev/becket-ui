@@ -11,8 +11,9 @@ export const Default: Story = {
   render: () => (
     <>
       <SkipLink href="#story-main" />
-      <Text color="muted">Press Tab: the skip link appears at the top left.</Text>
-      <main id="story-main" />
+      <main id="story-main">
+        <Text color="muted">Press Tab: the skip link appears at the top left.</Text>
+      </main>
     </>
   ),
 };
