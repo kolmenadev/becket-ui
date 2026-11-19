@@ -40,13 +40,12 @@ for (const [path, storyFile] of Object.entries(
     eager: true,
   }),
 )) {
-  // style-check keep: computed once per file; inlined, it would rerun for every story's test name.
   const component = path.replace('./components/', '').replace('.stories.tsx', '');
   // style-check keep: composed once per file; inlined, the guard and the loop would compose it twice.
   const stories = Object.entries<ReturnType<typeof composeStory>>(composeStories(storyFile));
 
   // A story file that exports no stories would otherwise drop out of the gate without a sign.
-  it(`${component} has a test per story`, () => {
+  it(`${component} exports at least one story`, () => {
     expect(stories.length).toBeGreaterThan(0);
   });
 
@@ -60,7 +59,7 @@ for (const [path, storyFile] of Object.entries(
         // SkipLink), its container stands in for the page's, so `region` flags only what leaves it.
         if (!container.querySelector('main')) container.setAttribute('role', 'main');
         await document.fonts.ready;
-        // baseElement, not container: Dialog, Drawer, Menu and Tooltip portal into document.body.
+        // baseElement, not container: Tooltip portals into document.body.
         await assertNoAxeViolations(baseElement, {
           environment: 'browser',
           // The a11y standard (§3): critical and serious fail; moderate and minor are reported.
