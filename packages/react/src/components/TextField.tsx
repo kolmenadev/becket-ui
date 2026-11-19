@@ -4,9 +4,8 @@ import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
 import {
   Field,
   FieldControl,
-  FieldError,
-  FieldHelper,
   FieldLabel,
+  FieldMessages,
   type FieldSize,
 } from './Field';
 
@@ -40,14 +39,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       <Field id={id} size={size} invalid={invalid} fullWidth={fullWidth}>
         {label != null ? <FieldLabel>{label}</FieldLabel> : null}
         <FieldControl ref={ref} {...props} />
-        {helperText != null && (!invalid || errorText != null) ? (
-          <FieldHelper>{helperText}</FieldHelper>
-        ) : null}
-        {/* An invalid field without errorText shows helperText as the error, so fields written
-            before errorText keep working. */}
-        {invalid && (errorText ?? helperText) != null ? (
-          <FieldError>{errorText ?? helperText}</FieldError>
-        ) : null}
+        <FieldMessages helperText={helperText} errorText={errorText} />
       </Field>
     );
   },

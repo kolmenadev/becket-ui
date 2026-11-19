@@ -213,6 +213,29 @@ export const FieldError = forwardRef<HTMLSpanElement, FieldHelperProps>(
 
 FieldError.displayName = 'FieldError';
 
+// Internal: TextField, Select and Textarea share it; the package index doesn't export it.
+export function FieldMessages({
+  helperText,
+  errorText,
+}: {
+  helperText?: ReactNode;
+  errorText?: ReactNode;
+}) {
+  const { invalid } = useField();
+  return (
+    <>
+      {helperText != null && (!invalid || errorText != null) ? (
+        <FieldHelper>{helperText}</FieldHelper>
+      ) : null}
+      {/* An invalid field without errorText shows helperText as the error, so fields written
+          before errorText keep working. */}
+      {invalid && (errorText ?? helperText) != null ? (
+        <FieldError>{errorText ?? helperText}</FieldError>
+      ) : null}
+    </>
+  );
+}
+
 type FieldControlProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>;
 
 /** Native text input wired to the parent Field (id, aria, size, invalid). */

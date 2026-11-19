@@ -3,9 +3,8 @@
 import { forwardRef, type ReactNode, type TextareaHTMLAttributes } from 'react';
 import {
   Field,
-  FieldError,
-  FieldHelper,
   FieldLabel,
+  FieldMessages,
   FieldTextarea,
   type FieldSize,
 } from './Field';
@@ -41,14 +40,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       <Field id={id} size={size} invalid={invalid} fullWidth={fullWidth}>
         {label != null ? <FieldLabel>{label}</FieldLabel> : null}
         <FieldTextarea ref={ref} rows={rowCount} {...props} />
-        {helperText != null && (!invalid || errorText != null) ? (
-          <FieldHelper>{helperText}</FieldHelper>
-        ) : null}
-        {/* An invalid field without errorText shows helperText as the error, so fields written
-            before errorText keep working. */}
-        {invalid && (errorText ?? helperText) != null ? (
-          <FieldError>{errorText ?? helperText}</FieldError>
-        ) : null}
+        <FieldMessages helperText={helperText} errorText={errorText} />
       </Field>
     );
   },

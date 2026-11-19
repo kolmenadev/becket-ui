@@ -3,9 +3,8 @@
 import { forwardRef, type ReactNode, type SelectHTMLAttributes } from 'react';
 import {
   Field,
-  FieldError,
-  FieldHelper,
   FieldLabel,
+  FieldMessages,
   FieldSelect,
   type FieldSize,
 } from './Field';
@@ -42,14 +41,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         <FieldSelect ref={ref} {...props}>
           {children}
         </FieldSelect>
-        {helperText != null && (!invalid || errorText != null) ? (
-          <FieldHelper>{helperText}</FieldHelper>
-        ) : null}
-        {/* An invalid field without errorText shows helperText as the error, so fields written
-            before errorText keep working. */}
-        {invalid && (errorText ?? helperText) != null ? (
-          <FieldError>{errorText ?? helperText}</FieldError>
-        ) : null}
+        <FieldMessages helperText={helperText} errorText={errorText} />
       </Field>
     );
   },

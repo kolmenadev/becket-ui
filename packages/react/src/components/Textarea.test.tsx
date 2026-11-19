@@ -71,4 +71,12 @@ describe('Textarea', () => {
     }
     expect(new FormData(form).get('notes')).toBe('Hello');
   });
+
+  it('shows the hint and the error together, error first in aria-describedby', () => {
+    render(<Textarea label="Notes" invalid helperText="Up to 200 words" errorText="Add a note" />);
+    expect(screen.getByRole('alert').textContent).toBe('Add a note');
+    expect(screen.getByRole('textbox', { name: 'Notes' }).getAttribute('aria-describedby')).toBe(
+      `${screen.getByRole('alert').id} ${screen.getByText('Up to 200 words').id}`,
+    );
+  });
 });
