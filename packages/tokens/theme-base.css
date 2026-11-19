@@ -51,8 +51,9 @@
   /*
    * People who ask the OS to reduce motion get no rotation, slide or fade. Durations drop to
    * 0.01ms instead of the properties going to `none`, so transitionend and animationend still
-   * fire for code that waits on them. `!important` so recipe and app CSS, which set durations on
-   * the element itself, can't win.
+   * fire for code that waits on them. `!important` because this is the base layer, the lowest of
+   * the cascade: recipe and utility rules in later layers set durations on the element itself and
+   * would win over a plain declaration.
    */
   @media (prefers-reduced-motion: reduce) {
     *,
