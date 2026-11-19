@@ -25,6 +25,8 @@ function fail(message) {
   process.exit(1);
 }
 
+if (!(Number(options['root-px']) > 0))
+  fail(`--root-px needs a positive number of pixels, got "${options['root-px']}"`);
 // No default paths: each package's build writes the output it owns, so Turbo caches and restores it
 // with that package.
 if (!options.manifest && !options['tokens-json'])
@@ -79,7 +81,10 @@ function resolvePath({ path, mode, from, depth = 0 }) {
 
   const calc = source.match(/^calc\(\{([\w.-]+)\} \* ([\d.]+)\)$/);
   if (calc) {
-    const [, magnitude, unit] = reference(calc[1]).match(/^(-?[\d.]+)(\D*)$/);
+    // String() turns a color object into text the pattern rejects, so it fails with the token named.
+    const [, magnitude, unit] =
+      String(reference(calc[1])).match(/^(-?[\d.]+)(\D*)$/) ??
+      fail(`${from}: calc() can only scale a length, and {${calc[1]}} isn't one`);
     return `${Number((magnitude * calc[2]).toFixed(4))}${unit}`;
   }
   return source.replace(/\{([\w.-]+)\}/g, (_, target) => {
@@ -241,10 +246,18 @@ for (const entry of entries.values()) {
       const target = alias && entries.get(alias[1]);
       return target?.artifact ? `{${target.artifact}}` : entry[mode];
     });
+    // Only neutral steps share a generated line, so a new color can't ship with a wrong description.
+    const usage =
+      colorUsage[entry.panda] ??
+      (entry.panda.startsWith('colors.neutral.')
+        ? `Neutral scale step ${entry.panda.split('.').at(-1)}.`
+        : undefined);
+    if (!usage)
+      fail(`${entry.panda} has no usage line for the artifact list; add it to colorUsage`);
     list.color.tokens.push({
       name: entry.artifact,
       value: typeof entry.source === 'object' ? { dark, light } : dark,
-      usage: `CSS: \`var(${entry.css})\`. ${colorUsage[entry.panda] ?? `Neutral scale step ${entry.panda.split('.').at(-1)}.`}`,
+      usage: `CSS: \`var(${entry.css})\`. ${usage}`,
     });
     continue;
   }

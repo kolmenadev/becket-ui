@@ -157,6 +157,19 @@ test('an expression the resolver does not understand exits 1 and names the token
   }
 });
 
+test('a calc that scales something other than a length exits 1 and names the token', () => {
+  const fixture = exportFixture({
+    tokens: {
+      colors: { primary: { value: '#000000' } },
+      spacing: { odd: { value: 'calc({colors.primary} * 2)' } },
+    },
+    semanticTokens: {},
+    breakpoints: {},
+  });
+  assert.equal(fixture.status, 1);
+  assert.match(fixture.stderr, /spacing\.odd: calc\(\) can only scale a length/);
+});
+
 test('a primaryHover that drifts from linkHover.base fails the self-test', () => {
   const fixture = exportFixture({
     tokens: {
