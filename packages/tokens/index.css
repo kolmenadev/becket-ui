@@ -2651,7 +2651,15 @@
       background-color: var(--beckui--colors-primary);
       color: var(--beckui--colors-neutral-900);
     }
-    [data-theme='light'] :is([data-status="complete"] > .beckui--steps__marker), [data-status="current"] > .beckui--steps__marker, [data-theme='light'] :is([data-status="current"] > .beckui--steps__marker) {
+    [data-theme='light'] :is([data-status="complete"] > .beckui--steps__marker) {
+      border-color: var(--beckui--colors-primary);
+    }
+    [data-status="current"] > .beckui--steps__marker {
+      border-width: 3px;
+      border-color: var(--beckui--colors-primary);
+      font-weight: var(--beckui--font-weights-bold);
+    }
+    [data-theme='light'] :is([data-status="current"] > .beckui--steps__marker) {
       border-color: var(--beckui--colors-primary);
     }
     [data-theme='light'] .beckui--steps__marker {
@@ -2668,6 +2676,9 @@
     }
     .beckui--steps__title {
       font-weight: var(--beckui--font-weights-medium);
+    }
+    [data-status="current"] .beckui--steps__title {
+      font-weight: var(--beckui--font-weights-bold);
     }
     .beckui--steps__description {
       color: var(--beckui--colors-muted);
