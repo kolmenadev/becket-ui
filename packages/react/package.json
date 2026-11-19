@@ -50,6 +50,7 @@
     "build": "tsup && tsc --emitDeclarationOnly -p tsconfig.build.json && node scripts/add-js-extensions.mjs",
     "prepack": "node ../../scripts/assert-built.mjs dist/index.js dist/index.d.ts",
     "test": "vitest run",
+    "test:browser": "vitest run -c vitest.browser.config.ts",
     "test:visual": "vitest run -c vitest.visual.config.ts",
     "test:visual:update": "vitest run -c vitest.visual.config.ts --update",
     "storybook": "storybook dev -p 6006 -c ../../apps/docs/.storybook --project-root ../../apps/docs",

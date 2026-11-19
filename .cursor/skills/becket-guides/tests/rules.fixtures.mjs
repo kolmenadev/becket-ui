@@ -50,6 +50,9 @@ function countdown(n: number): number {
 }
 export { countdown };
 `,
+      'src/ambient.ts': `declare const process: { env: { NODE_ENV?: string } };
+export const isProduction = process.env.NODE_ENV === 'production';
+`,
     },
   },
   {

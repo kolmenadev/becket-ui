@@ -52,6 +52,8 @@ export const WithGradient: Story = {
   },
 };
 
+export const ForcedColors: Story = { ...WithGradient, parameters: { forcedColors: true } };
+
 export const AsElement: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

@@ -7,8 +7,8 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
-    // Screenshots need a real browser: vitest.visual.config.ts runs them.
-    exclude: [...configDefaults.exclude, 'src/**/*.visual.test.tsx'],
+    // Real-browser suites have their own configs: vitest.visual.config.ts, vitest.browser.config.ts.
+    exclude: [...configDefaults.exclude, 'src/**/*.visual.test.tsx', 'src/**/*.browser.test.tsx'],
     setupFiles: ['./vitest.setup.ts'],
   },
 });

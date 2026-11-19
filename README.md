@@ -1,5 +1,11 @@
 <p align="center">
-  <img src="./apps/docs/public/wordmark.png" alt="Becket" width="300" />
+  <picture>
+    <source
+      media="(prefers-color-scheme: dark)"
+      srcset="./apps/docs/public/brand/becket-ui-lockup-on-dark.svg"
+    />
+    <img src="./apps/docs/public/brand/becket-ui-lockup-color.svg" alt="Becket UI" width="320" />
+  </picture>
 </p>
 
 <h1 align="center">React components, compiled CSS</h1>
@@ -29,8 +35,8 @@ import { Button } from "@becket-ui/react";
 Apps that only use components do **not** need Panda, Tailwind, or a theme provider.
 
 Rebrand with CSS variables after `index.css`, or `defineBecketTheme()` from
-`@becket-ui/tokens/theme`. `deriveBecketTheme()` builds a full theme from one to three brand
-colors that passes WCAG AA in dark and light. See [docs/THEMING.md](./docs/THEMING.md).
+`@becket-ui/tokens/theme`. `deriveBecketTheme()` builds a full theme from one to three brand colors
+that passes WCAG AA in dark and light. See [docs/THEMING.md](./docs/THEMING.md).
 
 ### Optional: Panda already in the app
 
@@ -85,6 +91,7 @@ Requirements: **React 19+**.
   React, TypeScript, tests)
 - [MCP server](./packages/mcp/README.md) — connect Claude Code, Cursor or VS Code to Becket
   (components, props, tokens, rules, code review)
+- [Brand](./docs/BRAND.md) — the name, the hive logo, colors and type, and how you may use them
 
 ## Contributing
 

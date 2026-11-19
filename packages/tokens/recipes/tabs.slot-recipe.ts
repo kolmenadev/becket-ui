@@ -37,6 +37,12 @@ export const tabs: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
       '&[aria-selected="true"]': {
         color: 'text',
         borderBottomColor: 'primary',
+        // Unselected tabs stay 2px. The extra width carries the state; Highlight stays when forced
+        // colors repaint both borders to one system color.
+        _highContrast: {
+          borderBottomWidth: '4px',
+          borderBottomColor: 'Highlight',
+        },
       },
       _focusVisible: {
         outline: '2px solid transparent',

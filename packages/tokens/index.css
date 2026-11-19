@@ -1985,6 +1985,14 @@
         display: none;
       }
     }
+    @media (forced-colors: active) {
+      .beckui--heading--compound__withGradient_true {
+        background: none;
+        -webkit-background-clip: border-box;
+        color: CanvasText;
+        -webkit-text-fill-color: currentColor;
+      }
+    }
   }
 }
 @layer recipes.slots {
@@ -2823,6 +2831,50 @@
       outline: 2px solid transparent;
       outline-offset: 2px;
       box-shadow: var(--beckui--shadows-outline);
+    }
+    @media (forced-colors: active) {
+      [data-theme='light'] :is(.beckui--checkbox__control:is(:checked, [data-checked], [aria-checked=true], [data-state="checked"]) + *), .beckui--checkbox__control:is(:checked, [data-checked], [aria-checked=true], [data-state="checked"]) + * {
+        border-color: Highlight;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: Highlight;
+        color: HighlightText;
+        background-image: none;
+      }
+      .beckui--checkbox__control:is(:checked, [data-checked], [aria-checked=true], [data-state="checked"]) + *::after {
+        content: "✓";
+        color: currentColor;
+        font-size: var(--beckui--font-sizes-sm);
+        line-height: 1;
+      }
+      .beckui--pagination__link[aria-current="page"] {
+        outline: 2px solid Highlight;
+        text-decoration: underline;
+        outline-offset: -2px;
+      }
+      [data-theme='light'] :is(.beckui--radio__control:is(:checked, [data-checked], [aria-checked=true], [data-state="checked"]) + *), .beckui--radio__control:is(:checked, [data-checked], [aria-checked=true], [data-state="checked"]) + * {
+        border-color: Highlight;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: Highlight;
+        color: HighlightText;
+        background-image: none;
+      }
+      .beckui--radio__control:is(:checked, [data-checked], [aria-checked=true], [data-state="checked"]) + *::after {
+        content: "●";
+        color: currentColor;
+        font-size: var(--beckui--font-sizes-xs);
+        line-height: 1;
+      }
+      [data-status="current"] > .beckui--steps__marker, [data-theme='light'] :is([data-status="current"] > .beckui--steps__marker) {
+        border-color: Highlight;
+      }
+      .beckui--tabs__tab[aria-selected="true"] {
+        border-bottom-width: 4px;
+        border-bottom-color: Highlight;
+      }
     }
   }
   @layer variants {

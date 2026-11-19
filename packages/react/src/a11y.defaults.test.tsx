@@ -9,8 +9,10 @@ import { Drawer } from './components/Drawer';
 import { Field, FieldControl, FieldHelper, FieldLabel } from './components/Field';
 import { Menu, MenuItem } from './components/Menu';
 import { Radio, RadioGroup } from './components/Radio';
+import { Select } from './components/Select';
 import { Switch } from './components/Switch';
 import { Tab, TabList, TabPanel, Tabs } from './components/Tabs';
+import { Textarea } from './components/Textarea';
 import { TextField } from './components/TextField';
 import { Tooltip } from './components/Tooltip';
 
@@ -23,6 +25,22 @@ describe('Default primitive axe gate', () => {
   it('TextField', async () => {
     const { container } = render(<TextField label="Offset" helperText="Optional helper text" />);
     await assertNoAxeViolations(container);
+  });
+
+  it('Select', async () => {
+    await assertNoAxeViolations(
+      render(
+        <Select label="Offset" helperText="Optional helper text">
+          <option value="one">One</option>
+        </Select>,
+      ).container,
+    );
+  });
+
+  it('Textarea', async () => {
+    await assertNoAxeViolations(
+      render(<Textarea label="Offset" helperText="Optional helper text" />).container,
+    );
   });
 
   it('Field', async () => {

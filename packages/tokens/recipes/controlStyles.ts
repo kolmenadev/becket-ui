@@ -36,6 +36,18 @@ export const controlChrome = {
   },
 };
 
+// Checkbox and Radio, each in both themes. The fill and image that mark them checked are dropped or
+// repainted in forced colors; Highlight stays, and each control adds its glyph as a shape.
+export const checkedHighContrast = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: 'Highlight',
+  borderColor: 'Highlight',
+  color: 'HighlightText',
+  backgroundImage: 'none',
+};
+
 export const controlSizeVariants = fieldSizeStyles;
 
 export const controlInvalidVariants = {

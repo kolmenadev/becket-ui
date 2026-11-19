@@ -37,6 +37,14 @@ export const heading: ReturnType<typeof defineRecipe> = defineRecipe({
         backgroundImage: '{gradients.primary}',
         backgroundClip: 'text',
         WebkitBackgroundClip: 'text',
+        // Forced colors drop the gradient and keep `color: transparent`, so the heading vanishes.
+        // `background: none` resets `background-clip`; the webkit clip is a separate property.
+        _highContrast: {
+          background: 'none',
+          WebkitBackgroundClip: 'border-box',
+          color: 'CanvasText',
+          WebkitTextFillColor: 'currentColor',
+        },
       },
     },
   ],

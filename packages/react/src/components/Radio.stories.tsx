@@ -49,7 +49,11 @@ export const Default: Story = {
   ),
 };
 
-export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
+export const ForcedColors: Story = {
+  ...Default,
+  args: { defaultValue: 'pro' },
+  parameters: { forcedColors: true },
+};
 
 export const DefaultSelected: Story = {
   args: { defaultValue: 'pro' },
