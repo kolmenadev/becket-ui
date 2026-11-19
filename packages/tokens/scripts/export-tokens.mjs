@@ -107,8 +107,9 @@ for (const [path, leaf] of leaves) {
   for (const text of [darkText, lightText])
     if (/calc\(|color-mix\(/.test(text)) fail(`${path}: unsupported expression "${text}"`);
 
-  // lightBackground and lightText are @deprecated in a source comment only, which the built preset
-  // drops, so they're named here. A var() value depends on the page, which no design tool can hold.
+  // lightBackground and lightText are deprecated in the public theme types (theme/index.d.ts). The
+  // preset has no `deprecated` flag on them yet: adding one changes the published preset, which
+  // waits for MAV-208 part 2. A var() value depends on the page, which no design tool can hold.
   const isTargetless =
     ['colors.lightBackground', 'colors.lightText'].includes(path) || darkText.includes('var(');
   // Families without a prefix (font sizes, weights, gradients…) reach the artifact as type styles
@@ -208,28 +209,29 @@ const list = {
   shadow: { tokens: [] },
   breakpoint: { tokens: [] },
 };
-// The source keeps these as comments, which the built preset drops, so the descriptions live here.
+// Written here rather than as Panda `description` fields in the preset: those would ship in the
+// published preset, which waits for MAV-208 part 2.
 // style-check keep: inlining would rebuild the table on every pass of the loop below.
 const colorUsage = {
   'colors.brand.becketYellow':
     'Primary brand hue. Filled buttons and badges; always neutral-900 ink on it.',
   'colors.brand.hiveSage': 'Secondary brand hue.',
   'colors.brand.combAmber': 'Tertiary brand hue; gradient end.',
-  'colors.primary': 'Primary brand color. Alias of brand-becketYellow.',
-  'colors.secondary': 'Secondary brand color. Alias of brand-hiveSage.',
-  'colors.tertiary': 'Tertiary brand color. Alias of brand-combAmber.',
-  'colors.primaryHover': 'Hover fill for primary: 88% primary mixed with white.',
+  'colors.primary': 'Primary brand color.',
+  'colors.secondary': 'Secondary brand color.',
+  'colors.tertiary': 'Tertiary brand color.',
+  'colors.primaryHover': 'Hover fill for primary.',
   'colors.black': 'Near-black.',
   'colors.white': 'Near-white.',
-  'colors.border': 'Default border. Alias of neutral-200.',
-  'colors.warning': 'Warning state, lighter orange than tertiary.',
-  'colors.success': 'Success state, hue clear of secondary.',
+  'colors.border': 'Default border.',
+  'colors.warning': 'Warning state.',
+  'colors.success': 'Success state.',
   'colors.background': 'Page background.',
   'colors.text': 'Body text on background.',
   'colors.muted': 'Secondary text on background.',
   'colors.surface': 'Dialog, field and menu fill.',
   'colors.danger': 'Error text and borders only.',
-  'colors.accent': 'Sage text on the canvas: outline Button, Badge and Tag.',
+  'colors.accent': 'Accent text on the canvas: outline Button, Badge and Tag.',
   'colors.link': 'Link text.',
   'colors.linkHover': 'Link text on hover.',
   'colors.linkVisited': 'Visited link text.',
