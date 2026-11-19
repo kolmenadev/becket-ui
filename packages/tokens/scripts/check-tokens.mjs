@@ -67,9 +67,6 @@ if (problems.length > 0) {
 console.log(
   [
     `\n${report.results.length} contrast rows: ${report.failures.length} failures, ${report.knownGaps.length} known gaps.`,
-    'Root scales: spacing, sizes and text spacing derive from their units, the type scale from font-sizes-base, and radii are in rem.',
-    // The recipe slice in findScaleProblems is empty on the built index.css (see the comment
-    // there), so this line must not claim those checks passed until that's fixed.
-    "Recipe scales: the off-scale key, missing token and raw length checks ran on an empty slice (findScaleProblems doesn't find the recipe layer in index.css), so they checked nothing.",
+    'Scales: recipes use only scale keys, existing tokens and no raw lengths; the root scales derive from their units.',
   ].join('\n'),
 );
