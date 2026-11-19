@@ -10,23 +10,21 @@ import { findScaleProblems } from '../theme/scale.test.mjs';
 const { version } = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const report = checkBecketThemeContrast({}, { version });
 
-// style-check keep: every cell's width is read from all rows, so the rows exist before they print.
-const rows = [
-  ['pair', 'theme', 'ratio', 'minimum', 'level', 'result'],
-  ...report.results.map((result) => [
-    `${result.foreground} on ${result.background}`,
-    result.theme,
-    `${result.ratio}:1`,
-    `${result.minimum}:1`,
-    result.level === 'known-gap'
-      ? `known-gap ${result.issue ?? '(no issue)'} until ${result.until ?? '(none)'}`
-      : result.level,
-    result.passes ? 'pass' : report.knownGaps.includes(result) ? 'known gap' : 'FAIL',
-  ]),
-];
 console.log(
-  rows
-    .map((row) =>
+  [
+    ['pair', 'theme', 'ratio', 'minimum', 'level', 'result'],
+    ...report.results.map((result) => [
+      `${result.foreground} on ${result.background}`,
+      result.theme,
+      `${result.ratio}:1`,
+      `${result.minimum}:1`,
+      result.level === 'known-gap'
+        ? `known-gap ${result.issue ?? '(no issue)'} until ${result.until ?? '(none)'}`
+        : result.level,
+      result.passes ? 'pass' : report.knownGaps.includes(result) ? 'known gap' : 'FAIL',
+    ]),
+  ]
+    .map((row, _, rows) =>
       row
         .map((cell, column) => cell.padEnd(Math.max(...rows.map((each) => each[column].length))))
         .join('  ')
@@ -67,5 +65,11 @@ if (problems.length > 0) {
   process.exit(1);
 }
 console.log(
-  `\n${report.results.length} contrast rows: ${report.failures.length} failures, ${report.knownGaps.length} known gaps. Scales OK.`,
+  [
+    `\n${report.results.length} contrast rows: ${report.failures.length} failures, ${report.knownGaps.length} known gaps.`,
+    'Root scales: spacing, sizes and text spacing derive from their units, the type scale from font-sizes-base, and radii are in rem.',
+    // The recipe slice in findScaleProblems is empty on the built index.css (see the comment
+    // there), so this line must not claim those checks passed until that's fixed.
+    "Recipe scales: the off-scale key, missing token and raw length checks ran on an empty slice (findScaleProblems doesn't find the recipe layer in index.css), so they checked nothing.",
+  ].join('\n'),
 );

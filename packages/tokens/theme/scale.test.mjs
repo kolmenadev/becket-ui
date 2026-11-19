@@ -11,6 +11,10 @@ const fibonacci = ['0', '1', '2', '3', '5', '8', '13', '21', '34', '55'];
 // compile silently; this reads the built recipe CSS and finds them and raw lengths. It's
 // exported because scripts/check-tokens.mjs runs the same checks at the end of every build.
 export function findScaleProblems(css) {
+  // Known gap, kept as it was on main: the built index.css writes `@layer recipes {` and
+  // `@layer utilities {` with a space, so both indexOf calls return -1 and this slice is empty.
+  // The three recipe checks below find nothing until it's fixed, and check-tokens.mjs says so.
+  // Adding the space isn't enough: the first `@layer recipes {` is the layer-order line.
   const recipes = css.slice(css.indexOf('@layer recipes{'), css.indexOf('@layer utilities{'));
   // One variable per scale is enough to resize Becket: spacing, text spacing and type.
   const root = Object.fromEntries(
