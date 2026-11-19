@@ -55,6 +55,14 @@ pnpm --filter @becket-ui/tokens test
 pnpm pack:check
 ```
 
+Keyboard and focus behavior that jsdom can't run (a modal `<dialog>`, real key events) is tested in a real browser, in `*.browser.test.tsx` files next to each component's test:
+
+```bash
+pnpm --filter @becket-ui/react test:browser
+```
+
+`vitest.browser.config.ts` runs every file in two instances, `chrome` and `firefox`, through WebdriverIO. A new browser test file runs in both with no config change. Locally the config installs a pinned chrome-headless-shell, ChromeDriver and Firefox into `packages/react/.visual-browsers`, and WebdriverIO downloads geckodriver, so the first run needs network. CI uses the runner's own Chrome, Firefox and drivers. Safari isn't automated yet (it needs `safaridriver` on a macOS runner), so its keyboard pass stays manual.
+
 Packed Next.js consumer (`apps/next-example`, not in the pnpm workspace):
 
 ```bash
