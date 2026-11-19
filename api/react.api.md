@@ -1032,7 +1032,7 @@ export const Th: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ThHTMLAttribut
 // @public (undocumented)
 export const Thead: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>, "ref"> & RefAttributes<HTMLTableSectionElement>>;
 
-// @public (undocumented)
+// @public
 export const Tooltip: ForwardRefExoticComponent<TooltipProps & RefAttributes<HTMLElement>>;
 
 // @public (undocumented)
