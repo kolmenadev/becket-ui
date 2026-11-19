@@ -87,9 +87,6 @@ type BadgeBorderRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
 // @public (undocumented)
 type BadgeSize = 'sm' | 'md' | 'lg';
 
-// @public (undocumented)
-type BaseElement = 'p' | 'span' | 'div' | 'strong' | 'em' | 'label';
-
 // @public
 export const Blockquote: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & {
 cite?: string;
@@ -647,7 +644,7 @@ type ListSpacing = 'xs' | 'sm' | 'md';
 // @public
 export const Mark: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & RefAttributes<HTMLElement>>;
 
-// @public (undocumented)
+// @public
 export const Menu: ForwardRefExoticComponent<Omit<DetailsHTMLAttributes<HTMLDetailsElement>, "onToggle"> & {
 label: ReactNode;
 } & RefAttributes<HTMLDetailsElement>>;
@@ -998,10 +995,9 @@ export const Tbody: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttribu
 export const Td: ForwardRefExoticComponent<Omit<DetailedHTMLProps<TdHTMLAttributes<HTMLTableDataCellElement>, HTMLTableDataCellElement>, "ref"> & RefAttributes<HTMLTableCellElement>>;
 
 // Warning: (ae-forgotten-export) The symbol "TextProps" needs to be exported by the entry point index.d.ts
-// Warning: (ae-forgotten-export) The symbol "BaseElement" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
-const Text_2: ForwardRefExoticComponent<TextProps<BaseElement> & RefAttributes<HTMLElement>>;
+const Text_2: ForwardRefExoticComponent<TextProps<"div" | "em" | "label" | "p" | "span" | "strong"> & RefAttributes<HTMLElement>>;
 export { Text_2 as Text }
 
 // @public (undocumented)
@@ -1022,8 +1018,8 @@ invalid?: boolean;
 fullWidth?: boolean;
 } & RefAttributes<HTMLInputElement>>;
 
-// @public (undocumented)
-type TextProps<T extends ElementType = BaseElement> = React.ComponentPropsWithoutRef<T> & JsxStyleProps & {
+// @public
+type TextProps<T extends ElementType = 'p' | 'span' | 'div' | 'strong' | 'em' | 'label'> = React.ComponentPropsWithoutRef<T> & JsxStyleProps & {
     as?: T;
 };
 
