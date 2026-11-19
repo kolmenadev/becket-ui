@@ -102,7 +102,13 @@ export function parseColorAlpha(input) {
     parts.length > 4 ||
     (isLegacy ? slashParts.length > 0 : channels.length !== 3) ||
     // Anchored, so `1;x` or `200x` is rejected instead of read as a number the way parseFloat would.
-    !parts.every((part) => part === 'none' || /^[+-]?(?:\d+\.?\d*|\.\d+)(?:%|deg)?$/.test(part)) ||
+    !parts.every(
+      (part) =>
+        part === 'none' ||
+        // Finite too: a channel of 309 digits reads as Infinity and would write invalid CSS.
+        (/^[+-]?(?:\d+\.?\d*|\.\d+)(?:%|deg)?$/.test(part) &&
+          Number.isFinite(Number.parseFloat(part))),
+    ) ||
     parts[3]?.endsWith('deg')
   )
     return null;

@@ -43,6 +43,12 @@ test('parseColorAlpha needs exactly three channels, and a slash before a modern 
   }
 });
 
+test('parseColorAlpha rejects a channel too long to read as a finite number', () => {
+  for (const input of [`oklch(0.5 ${'9'.repeat(309)} 200)`, `hsl(${'9'.repeat(309)} 50% 50%)`]) {
+    assert.equal(parseColorAlpha(input), null, input.slice(0, 20));
+  }
+});
+
 test('parseColorAlpha reads an alpha between 0 and 1, as a number or a percentage', () => {
   assert.equal(parseColorAlpha('rgb(1 2 3 / 40%)').alpha, 0.4);
   assert.equal(parseColorAlpha('rgba(1, 2, 3, 0.25)').alpha, 0.25);
