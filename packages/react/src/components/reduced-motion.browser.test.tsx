@@ -1,6 +1,7 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, onTestFinished } from 'vitest';
 import { commands } from 'vitest/browser';
+
 import '@becket-ui/tokens/index.css';
 
 import { Button } from './Button';
@@ -43,13 +44,14 @@ describe('prefers-reduced-motion: reduce', () => {
 
   it('removes the Switch track and thumb transitions', () => {
     render(<Switch label="Notifications" />);
-    // The track and its thumb are aria-hidden, so no role or name reaches them.
-    const parts = screen.getByRole('switch', { name: 'Notifications' }).querySelectorAll('span');
-
-    expect(parts).toHaveLength(2);
-    for (const part of parts) {
-      expect(seconds(getComputedStyle(part).transitionDuration)).toBeLessThanOrEqual(0.00001);
-    }
+    // The track and its thumb are aria-hidden, so no role or name reaches them. One entry per
+    // span, so a missing track or thumb fails too.
+    expect(
+      Array.from(
+        screen.getByRole('switch', { name: 'Notifications' }).querySelectorAll('span'),
+        (span) => seconds(getComputedStyle(span).transitionDuration) <= 0.00001,
+      ),
+    ).toEqual([true, true]);
   });
 
   it('removes the TextField transition', () => {

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 // jsdom and the node runner apply no CSS, so this reads the built stylesheet. The computed-style
 // check in a real browser lives in packages/react (reduced-motion.browser.test.tsx).
+// style-check keep: read index.css once; inlined, each test re-reads the file.
 const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'index.css'), 'utf8');
 
 test('index.css shortens every animation and transition under reduced motion', () => {

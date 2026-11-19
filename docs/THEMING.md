@@ -92,7 +92,7 @@ Keep units in `rem` (and the text unit in `em`) so browser font-size settings st
 
 Becket honors the OS setting "Reduce motion" (`prefers-reduced-motion: reduce`) with no setup. `index.css` shortens every animation and transition to 0.01ms, runs animations once, and turns off smooth scrolling. `Spinner` also stops rotating and shows its arc still.
 
-Hover and focus feedback stays for everyone else. Your own CSS is covered too, because the rule applies to every element and uses `!important`. Inline `style` with `!important`, CSS from a layer you order before `base`, and motion driven by JavaScript still run. Animations that carry meaning of their own need another cue (text, an icon) that works without motion.
+Hover and focus feedback stays for everyone else. Your own CSS is covered too, because the rule applies to every element and uses `!important`. `!important` declarations in inline `style` or in a layer you order before `base`, and motion driven by JavaScript, still run. Animations that carry meaning of their own need another cue (text, an icon) that works without motion.
 
 ## Instance override
 
