@@ -11,7 +11,7 @@ import {
   parseColor,
 } from '@becket-ui/tokens/theme';
 
-const { values } = parseArgs({
+const { values: options } = parseArgs({
   options: {
     preset: { type: 'string' },
     'root-px': { type: 'string', default: '16' },
@@ -26,7 +26,7 @@ function fail(message) {
 }
 
 const { becketPreset } = await import(
-  values.preset ? pathToFileURL(resolve(values.preset)).href : '@becket-ui/tokens/preset'
+  options.preset ? pathToFileURL(resolve(options.preset)).href : '@becket-ui/tokens/preset'
 );
 
 const leaves = new Map();
@@ -66,16 +66,16 @@ function resolvePath({ path, mode, from, depth = 0 }) {
     const mix = source.match(/^color-mix\(in oklch, \{([\w.-]+)\} ([\d.]+)%, white\)$/);
     if (mix) {
       const base = reference(mix[1]);
-      const amount = Number(mix[2]) / 100;
-      return { L: base.L * amount + (1 - amount), C: base.C * amount, h: base.h };
+      const share = Number(mix[2]) / 100;
+      return { L: base.L * share + (1 - share), C: base.C * share, h: base.h };
     }
     return parseColor(source) ?? fail(`${from}: can't parse the color "${source}"`);
   }
 
   const calc = source.match(/^calc\(\{([\w.-]+)\} \* ([\d.]+)\)$/);
   if (calc) {
-    const [, amount, unit] = reference(calc[1]).match(/^(-?[\d.]+)(\D*)$/);
-    return `${Number((amount * calc[2]).toFixed(4))}${unit}`;
+    const [, magnitude, unit] = reference(calc[1]).match(/^(-?[\d.]+)(\D*)$/);
+    return `${Number((magnitude * calc[2]).toFixed(4))}${unit}`;
   }
   return source.replace(/\{([\w.-]+)\}/g, (_, target) => {
     const resolved = reference(target);
@@ -161,10 +161,11 @@ let requiredChecked = 0;
 let advisoryBelow = 0;
 for (const mode of ['dark', 'light']) {
   for (const pair of contrastPairs) {
-    const [foreground, background] = [pair.foreground, pair.background].map(
-      (key) => colors.get(`colors.${key}`)?.[mode] ?? fail(`contrast pair needs colors.${key}`),
+    const ratio = contrastRatio(
+      ...[pair.foreground, pair.background].map((key) =>
+        formatHex(colors.get(`colors.${key}`)?.[mode] ?? fail(`contrast pair needs colors.${key}`)),
+      ),
     );
-    const ratio = contrastRatio(formatHex(foreground), formatHex(background));
     if (pair.level === 'advisory') {
       if (ratio < pair.minimum) advisoryBelow += 1;
       continue;
@@ -258,7 +259,7 @@ for (const entry of entries.values()) {
   ].tokens.push({
     name: entry.artifact,
     value: normalized,
-    usage: `CSS: \`var(${entry.css})\`. ${normalized}${entry.dark.endsWith('rem') ? `, ${Number.parseFloat(entry.dark) * Number(values['root-px'])}px at a ${values['root-px']}px root` : ''}.`,
+    usage: `CSS: \`var(${entry.css})\`. ${normalized}${entry.dark.endsWith('rem') ? `, ${Number.parseFloat(entry.dark) * Number(options['root-px'])}px at a ${options['root-px']}px root` : ''}.`,
   });
 }
 
@@ -306,12 +307,12 @@ console.log(
 );
 for (const [path, contents] of [
   [
-    values['tokens-json'] ??
+    options['tokens-json'] ??
       fileURLToPath(new URL('../../design-system/dist/tokens.json', import.meta.url)),
     list,
   ],
   [
-    values.manifest ?? fileURLToPath(new URL('../figma/manifest.json', import.meta.url)),
+    options.manifest ?? fileURLToPath(new URL('../figma/manifest.json', import.meta.url)),
     [...entries.values()],
   ],
 ]) {

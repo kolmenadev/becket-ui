@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { test } from 'node:test';
+import { after, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 const script = fileURLToPath(new URL('./export-tokens.mjs', import.meta.url));
 const scratch = mkdtempSync(join(tmpdir(), 'export-tokens-'));
+after(() => rmSync(scratch, { recursive: true, force: true }));
 
 const run = spawnSync(
   process.execPath,
