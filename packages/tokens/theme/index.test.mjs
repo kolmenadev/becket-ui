@@ -240,6 +240,23 @@ test('a rejected value of any kind is quoted only up to its first 40 characters'
   }
 });
 
+test('defineBecketTheme checks and writes the same string, even when toString changes between reads', () => {
+  for (const [group, key, first] of [
+    ['radii', 'md', '4px'],
+    ['fonts', 'sans', 'Inter'],
+  ]) {
+    // style-check keep: counts reads across toString calls; it can't live inside the callback.
+    let reads = 0;
+    assert.doesNotMatch(
+      defineBecketTheme({
+        [group]: { [key]: { toString: () => (reads++ === 0 ? first : `${first}; background: url(//x)`) } },
+      }),
+      /url/,
+      group,
+    );
+  }
+});
+
 test('defineBecketTheme skips empty values of every kind', () => {
   assert.doesNotMatch(
     defineBecketTheme({

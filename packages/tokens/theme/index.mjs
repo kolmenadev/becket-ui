@@ -69,118 +69,65 @@ function assertAllowedKeys(object, allowed, label) {
 
 // Every value is checked against its kind's grammar rather than escaped: CSS has no safe generic
 // escape for a declaration value. Errors quote only a prefix, so a hostile value isn't echoed whole.
-function pushDecl({ decls, name, path, value, kind }) {
-  if (value == null || value === '') return;
+// Returns a list (empty for an empty value) so callers can flatMap their declarations.
+function toDecls({ name, path, value, kind }) {
+  if (value == null || value === '') return [];
+  // Converted once, so a value whose toString changes can't pass the check and write something else.
+  const text = String(value);
   if (kind === 'color') {
+    // parseColorAlpha takes only strings, and the CSS is written from what it parsed.
     const parsed = parseColorAlpha(value);
     if (!parsed) {
       throw new Error(
-        `Not a CSS color at ${path}: ${JSON.stringify(String(value).slice(0, 40))}. Use hex, rgb(), hsl() or oklch().`,
+        `Not a CSS color at ${path}: ${JSON.stringify(text.slice(0, 40))}. Use hex, rgb(), hsl() or oklch().`,
       );
     }
     // Written from the parsed color, never the raw string, so nothing else can ride along with it.
     const color = formatOklch(parsed.color);
-    decls.push(
+    return [
       `  ${name}: ${parsed.alpha < 1 ? `${color.slice(0, -1)} / ${Number(parsed.alpha.toFixed(3))})` : color};`,
-    );
-    return;
+    ];
   }
   if (
     !(
       kind === 'length'
         ? /^-?(?:\d+|\d*\.\d+)(?:px|rem|em|%)?$/
         : /^(?:[A-Za-z0-9_-]+|'[A-Za-z0-9 ._-]+'|"[A-Za-z0-9 ._-]+")(?:\s*,\s*(?:[A-Za-z0-9_-]+|'[A-Za-z0-9 ._-]+'|"[A-Za-z0-9 ._-]+"))*$/
-    ).test(value)
+    ).test(text)
   ) {
     throw new Error(
-      `Not a CSS ${kind} at ${path}: ${JSON.stringify(String(value).slice(0, 40))}. ${
+      `Not a CSS ${kind} at ${path}: ${JSON.stringify(text.slice(0, 40))}. ${
         kind === 'length'
           ? 'Use a number with px, rem, em or %.'
           : "Use font names separated by commas, quoted when they contain spaces ('Segoe UI')."
       }`,
     );
   }
-  decls.push(`  ${name}: ${value};`);
+  return [`  ${name}: ${text};`];
 }
 
-function colorDecls(colors, rootDecls, lightDecls) {
-  assertAllowedKeys(colors, [...COLOR_FLAT, ...COLOR_THEMED, 'neutral'], 'colors');
-
-  for (const key of COLOR_FLAT) {
-    const value = colors[key];
-    if (value == null) continue;
-    if (typeof value === 'object') {
-      throw new Error(`colors.${key} must be a CSS color string`);
-    }
-    pushDecl({
-      decls: rootDecls,
-      name: cssVar(['colors', key]),
-      path: `colors.${key}`,
-      value,
-      kind: 'color',
-    });
-  }
-
-  for (const key of COLOR_THEMED) {
-    const value = colors[key];
-    if (value == null) continue;
-    const name = cssVar(['colors', key]);
-    if (typeof value !== 'object') {
-      pushDecl({ decls: rootDecls, name, path: `colors.${key}`, value, kind: 'color' });
-      continue;
-    }
-    pushDecl({
-      decls: rootDecls,
-      name,
-      path: `colors.${key}.dark`,
-      value: value.dark,
-      kind: 'color',
-    });
-    pushDecl({
-      decls: lightDecls,
-      name,
-      path: `colors.${key}.light`,
-      value: value.light,
-      kind: 'color',
-    });
-  }
-
-  if (colors.neutral) {
-    assertAllowedKeys(colors.neutral, NEUTRAL_STEPS, 'colors.neutral');
-    for (const step of NEUTRAL_STEPS) {
-      pushDecl({
-        decls: rootDecls,
-        name: cssVar(['colors', 'neutral', step]),
-        path: `colors.neutral.${step}`,
-        value: colors.neutral[step],
-        kind: 'color',
-      });
-    }
-  }
-}
-
-function densityDecls(density, decls) {
+// style-check keep: inlined as a plain expression, the density key check would run before the color and length checks and change which error is reported first.
+function densityDecls(density) {
   assertAllowedKeys(density, ['button', 'field', 'tag'], 'density');
-  for (const component of Object.keys(DENSITY_SIZES)) {
+  return Object.keys(DENSITY_SIZES).flatMap((component) => {
     const sizes = density[component];
-    if (!sizes) continue;
+    if (!sizes) return [];
     const allowed = DENSITY_SIZES[component];
     assertAllowedKeys(sizes, allowed, `density.${component}`);
-    for (const size of allowed) {
+    return allowed.flatMap((size) => {
       const box = sizes[size];
-      if (!box) continue;
+      if (!box) return [];
       assertAllowedKeys(box, ['px', 'py'], `density.${component}.${size}`);
-      for (const axis of ['px', 'py']) {
-        pushDecl({
-          decls,
+      return ['px', 'py'].flatMap((axis) =>
+        toDecls({
           name: `--beckui-${component}-${axis}-${size}`,
           path: `density.${component}.${size}.${axis}`,
           value: box[axis],
           kind: 'length',
-        });
-      }
-    }
-  }
+        }),
+      );
+    });
+  });
 }
 
 function sheet(selector, decls) {
@@ -202,77 +149,61 @@ export function defineBecketTheme(config = {}) {
     'theme',
   );
 
-  const rootDecls = [];
-  const lightDecls = [];
-
-  if (config.colors) colorDecls(config.colors, rootDecls, lightDecls);
-
-  if (config.radii) {
-    assertAllowedKeys(config.radii, RADII, 'radii');
-    for (const key of RADII) {
-      pushDecl({
-        decls: rootDecls,
-        name: cssVar(['radii', key]),
-        path: `radii.${key}`,
-        value: config.radii[key],
-        kind: 'length',
-      });
+  if (config.colors) {
+    assertAllowedKeys(config.colors, [...COLOR_FLAT, ...COLOR_THEMED, 'neutral'], 'colors');
+  }
+  // Read twice below, for :root and the light block; inlined, every color would be parsed twice.
+  const colorsByKey = [...COLOR_FLAT, ...COLOR_THEMED].map((key) => {
+    const value = config.colors?.[key];
+    const name = cssVar(['colors', key]);
+    // A plain string goes in :root, which applies in light too unless a light value overrides it.
+    if (value == null || typeof value !== 'object') {
+      return { root: toDecls({ name, path: `colors.${key}`, value, kind: 'color' }), light: [] };
     }
+    if (COLOR_FLAT.includes(key)) throw new Error(`colors.${key} must be a CSS color string`);
+    return {
+      root: toDecls({ name, path: `colors.${key}.dark`, value: value.dark, kind: 'color' }),
+      light: toDecls({ name, path: `colors.${key}.light`, value: value.light, kind: 'color' }),
+    };
+  });
+  if (config.colors?.neutral) {
+    assertAllowedKeys(config.colors.neutral, NEUTRAL_STEPS, 'colors.neutral');
   }
 
-  if (config.fontSizes) {
-    assertAllowedKeys(config.fontSizes, FONT_SIZES, 'fontSizes');
-    for (const key of FONT_SIZES) {
-      pushDecl({
-        decls: rootDecls,
-        name: cssVar(['font-sizes', key]),
-        path: `fontSizes.${key}`,
-        value: config.fontSizes[key],
-        kind: 'length',
-      });
-    }
-  }
-
-  if (config.spacing) {
-    assertAllowedKeys(config.spacing, SPACING, 'spacing');
-    for (const key of SPACING) {
-      pushDecl({
-        decls: rootDecls,
-        name: cssVar(['spacing', key]),
-        path: `spacing.${key}`,
-        value: config.spacing[key],
-        kind: 'length',
-      });
-    }
-  }
-
-  if (config.sizes) {
-    assertAllowedKeys(config.sizes, ['field'], 'sizes');
-    pushDecl({
-      decls: rootDecls,
-      name: cssVar(['sizes', 'field']),
-      path: 'sizes.field',
-      value: config.sizes.field,
-      kind: 'length',
-    });
-  }
-
-  if (config.fonts) {
-    assertAllowedKeys(config.fonts, FONTS, 'fonts');
-    for (const key of FONTS) {
-      pushDecl({
-        decls: rootDecls,
-        name: cssVar(['fonts', key]),
-        path: `fonts.${key}`,
-        value: config.fonts[key],
-        kind: 'font family',
-      });
-    }
-  }
-
-  if (config.density) densityDecls(config.density, rootDecls);
-
-  const css = `${sheet(':root', rootDecls)}${sheet("html[data-theme='light']", lightDecls)}`;
+  const css = `${sheet(':root', [
+    ...colorsByKey.flatMap(({ root }) => root),
+    ...NEUTRAL_STEPS.flatMap((step) =>
+      toDecls({
+        name: cssVar(['colors', 'neutral', step]),
+        path: `colors.neutral.${step}`,
+        value: config.colors?.neutral?.[step],
+        kind: 'color',
+      }),
+    ),
+    // Same shape for every group; cssVar kebab-cases `fontSizes` to `font-sizes`.
+    ...[
+      ['radii', RADII, 'length'],
+      ['fontSizes', FONT_SIZES, 'length'],
+      ['spacing', SPACING, 'length'],
+      ['sizes', ['field'], 'length'],
+      ['fonts', FONTS, 'font family'],
+    ].flatMap(([group, keys, kind]) => {
+      if (!config[group]) return [];
+      assertAllowedKeys(config[group], keys, group);
+      return keys.flatMap((key) =>
+        toDecls({
+          name: cssVar([group, key]),
+          path: `${group}.${key}`,
+          value: config[group][key],
+          kind,
+        }),
+      );
+    }),
+    ...(config.density ? densityDecls(config.density) : []),
+  ])}${sheet(
+    "html[data-theme='light']",
+    colorsByKey.flatMap(({ light }) => light),
+  )}`;
   if (!css) {
     return '/* defineBecketTheme: empty config, Becket defaults unchanged */\n';
   }
