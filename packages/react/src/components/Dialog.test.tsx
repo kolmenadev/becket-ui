@@ -4,7 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { assertNoAxeViolations } from '@becket-ui/a11y';
 
 import { Button } from './Button';
-import { Dialog, DialogClose } from './Dialog';
+import { CloseIcon } from './Glyphs';
+import { Dialog, DialogClose, DialogHeader, DialogTitle } from './Dialog';
 
 function ConfirmDialog({
   open = true,
@@ -97,12 +98,26 @@ describe('Dialog', () => {
 
   it('names a close button from its visible text, not Close', () => {
     render(
-      <Dialog open aria-label="T">
+      <Dialog open>
+        <DialogHeader>
+          <DialogTitle>T</DialogTitle>
+        </DialogHeader>
         <DialogClose>Cancel</DialogClose>
       </Dialog>,
     );
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Close' })).toBeNull();
+  });
+
+  it('names an icon-only close button from an explicit aria-label', () => {
+    render(
+      <Dialog open aria-label="T">
+        <DialogClose aria-label="Close">
+          <CloseIcon />
+        </DialogClose>
+      </Dialog>,
+    );
+    expect(screen.getByRole('button', { name: 'Close' })).toBeTruthy();
   });
 
   it('lets an explicit aria-label name the close button', () => {
