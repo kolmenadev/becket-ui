@@ -68,6 +68,11 @@ test('parseColorAlpha reads % and deg channels the way parseColor always has', (
   );
   assert.equal(formatOklch(parseColorAlpha('oklch(50% 25% 200deg)').color), 'oklch(0.5 0.1 200)');
   assert.deepEqual(parseColorAlpha('oklch(0.5 none 200)').color, { L: 0.5, C: 0, h: 200 });
+  assert.deepEqual(
+    parseColorAlpha('hsl(none 50% 50%)').color,
+    parseColorAlpha('hsl(0 50% 50%)').color,
+  );
+  assert.deepEqual(parseColorAlpha('oklch(none 0.1 200)').color, { L: 0, C: 0.1, h: 200 });
 });
 
 test('parseColor drops the alpha parseColorAlpha reads', () => {

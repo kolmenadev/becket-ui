@@ -119,13 +119,12 @@ export function parseColorAlpha(input) {
     };
   }
   if (kind.startsWith('hsl')) {
-    const hue = Number.parseFloat(parts[0]);
-    // `none` is the one channel parseFloat can't read.
-    if (Number.isNaN(hue)) return null;
     const lightness = clamp01(number(parts[2]));
     // CSS Color 4 hsl() → sRGB.
     const chroma = (1 - Math.abs(2 * lightness - 1)) * clamp01(number(parts[1]));
-    const sector = (((hue % 360) + 360) % 360) / 60;
+    // The hue skips number(): it would read a `50%` hue as 0.5, where parseColor has always read 50.
+    const sector =
+      ((((parts[0] === 'none' ? 0 : Number.parseFloat(parts[0])) % 360) + 360) % 360) / 60;
     const x = chroma * (1 - Math.abs((sector % 2) - 1));
     const [r, g, b] = [
       [chroma, x, 0],
