@@ -20,7 +20,7 @@ await assertNoAxeViolations(container, { environment: 'browser' });
 
 ## Exceptions
 
-A rule is off only when [`src/exceptions.ts`](./src/exceptions.ts) has an entry for it, with a `scope` (`jsdom`, `browser` or `fragment`, which holds in both), a `reason` with its ticket key, an `owner` and an `expires` date. The helper turns off every entry that matches the environment. Turning a rule off through `options.rules` throws `axe rule <id> disabled without an exception entry` unless an entry covers it, and an entry past its date throws `axe exception for <id> expired on <date>`. To skip a rule, add the entry; don't pass it as an option.
+A rule is off only when [`src/exceptions.ts`](./src/exceptions.ts) has an entry for it, with a `scope` (`jsdom`, `browser` or `fragment`, which holds in both), a `reason` with its ticket key, an `owner` and an `expires` date. The helper turns off every entry that matches the environment. Turning a rule off through `options.rules` throws `axe rule <id> disabled without an exception entry` unless an entry covers it, and an entry past its date throws `axe exception for <id> expired on <date>`. Passing `runOnly` throws too, because the tag set is fixed. To skip a rule, add the entry; don't pass it as an option.
 
 Results axe can't decide (`incomplete`) don't fail the test. The helper prints each rule id and its node count with `console.warn`, so check them by hand.
 

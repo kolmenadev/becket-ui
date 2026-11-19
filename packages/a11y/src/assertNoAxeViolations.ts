@@ -17,6 +17,13 @@ export async function assertNoAxeViolations(
   container: Element,
   { environment = 'jsdom', ...options }: RunOptions & { environment?: 'jsdom' | 'browser' } = {},
 ): Promise<void> {
+  // A narrower runOnly would drop rules without an exception entry, which the standard forbids.
+  if (options.runOnly) {
+    throw new Error(
+      'axe runOnly is fixed by the a11y standard; turn a rule off with an entry in src/exceptions.ts',
+    );
+  }
+
   const exceptions = axeExceptions.filter(
     (exception) => exception.scope === environment || exception.scope === 'fragment',
   );

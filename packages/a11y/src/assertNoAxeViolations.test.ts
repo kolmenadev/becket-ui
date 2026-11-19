@@ -62,6 +62,14 @@ describe('assertNoAxeViolations', () => {
     ).resolves.toBeUndefined();
   });
 
+  it('rejects a caller-supplied runOnly', async () => {
+    await expect(
+      assertNoAxeViolations(mount('<button>Save</button>'), {
+        runOnly: { type: 'tag', values: ['wcag2a'] },
+      }),
+    ).rejects.toThrow('axe runOnly is fixed by the a11y standard');
+  });
+
   it('rejects once an exception has expired', async () => {
     vi.setSystemTime('2100-01-01');
 
