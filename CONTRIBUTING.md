@@ -51,9 +51,12 @@ pnpm build
 pnpm --filter @becket-ui/react exec tsc --noEmit -p tsconfig.build.json
 pnpm --filter @becket-ui/a11y test
 pnpm --filter @becket-ui/react test
+pnpm --filter @becket-ui/react test:browser
 pnpm --filter @becket-ui/tokens test
 pnpm pack:check
 ```
+
+`test:browser` runs the `*.browser.test.tsx` files in Chrome and Firefox (pinned builds, downloaded on the first run). It includes browser axe over every story, dark and light: critical and serious violations fail, and the full results go to `packages/react/axe-results/<browser>/axe-results-<theme>.json`.
 
 Packed Next.js consumer (`apps/next-example`, not in the pnpm workspace):
 
