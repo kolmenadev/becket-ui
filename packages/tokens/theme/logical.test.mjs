@@ -5,18 +5,21 @@ import { test } from 'node:test';
 // Recipes are read as text, not from the compiled CSS: a finding keeps the source line that Panda's
 // output hides.
 function scan(file, source) {
-  return source.split('\n').flatMap((text, index) => {
+  return source.split('\n').flatMap((text, index, lines) => {
     if (/^\s*(\/\/|\/\*|\*)/.test(text)) return [];
+    // Prettier moves a long value to the line after its key; read the two as one statement, and
+    // report the key's line.
+    const statement = /:\s*$/.test(text) ? `${text} ${lines[index + 1]}` : text;
     const matches = [
       ...text.matchAll(
         /(?<![\w$.-])['"]?(left|right|marginLeft|marginRight|paddingLeft|paddingRight|borderLeft\w*|borderRight\w*|float)['"]?\s*:/g,
       ),
     ].map(([, property]) => property);
-    if (/\btextAlign\s*:\s*['"](left|right)['"]/.test(text)) matches.push('textAlign');
-    if (/\bbackgroundPosition\s*:\s*['"`][^'"`]*\b(left|right)\b/.test(text)) {
+    if (/\btextAlign\s*:\s*['"](left|right)['"]/.test(statement)) matches.push('textAlign');
+    if (/\bbackgroundPosition\s*:\s*['"`][^'"`]*\b(left|right)\b/.test(statement)) {
       matches.push('backgroundPosition');
     }
-    const translate = text.match(/\btransform\s*:\s*['"`][^'"`]*\b(translateX?)\(/);
+    const translate = statement.match(/\btransform\s*:\s*['"`][^'"`]*\b(translateX?)\(/);
     if (translate) matches.push(translate[1]);
     return matches.map((match) => ({ file, line: index + 1, match }));
   });
@@ -106,6 +109,26 @@ test('scan flags each physical-direction pattern once, with its line', () => {
       '13 translateX',
       '14 translate',
     ],
+  );
+});
+
+test('scan sees a value that Prettier wrapped onto the line after its key', () => {
+  assert.deepEqual(
+    scan(
+      'fixture.recipe.ts',
+      [
+        'export const fixture = {',
+        '  transform:',
+        "    'translateX(2px)',",
+        '  backgroundPosition:',
+        "    'left center',",
+        '  textAlign:',
+        "    'right',",
+        "  insetInlineStart: 'md',",
+        '};',
+      ].join('\n'),
+    ).map(({ line, match }) => `${line} ${match}`),
+    ['2 translateX', '4 backgroundPosition', '6 textAlign'],
   );
 });
 

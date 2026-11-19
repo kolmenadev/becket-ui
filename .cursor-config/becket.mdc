@@ -156,7 +156,7 @@ Reference tokens with braces when they sit inside a value: `calc(100% - {spacing
 
 ### Logical properties
 
-Recipes use logical properties so a layout mirrors under `dir="rtl"`: `insetInlineStart`, `paddingInlineEnd`, `marginInlineStart`, `borderInlineStart`, `textAlign: 'start'`. No new physical directions in a recipe: `left`, `right`, `paddingLeft`, `marginRight`, `borderLeft*`, `float`, `textAlign: 'left'`, a `backgroundPosition` with `left` or `right`, `translateX(`. Move something along the inline axis with an inset, not a `translateX`. `packages/tokens/theme/logical.test.mjs` fails on them. The sites that still use one are listed, each with a reason and an `until` date, in `packages/tokens/theme/logical.baseline.json`. The list only shrinks: converting a site fails the test as stale until you remove its entry.
+Recipes use logical properties so a layout mirrors under `dir="rtl"`: `insetInlineStart`, `paddingInlineEnd`, `marginInlineStart`, `borderInlineStart`, `textAlign: 'start'`. No new physical directions in a recipe: `left`, `right`, `paddingLeft`, `marginRight`, `borderLeft*`, `float`, `textAlign: 'left'`, a `backgroundPosition` with `left` or `right`, `translateX(` and `translate(` in a `transform`. Move something along the inline axis with an inset, not a `translateX`. `packages/tokens/theme/logical.test.mjs` fails on them. The sites that still use one are listed, each with a reason and an `until` date, in `packages/tokens/theme/logical.baseline.json`. The list only shrinks: converting a site fails the test as stale until you remove its entry.
 
 ### Brand vs status colors
 
