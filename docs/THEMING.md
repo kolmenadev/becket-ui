@@ -66,7 +66,7 @@ const themeCss = defineBecketTheme(theme);
 ```
 
 - One to three brand colors, most important first: hex, `rgb()`, `hsl()` or `oklch()`. Only lightness moves; the hue never does. A color that already passes is used exactly.
-- `pinned: { background: { dark: '…', light: '…' } }` keeps colors you must match. They're checked, never changed, and anything on them is shaded to fit.
+- `pinned: { background: { dark: '…', light: '…' } }` keeps colors you must match. They're checked and never shaded (defineBecketTheme writes them in OKLCH, the same color), and anything on them is shaded to fit.
 - `checkBecketThemeContrast(theme)` checks any theme, hand-written ones included. Advisory rows (the focus ring on a light canvas, labels over the tertiary end of a gradient) are reported but not enforced, because Becket's default theme misses them too.
 
 With an agent, the Becket MCP does this for you: `suggest_theme` reads a logo or brand manual PDF and asks you one decision at a time; `set_theme` returns the CSS. See the [MCP README](../packages/mcp/README.md#brand-themes).

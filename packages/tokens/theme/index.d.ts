@@ -139,7 +139,7 @@ export function checkBecketThemeContrast(theme?: BecketTheme): BecketContrastRep
 export type DeriveBecketThemeInput = {
   /** One to three brand colors, most important first: hex, rgb(), hsl() or oklch(). */
   brand: string[];
-  /** Colors to keep exactly as given. They are still checked, never changed. */
+  /** Colors to keep as given. They are checked, never shaded; defineBecketTheme writes them in OKLCH. */
   pinned?: BecketThemeColors;
 };
 
