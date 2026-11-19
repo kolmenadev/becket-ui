@@ -75,7 +75,7 @@ function toDecls({ name, path, value, kind }) {
   // Converted once, so a value whose toString changes can't pass the check and write something else.
   const text = String(value);
   if (kind === 'color') {
-    // parseColorAlpha takes only strings, and the CSS is written from what it parsed.
+    // `value`, not `text`: parseColorAlpha rejects anything that isn't a string.
     const parsed = parseColorAlpha(value);
     if (!parsed) {
       throw new Error(
@@ -106,30 +106,6 @@ function toDecls({ name, path, value, kind }) {
   return [`  ${name}: ${text};`];
 }
 
-// style-check keep: inlined as a plain expression, the density key check would run before the color and length checks and change which error is reported first.
-function densityDecls(density) {
-  assertAllowedKeys(density, ['button', 'field', 'tag'], 'density');
-  return Object.keys(DENSITY_SIZES).flatMap((component) => {
-    const sizes = density[component];
-    if (!sizes) return [];
-    const allowed = DENSITY_SIZES[component];
-    assertAllowedKeys(sizes, allowed, `density.${component}`);
-    return allowed.flatMap((size) => {
-      const box = sizes[size];
-      if (!box) return [];
-      assertAllowedKeys(box, ['px', 'py'], `density.${component}.${size}`);
-      return ['px', 'py'].flatMap((axis) =>
-        toDecls({
-          name: `--beckui-${component}-${axis}-${size}`,
-          path: `density.${component}.${size}.${axis}`,
-          value: box[axis],
-          kind: 'length',
-        }),
-      );
-    });
-  });
-}
-
 function sheet(selector, decls) {
   if (!decls.length) return '';
   return `${selector} {\n${decls.join('\n')}\n}\n`;
@@ -152,6 +128,7 @@ export function defineBecketTheme(config = {}) {
   if (config.colors) {
     assertAllowedKeys(config.colors, [...COLOR_FLAT, ...COLOR_THEMED, 'neutral'], 'colors');
   }
+  if (config.density) assertAllowedKeys(config.density, Object.keys(DENSITY_SIZES), 'density');
   // Read twice below, for :root and the light block; inlined, every color would be parsed twice.
   const colorsByKey = [...COLOR_FLAT, ...COLOR_THEMED].map((key) => {
     const value = config.colors?.[key];
@@ -199,7 +176,25 @@ export function defineBecketTheme(config = {}) {
         }),
       );
     }),
-    ...(config.density ? densityDecls(config.density) : []),
+    ...Object.keys(DENSITY_SIZES).flatMap((component) => {
+      const sizes = config.density?.[component];
+      if (!sizes) return [];
+      const allowed = DENSITY_SIZES[component];
+      assertAllowedKeys(sizes, allowed, `density.${component}`);
+      return allowed.flatMap((size) => {
+        const box = sizes[size];
+        if (!box) return [];
+        assertAllowedKeys(box, ['px', 'py'], `density.${component}.${size}`);
+        return ['px', 'py'].flatMap((axis) =>
+          toDecls({
+            name: `--beckui-${component}-${axis}-${size}`,
+            path: `density.${component}.${size}.${axis}`,
+            value: box[axis],
+            kind: 'length',
+          }),
+        );
+      });
+    }),
   ])}${sheet(
     "html[data-theme='light']",
     colorsByKey.flatMap(({ light }) => light),
