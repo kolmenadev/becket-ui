@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { assertNoAxeViolations } from '@becket-ui/a11y';
 
-import { Tab, TabList, TabPanel, Tabs } from './Tabs';
+import { Tab, TabList, TabPanel, Tabs, type TabsProps } from './Tabs';
 
 function DemoTabs() {
   return (
@@ -18,6 +18,18 @@ function DemoTabs() {
       <TabPanel value="one">First panel.</TabPanel>
       <TabPanel value="two">Second panel.</TabPanel>
       <TabPanel value="three">Hidden.</TabPanel>
+    </Tabs>
+  );
+}
+
+function AlphaBetaGamma(props: TabsProps) {
+  return (
+    <Tabs {...props}>
+      <TabList>
+        <Tab value="a">Alpha</Tab>
+        <Tab value="b">Beta</Tab>
+        <Tab value="c">Gamma</Tab>
+      </TabList>
     </Tabs>
   );
 }
@@ -46,24 +58,8 @@ describe('Tabs', () => {
   it('calls the latest onValueChange', async () => {
     const first = vi.fn();
     const latest = vi.fn();
-    const { rerender } = render(
-      <Tabs value="a" onValueChange={first}>
-        <TabList>
-          <Tab value="a">Alpha</Tab>
-          <Tab value="b">Beta</Tab>
-          <Tab value="c">Gamma</Tab>
-        </TabList>
-      </Tabs>,
-    );
-    rerender(
-      <Tabs value="a" onValueChange={latest}>
-        <TabList>
-          <Tab value="a">Alpha</Tab>
-          <Tab value="b">Beta</Tab>
-          <Tab value="c">Gamma</Tab>
-        </TabList>
-      </Tabs>,
-    );
+    const { rerender } = render(<AlphaBetaGamma value="a" onValueChange={first} />);
+    rerender(<AlphaBetaGamma value="a" onValueChange={latest} />);
     await userEvent.setup().click(screen.getByRole('tab', { name: 'Beta' }));
     await userEvent.setup().click(screen.getByRole('tab', { name: 'Gamma' }));
     expect(first).not.toHaveBeenCalled();
@@ -91,24 +87,8 @@ describe('Tabs', () => {
 
   it('switches control mode', async () => {
     const onValueChange = vi.fn();
-    const { rerender } = render(
-      <Tabs defaultValue="b" onValueChange={onValueChange}>
-        <TabList>
-          <Tab value="a">Alpha</Tab>
-          <Tab value="b">Beta</Tab>
-          <Tab value="c">Gamma</Tab>
-        </TabList>
-      </Tabs>,
-    );
-    rerender(
-      <Tabs value="b" defaultValue="b" onValueChange={onValueChange}>
-        <TabList>
-          <Tab value="a">Alpha</Tab>
-          <Tab value="b">Beta</Tab>
-          <Tab value="c">Gamma</Tab>
-        </TabList>
-      </Tabs>,
-    );
+    const { rerender } = render(<AlphaBetaGamma defaultValue="b" onValueChange={onValueChange} />);
+    rerender(<AlphaBetaGamma value="b" defaultValue="b" onValueChange={onValueChange} />);
     await userEvent.setup().click(screen.getByRole('tab', { name: 'Gamma' }));
     expect(screen.getByRole('tab', { name: 'Beta' }).getAttribute('aria-selected')).toBe('true');
     expect(onValueChange).toHaveBeenCalledTimes(1);
@@ -116,24 +96,8 @@ describe('Tabs', () => {
   });
 
   it('follows clicks after switching from controlled to uncontrolled', async () => {
-    const { rerender } = render(
-      <Tabs value="a" defaultValue="a">
-        <TabList>
-          <Tab value="a">Alpha</Tab>
-          <Tab value="b">Beta</Tab>
-          <Tab value="c">Gamma</Tab>
-        </TabList>
-      </Tabs>,
-    );
-    rerender(
-      <Tabs defaultValue="a">
-        <TabList>
-          <Tab value="a">Alpha</Tab>
-          <Tab value="b">Beta</Tab>
-          <Tab value="c">Gamma</Tab>
-        </TabList>
-      </Tabs>,
-    );
+    const { rerender } = render(<AlphaBetaGamma value="a" defaultValue="a" />);
+    rerender(<AlphaBetaGamma defaultValue="a" />);
     await userEvent.setup().click(screen.getByRole('tab', { name: 'Gamma' }));
     expect(screen.getByRole('tab', { name: 'Gamma' }).getAttribute('aria-selected')).toBe('true');
   });
