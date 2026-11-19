@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { setTheme } from '../src/theme/setTheme';
+import { setTheme, type SetThemeInput } from '../src/theme/setTheme';
 
 describe('set_theme', () => {
   it('builds a full AA theme from one brand color and explains the shaded values', () => {
@@ -15,7 +15,8 @@ describe('set_theme', () => {
 
   it('keeps exact tokens and reports the pairs they fail, without calling it shippable', () => {
     const text = setTheme({ colors: { primary: '#0a3d91' } });
-    expect(text).toContain('--beckui--colors-primary: #0a3d91;');
+    // Re-serialised: #0a3d91 in OKLCH.
+    expect(text).toContain('--beckui--colors-primary: oklch(0.3856 0.1483 260.54);');
     expect(text).toMatch(/\d+ of 34 required pairs FAIL/);
     expect(text).toMatch(
       /\| dark \| label on a filled primary control \| 1\.\d+:1 \| 4\.5:1 \| \*\*FAIL\*\* \|/,
@@ -29,7 +30,7 @@ describe('set_theme', () => {
       colors: { background: { dark: 'oklch(0.18 0.03 260)', light: '#ffffff' } },
     });
     expect(text).toContain('--beckui--colors-background: oklch(0.18 0.03 260);');
-    expect(text).toContain('--beckui--colors-background: #ffffff;');
+    expect(text).toContain('--beckui--colors-background: oklch(1 0 0);');
     expect(text).toContain('- background: Pinned by you, kept exactly.');
     expect(text).toContain('required pairs pass');
   });
@@ -74,5 +75,18 @@ describe('set_theme', () => {
       'Use hex, rgb(), hsl() or oklch().',
     );
     expect(setTheme({})).toContain('Nothing to set.');
+  });
+
+  it.each<SetThemeInput>([
+    { colors: { primary: 'red; background: url(//x)' } },
+    { brand: ['#0a3d91'], colors: { background: '#fff}</style><script>' } },
+    { fonts: { sans: 'Inter}</style><script>' } },
+    { radii: { md: '4px; x:y' } },
+    { density: { button: { md: { px: '1rem;color:red' } } } },
+  ])('refuses a value that would write more than the token, and generates nothing: %j', (input) => {
+    const text = setTheme(input);
+    expect(text).toMatch(/^(Not a CSS|Can't read)/);
+    expect(text).toContain('Nothing was generated.');
+    expect(text).not.toContain('```css');
   });
 });

@@ -1,3 +1,5 @@
+import { formatOklch, parseColorAlpha } from './color.mjs';
+
 export {
   colorDistance,
   contrastRatio,
@@ -65,19 +67,40 @@ function assertAllowedKeys(object, allowed, label) {
   }
 }
 
-function pushDecl(decls, name, value) {
+// Every value is checked against its kind's grammar rather than escaped: CSS has no safe generic
+// escape for a declaration value. Errors quote only a prefix, so a hostile value isn't echoed whole.
+function pushDecl({ decls, name, path, value, kind }) {
   if (value == null || value === '') return;
-  decls.push(`  ${name}: ${value};`);
-}
-
-function pushThemed(rootDecls, lightDecls, name, value) {
-  if (value == null || value === '') return;
-  if (typeof value === 'object') {
-    if (value.dark) pushDecl(rootDecls, name, value.dark);
-    if (value.light) pushDecl(lightDecls, name, value.light);
+  if (kind === 'color') {
+    const parsed = parseColorAlpha(value);
+    if (!parsed) {
+      throw new Error(
+        `Not a CSS color at ${path}: ${JSON.stringify(String(value).slice(0, 40))}. Use hex, rgb(), hsl() or oklch().`,
+      );
+    }
+    // Written from the parsed color, never the raw string, so nothing else can ride along with it.
+    const color = formatOklch(parsed.color);
+    decls.push(
+      `  ${name}: ${parsed.alpha < 1 ? `${color.slice(0, -1)} / ${Number(parsed.alpha.toFixed(3))})` : color};`,
+    );
     return;
   }
-  pushDecl(rootDecls, name, value);
+  if (
+    !(
+      kind === 'length'
+        ? /^-?(?:\d+|\d*\.\d+)(?:px|rem|em|%)?$/
+        : /^(?:[A-Za-z0-9_-]+|'[A-Za-z0-9 ._-]+'|"[A-Za-z0-9 ._-]+")(?:\s*,\s*(?:[A-Za-z0-9_-]+|'[A-Za-z0-9 ._-]+'|"[A-Za-z0-9 ._-]+"))*$/
+    ).test(value)
+  ) {
+    throw new Error(
+      `Not a CSS ${kind} at ${path}: ${JSON.stringify(String(value).slice(0, 40))}. ${
+        kind === 'length'
+          ? 'Use a number with px, rem, em or %.'
+          : "Use font names separated by commas, quoted when they contain spaces ('Segoe UI')."
+      }`,
+    );
+  }
+  decls.push(`  ${name}: ${value};`);
 }
 
 function colorDecls(colors, rootDecls, lightDecls) {
@@ -89,17 +112,49 @@ function colorDecls(colors, rootDecls, lightDecls) {
     if (typeof value === 'object') {
       throw new Error(`colors.${key} must be a CSS color string`);
     }
-    pushDecl(rootDecls, cssVar(['colors', key]), value);
+    pushDecl({
+      decls: rootDecls,
+      name: cssVar(['colors', key]),
+      path: `colors.${key}`,
+      value,
+      kind: 'color',
+    });
   }
 
   for (const key of COLOR_THEMED) {
-    pushThemed(rootDecls, lightDecls, cssVar(['colors', key]), colors[key]);
+    const value = colors[key];
+    if (value == null) continue;
+    const name = cssVar(['colors', key]);
+    if (typeof value !== 'object') {
+      pushDecl({ decls: rootDecls, name, path: `colors.${key}`, value, kind: 'color' });
+      continue;
+    }
+    pushDecl({
+      decls: rootDecls,
+      name,
+      path: `colors.${key}.dark`,
+      value: value.dark,
+      kind: 'color',
+    });
+    pushDecl({
+      decls: lightDecls,
+      name,
+      path: `colors.${key}.light`,
+      value: value.light,
+      kind: 'color',
+    });
   }
 
   if (colors.neutral) {
     assertAllowedKeys(colors.neutral, NEUTRAL_STEPS, 'colors.neutral');
     for (const step of NEUTRAL_STEPS) {
-      pushDecl(rootDecls, cssVar(['colors', 'neutral', step]), colors.neutral[step]);
+      pushDecl({
+        decls: rootDecls,
+        name: cssVar(['colors', 'neutral', step]),
+        path: `colors.neutral.${step}`,
+        value: colors.neutral[step],
+        kind: 'color',
+      });
     }
   }
 }
@@ -115,8 +170,15 @@ function densityDecls(density, decls) {
       const box = sizes[size];
       if (!box) continue;
       assertAllowedKeys(box, ['px', 'py'], `density.${component}.${size}`);
-      if (box.px) decls.push(`  --beckui-${component}-px-${size}: ${box.px};`);
-      if (box.py) decls.push(`  --beckui-${component}-py-${size}: ${box.py};`);
+      for (const axis of ['px', 'py']) {
+        pushDecl({
+          decls,
+          name: `--beckui-${component}-${axis}-${size}`,
+          path: `density.${component}.${size}.${axis}`,
+          value: box[axis],
+          kind: 'length',
+        });
+      }
     }
   }
 }
@@ -148,33 +210,63 @@ export function defineBecketTheme(config = {}) {
   if (config.radii) {
     assertAllowedKeys(config.radii, RADII, 'radii');
     for (const key of RADII) {
-      pushDecl(rootDecls, cssVar(['radii', key]), config.radii[key]);
+      pushDecl({
+        decls: rootDecls,
+        name: cssVar(['radii', key]),
+        path: `radii.${key}`,
+        value: config.radii[key],
+        kind: 'length',
+      });
     }
   }
 
   if (config.fontSizes) {
     assertAllowedKeys(config.fontSizes, FONT_SIZES, 'fontSizes');
     for (const key of FONT_SIZES) {
-      pushDecl(rootDecls, cssVar(['font-sizes', key]), config.fontSizes[key]);
+      pushDecl({
+        decls: rootDecls,
+        name: cssVar(['font-sizes', key]),
+        path: `fontSizes.${key}`,
+        value: config.fontSizes[key],
+        kind: 'length',
+      });
     }
   }
 
   if (config.spacing) {
     assertAllowedKeys(config.spacing, SPACING, 'spacing');
     for (const key of SPACING) {
-      pushDecl(rootDecls, cssVar(['spacing', key]), config.spacing[key]);
+      pushDecl({
+        decls: rootDecls,
+        name: cssVar(['spacing', key]),
+        path: `spacing.${key}`,
+        value: config.spacing[key],
+        kind: 'length',
+      });
     }
   }
 
   if (config.sizes) {
     assertAllowedKeys(config.sizes, ['field'], 'sizes');
-    pushDecl(rootDecls, cssVar(['sizes', 'field']), config.sizes.field);
+    pushDecl({
+      decls: rootDecls,
+      name: cssVar(['sizes', 'field']),
+      path: 'sizes.field',
+      value: config.sizes.field,
+      kind: 'length',
+    });
   }
 
   if (config.fonts) {
     assertAllowedKeys(config.fonts, FONTS, 'fonts');
     for (const key of FONTS) {
-      pushDecl(rootDecls, cssVar(['fonts', key]), config.fonts[key]);
+      pushDecl({
+        decls: rootDecls,
+        name: cssVar(['fonts', key]),
+        path: `fonts.${key}`,
+        value: config.fonts[key],
+        kind: 'font family',
+      });
     }
   }
 

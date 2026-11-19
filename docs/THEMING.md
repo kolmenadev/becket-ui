@@ -32,7 +32,17 @@ const themeCss = defineBecketTheme({
 });
 ```
 
-Inject `themeCss` in a `<style>` tag, or copy [theme.example.css](../packages/tokens/theme.example.css) and import it **after** `index.css`.
+Prefer writing `themeCss` to a `.css` file (or copying [theme.example.css](../packages/tokens/theme.example.css)) and importing it **after** `index.css`. Injecting it in a `<style>` tag works too; a stylesheet file keeps theme values out of your HTML.
+
+`defineBecketTheme` only writes values it can read, and throws naming the key (`radii.md`) for anything else:
+
+| Keys | Accepts |
+| --- | --- |
+| `radii.*`, `fontSizes.*`, `spacing.*`, `sizes.field`, `density.*.*.px` / `py` | A number, optionally with `px`, `rem`, `em` or `%`: `4px`, `0.25rem`, `-1px`, `50%` |
+| `fonts.sans`, `fonts.mono` | Font names separated by commas. Quote a name with spaces or dots: `'Segoe UI', system-ui, sans-serif`. Names use ASCII letters, digits, `-` and `_` |
+| every `colors.*`, `{ dark, light }` and `neutral.*` | Hex (3, 4, 6 or 8 digits), `rgb()`, `hsl()`, `oklch()` or a basic color name, with an optional alpha |
+
+Colors are written back out in OKLCH: `#0a3d91` becomes `oklch(0.3856 0.1483 260.54)`, and an alpha below 1 stays (`#11223380` becomes `oklch(0.2462 0.0398 249.73 / 0.502)`). `var()`, `calc()` and other functions aren't accepted; set those in your own CSS after `index.css`. Empty values are skipped.
 
 Unlayered `:root` wins over `@layer tokens`. Set `data-theme="dark" | "light"` on `<html>`. Dark is the default. `background` / `text` / `muted` / `danger` are semantic: one name, two values via `data-theme`. Filled brand controls use `neutral.900` ink so yellow/sage fills stay AA. The violet in the Button **Brand Theme** story is a `defineBecketTheme({ colors: { primary } })` demo (hue 280), not the default primary.
 
