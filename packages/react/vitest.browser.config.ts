@@ -30,6 +30,17 @@ export default defineConfig({
       enabled: true,
       headless: true,
       viewport: { width: 1024, height: 768 },
+      commands: {
+        // Chrome emulates the media feature per test through CDP. Firefox has no such call in
+        // WebDriver or BiDi, so its reduced-motion instance below sets the preference at launch.
+        emulateReducedMotion: async ({ browser }, value: 'reduce' | 'no-preference') => {
+          if (browser.capabilities.browserName?.includes('chrome')) {
+            await browser.sendCommandAndGetResult('Emulation.setEmulatedMedia', {
+              features: [{ name: 'prefers-reduced-motion', value }],
+            });
+          }
+        },
+      },
       instances: [
         {
           browser: 'chrome',
@@ -56,6 +67,10 @@ export default defineConfig({
           provider: webdriverio({
             capabilities: {
               'moz:firefoxOptions': {
+                // Reduced motion for the whole Firefox run: the preference can't change per test.
+                // reduced-motion.browser.test.tsx asserts the feature matches, so a dropped
+                // preference fails that test instead of passing vacuously.
+                prefs: { 'ui.prefersReducedMotion': 1 },
                 // Pinned like Chrome, into the same cache; CI uses the runner's Firefox for the same
                 // reason it uses the runner's Chrome.
                 binary: process.env.CI
