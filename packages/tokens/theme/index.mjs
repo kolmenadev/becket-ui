@@ -1,4 +1,13 @@
-export { colorDistance, contrastRatio, formatHex, formatOklch, parseColor, rgbToOklch, toGamut } from './color.mjs';
+export {
+  colorDistance,
+  contrastRatio,
+  formatHex,
+  formatOklch,
+  parseColor,
+  parseColorAlpha,
+  rgbToOklch,
+  toGamut,
+} from './color.mjs';
 export { contrastPairs, checkBecketThemeContrast, resolveBecketColors } from './contrast.mjs';
 export { deriveBecketTheme } from './derive.mjs';
 

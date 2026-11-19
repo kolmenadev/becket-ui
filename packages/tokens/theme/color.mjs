@@ -50,6 +50,10 @@ function number(part, scale = 1) {
  * @returns {{ L: number, C: number, h: number } | null} null when the format isn't supported
  */
 export function parseColor(input) {
+  return parseColorAlpha(input)?.color ?? null;
+}
+
+export function parseColorAlpha(input) {
   if (typeof input !== 'string') return null;
   // CSS's basic color names, the ones logos and SVGs use. Rarer names aren't guessed.
   const value = (
@@ -77,37 +81,50 @@ export function parseColor(input) {
 
   const hex = value.match(/^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i);
   if (hex) {
-    return linearToOklch(
-      // #abc → #aabbcc; the first three pairs are r, g, b (alpha is dropped).
-      (hex[1].length <= 4 ? [...hex[1]].map((digit) => digit + digit).join('') : hex[1])
-        .match(/../g)
-        .slice(0, 3)
-        .map((pair) => toLinear(Number.parseInt(pair, 16) / 255)),
-    );
+    // #abcd → #aabbccdd; the pairs are r, g, b and an optional alpha.
+    const [r, g, b, alpha = 255] = (
+      hex[1].length <= 4 ? [...hex[1]].map((digit) => digit + digit).join('') : hex[1]
+    )
+      .match(/../g)
+      .map((pair) => Number.parseInt(pair, 16));
+    return { color: rgbToOklch([r, g, b]), alpha: alpha / 255 };
   }
 
   const fn = value.match(/^(rgba?|hsla?|oklch)\(\s*([^)]*)\)$/i);
   if (!fn) return null;
+  // Modern `1 2 3 / 0.5` puts alpha after one slash; legacy `1, 2, 3, 0.5` in a fourth part.
+  const [channelText, ...slashParts] = fn[2].split('/');
+  const isLegacy = channelText.includes(',');
+  const channels = isLegacy ? channelText.split(',') : channelText.trim().split(/\s+/);
+  const parts = [...channels, ...slashParts].map((part) => part.trim());
+  if (
+    parts.length < 3 ||
+    parts.length > 4 ||
+    (isLegacy ? slashParts.length > 0 : channels.length !== 3) ||
+    // Anchored, so `1;x` or `200x` is rejected instead of read as a number the way parseFloat would.
+    !parts.every((part) => part === 'none' || /^[+-]?(?:\d+\.?\d*|\.\d+)(?:%|deg)?$/.test(part)) ||
+    parts[3]?.endsWith('deg')
+  )
+    return null;
+  const alpha = parts.length === 4 ? number(parts[3]) : 1;
+  if (alpha < 0 || alpha > 1) return null;
   const kind = fn[1].toLowerCase();
-  // `1 2 3 / 0.5` or `1, 2, 3, 0.5`: three channels, alpha dropped.
-  const withoutAlpha = fn[2].split('/')[0];
-  const parts = (
-    withoutAlpha.includes(',') ? withoutAlpha.split(',') : withoutAlpha.trim().split(/\s+/)
-  ).slice(0, 3);
-  if (parts.length !== 3) return null;
 
   if (kind.startsWith('rgb')) {
-    const rgb = parts.map((part) => clamp01(number(part, 255) / 255));
-    if (rgb.some(Number.isNaN)) return null;
-    return linearToOklch(rgb.map(toLinear));
+    return {
+      color: linearToOklch(
+        parts.slice(0, 3).map((part) => toLinear(clamp01(number(part, 255) / 255))),
+      ),
+      alpha,
+    };
   }
   if (kind.startsWith('hsl')) {
     const hue = Number.parseFloat(parts[0]);
-    const saturation = clamp01(number(parts[1]));
+    // `none` is the one channel parseFloat can't read.
+    if (Number.isNaN(hue)) return null;
     const lightness = clamp01(number(parts[2]));
-    if ([hue, saturation, lightness].some(Number.isNaN)) return null;
     // CSS Color 4 hsl() → sRGB.
-    const chroma = (1 - Math.abs(2 * lightness - 1)) * saturation;
+    const chroma = (1 - Math.abs(2 * lightness - 1)) * clamp01(number(parts[1]));
     const sector = (((hue % 360) + 360) % 360) / 60;
     const x = chroma * (1 - Math.abs((sector % 2) - 1));
     const [r, g, b] = [
@@ -119,11 +136,10 @@ export function parseColor(input) {
       [chroma, 0, x],
     ][Math.min(5, Math.floor(sector))];
     const offset = lightness - chroma / 2;
-    return linearToOklch([r + offset, g + offset, b + offset].map(toLinear));
+    return { color: linearToOklch([r + offset, g + offset, b + offset].map(toLinear)), alpha };
   }
   const [L, C, h] = [number(parts[0]), number(parts[1], 0.4), number(parts[2])];
-  if ([L, C, h].some(Number.isNaN)) return null;
-  return { L: clamp01(L), C: Math.max(0, C), h: ((h % 360) + 360) % 360 };
+  return { color: { L: clamp01(L), C: Math.max(0, C), h: ((h % 360) + 360) % 360 }, alpha };
 }
 
 /**
