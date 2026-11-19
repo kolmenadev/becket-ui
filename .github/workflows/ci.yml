@@ -45,8 +45,8 @@ jobs:
   a11y-browser:
     needs: check
     runs-on: ubuntu-latest
-    # Browser axe is on trial for its first two weeks; at the 0.12 gate this line goes and the job
-    # becomes a required status check. check excludes the story test so it runs once, here.
+    # Non-blocking until the job becomes a required status check at the 0.12 gate (roadmap R9).
+    # check excludes the story test so it runs once, here.
     continue-on-error: true
     permissions:
       contents: read
