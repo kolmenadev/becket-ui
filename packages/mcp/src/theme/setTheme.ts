@@ -161,7 +161,7 @@ export function setTheme(input: SetThemeInput): string {
   }
 
   const required = contrast.results.filter((result) => result.level === 'required');
-  const flagged = [...contrast.failures, ...contrast.advisories];
+  const flagged = [...contrast.failures, ...contrast.knownGaps];
   return [
     `# Becket theme${contrast.passes ? '' : ' (contrast failures, see below)'}`,
     '## Contrast',
@@ -175,12 +175,21 @@ export function setTheme(input: SetThemeInput): string {
             '| --- | --- | --- | --- | --- |',
             ...flagged.map(
               (result) =>
-                `| ${result.theme} | ${result.use} | ${result.ratio}:1 | ${result.minimum}:1 | ${result.passes ? 'pass' : result.level === 'advisory' ? 'advisory' : '**FAIL**'} |`,
+                `| ${result.theme} | ${result.use} | ${result.ratio}:1 | ${result.minimum}:1 | ${result.passes ? 'pass' : contrast.knownGaps.includes(result) ? 'known gap' : '**FAIL**'} |`,
             ),
           ].join('\n')
         : null,
-      contrast.advisories.length
-        ? `Advisory rows aren't enforced because Becket's own default theme misses them too, but fix them when you can: ${[...new Set(contrast.advisories.map((result) => result.note))].join(' ')}`
+      contrast.knownGaps.length
+        ? `Known gaps aren't enforced yet because Becket's own default theme misses them too, but fix them when you can. Each names the Becket issue that fixes it and the release it's due in: ${[
+            ...new Set(
+              contrast.knownGaps.map((result) =>
+                // Narrows to the known-gap shape, which is the only one with `issue` and `until`.
+                result.level === 'known-gap'
+                  ? `${result.note} (${result.issue}, due in ${result.until})`
+                  : result.note,
+              ),
+            ),
+          ].join(' ')}`
         : null,
     ]
       .filter(Boolean)
