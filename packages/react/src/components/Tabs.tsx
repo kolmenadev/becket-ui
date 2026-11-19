@@ -55,8 +55,8 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
     const isControlledRef = useRef(isControlled);
     isControlledRef.current = isControlled;
 
-    // The memo below keeps every Tab from re-rendering on unrelated parent renders, so this
-    // callback must stay stable and read the latest props through the refs.
+    // The Provider's memoized value keeps every Tab from re-rendering on unrelated parent renders,
+    // so this callback must stay stable and read the latest props through the refs.
     const setValue = useCallback((next: string) => {
       if (!isControlledRef.current) setUncontrolled(next);
       onValueChangeRef.current?.(next);
