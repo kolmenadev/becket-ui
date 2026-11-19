@@ -39,12 +39,6 @@ const COLOR_THEMED = [
   'linkVisited',
 ];
 const NEUTRAL_STEPS = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
-const RADII = ['none', 'sm', 'md', 'lg', 'xl', 'full'];
-// `base` rescales the whole type scale; the steps are ratios of it.
-const FONT_SIZES = ['base', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'];
-// `unit` rescales every Fibonacci spacing and size step; `textUnit` the em-based text spacing.
-const SPACING = ['unit', 'textUnit', 'xs', 'sm', 'md', 'lg', 'xl'];
-const FONTS = ['sans', 'mono'];
 const DENSITY_SIZES = {
   button: ['sm', 'md'],
   field: ['sm', 'md', 'lg'],
@@ -83,9 +77,12 @@ function toDecls({ name, path, value, kind }) {
       );
     }
     // Written from the parsed color, never the raw string, so nothing else can ride along with it.
-    const color = formatOklch(parsed.color);
     return [
-      `  ${name}: ${parsed.alpha < 1 ? `${color.slice(0, -1)} / ${Number(parsed.alpha.toFixed(3))})` : color};`,
+      `  ${name}: ${
+        parsed.alpha < 1
+          ? `${formatOklch(parsed.color).slice(0, -1)} / ${Number(parsed.alpha.toFixed(3))})`
+          : formatOklch(parsed.color)
+      };`,
     ];
   }
   if (
@@ -159,11 +156,17 @@ export function defineBecketTheme(config = {}) {
     ),
     // Same shape for every group; cssVar kebab-cases `fontSizes` to `font-sizes`.
     ...[
-      ['radii', RADII, 'length'],
-      ['fontSizes', FONT_SIZES, 'length'],
-      ['spacing', SPACING, 'length'],
+      ['radii', ['none', 'sm', 'md', 'lg', 'xl', 'full'], 'length'],
+      // `base` rescales the whole type scale; the steps are ratios of it.
+      [
+        'fontSizes',
+        ['base', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl'],
+        'length',
+      ],
+      // `unit` rescales every Fibonacci spacing and size step; `textUnit` the em-based text spacing.
+      ['spacing', ['unit', 'textUnit', 'xs', 'sm', 'md', 'lg', 'xl'], 'length'],
       ['sizes', ['field'], 'length'],
-      ['fonts', FONTS, 'font family'],
+      ['fonts', ['sans', 'mono'], 'font family'],
     ].flatMap(([group, keys, kind]) => {
       if (!config[group]) return [];
       assertAllowedKeys(config[group], keys, group);
@@ -179,9 +182,8 @@ export function defineBecketTheme(config = {}) {
     ...Object.keys(DENSITY_SIZES).flatMap((component) => {
       const sizes = config.density?.[component];
       if (!sizes) return [];
-      const allowed = DENSITY_SIZES[component];
-      assertAllowedKeys(sizes, allowed, `density.${component}`);
-      return allowed.flatMap((size) => {
+      assertAllowedKeys(sizes, DENSITY_SIZES[component], `density.${component}`);
+      return DENSITY_SIZES[component].flatMap((size) => {
         const box = sizes[size];
         if (!box) return [];
         assertAllowedKeys(box, ['px', 'py'], `density.${component}.${size}`);
