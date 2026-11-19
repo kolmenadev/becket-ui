@@ -31,14 +31,14 @@ function check({ findings, baseline, today }) {
   const problems = [];
   const claimed = new Set();
   for (const { file, line, match } of findings) {
-    const entry = baseline.findIndex(
+    const entryIndex = baseline.findIndex(
       (candidate, index) =>
         !claimed.has(index) && candidate.file === file && candidate.match === match,
     );
-    if (entry === -1) {
+    if (entryIndex === -1) {
       problems.push(`${file}:${line} uses the physical direction ${match}; use a logical property`);
     } else {
-      claimed.add(entry);
+      claimed.add(entryIndex);
     }
   }
   baseline.forEach(({ file, match, until }, index) => {

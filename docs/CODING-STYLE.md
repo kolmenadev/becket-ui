@@ -173,11 +173,13 @@ an inline `style` with token variables is fine. Add a comment that names the gap
 
 ## Logical properties
 
-Style along the inline axis with logical properties (`insetInlineStart`, `paddingInlineEnd`,
-`textAlign: 'start'`), never physical directions (`left`, `paddingRight`, `textAlign: 'left'`), so
-layouts mirror under `dir="rtl"`. In `packages/tokens/recipes`, `theme/logical.test.mjs` enforces it
-against a dated baseline; see "Logical properties" in
-[`.cursor-config/becket.mdc`](../.cursor-config/becket.mdc).
+Recipes in `packages/tokens/recipes` take no new physical directions (`left`, `paddingRight`,
+`textAlign: 'left'`): use logical properties (`insetInlineStart`, `paddingInlineEnd`,
+`textAlign: 'start'`) so layouts mirror under `dir="rtl"`.
+`packages/tokens/theme/logical.test.mjs` enforces it against a dated baseline; see "Logical
+properties" in [`.cursor-config/becket.mdc`](../.cursor-config/becket.mdc). Viewport coordinates
+from layout APIs (`getBoundingClientRect`) are physical by nature, so code that positions from them
+is not covered.
 
 ## Prefer inversion of control
 
