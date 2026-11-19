@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { assertNoAxeViolations } from '@becket-ui/a11y';
@@ -34,11 +34,86 @@ describe('Tabs', () => {
     screen.getByRole('tab', { name: 'Overview' }).focus();
     await user.keyboard('{End}');
     expect(document.activeElement).toBe(screen.getByRole('tab', { name: 'Activity' }));
-    expect(screen.getByRole('tab', { name: 'Activity' }).getAttribute('aria-selected')).toBe('true');
+    expect(screen.getByRole('tab', { name: 'Activity' }).getAttribute('aria-selected')).toBe(
+      'true',
+    );
     await user.keyboard('{Home}');
     expect(document.activeElement).toBe(screen.getByRole('tab', { name: 'Overview' }));
     await user.keyboard('{ArrowRight}');
     expect(document.activeElement).toBe(screen.getByRole('tab', { name: 'Activity' }));
+  });
+
+  it('calls the latest onValueChange', async () => {
+    const user = userEvent.setup();
+    const first = vi.fn();
+    const latest = vi.fn();
+    const { rerender } = render(
+      <Tabs value="a" onValueChange={first}>
+        <TabList>
+          <Tab value="a">Alpha</Tab>
+          <Tab value="b">Beta</Tab>
+          <Tab value="c">Gamma</Tab>
+        </TabList>
+      </Tabs>,
+    );
+    rerender(
+      <Tabs value="a" onValueChange={latest}>
+        <TabList>
+          <Tab value="a">Alpha</Tab>
+          <Tab value="b">Beta</Tab>
+          <Tab value="c">Gamma</Tab>
+        </TabList>
+      </Tabs>,
+    );
+    await user.click(screen.getByRole('tab', { name: 'Beta' }));
+    await user.click(screen.getByRole('tab', { name: 'Gamma' }));
+    expect(first).not.toHaveBeenCalled();
+    expect(latest.mock.calls).toEqual([['b'], ['c']]);
+  });
+
+  it('controlled without defaultValue', () => {
+    render(
+      <>
+        <Tabs value="a" onValueChange={() => {}}>
+          <TabList>
+            <Tab value="a">Alpha</Tab>
+          </TabList>
+        </Tabs>
+        {/* @ts-expect-error uncontrolled Tabs still needs defaultValue, so one tab is always selected */}
+        <Tabs>
+          <TabList>
+            <Tab value="b">Beta</Tab>
+          </TabList>
+        </Tabs>
+      </>,
+    );
+    expect(screen.getByRole('tab', { name: 'Alpha' }).getAttribute('aria-selected')).toBe('true');
+  });
+
+  it('switches control mode', async () => {
+    const onValueChange = vi.fn();
+    const { rerender } = render(
+      <Tabs defaultValue="a" onValueChange={onValueChange}>
+        <TabList>
+          <Tab value="a">Alpha</Tab>
+          <Tab value="b">Beta</Tab>
+          <Tab value="c">Gamma</Tab>
+        </TabList>
+      </Tabs>,
+    );
+    rerender(
+      <Tabs value="b" defaultValue="a" onValueChange={onValueChange}>
+        <TabList>
+          <Tab value="a">Alpha</Tab>
+          <Tab value="b">Beta</Tab>
+          <Tab value="c">Gamma</Tab>
+        </TabList>
+      </Tabs>,
+    );
+    await userEvent.setup().click(screen.getByRole('tab', { name: 'Gamma' }));
+    expect(screen.getByRole('tab', { name: 'Beta' }).getAttribute('aria-selected')).toBe('true');
+    expect(onValueChange).toHaveBeenCalledTimes(1);
+    expect(onValueChange).toHaveBeenCalledWith('c');
   });
 
   it('has no axe violations', async () => {

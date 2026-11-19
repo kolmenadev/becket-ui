@@ -3,9 +3,11 @@
 import {
   createContext,
   forwardRef,
+  useCallback,
   useContext,
   useId,
   useMemo,
+  useRef,
   useState,
   type ButtonHTMLAttributes,
   type ComponentPropsWithoutRef,
@@ -34,29 +36,40 @@ function mergeClassName(...classes: (string | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
-export type TabsProps = ComponentPropsWithoutRef<'div'> & {
-  value?: string;
-  defaultValue: string;
+// style-check keep: the two TabsProps branches share these props; written twice they could drift.
+type TabsBaseProps = ComponentPropsWithoutRef<'div'> & {
   onValueChange?: (value: string) => void;
   children?: ReactNode;
 };
 
+export type TabsProps =
+  | (TabsBaseProps & { value: string; defaultValue?: string })
+  | (TabsBaseProps & { value?: undefined; defaultValue: string });
+
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
   ({ value, defaultValue, onValueChange, className, children, ...props }, ref) => {
     const isControlled = value !== undefined;
-    const [uncontrolled, setUncontrolled] = useState(defaultValue);
+    const [uncontrolled, setUncontrolled] = useState(defaultValue ?? '');
     const selected = isControlled ? value : uncontrolled;
     const baseId = useId();
     const styles = tabsRecipe();
 
-    const setValue = (next: string) => {
-      if (!isControlled) setUncontrolled(next);
-      onValueChange?.(next);
-    };
+    const onValueChangeRef = useRef(onValueChange);
+    // Assigned during render on purpose: the next event must see this render's callback.
+    onValueChangeRef.current = onValueChange;
+    const isControlledRef = useRef(isControlled);
+    isControlledRef.current = isControlled;
+
+    // The memo below keeps every Tab from re-rendering on unrelated parent renders, so this
+    // callback must stay stable and read the latest props through the refs.
+    const setValue = useCallback((next: string) => {
+      if (!isControlledRef.current) setUncontrolled(next);
+      onValueChangeRef.current?.(next);
+    }, []);
 
     const ctx = useMemo(
       () => ({ value: selected, setValue, baseId }),
-      [baseId, selected],
+      [baseId, selected, setValue],
     );
 
     return (
