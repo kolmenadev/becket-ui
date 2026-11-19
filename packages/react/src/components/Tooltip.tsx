@@ -12,7 +12,6 @@ import {
   useLayoutEffect,
   useRef,
   useState,
-  type CSSProperties,
   type FocusEventHandler,
   type MouseEventHandler,
   type ReactNode,
@@ -123,7 +122,7 @@ function clampToViewport(top: number, left: number, tip: DOMRect): { top: number
 /** Makes a trigger that isn't a tab stop into one; wrap a disabled button yourself. */
 export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
   ({ content, children, placement = 'top', delayMs = 200, disabled = false }, ref) => {
-    const tipId = useId();
+    const tipID = useId();
     const triggerRef = useRef<HTMLElement | null>(null);
     const tipRef = useRef<HTMLDivElement | null>(null);
     const showTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -133,9 +132,23 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
     const [isWrapped, setIsWrapped] = useState(false);
     const canOpen = !disabled && content != null && content !== '';
 
+    const childArray = Children.toArray(children);
+    // style-check keep: read three times below to reset the classification when the trigger changes.
+    const childType =
+      childArray.length === 1 && isValidElement(childArray[0]) ? childArray[0].type : undefined;
+    // Boxed: useState would call a component type as an initializer or an updater.
+    const [classified, setClassified] = useState({ type: childType });
+    // A new trigger may take the cloned props where the old one didn't, so it's classified again.
+    if (childType !== classified.type) {
+      setClassified({ type: childType });
+      setIsWrapped(false);
+      setShouldAddTabStop(false);
+    }
+
     const setTriggerRef = useCallback(
       (node: HTMLElement | null) => {
-        triggerRef.current = node;
+        // A class component hands the ref its instance, which has no DOM methods; null wraps it.
+        triggerRef.current = node?.nodeType === Node.ELEMENT_NODE ? node : null;
         assignRef(ref, node);
       },
       [ref],
@@ -180,39 +193,36 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
 
     useLayoutEffect(() => {
       if (!open || !triggerRef.current || !tipRef.current) return;
-      const trigger = triggerRef.current.getBoundingClientRect();
       const tip = tipRef.current.getBoundingClientRect();
-      const raw = computePosition(trigger, tip, placement);
+      const raw = computePosition(triggerRef.current.getBoundingClientRect(), tip, placement);
       setCoords(clampToViewport(raw.top, raw.left, tip));
     }, [open, placement, content]);
 
-    // style-check keep: syncs the trigger's DOM aria-describedby with the open tooltip.
+    // style-check keep: syncs the trigger's DOM aria-describedby with the open tooltip after every
+    // commit (no dependency list), since a rerender can rewrite the caller's own description.
     useLayoutEffect(() => {
-      const node = triggerRef.current;
+      // A control inside the trigger is what assistive tech announces on focus, so it's described.
+      const node = triggerRef.current?.contains(document.activeElement)
+        ? document.activeElement
+        : triggerRef.current;
       if (!open || !node) return;
       // Set on the node rather than cloned as a prop: Checkbox, Radio and the Field controls set
       // their own aria-describedby before spreading props, and a cloned one would replace it.
       node.setAttribute(
         'aria-describedby',
-        [node.getAttribute('aria-describedby'), tipId].filter(Boolean).join(' '),
+        [node.getAttribute('aria-describedby'), tipID].filter(Boolean).join(' '),
       );
       return () => {
         node.setAttribute(
           'aria-describedby',
           (node.getAttribute('aria-describedby') ?? '')
             .split(' ')
-            .filter((id) => id !== '' && id !== tipId)
+            .filter((id) => id !== '' && id !== tipID)
             .join(' '),
         );
         if (node.getAttribute('aria-describedby') === '') node.removeAttribute('aria-describedby');
       };
-    }, [open, tipId]);
-
-    const tipStyle: CSSProperties = {
-      top: coords?.top ?? -9999,
-      left: coords?.left ?? -9999,
-      visibility: coords ? 'visible' : 'hidden',
-    };
+    });
 
     const hoverHandlers = {
       onMouseEnter: scheduleOpen,
@@ -221,7 +231,6 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
       onBlur: close,
     };
 
-    const childArray = Children.toArray(children);
     // Cloning keeps the child's own element, layout, ref and tab stop. A Fragment takes no ref or
     // handlers, so it's wrapped like text.
     const child =
@@ -247,27 +256,35 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
       }
       if (
         child?.props.tabIndex != null ||
-        [node, ...node.querySelectorAll('*')].some((element) =>
-          element.matches(
-            'a[href], area[href], button:not(:disabled), input:not(:disabled):not([type="hidden"]), select:not(:disabled), textarea:not(:disabled), summary, iframe, audio[controls], video[controls], [contenteditable]:not([contenteditable="false"]), [tabindex]:not([tabindex^="-"])',
-          ),
+        [node, ...node.querySelectorAll('*')].some(
+          (element) =>
+            element.matches(
+              'a[href], area[href], button:not(:disabled), input:not(:disabled):not([type="hidden"]), select:not(:disabled), textarea:not(:disabled), summary, iframe, audio[controls], video[controls], [contenteditable]:not([contenteditable="false"]), [tabindex]',
+            ) &&
+            // A negative tabindex, a hidden control or an inert one takes no Tab, so it doesn't count.
+            !element.matches('[tabindex^="-"]') &&
+            !element.closest('[hidden], [inert]') &&
+            (element.checkVisibility?.({ visibilityProperty: true }) ??
+              // jsdom has no checkVisibility; computed style still covers the element's own display.
+              (getComputedStyle(element).display !== 'none' &&
+                getComputedStyle(element).visibility !== 'hidden')),
         )
       ) {
         return;
       }
       setShouldAddTabStop(true);
-      // process.env.NODE_ENV comes last: bundlers fold it to false in production, and a page
-      // without a bundler only reads it for a hidden trigger.
-      if (
-        !hasWarnedHiddenTrigger &&
-        node.getAttribute('aria-hidden') === 'true' &&
-        process.env.NODE_ENV !== 'production'
-      ) {
-        hasWarnedHiddenTrigger = true;
-        console.warn(
-          '[Becket UI] Tooltip: the trigger is aria-hidden, so its tab stop has no accessible name. Give an Icon trigger a label.',
-        );
+      if (hasWarnedHiddenTrigger || node.getAttribute('aria-hidden') !== 'true') return;
+      // Read inside try rather than behind typeof process: bundlers replace process.env.NODE_ENV
+      // but don't define process, and unbundled ESM in a browser has no process at all.
+      try {
+        if (process.env.NODE_ENV === 'production') return;
+      } catch {
+        return;
       }
+      hasWarnedHiddenTrigger = true;
+      console.warn(
+        '[Becket UI] Tooltip: the trigger is aria-hidden, so its tab stop has no accessible name. Give an Icon trigger a label.',
+      );
     });
 
     return (
@@ -299,10 +316,14 @@ export const Tooltip = forwardRef<HTMLElement, TooltipProps>(
           ? createPortal(
               <div
                 ref={tipRef}
-                id={tipId}
+                id={tipID}
                 role="tooltip"
                 className={mergeClassName(tooltipRecipe({ placement }))}
-                style={tipStyle}
+                style={{
+                  top: coords?.top ?? -9999,
+                  left: coords?.left ?? -9999,
+                  visibility: coords ? 'visible' : 'hidden',
+                }}
               >
                 {content}
               </div>,

@@ -1,4 +1,4 @@
-import { createRef, forwardRef, StrictMode } from 'react';
+import { Component, createRef, forwardRef, StrictMode } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -270,9 +270,105 @@ describe('Tooltip', () => {
 
     await user.tab();
     expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Save' }));
-    expect(await screen.findByRole('tooltip')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Save' }).getAttribute('aria-describedby')).toBe(
+      (await screen.findByRole('tooltip')).id,
+    );
     await user.tab();
     expect(document.activeElement).toBe(screen.getByRole('button', { name: 'After' }));
+  });
+
+  it.each([
+    {
+      name: 'a hidden button',
+      trigger: (
+        <span>
+          Info<button style={{ display: 'none' }}>Hidden</button>
+        </span>
+      ),
+    },
+    {
+      name: 'a button out of the tab order',
+      trigger: (
+        <span>
+          Info<button tabIndex={-1}>Skipped</button>
+        </span>
+      ),
+    },
+  ])('makes a trigger with $name inside a tab stop', async ({ trigger }) => {
+    render(
+      <Tooltip content="Hint" delayMs={0}>
+        {trigger}
+      </Tooltip>,
+    );
+
+    await userEvent.setup().tab();
+    expect(document.activeElement).toBe(screen.getByText('Info'));
+  });
+
+  it('keeps the caller description when it changes while open', async () => {
+    const { rerender } = render(
+      <Tooltip content="Hint" delayMs={0}>
+        <button type="button" aria-describedby="first">
+          Save
+        </button>
+      </Tooltip>,
+    );
+
+    await userEvent.setup().tab();
+    await screen.findByRole('tooltip');
+    rerender(
+      <Tooltip content="Hint" delayMs={0}>
+        <button type="button" aria-describedby="second">
+          Save
+        </button>
+      </Tooltip>,
+    );
+    expect(screen.getByRole('button', { name: 'Save' }).getAttribute('aria-describedby')).toBe(
+      `second ${screen.getByRole('tooltip').id}`,
+    );
+  });
+
+  it('enhances a trigger directly after it replaces one that was wrapped', async () => {
+    // style-check keep: a component has to be declared before it can be rendered.
+    function DropsRef() {
+      return <span>Ref dropped</span>;
+    }
+    const user = userEvent.setup();
+    const { rerender } = render(
+      <Tooltip content="Hint" delayMs={0}>
+        <DropsRef />
+      </Tooltip>,
+    );
+    rerender(
+      <>
+        <Tooltip content="Hint" delayMs={0}>
+          <Button>Save</Button>
+        </Tooltip>
+        <button type="button">After</button>
+      </>,
+    );
+
+    await user.tab();
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Save' }));
+    await user.tab();
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'After' }));
+  });
+
+  it('wraps a class component trigger', async () => {
+    // style-check keep: a component has to be declared before it can be rendered.
+    class Legacy extends Component {
+      render() {
+        return <span>Legacy</span>;
+      }
+    }
+    render(
+      <Tooltip content="Hint" delayMs={0}>
+        <Legacy />
+      </Tooltip>,
+    );
+
+    await userEvent.setup().tab();
+    expect(document.activeElement).toBe(screen.getByText('Legacy').parentElement);
   });
 
   it('wraps a trigger that drops the props it is given', async () => {
@@ -334,5 +430,41 @@ describe('Tooltip', () => {
     );
     expect(console.warn).toHaveBeenCalledTimes(1);
     expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('accessible name'));
+  });
+
+  // A fresh module resets the once-per-session flag the test above sets.
+  it('warns about an Icon with an empty label', async () => {
+    vi.resetModules();
+    const fresh = await import('./Tooltip');
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    render(
+      <fresh.Tooltip content="Hint">
+        <Icon label="">
+          <svg />
+        </Icon>
+      </fresh.Tooltip>,
+    );
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('accessible name'));
+  });
+
+  it('renders a hidden trigger on a page with no process global', async () => {
+    vi.resetModules();
+    const fresh = await import('./Tooltip');
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    // Unbundled ESM in a browser has no process; bundlers replace process.env.NODE_ENV instead.
+    vi.stubGlobal('process', undefined);
+    try {
+      expect(() =>
+        render(
+          <fresh.Tooltip content="Hint">
+            <Icon>
+              <svg />
+            </Icon>
+          </fresh.Tooltip>,
+        ),
+      ).not.toThrow();
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });
