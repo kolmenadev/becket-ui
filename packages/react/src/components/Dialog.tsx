@@ -204,7 +204,8 @@ export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(
         type={type}
         data-becket-dialog-close=""
         {...props}
-        // Visible children name the button (WCAG 2.5.3 Label in Name); only the default × glyph needs "Close".
+        // Visible children name the button (WCAG 2.5.3 Label in Name); only the default × glyph
+        // needs "Close".
         aria-label={props['aria-label'] ?? (children === undefined ? 'Close' : undefined)}
         className={mergeClassName(styles.close, className)}
         onClick={(event) => {

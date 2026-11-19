@@ -2,8 +2,17 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { drawer as drawerRecipe } from '@becket-ui/tokens/recipes';
 import { Button } from './Button';
+import { CloseIcon } from './Glyphs';
 import { Text } from './Text';
-import { Drawer, type DrawerProps } from './Drawer';
+import {
+  Drawer,
+  DrawerBody,
+  DrawerClose,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  type DrawerProps,
+} from './Drawer';
 
 const meta: Meta<typeof Drawer> = {
   title: 'Overlays/Drawer',
@@ -85,4 +94,23 @@ export const Open: Story = {
       </>
     );
   },
+};
+
+export const CloseNaming: Story = {
+  render: () => (
+    <Drawer defaultOpen>
+      <DrawerHeader>
+        <DrawerTitle>Discard draft?</DrawerTitle>
+        <DrawerClose aria-label="Close">
+          <CloseIcon />
+        </DrawerClose>
+      </DrawerHeader>
+      <DrawerBody>
+        <Text>Visible text names the button. An icon needs an aria-label.</Text>
+      </DrawerBody>
+      <DrawerFooter>
+        <DrawerClose>Cancel</DrawerClose>
+      </DrawerFooter>
+    </Drawer>
+  ),
 };
