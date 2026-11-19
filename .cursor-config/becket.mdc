@@ -154,6 +154,10 @@ Derive a component's internal geometry from one custom property (`--becket-<comp
 
 Reference tokens with braces when they sit inside a value: `calc(100% - {spacing.8})`, `right {spacing.3} center`. A key that doesn't exist (for example `sizes.2xs`) is dropped without an error, so check the built `index.css`.
 
+### Logical properties
+
+Recipes use logical properties so a layout mirrors under `dir="rtl"`: `insetInlineStart`, `paddingInlineEnd`, `marginInlineStart`, `borderInlineStart`, `textAlign: 'start'`. No new physical directions in a recipe: `left`, `right`, `paddingLeft`, `marginRight`, `borderLeft*`, `float`, `textAlign: 'left'`, a `backgroundPosition` with `left` or `right`, `translateX(`. Move something along the inline axis with an inset, not a `translateX`. `packages/tokens/theme/logical.test.mjs` fails on them. The sites that still use one are listed, each with a reason and an `until` date, in `packages/tokens/theme/logical.baseline.json`. The list only shrinks: converting a site fails the test as stale until you remove its entry.
+
 ### Brand vs status colors
 
 Brand tokens are identity: `becketYellow`, `hiveSage`, `combAmber`, plus aliases `primary` / `secondary` / `tertiary`. Status tokens are semantic: `danger`, `warning`, `success`.

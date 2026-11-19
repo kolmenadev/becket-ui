@@ -47,6 +47,7 @@ reason.
   - [Must use stable keys](#must-use-stable-keys)
   - [Name props `onX` and handlers `handleX`](#name-props-onx-and-handlers-handlex)
   - [Prefer native, accessible elements](#prefer-native-accessible-elements)
+  - [Logical properties](#logical-properties)
 - [TypeScript](#typescript)
   - [Must not use `any`](#must-not-use-any)
   - [Must use `as const` only when you need the literal types](#must-use-as-const-only-when-you-need-the-literal-types)
@@ -654,6 +655,14 @@ Use `<button>` for actions, `<a href>` for navigation and `<label>` for inputs, 
 `div`. Every control has an accessible name: a visible label, or `aria-label` when the label is
 visual only (an icon button, a switch inside a table row). Use ARIA only when native HTML can't
 express it. Target: WCAG 2.2 AA.
+
+## Logical properties
+
+Style along the inline axis with logical properties (`insetInlineStart`, `paddingInlineEnd`,
+`textAlign: 'start'`), never physical directions (`left`, `paddingRight`, `textAlign: 'left'`), so
+layouts mirror under `dir="rtl"`. In `packages/tokens/recipes`, `theme/logical.test.mjs` enforces it
+against a dated baseline; see "Logical properties" in
+[`.cursor-config/becket.mdc`](../.cursor-config/becket.mdc).
 
 # TypeScript
 
