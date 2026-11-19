@@ -43,6 +43,29 @@ test('parseColorAlpha needs exactly three channels, and a slash before a modern 
   }
 });
 
+test('parseColorAlpha reads every number spelling the channel grammar allows, and only those', () => {
+  for (const token of ['1', '1.', '1.5', '.5', '15%', '+1deg', '-.5', '01', '1.5%']) {
+    assert.notEqual(parseColorAlpha(`oklch(0.5 0.1 ${token})`), null, token);
+  }
+  for (const token of ['.', '1..2', '1.5.', '.5.5', '+-1', '1e3', '+', '%']) {
+    assert.equal(parseColorAlpha(`oklch(0.5 0.1 ${token})`), null, token);
+  }
+});
+
+test('parseColorAlpha rejects a long run of digits or spaces in linear time', () => {
+  for (const input of [
+    `rgb(1 2 ${'1'.repeat(100000)}x)`,
+    `oklch(0.5 0.1 ${'1'.repeat(100000)}.5.)`,
+    `rgb(${' '.repeat(100000)}x`,
+  ]) {
+    // style-check keep: the timer starts before the parse it measures; inlined, it would start after.
+    const start = performance.now();
+    assert.equal(parseColorAlpha(input), null, input.slice(0, 12));
+    // Linear parsing takes a few milliseconds; the quadratic regexes this replaces took seconds.
+    assert.ok(performance.now() - start < 1000, input.slice(0, 12));
+  }
+});
+
 test('parseColorAlpha rejects a channel too long to read as a finite number', () => {
   for (const input of [`oklch(0.5 ${'9'.repeat(309)} 200)`, `hsl(${'9'.repeat(309)} 50% 50%)`]) {
     assert.equal(parseColorAlpha(input), null, input.slice(0, 20));

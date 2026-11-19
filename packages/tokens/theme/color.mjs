@@ -90,7 +90,9 @@ export function parseColorAlpha(input) {
     return { color: rgbToOklch([r, g, b]), alpha: alpha / 255 };
   }
 
-  const fn = value.match(/^(rgba?|hsla?|oklch)\(\s*([^)]*)\)$/i);
+  // No `\s*` after the `(`: next to `[^)]*` it backtracks quadratically on a long run of spaces
+  // without a `)`. The channels are trimmed below instead.
+  const fn = value.match(/^(rgba?|hsla?|oklch)\(([^)]*)\)$/i);
   if (!fn) return null;
   // Modern `1 2 3 / 0.5` puts alpha after one slash; legacy `1, 2, 3, 0.5` in a fourth part.
   const [channelText, ...slashParts] = fn[2].split('/');
@@ -105,8 +107,10 @@ export function parseColorAlpha(input) {
     !parts.every(
       (part) =>
         part === 'none' ||
-        // Finite too: a channel of 309 digits reads as Infinity and would write invalid CSS.
-        (/^[+-]?(?:\d+\.?\d*|\.\d+)(?:%|deg)?$/.test(part) &&
+        // Finite too: a channel of 309 digits reads as Infinity and would write invalid CSS. The
+        // fraction is grouped so no two parts can take the same digits; `\d+\.?\d*` backtracks
+        // quadratically on a long run of digits followed by a bad character.
+        (/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:%|deg)?$/.test(part) &&
           Number.isFinite(Number.parseFloat(part))),
     ) ||
     parts[3]?.endsWith('deg')
