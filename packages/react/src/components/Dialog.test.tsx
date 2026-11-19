@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { assertNoAxeViolations } from '@becket-ui/a11y';
 
 import { Button } from './Button';
-import { Dialog } from './Dialog';
+import { Dialog, DialogClose } from './Dialog';
 
 function ConfirmDialog({
   open = true,
@@ -86,13 +86,32 @@ describe('Dialog', () => {
     expect(onAlert).not.toHaveBeenCalled();
   });
 
-  it('lets Close aria-label be overridden', () => {
+  it('names the default close button Close', () => {
     render(
-      <Dialog open title="Confirm">
-        Body
+      <Dialog open aria-label="T">
+        <DialogClose />
       </Dialog>,
     );
     expect(screen.getByRole('button', { name: 'Close' })).toBeTruthy();
+  });
+
+  it('names a close button from its visible text, not Close', () => {
+    render(
+      <Dialog open aria-label="T">
+        <DialogClose>Cancel</DialogClose>
+      </Dialog>,
+    );
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Close' })).toBeNull();
+  });
+
+  it('lets an explicit aria-label name the close button', () => {
+    render(
+      <Dialog open aria-label="T">
+        <DialogClose aria-label="Dismiss">x</DialogClose>
+      </Dialog>,
+    );
+    expect(screen.getByRole('button', { name: 'Dismiss' })).toBeTruthy();
   });
 
   it('closes on Escape via the native dialog close event', () => {

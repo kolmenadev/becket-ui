@@ -195,7 +195,7 @@ DialogFooter.displayName = 'DialogFooter';
 type DialogCloseProps = ComponentPropsWithoutRef<'button'>;
 
 export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(
-  ({ className, children = '×', type = 'button', onClick, ...props }, ref) => {
+  ({ className, children, type = 'button', onClick, ...props }, ref) => {
     const { setOpen } = useDialog();
     const styles = dialogRecipe();
     return (
@@ -204,14 +204,15 @@ export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(
         type={type}
         data-becket-dialog-close=""
         {...props}
-        aria-label={props['aria-label'] ?? 'Close'}
+        // Visible children name the button (WCAG 2.5.3 Label in Name); only the default × glyph needs "Close".
+        aria-label={props['aria-label'] ?? (children === undefined ? 'Close' : undefined)}
         className={mergeClassName(styles.close, className)}
         onClick={(event) => {
           onClick?.(event);
           if (!event.defaultPrevented) setOpen(false);
         }}
       >
-        {children}
+        {children ?? '×'}
       </button>
     );
   },
