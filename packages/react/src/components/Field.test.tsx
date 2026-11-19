@@ -1,7 +1,8 @@
-import { describe, expect, it } from 'vitest';
+import { StrictMode } from 'react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-import { Field } from './Field';
+import { Field, FieldControl, FieldError, FieldHelper, FieldLabel } from './Field';
 import { Radio, RadioGroup } from './Radio';
 import { TextField } from './TextField';
 
@@ -36,5 +37,76 @@ describe('Field describedBy', () => {
       </Field>,
     );
     expect(screen.getByRole('group', { name: 'Side' }).getAttribute('aria-describedby')).toBeNull();
+  });
+});
+
+describe('Field error messages', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('warns once in development when an invalid field has no message', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    // StrictMode runs effects twice on mount, the way development builds do.
+    render(
+      <StrictMode>
+        <TextField label="Email" invalid />
+      </StrictMode>,
+    );
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0]?.[0]).toContain('invalid field has no error message');
+  });
+
+  it('does not warn when an invalid field has a message', () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    render(<TextField label="Email" invalid helperText="Enter a valid email address" />);
+    render(
+      <Field invalid>
+        <FieldLabel>Name</FieldLabel>
+        <FieldControl />
+        <FieldError>Enter your name</FieldError>
+      </Field>,
+    );
+    expect(console.warn).not.toHaveBeenCalled();
+  });
+
+  it('shows helper and error together, error first in aria-describedby', () => {
+    render(<TextField label="Email" invalid helperText="Hint" errorText="Required" />);
+    const helper = screen.getByText('Hint');
+    expect(helper.getAttribute('role')).toBeNull();
+    expect(screen.getByRole('alert').textContent).toBe('Required');
+    expect(screen.getByLabelText('Email').getAttribute('aria-describedby')).toBe(
+      `${screen.getByRole('alert').id} ${helper.id}`,
+    );
+  });
+
+  it('keeps helperText as the only alert when invalid without errorText', () => {
+    render(<TextField label="Email" invalid helperText="Required" />);
+    expect(screen.getAllByRole('alert')).toHaveLength(1);
+    expect(screen.getByRole('alert').textContent).toBe('Required');
+    expect(screen.getByLabelText('Email').getAttribute('aria-describedby')).toBe(
+      screen.getByRole('alert').id,
+    );
+  });
+
+  it('shows only the hint when errorText is given but the field is valid', () => {
+    render(<TextField label="Email" helperText="Hint" errorText="Required" />);
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(screen.queryByText('Required')).toBeNull();
+    expect(screen.getByText('Hint')).toBeTruthy();
+  });
+
+  it('marks FieldError with a hidden glyph and keeps the message as its text', () => {
+    render(
+      <Field invalid>
+        <FieldLabel>Email</FieldLabel>
+        <FieldControl />
+        <FieldHelper>Work address</FieldHelper>
+        <FieldError>Enter a valid email address</FieldError>
+      </Field>,
+    );
+    const alert = screen.getByRole('alert');
+    expect(alert.textContent).toBe('Enter a valid email address');
+    expect(alert.querySelector('[aria-hidden="true"] svg')).not.toBeNull();
   });
 });
