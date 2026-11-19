@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
+import { Stack } from './Stack';
 import { Text } from './Text';
 import { Tab, TabList, TabPanel, Tabs, type TabsProps } from './Tabs';
 
@@ -34,6 +36,33 @@ export const Default: Story = {
       </TabPanel>
     </Tabs>
   ),
+};
+
+export const Controlled: Story = {
+  render: function ControlledTabs() {
+    const [value, setValue] = useState('overview');
+    return (
+      <Stack gap="md">
+        <Tabs value={value} onValueChange={setValue}>
+          <TabList>
+            <Tab value="overview">Overview</Tab>
+            <Tab value="activity">Activity</Tab>
+            <Tab value="settings">Settings</Tab>
+          </TabList>
+          <TabPanel value="overview">
+            <Text>Overview panel.</Text>
+          </TabPanel>
+          <TabPanel value="activity">
+            <Text>Activity panel.</Text>
+          </TabPanel>
+          <TabPanel value="settings">
+            <Text>Settings panel.</Text>
+          </TabPanel>
+        </Tabs>
+        <Text color="muted">Selected: {value}</Text>
+      </Stack>
+    );
+  },
 };
 
 export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
