@@ -161,7 +161,6 @@ export function setTheme(input: SetThemeInput): string {
   }
 
   const required = contrast.results.filter((result) => result.level === 'required');
-  const flagged = [...contrast.failures, ...contrast.knownGaps];
   return [
     `# Becket theme${contrast.passes ? '' : ' (contrast failures, see below)'}`,
     '## Contrast',
@@ -169,24 +168,25 @@ export function setTheme(input: SetThemeInput): string {
       contrast.passes
         ? `All ${required.length} required pairs pass WCAG 2.2 AA in dark and light.`
         : `${contrast.failures.length} of ${required.length} required pairs FAIL WCAG 2.2 AA. Don't ship this theme as is.`,
-      flagged.length
+      // Failures and known gaps together are every failing result.
+      contrast.results.some((result) => !result.passes)
         ? [
             '| theme | where | ratio | needs | result |',
             '| --- | --- | --- | --- | --- |',
-            ...flagged.map(
-              (result) =>
-                `| ${result.theme} | ${result.use} | ${result.ratio}:1 | ${result.minimum}:1 | ${result.passes ? 'pass' : contrast.knownGaps.includes(result) ? 'known gap' : '**FAIL**'} |`,
+            ...[
+              ...contrast.failures.map((result) => ({ result, label: '**FAIL**' })),
+              ...contrast.knownGaps.map((result) => ({ result, label: 'known gap' })),
+            ].map(
+              ({ result, label }) =>
+                `| ${result.theme} | ${result.use} | ${result.ratio}:1 | ${result.minimum}:1 | ${label} |`,
             ),
           ].join('\n')
         : null,
       contrast.knownGaps.length
         ? `Known gaps aren't enforced yet because Becket's own default theme misses them too, but fix them when you can. Each names the Becket issue that fixes it and the release it's due in: ${[
             ...new Set(
-              contrast.knownGaps.map((result) =>
-                // Narrows to the known-gap shape, which is the only one with `issue` and `until`.
-                result.level === 'known-gap'
-                  ? `${result.note} (${result.issue}, due in ${result.until})`
-                  : result.note,
+              contrast.knownGaps.map(
+                (result) => `${result.note} (${result.issue}, due in ${result.until})`,
               ),
             ),
           ].join(' ')}`

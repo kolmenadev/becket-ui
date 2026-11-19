@@ -133,9 +133,9 @@ export type BecketContrastReport = {
   passes: boolean;
   failures: BecketContrastResult[];
   /** Failing known-gap pairs that are still tolerated. */
-  knownGaps: BecketContrastResult[];
+  knownGaps: Extract<BecketContrastResult, { level: 'known-gap' }>[];
   /** @deprecated Use `knownGaps`. Removed in 1.0. */
-  advisories: BecketContrastResult[];
+  advisories: Extract<BecketContrastResult, { level: 'known-gap' }>[];
   results: BecketContrastResult[];
 };
 

@@ -183,13 +183,8 @@ export function checkBecketThemeContrast(theme = {}, { version } = {}) {
     if (!/^MAV-\d+$/.test(result.issue ?? '') || !/^\d+\.\d+\.\d+$/.test(result.until ?? '')) {
       return false;
     }
-    if (!version) return true;
-    // Numeric semver compare, no dependency: 0.10.0 is past 0.9.0, and 0.9.0-rc.1 has reached 0.9.0.
-    const [current, limit] = [version, result.until].map((each) =>
-      each.split(/[.-]/).slice(0, 3).map(Number),
-    );
-    const differs = current.findIndex((part, index) => part !== limit[index]);
-    return differs >= 0 && current[differs] < limit[differs];
+    // Numeric compare, no dependency: 0.10.0 is past 0.9.0, and 0.9.0-rc.1 has reached 0.9.0.
+    return !version || version.localeCompare(result.until, 'en', { numeric: true }) < 0;
   });
   return {
     passes: results.every((result) => result.passes || knownGaps.includes(result)),
