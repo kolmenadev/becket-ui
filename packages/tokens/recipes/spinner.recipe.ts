@@ -17,6 +17,8 @@ export const spinner: ReturnType<typeof defineRecipe> = defineRecipe({
     animationDuration: '0.7s',
     animationTimingFunction: 'linear',
     animationIterationCount: 'infinite',
+    // The global reduced-motion rule only shortens the spin to one 0.01ms turn; the static arc stays.
+    _motionReduce: { animationName: 'none' },
     _light: {
       borderColor: 'neutral.300',
       borderTopColor: 'primary',
