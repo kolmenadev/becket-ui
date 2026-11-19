@@ -165,6 +165,11 @@ describe('Tooltip', () => {
       find: () => screen.getByRole('img', { name: 'Ada Lovelace' }),
     },
     { name: 'Tag', trigger: <Tag>New</Tag>, find: () => screen.getByText('New') },
+    {
+      name: 'Tag as button',
+      trigger: <Tag as="button">New</Tag>,
+      find: () => screen.getByRole('button', { name: 'New' }),
+    },
     { name: 'Badge', trigger: <Badge>3</Badge>, find: () => screen.getByText('3') },
     { name: 'Kbd', trigger: <Kbd>Ctrl</Kbd>, find: () => screen.getByText('Ctrl') },
     { name: 'Code', trigger: <Code>pnpm build</Code>, find: () => screen.getByText('pnpm build') },
