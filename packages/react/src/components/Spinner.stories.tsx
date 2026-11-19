@@ -54,10 +54,18 @@ export const LoadingRegion: Story = {
             Persistent region: the Spinner mounts inside a region that was already in the page.
           </Text>
           <HStack gap="sm">
-            <Button visual="primary" onClick={() => setIsPersistentLoading(true)}>
+            <Button
+              visual="primary"
+              aria-label="Load (persistent region)"
+              onClick={() => setIsPersistentLoading(true)}
+            >
               Load
             </Button>
-            <Button visual="outline" onClick={() => setIsPersistentLoading(false)}>
+            <Button
+              visual="outline"
+              aria-label="Reset (persistent region)"
+              onClick={() => setIsPersistentLoading(false)}
+            >
               Reset
             </Button>
           </HStack>
@@ -68,10 +76,18 @@ export const LoadingRegion: Story = {
             Inserted Spinner: the region and its text arrive together.
           </Text>
           <HStack gap="sm">
-            <Button visual="primary" onClick={() => setIsInsertedLoading(true)}>
+            <Button
+              visual="primary"
+              aria-label="Load (inserted Spinner)"
+              onClick={() => setIsInsertedLoading(true)}
+            >
               Load
             </Button>
-            <Button visual="outline" onClick={() => setIsInsertedLoading(false)}>
+            <Button
+              visual="outline"
+              aria-label="Reset (inserted Spinner)"
+              onClick={() => setIsInsertedLoading(false)}
+            >
               Reset
             </Button>
           </HStack>
