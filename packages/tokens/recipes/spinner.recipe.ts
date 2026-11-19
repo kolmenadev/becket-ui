@@ -17,8 +17,8 @@ export const spinner: ReturnType<typeof defineRecipe> = defineRecipe({
     animationDuration: '0.7s',
     animationTimingFunction: 'linear',
     animationIterationCount: 'infinite',
-    // The global rule alone leaves one 0.01ms turn, which can land the arc at any angle; this pins it
-    // still. It also keeps the Spinner still when an app's CSS drops the base layer.
+    // The global rule still runs the animation once for 0.01ms and fires its events; none removes
+    // that run too. It also keeps the Spinner still when an app uses the preset without the base layer.
     _motionReduce: { animationName: 'none' },
     _light: {
       borderColor: 'neutral.300',

@@ -99,10 +99,6 @@ export default defineConfig({
                 // The preference can't change per test, so only this instance sets it. The test
                 // asserts the feature matches, so a dropped preference fails it.
                 prefs: { 'ui.prefersReducedMotion': 1 },
-                // Reduced motion for the whole Firefox run: the preference can't change per test.
-                // reduced-motion.browser.test.tsx asserts the feature matches, so a dropped
-                // preference fails that test instead of passing vacuously.
-                prefs: { 'ui.prefersReducedMotion': 1 },
                 // Pinned like Chrome, into the same cache; CI uses the runner's Firefox for the same
                 // reason it uses the runner's Chrome.
                 binary: process.env.CI
