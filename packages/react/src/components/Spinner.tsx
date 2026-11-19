@@ -1,10 +1,14 @@
-import { forwardRef, type ComponentPropsWithoutRef } from 'react';
+import { forwardRef, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import { spinner as spinnerRecipe } from '@becket-ui/tokens/recipes';
+
+import { VisuallyHidden } from './VisuallyHidden';
 
 type SpinnerSize = 'sm' | 'md' | 'lg';
 
-export type SpinnerProps = ComponentPropsWithoutRef<'span'> & {
+export type SpinnerProps = Omit<ComponentPropsWithoutRef<'span'>, 'children'> & {
   size?: SpinnerSize;
+  /** Text a screen reader reads from the status region; defaults to "Loading". */
+  label?: ReactNode;
 };
 
 function mergeClassName(...classes: (string | undefined)[]): string {
@@ -12,15 +16,16 @@ function mergeClassName(...classes: (string | undefined)[]): string {
 }
 
 export const Spinner = forwardRef<HTMLSpanElement, SpinnerProps>(
-  ({ size = 'md', className, ...props }, ref) => {
+  ({ size = 'md', label = 'Loading', className, ...props }, ref) => {
     return (
       <span
         ref={ref}
         role="status"
         {...props}
-        aria-label={props['aria-label'] ?? 'Loading'}
         className={mergeClassName(spinnerRecipe({ size }), className)}
-      />
+      >
+        <VisuallyHidden>{label}</VisuallyHidden>
+      </span>
     );
   },
 );
