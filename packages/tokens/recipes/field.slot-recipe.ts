@@ -26,7 +26,7 @@ export const field: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
     error: {
       display: 'flex',
       alignItems: 'start',
-      gap: '1',
+      gap: 'xs',
       fontSize: 'xs',
       color: 'danger',
     },

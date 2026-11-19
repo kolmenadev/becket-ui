@@ -70,8 +70,6 @@ export const InvalidWithHelper: Story = {
   ),
 };
 
-// A form where most fields are required can say so once, above the fields, and mark the
-// exceptions "(optional)" instead.
 export const Required: Story = {
   render: (args: FieldProps) => (
     <Stack gap="md" align="start">

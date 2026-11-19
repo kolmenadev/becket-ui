@@ -47,7 +47,7 @@ describe('Field error messages', () => {
 
   it('warns once in development when an invalid field has no message', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    // StrictMode runs effects twice on mount, the way development builds do.
+    // In development, StrictMode runs effects twice on mount; the warning must still fire once.
     render(
       <StrictMode>
         <TextField label="Email" invalid />

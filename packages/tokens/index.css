@@ -2366,7 +2366,7 @@
       color: var(--beckui--colors-muted);
     }
     .beckui--field__error {
-      gap: var(--beckui--spacing-1);
+      gap: var(--beckui--spacing-xs);
       display: flex;
       align-items: start;
       font-size: var(--beckui--font-sizes-xs);
