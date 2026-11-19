@@ -115,6 +115,29 @@ describe('Tabs', () => {
     expect(onValueChange).toHaveBeenCalledWith('c');
   });
 
+  it('follows clicks after switching from controlled to uncontrolled', async () => {
+    const { rerender } = render(
+      <Tabs value="a" defaultValue="a">
+        <TabList>
+          <Tab value="a">Alpha</Tab>
+          <Tab value="b">Beta</Tab>
+          <Tab value="c">Gamma</Tab>
+        </TabList>
+      </Tabs>,
+    );
+    rerender(
+      <Tabs defaultValue="a">
+        <TabList>
+          <Tab value="a">Alpha</Tab>
+          <Tab value="b">Beta</Tab>
+          <Tab value="c">Gamma</Tab>
+        </TabList>
+      </Tabs>,
+    );
+    await userEvent.setup().click(screen.getByRole('tab', { name: 'Gamma' }));
+    expect(screen.getByRole('tab', { name: 'Gamma' }).getAttribute('aria-selected')).toBe('true');
+  });
+
   it('has no axe violations', async () => {
     const { container } = render(<DemoTabs />);
     await assertNoAxeViolations(container);

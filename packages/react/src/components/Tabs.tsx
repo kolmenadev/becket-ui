@@ -3,7 +3,6 @@
 import {
   createContext,
   forwardRef,
-  useCallback,
   useContext,
   useId,
   useMemo,
@@ -55,16 +54,21 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
     const isControlledRef = useRef(isControlled);
     isControlledRef.current = isControlled;
 
-    // The Provider's memoized value keeps every Tab from re-rendering on unrelated parent renders,
-    // so this callback must stay stable and read the latest props through the refs.
-    const setValue = useCallback((next: string) => {
-      if (!isControlledRef.current) setUncontrolled(next);
-      onValueChangeRef.current?.(next);
-    }, []);
-
     return (
       <TabsContext.Provider
-        value={useMemo(() => ({ value: selected, setValue, baseId }), [baseId, selected, setValue])}
+        // Memoized on baseId and selected so unrelated parent renders don't re-render every Tab;
+        // setValue stays correct because it reads the latest props through the refs.
+        value={useMemo(
+          () => ({
+            value: selected,
+            setValue: (next: string) => {
+              if (!isControlledRef.current) setUncontrolled(next);
+              onValueChangeRef.current?.(next);
+            },
+            baseId,
+          }),
+          [baseId, selected],
+        )}
       >
         <div ref={ref} {...props} className={mergeClassName(styles.root, className)}>
           {children}
