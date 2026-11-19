@@ -11,9 +11,8 @@ describe('Spinner', () => {
 
   it('shows the label as text and sets no aria-label', () => {
     render(<Spinner label="Saving" />);
-    const status = screen.getByRole('status');
-    expect(status.textContent).toBe('Saving');
-    expect(status.hasAttribute('aria-label')).toBe(false);
+    expect(screen.getByRole('status').textContent).toBe('Saving');
+    expect(screen.getByRole('status').hasAttribute('aria-label')).toBe(false);
   });
 
   it('keeps a consumer aria-label as the name', () => {

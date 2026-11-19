@@ -44,31 +44,38 @@ export const Sizes: Story = {
 export const LoadingRegion: Story = {
   parameters: { controls: { disable: true } },
   render: function LoadingRegionDemo() {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isPersistentLoading, setIsPersistentLoading] = useState(false);
+    const [isInsertedLoading, setIsInsertedLoading] = useState(false);
 
     return (
       <VStack gap="lg" align="start">
-        <Button
-          visual="primary"
-          onClick={() => {
-            if (isLoading) return;
-            setIsLoading(true);
-            setTimeout(() => setIsLoading(false), 3000);
-          }}
-        >
-          Load
-        </Button>
         <VStack gap="xs" align="start">
           <Text as="strong" fontSize="sm">
             Persistent region: the Spinner mounts inside a region that was already in the page.
           </Text>
-          <Box role="status">{isLoading ? <Spinner role={undefined} /> : null}</Box>
+          <HStack gap="sm">
+            <Button visual="primary" onClick={() => setIsPersistentLoading(true)}>
+              Load
+            </Button>
+            <Button visual="outline" onClick={() => setIsPersistentLoading(false)}>
+              Reset
+            </Button>
+          </HStack>
+          <Box role="status">{isPersistentLoading ? <Spinner role={undefined} /> : null}</Box>
         </VStack>
         <VStack gap="xs" align="start">
           <Text as="strong" fontSize="sm">
             Inserted Spinner: the region and its text arrive together.
           </Text>
-          <Box>{isLoading ? <Spinner /> : null}</Box>
+          <HStack gap="sm">
+            <Button visual="primary" onClick={() => setIsInsertedLoading(true)}>
+              Load
+            </Button>
+            <Button visual="outline" onClick={() => setIsInsertedLoading(false)}>
+              Reset
+            </Button>
+          </HStack>
+          <Box>{isInsertedLoading ? <Spinner /> : null}</Box>
         </VStack>
       </VStack>
     );
