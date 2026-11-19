@@ -100,6 +100,8 @@ Becket follows semver, `major.minor.patch`:
 
 Below 1.0, breaking changes ship as `minor` (`^0.3.0` never installs 0.4.0) and the changeset says what to migrate. Releases group every pending changeset, and the largest bump wins. Docs, test and CI-only changes get no changeset. If the bump isn't obvious, ask the owner before committing it.
 
+A pull request that changes a report commits the regenerated report (`pnpm api:update`). `pnpm api:check` fails when that file does not match the build and prints a unified diff. A removed or changed line needs a changeset (in `tokens-recipes.api.json`, a removed recipe, variant or value, or a changed default) of type `minor` below 1.0 and `major` from 1.0. An addition needs no changeset.
+
 ### Deprecations
 
 Two periods, two rules:
