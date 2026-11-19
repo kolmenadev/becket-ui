@@ -1,0 +1,68 @@
+[
+  {
+    "file": "select.recipe.ts",
+    "match": "backgroundPosition",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "select.recipe.ts",
+    "match": "paddingRight",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "switch.recipe.ts",
+    "match": "left",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "switch.recipe.ts",
+    "match": "translateX",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "table.slot-recipe.ts",
+    "match": "textAlign",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "table.slot-recipe.ts",
+    "match": "textAlign",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "menu.slot-recipe.ts",
+    "match": "textAlign",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "tooltip.recipe.ts",
+    "match": "textAlign",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "tooltip.recipe.ts",
+    "match": "left",
+    "reason": "Tooltip placement variant key; left and right are API values (D12-B)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "tooltip.recipe.ts",
+    "match": "right",
+    "reason": "Tooltip placement variant key; left and right are API values (D12-B)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "skip-link.recipe.ts",
+    "match": "left",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  }
+]
