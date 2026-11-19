@@ -71,8 +71,8 @@ describe('assertNoAxeViolations', () => {
   });
 
   it('fails an unnamed dialog', async () => {
-    // An ARIA dialog, not <dialog open>: jsdom has no document.elementFromPoint, so axe errors on a
-    // native open dialog and returns its rules as incomplete instead of a verdict.
+    // An ARIA dialog, not <dialog open>: aria-dialog-name selects only [role="dialog"] and
+    // [role="alertdialog"], so a plain <dialog> is outside the rule.
     await expect(
       assertNoAxeViolations(mount('<div role="dialog"><p>Saved</p></div>')),
     ).rejects.toThrow(/aria-dialog-name/);

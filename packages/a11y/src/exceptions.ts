@@ -1,5 +1,5 @@
 // The a11y standard (§3) lets a test turn an axe rule off only through an entry here, so every
-// skipped rule has an owner and an end date. `fragment` entries hold in both environments.
+// skipped rule has an owner and an end date.
 export const axeExceptions: {
   rule: string;
   scope: 'jsdom' | 'browser' | 'fragment';
