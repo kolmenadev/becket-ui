@@ -75,7 +75,7 @@ export const Sizes: Story = {
 
 export const Grayscale: Story = {
   render: (args) => (
-    // Becket has no prop for `filter`, so a style on the wrapper fakes a grayscale display.
+    // A one-off wrapper for the visual baseline: Becket has no `filter` prop and this isn't app UI.
     <Stack gap="lg" style={{ filter: 'grayscale(1)' }}>
       {stepsRecipe.variantMap.orientation.map((orientation) => (
         <Steps
