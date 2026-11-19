@@ -39,6 +39,19 @@ export const Default: Story = {
 
 export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
 
+export const ReducedMotion: Story = {
+  ...Default,
+  tags: ['no-screenshot'],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Turn on "Reduce motion" in the OS: focus and invalid borders change at once instead of fading.',
+      },
+    },
+  },
+};
+
 export const Invalid: Story = {
   args: {
     label: 'Email',
