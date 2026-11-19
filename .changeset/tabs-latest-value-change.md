@@ -1,6 +1,7 @@
 ---
 "@becket-ui/react": patch
 "@becket-ui/tokens": patch
+"@becket-ui/mcp": patch
 ---
 
 Tabs calls the latest `onValueChange` after a parent re-render. Before, a new callback was ignored

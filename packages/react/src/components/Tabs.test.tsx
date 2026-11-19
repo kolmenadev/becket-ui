@@ -44,7 +44,6 @@ describe('Tabs', () => {
   });
 
   it('calls the latest onValueChange', async () => {
-    const user = userEvent.setup();
     const first = vi.fn();
     const latest = vi.fn();
     const { rerender } = render(
@@ -65,8 +64,8 @@ describe('Tabs', () => {
         </TabList>
       </Tabs>,
     );
-    await user.click(screen.getByRole('tab', { name: 'Beta' }));
-    await user.click(screen.getByRole('tab', { name: 'Gamma' }));
+    await userEvent.setup().click(screen.getByRole('tab', { name: 'Beta' }));
+    await userEvent.setup().click(screen.getByRole('tab', { name: 'Gamma' }));
     expect(first).not.toHaveBeenCalled();
     expect(latest.mock.calls).toEqual([['b'], ['c']]);
   });
@@ -93,7 +92,7 @@ describe('Tabs', () => {
   it('switches control mode', async () => {
     const onValueChange = vi.fn();
     const { rerender } = render(
-      <Tabs defaultValue="a" onValueChange={onValueChange}>
+      <Tabs defaultValue="b" onValueChange={onValueChange}>
         <TabList>
           <Tab value="a">Alpha</Tab>
           <Tab value="b">Beta</Tab>
@@ -102,7 +101,7 @@ describe('Tabs', () => {
       </Tabs>,
     );
     rerender(
-      <Tabs value="b" defaultValue="a" onValueChange={onValueChange}>
+      <Tabs value="b" defaultValue="b" onValueChange={onValueChange}>
         <TabList>
           <Tab value="a">Alpha</Tab>
           <Tab value="b">Beta</Tab>

@@ -36,15 +36,10 @@ function mergeClassName(...classes: (string | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
 
-// style-check keep: the two TabsProps branches share these props; written twice they could drift.
-type TabsBaseProps = ComponentPropsWithoutRef<'div'> & {
+export type TabsProps = ComponentPropsWithoutRef<'div'> & {
   onValueChange?: (value: string) => void;
   children?: ReactNode;
-};
-
-export type TabsProps =
-  | (TabsBaseProps & { value: string; defaultValue?: string })
-  | (TabsBaseProps & { value?: undefined; defaultValue: string });
+} & ({ value: string; defaultValue?: string } | { value?: undefined; defaultValue: string });
 
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
   ({ value, defaultValue, onValueChange, className, children, ...props }, ref) => {
@@ -67,13 +62,10 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
       onValueChangeRef.current?.(next);
     }, []);
 
-    const ctx = useMemo(
-      () => ({ value: selected, setValue, baseId }),
-      [baseId, selected, setValue],
-    );
-
     return (
-      <TabsContext.Provider value={ctx}>
+      <TabsContext.Provider
+        value={useMemo(() => ({ value: selected, setValue, baseId }), [baseId, selected, setValue])}
+      >
         <div ref={ref} {...props} className={mergeClassName(styles.root, className)}>
           {children}
         </div>
