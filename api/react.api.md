@@ -35,6 +35,12 @@ import { TdHTMLAttributes } from 'react';
 import { TextareaHTMLAttributes } from 'react';
 import { ThHTMLAttributes } from 'react';
 
+// @public (undocumented)
+type AlignVariant = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
+
+// @public (undocumented)
+type AlignVariant_2 = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
+
 // @public
 export const AspectRatio: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
 ratio?: AspectRatioValue;
@@ -44,6 +50,9 @@ ratio?: AspectRatioValue;
 export type AspectRatioProps = ComponentPropsWithoutRef<'div'> & {
     ratio?: AspectRatioValue;
 };
+
+// @public (undocumented)
+type AspectRatioValue = '1:1' | '3:2' | '5:3' | '8:5' | '13:8' | '2:3' | '3:5' | '5:8' | '8:13' | '16:9' | '9:16';
 
 // @public
 export const Avatar: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "ref">, "children"> & {
@@ -60,6 +69,9 @@ export type AvatarProps = Omit<ComponentPropsWithoutRef<'span'>, 'children'> & {
 };
 
 // @public (undocumented)
+type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
+
+// @public (undocumented)
 export const Badge: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "ref"> & {
 size?: BadgeSize;
 visual?: LabelVisual;
@@ -68,6 +80,15 @@ withGradient?: boolean;
 customColors?: LabelCustomColors;
 as?: ElementType;
 } & RefAttributes<HTMLSpanElement>>;
+
+// @public (undocumented)
+type BadgeBorderRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+
+// @public (undocumented)
+type BadgeSize = 'sm' | 'md' | 'lg';
+
+// @public (undocumented)
+type BaseElement = 'p' | 'span' | 'div' | 'strong' | 'em' | 'label';
 
 // @public
 export const Blockquote: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & {
@@ -87,6 +108,17 @@ export type BlockquoteProps = ComponentPropsWithoutRef<'figure'> & {
     children?: ReactNode;
 };
 
+// Warning: (ae-forgotten-export) The symbol "FlexOptions" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "GradientBorderToken" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+type BorderProp = FlexOptions['border'] | GradientBorderToken;
+
+// Warning: (ae-forgotten-export) The symbol "StackOptions" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+type BorderProp_2 = StackOptions['border'] | GradientBorderToken;
+
 // @public (undocumented)
 export const Box: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
 padding?: BoxSpacing;
@@ -96,12 +128,21 @@ as?: ElementType;
 } & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
+type BoxBackground = 'none' | 'background' | 'surface' | 'subtle';
+
+// @public (undocumented)
 export type BoxProps = ComponentPropsWithoutRef<'div'> & {
     padding?: BoxSpacing;
     background?: BoxBackground;
     radius?: BoxRadius;
     as?: ElementType;
 };
+
+// @public (undocumented)
+type BoxRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+
+// @public (undocumented)
+type BoxSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 // @public
 export const Breadcrumb: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & {
@@ -145,6 +186,31 @@ export const BREAKPOINTS: readonly ["base", "sm", "md", "lg", "xl", "2xl"];
 export const Button: PolymorphicButton;
 
 // @public (undocumented)
+type ButtonBorderRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+
+// @public (undocumented)
+type ButtonOwnProps = {
+    visual?: ButtonVisual;
+    size?: ButtonSize;
+    borderRadius?: ButtonBorderRadius;
+    withGradient?: boolean;
+    fullWidth?: boolean;
+};
+
+// Warning: (ae-forgotten-export) The symbol "ButtonOwnProps" needs to be exported by the entry point index.d.ts
+//
+// @public
+type ButtonProps<T extends ElementType = 'button'> = ButtonOwnProps & {
+    as?: T;
+} & Omit<ComponentPropsWithoutRef<T>, keyof ButtonOwnProps | 'as'>;
+
+// @public (undocumented)
+type ButtonSize = 'sm' | 'md';
+
+// @public (undocumented)
+type ButtonVisual = 'outline' | 'primary' | 'secondary' | 'neutral';
+
+// @public (undocumented)
 export const Card: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
 size?: CardSize;
 visual?: CardVisual;
@@ -176,9 +242,15 @@ children?: ReactNode;
 } & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
+type CardSize = 'sm' | 'md' | 'lg';
+
+// @public (undocumented)
 export const CardTitle: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>, "ref"> & {
 as?: ElementType;
 } & RefAttributes<HTMLHeadingElement>>;
+
+// @public (undocumented)
+type CardVisual = 'outline' | 'subtle' | 'elevated';
 
 // @public (undocumented)
 export const Center: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
@@ -200,6 +272,9 @@ size?: CheckboxSize;
 } & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
+type CheckboxSize = 'sm' | 'md';
+
+// @public (undocumented)
 export const CheckIcon: ForwardRefExoticComponent<GlyphProps & RefAttributes<HTMLSpanElement>>;
 
 // @public (undocumented)
@@ -218,6 +293,9 @@ export const CloseIcon: ForwardRefExoticComponent<GlyphProps & RefAttributes<HTM
 export const Code: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & RefAttributes<HTMLElement>>;
 
 // @public (undocumented)
+type Columns = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+
+// @public (undocumented)
 export const Container: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
 size?: ContainerSize;
 padding?: ContainerPadding;
@@ -225,11 +303,17 @@ as?: ElementType;
 } & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
+type ContainerPadding = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
+// @public (undocumented)
 export type ContainerProps = ComponentPropsWithoutRef<'div'> & {
     size?: ContainerSize;
     padding?: ContainerPadding;
     as?: ElementType;
 };
+
+// @public (undocumented)
+type ContainerSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
 // @public (undocumented)
 export const CopyIcon: ForwardRefExoticComponent<GlyphProps & RefAttributes<HTMLSpanElement>>;
@@ -256,6 +340,9 @@ export const DialogFooter: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTML
 
 // @public (undocumented)
 export const DialogHeader: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+type DialogRole = 'dialog' | 'alertdialog';
 
 // @public (undocumented)
 export const DialogTitle: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>, "ref"> & {
@@ -285,6 +372,12 @@ export const DrawerFooter: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTML
 
 // @public (undocumented)
 export const DrawerHeader: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+type DrawerPlacement = 'start' | 'end';
+
+// @public (undocumented)
+type DrawerRole = 'dialog' | 'alertdialog';
 
 // @public (undocumented)
 export const DrawerTitle: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>, "ref"> & {
@@ -318,6 +411,9 @@ export type FieldContextValue = {
 export const FieldControl: ForwardRefExoticComponent<FieldControlProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
+type FieldControlProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>;
+
+// @public (undocumented)
 export const FieldError: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "ref"> & RefAttributes<HTMLSpanElement>>;
 
 // @public (undocumented)
@@ -328,10 +424,16 @@ export const FieldHelper: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLA
 // @public (undocumented)
 export const FieldLabel: ForwardRefExoticComponent<FieldLabelProps & RefAttributes<HTMLLabelElement>>;
 
+// @public (undocumented)
+type FieldLabelProps = LabelHTMLAttributes<HTMLLabelElement>;
+
 // Warning: (ae-forgotten-export) The symbol "FieldSelectProps" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
 export const FieldSelect: ForwardRefExoticComponent<FieldSelectProps & RefAttributes<HTMLSelectElement>>;
+
+// @public (undocumented)
+type FieldSelectProps = Omit<ComponentPropsWithoutRef<'select'>, 'size'>;
 
 // @public (undocumented)
 export type FieldSize = 'sm' | 'md' | 'lg';
@@ -340,6 +442,9 @@ export type FieldSize = 'sm' | 'md' | 'lg';
 //
 // @public (undocumented)
 export const FieldTextarea: ForwardRefExoticComponent<FieldTextareaProps & RefAttributes<HTMLTextAreaElement>>;
+
+// @public (undocumented)
+type FieldTextareaProps = Omit<ComponentPropsWithoutRef<'textarea'>, 'size'>;
 
 // @public
 export const Figure: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & {
@@ -367,11 +472,17 @@ order?: ResponsiveValue<number>;
 as?: ElementType;
 } & RefAttributes<HTMLDivElement>>;
 
+// @public (undocumented)
+type FlexOptions = NonNullable<Parameters<typeof flex>[0]>;
+
 // @public
 export type GapValue = ResponsiveValue<SpacingScale>;
 
 // @public (undocumented)
 export type GlyphProps = Omit<IconProps, 'children'>;
+
+// @public (undocumented)
+type GradientBorderToken = Exclude<GradientToken, 'primaryHover'>;
 
 // @public
 export const Grid: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
@@ -393,6 +504,9 @@ export type GridItemProps = ComponentPropsWithoutRef<'div'> & {
 };
 
 // @public (undocumented)
+type GridOptions = NonNullable<Parameters<typeof grid>[0]>;
+
+// @public (undocumented)
 export type GridProps = ComponentPropsWithoutRef<'div'> & {
     columns?: ResponsiveValue<Columns>;
     gap?: GapValue;
@@ -405,6 +519,9 @@ size?: HeadingSize;
 withGradient?: boolean;
 as?: ElementType;
 } & RefAttributes<HTMLHeadingElement>>;
+
+// @public (undocumented)
+type HeadingSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl';
 
 // @public
 export const Hide: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
@@ -441,6 +558,9 @@ export type IconProps = Omit<ComponentPropsWithoutRef<'span'>, 'children'> & {
     children: ReactNode;
 };
 
+// @public (undocumented)
+type IconSize = 'sm' | 'md' | 'lg' | 'xl';
+
 // @public
 const Image_2: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>, "ref">, "alt"> & {
 alt: string;
@@ -450,6 +570,9 @@ radius?: ImageRadius;
 export { Image_2 as Image }
 
 // @public (undocumented)
+type ImageFit = 'cover' | 'contain';
+
+// @public (undocumented)
 export type ImageProps = Omit<ComponentPropsWithoutRef<'img'>, 'alt'> & {
     alt: string;
     fit?: ImageFit;
@@ -457,7 +580,16 @@ export type ImageProps = Omit<ComponentPropsWithoutRef<'img'>, 'alt'> & {
 };
 
 // @public (undocumented)
+type ImageRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+
+// @public (undocumented)
 export const InfoIcon: ForwardRefExoticComponent<GlyphProps & RefAttributes<HTMLSpanElement>>;
+
+// @public (undocumented)
+type JustifyVariant = 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
+
+// @public (undocumented)
+type JustifyVariant_2 = 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
 
 // @public
 export const Kbd: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & RefAttributes<HTMLElement>>;
@@ -484,6 +616,9 @@ as?: ElementType;
 export const LinkIcon: ForwardRefExoticComponent<GlyphProps & RefAttributes<HTMLSpanElement>>;
 
 // @public (undocumented)
+type LinkVisual = 'default' | 'muted';
+
+// @public (undocumented)
 export const List: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLUListElement>, HTMLUListElement>, "ref"> & {
 as?: 'ul' | 'ol';
 spacing?: ListSpacing;
@@ -497,11 +632,17 @@ export const ListItem: ForwardRefExoticComponent<Omit<DetailedHTMLProps<LiHTMLAt
 export type ListItemProps = ComponentPropsWithoutRef<'li'>;
 
 // @public (undocumented)
+type ListMarker = 'disc' | 'decimal' | 'none';
+
+// @public (undocumented)
 export type ListProps = ComponentPropsWithoutRef<'ul'> & {
     as?: 'ul' | 'ol';
     spacing?: ListSpacing;
     marker?: ListMarker;
 };
+
+// @public (undocumented)
+type ListSpacing = 'xs' | 'sm' | 'md';
 
 // @public
 export const Mark: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & RefAttributes<HTMLElement>>;
@@ -518,6 +659,9 @@ export const MenuIcon: ForwardRefExoticComponent<GlyphProps & RefAttributes<HTML
 //
 // @public (undocumented)
 export const MenuItem: ForwardRefExoticComponent<MenuItemProps & RefAttributes<HTMLButtonElement>>;
+
+// @public (undocumented)
+type MenuItemProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 // @public (undocumented)
 export const MoonIcon: ForwardRefExoticComponent<GlyphProps & RefAttributes<HTMLSpanElement>>;
@@ -558,6 +702,15 @@ export type PaginationProps = Omit<ComponentPropsWithoutRef<'nav'>, 'children'> 
     };
 };
 
+// Warning: (ae-forgotten-export) The symbol "ButtonProps" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+type PolymorphicButton = (<T extends ElementType = 'button'>(props: ButtonProps<T> & {
+    ref?: ComponentPropsWithRef<T>['ref'];
+}) => ReactElement | null) & {
+    displayName?: string;
+};
+
 // @public
 export const Prose: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
 size?: ProseSize;
@@ -569,6 +722,9 @@ export type ProseProps = ComponentPropsWithoutRef<'div'> & {
     size?: ProseSize;
     as?: ElementType;
 };
+
+// @public (undocumented)
+type ProseSize = 'sm' | 'md' | 'lg';
 
 // @public (undocumented)
 export const Radio: ForwardRefExoticComponent<Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> & {
@@ -612,6 +768,9 @@ export type RadioProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 's
     size?: RadioSize;
 };
 
+// @public (undocumented)
+type RadioSize = 'sm' | 'md';
+
 // @public
 export function resolveBreakpointAlias(key: string): string;
 
@@ -650,6 +809,9 @@ orientation?: SeparatorOrientation;
 decorative?: boolean;
 } & RefAttributes<HTMLHRElement>>;
 
+// @public (undocumented)
+type SeparatorOrientation = 'horizontal' | 'vertical';
+
 // @public
 export const SimpleGrid: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
 columns?: ResponsiveValue<number> | GridOptions['columns'];
@@ -676,9 +838,15 @@ export type SpacingSemantic = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 export type SpacingStep = (typeof SPACING_SCALE)[number];
 
 // @public (undocumented)
+type Span = Columns | 'full';
+
+// @public (undocumented)
 export const Spinner: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "ref"> & {
 size?: SpinnerSize;
 } & RefAttributes<HTMLSpanElement>>;
+
+// @public (undocumented)
+type SpinnerSize = 'sm' | 'md' | 'lg';
 
 // @public (undocumented)
 export const Stack: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
@@ -690,6 +858,20 @@ border?: BorderProp_2;
 order?: ResponsiveValue<number>;
 as?: ElementType;
 } & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+type StackOptions = NonNullable<Parameters<typeof stack>[0]>;
+
+// @public (undocumented)
+type StackProps = ComponentPropsWithoutRef<'div'> & {
+    direction?: StackOptions['direction'];
+    gap?: GapValue;
+    align?: AlignVariant_2;
+    justify?: JustifyVariant_2;
+    border?: BorderProp_2;
+    order?: ResponsiveValue<number>;
+    as?: ElementType;
+};
 
 // @public (undocumented)
 export const Step: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>, "ref">, "title"> & {
@@ -741,6 +923,9 @@ export type SwitchProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChang
 };
 
 // @public (undocumented)
+type SwitchSize = 'sm' | 'md' | 'lg';
+
+// @public (undocumented)
 export const Tab: ForwardRefExoticComponent<ButtonHTMLAttributes<HTMLButtonElement> & {
 value: string;
 } & RefAttributes<HTMLButtonElement>>;
@@ -772,6 +957,9 @@ export const TableHeader: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLA
 export const TableRow: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLTableRowElement>, HTMLTableRowElement>, "ref"> & RefAttributes<HTMLTableRowElement>>;
 
 // @public (undocumented)
+type TableSize = 'sm' | 'md';
+
+// @public (undocumented)
 export const TabList: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
@@ -796,6 +984,12 @@ withGradient?: boolean;
 customColors?: LabelCustomColors;
 as?: ElementType;
 } & RefAttributes<HTMLSpanElement>>;
+
+// @public (undocumented)
+type TagBorderRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+
+// @public (undocumented)
+type TagSize = 'sm' | 'md' | 'lg';
 
 // @public (undocumented)
 export const Tbody: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>, "ref"> & RefAttributes<HTMLTableSectionElement>>;
@@ -827,6 +1021,11 @@ size?: FieldSize;
 invalid?: boolean;
 fullWidth?: boolean;
 } & RefAttributes<HTMLInputElement>>;
+
+// @public (undocumented)
+type TextProps<T extends ElementType = BaseElement> = React.ComponentPropsWithoutRef<T> & JsxStyleProps & {
+    as?: T;
+};
 
 // @public (undocumented)
 export const Tfoot: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>, "ref"> & RefAttributes<HTMLTableSectionElement>>;
@@ -871,47 +1070,48 @@ export const WarningIcon: ForwardRefExoticComponent<GlyphProps & RefAttributes<H
 
 // Warnings were encountered during analysis:
 //
-// src/components/AspectRatio.tsx:8:3 - (ae-forgotten-export) The symbol "AspectRatioValue" needs to be exported by the entry point index.d.ts
-// src/components/Avatar.tsx:14:3 - (ae-forgotten-export) The symbol "AvatarSize" needs to be exported by the entry point index.d.ts
-// src/components/Badge.tsx:16:3 - (ae-forgotten-export) The symbol "BadgeBorderRadius" needs to be exported by the entry point index.d.ts
-// src/components/Badge.tsx:26:19 - (ae-forgotten-export) The symbol "BadgeSize" needs to be exported by the entry point index.d.ts
-// src/components/Box.tsx:11:3 - (ae-forgotten-export) The symbol "BoxBackground" needs to be exported by the entry point index.d.ts
-// src/components/Box.tsx:12:3 - (ae-forgotten-export) The symbol "BoxRadius" needs to be exported by the entry point index.d.ts
-// src/components/Box.tsx:20:17 - (ae-forgotten-export) The symbol "BoxSpacing" needs to be exported by the entry point index.d.ts
-// src/components/Card.tsx:29:3 - (ae-forgotten-export) The symbol "CardVisual" needs to be exported by the entry point index.d.ts
-// src/components/Card.tsx:35:18 - (ae-forgotten-export) The symbol "CardSize" needs to be exported by the entry point index.d.ts
-// src/components/Checkbox.tsx:9:3 - (ae-forgotten-export) The symbol "CheckboxSize" needs to be exported by the entry point index.d.ts
-// src/components/Container.tsx:9:3 - (ae-forgotten-export) The symbol "ContainerSize" needs to be exported by the entry point index.d.ts
-// src/components/Container.tsx:11:3 - (ae-forgotten-export) The symbol "ContainerPadding" needs to be exported by the entry point index.d.ts
-// src/components/Dialog.tsx:54:3 - (ae-forgotten-export) The symbol "DialogRole" needs to be exported by the entry point index.d.ts
-// src/components/Drawer.tsx:47:3 - (ae-forgotten-export) The symbol "DrawerPlacement" needs to be exported by the entry point index.d.ts
-// src/components/Drawer.tsx:53:3 - (ae-forgotten-export) The symbol "DrawerRole" needs to be exported by the entry point index.d.ts
-// src/components/Flex.tsx:40:3 - (ae-forgotten-export) The symbol "AlignVariant" needs to be exported by the entry point index.d.ts
-// src/components/Flex.tsx:41:3 - (ae-forgotten-export) The symbol "JustifyVariant" needs to be exported by the entry point index.d.ts
-// src/components/Flex.tsx:47:3 - (ae-forgotten-export) The symbol "BorderProp" needs to be exported by the entry point index.d.ts
-// src/components/Flex.tsx:52:18 - (ae-forgotten-export) The symbol "FlexOptions" needs to be exported by the entry point index.d.ts
-// src/components/Grid.tsx:11:3 - (ae-forgotten-export) The symbol "Columns" needs to be exported by the entry point index.d.ts
-// src/components/Grid.tsx:18:3 - (ae-forgotten-export) The symbol "Span" needs to be exported by the entry point index.d.ts
-// src/components/Heading.tsx:16:21 - (ae-forgotten-export) The symbol "HeadingSize" needs to be exported by the entry point index.d.ts
-// src/components/Icon.tsx:8:3 - (ae-forgotten-export) The symbol "IconSize" needs to be exported by the entry point index.d.ts
-// src/components/Image.tsx:10:3 - (ae-forgotten-export) The symbol "ImageFit" needs to be exported by the entry point index.d.ts
-// src/components/Image.tsx:11:3 - (ae-forgotten-export) The symbol "ImageRadius" needs to be exported by the entry point index.d.ts
-// src/components/Link.tsx:16:18 - (ae-forgotten-export) The symbol "LinkVisual" needs to be exported by the entry point index.d.ts
-// src/components/List.tsx:10:3 - (ae-forgotten-export) The symbol "ListSpacing" needs to be exported by the entry point index.d.ts
-// src/components/List.tsx:11:3 - (ae-forgotten-export) The symbol "ListMarker" needs to be exported by the entry point index.d.ts
-// src/components/Prose.tsx:8:3 - (ae-forgotten-export) The symbol "ProseSize" needs to be exported by the entry point index.d.ts
-// src/components/Radio.tsx:115:3 - (ae-forgotten-export) The symbol "RadioSize" needs to be exported by the entry point index.d.ts
-// src/components/Separator.tsx:16:23 - (ae-forgotten-export) The symbol "SeparatorOrientation" needs to be exported by the entry point index.d.ts
-// src/components/SimpleGrid.tsx:81:24 - (ae-forgotten-export) The symbol "GridOptions" needs to be exported by the entry point index.d.ts
-// src/components/Spinner.tsx:14:21 - (ae-forgotten-export) The symbol "SpinnerSize" needs to be exported by the entry point index.d.ts
-// src/components/Stack.tsx:40:3 - (ae-forgotten-export) The symbol "AlignVariant_2" needs to be exported by the entry point index.d.ts
-// src/components/Stack.tsx:41:3 - (ae-forgotten-export) The symbol "JustifyVariant_2" needs to be exported by the entry point index.d.ts
-// src/components/Stack.tsx:42:3 - (ae-forgotten-export) The symbol "BorderProp_2" needs to be exported by the entry point index.d.ts
-// src/components/Stack.tsx:48:19 - (ae-forgotten-export) The symbol "StackOptions" needs to be exported by the entry point index.d.ts
-// src/components/Switch.tsx:20:3 - (ae-forgotten-export) The symbol "SwitchSize" needs to be exported by the entry point index.d.ts
-// src/components/Table.tsx:18:19 - (ae-forgotten-export) The symbol "TableSize" needs to be exported by the entry point index.d.ts
-// src/components/Tag.tsx:16:3 - (ae-forgotten-export) The symbol "TagBorderRadius" needs to be exported by the entry point index.d.ts
-// src/components/Tag.tsx:26:17 - (ae-forgotten-export) The symbol "TagSize" needs to be exported by the entry point index.d.ts
+// src/components/AspectRatio.tsx - (ae-forgotten-export) The symbol "AspectRatioValue" needs to be exported by the entry point index.d.ts
+// src/components/Avatar.tsx - (ae-forgotten-export) The symbol "AvatarSize" needs to be exported by the entry point index.d.ts
+// src/components/Badge.tsx - (ae-forgotten-export) The symbol "BadgeBorderRadius" needs to be exported by the entry point index.d.ts
+// src/components/Badge.tsx - (ae-forgotten-export) The symbol "BadgeSize" needs to be exported by the entry point index.d.ts
+// src/components/Box.tsx - (ae-forgotten-export) The symbol "BoxBackground" needs to be exported by the entry point index.d.ts
+// src/components/Box.tsx - (ae-forgotten-export) The symbol "BoxRadius" needs to be exported by the entry point index.d.ts
+// src/components/Box.tsx - (ae-forgotten-export) The symbol "BoxSpacing" needs to be exported by the entry point index.d.ts
+// src/components/Button.tsx - (ae-forgotten-export) The symbol "ButtonVisual" needs to be exported by the entry point index.d.ts
+// src/components/Button.tsx - (ae-forgotten-export) The symbol "ButtonSize" needs to be exported by the entry point index.d.ts
+// src/components/Button.tsx - (ae-forgotten-export) The symbol "ButtonBorderRadius" needs to be exported by the entry point index.d.ts
+// src/components/Card.tsx - (ae-forgotten-export) The symbol "CardVisual" needs to be exported by the entry point index.d.ts
+// src/components/Card.tsx - (ae-forgotten-export) The symbol "CardSize" needs to be exported by the entry point index.d.ts
+// src/components/Checkbox.tsx - (ae-forgotten-export) The symbol "CheckboxSize" needs to be exported by the entry point index.d.ts
+// src/components/Container.tsx - (ae-forgotten-export) The symbol "ContainerSize" needs to be exported by the entry point index.d.ts
+// src/components/Container.tsx - (ae-forgotten-export) The symbol "ContainerPadding" needs to be exported by the entry point index.d.ts
+// src/components/Dialog.tsx - (ae-forgotten-export) The symbol "DialogRole" needs to be exported by the entry point index.d.ts
+// src/components/Drawer.tsx - (ae-forgotten-export) The symbol "DrawerPlacement" needs to be exported by the entry point index.d.ts
+// src/components/Drawer.tsx - (ae-forgotten-export) The symbol "DrawerRole" needs to be exported by the entry point index.d.ts
+// src/components/Flex.tsx - (ae-forgotten-export) The symbol "AlignVariant" needs to be exported by the entry point index.d.ts
+// src/components/Flex.tsx - (ae-forgotten-export) The symbol "JustifyVariant" needs to be exported by the entry point index.d.ts
+// src/components/Flex.tsx - (ae-forgotten-export) The symbol "BorderProp" needs to be exported by the entry point index.d.ts
+// src/components/Grid.tsx - (ae-forgotten-export) The symbol "Columns" needs to be exported by the entry point index.d.ts
+// src/components/Grid.tsx - (ae-forgotten-export) The symbol "Span" needs to be exported by the entry point index.d.ts
+// src/components/Heading.tsx - (ae-forgotten-export) The symbol "HeadingSize" needs to be exported by the entry point index.d.ts
+// src/components/Icon.tsx - (ae-forgotten-export) The symbol "IconSize" needs to be exported by the entry point index.d.ts
+// src/components/Image.tsx - (ae-forgotten-export) The symbol "ImageFit" needs to be exported by the entry point index.d.ts
+// src/components/Image.tsx - (ae-forgotten-export) The symbol "ImageRadius" needs to be exported by the entry point index.d.ts
+// src/components/Link.tsx - (ae-forgotten-export) The symbol "LinkVisual" needs to be exported by the entry point index.d.ts
+// src/components/List.tsx - (ae-forgotten-export) The symbol "ListSpacing" needs to be exported by the entry point index.d.ts
+// src/components/List.tsx - (ae-forgotten-export) The symbol "ListMarker" needs to be exported by the entry point index.d.ts
+// src/components/Prose.tsx - (ae-forgotten-export) The symbol "ProseSize" needs to be exported by the entry point index.d.ts
+// src/components/Radio.tsx - (ae-forgotten-export) The symbol "RadioSize" needs to be exported by the entry point index.d.ts
+// src/components/Separator.tsx - (ae-forgotten-export) The symbol "SeparatorOrientation" needs to be exported by the entry point index.d.ts
+// src/components/SimpleGrid.tsx - (ae-forgotten-export) The symbol "GridOptions" needs to be exported by the entry point index.d.ts
+// src/components/Spinner.tsx - (ae-forgotten-export) The symbol "SpinnerSize" needs to be exported by the entry point index.d.ts
+// src/components/Stack.tsx - (ae-forgotten-export) The symbol "AlignVariant_2" needs to be exported by the entry point index.d.ts
+// src/components/Stack.tsx - (ae-forgotten-export) The symbol "JustifyVariant_2" needs to be exported by the entry point index.d.ts
+// src/components/Stack.tsx - (ae-forgotten-export) The symbol "BorderProp_2" needs to be exported by the entry point index.d.ts
+// src/components/Switch.tsx - (ae-forgotten-export) The symbol "SwitchSize" needs to be exported by the entry point index.d.ts
+// src/components/Table.tsx - (ae-forgotten-export) The symbol "TableSize" needs to be exported by the entry point index.d.ts
+// src/components/Tag.tsx - (ae-forgotten-export) The symbol "TagBorderRadius" needs to be exported by the entry point index.d.ts
+// src/components/Tag.tsx - (ae-forgotten-export) The symbol "TagSize" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 

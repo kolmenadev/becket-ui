@@ -9,6 +9,7 @@
   },
   "apiReport": {
     "enabled": true,
+    "includeForgottenExports": true,
     "reportFileName": "tokens-preset.api.md",
     "reportFolder": "<projectFolder>/../../api",
     "reportTempFolder": "<projectFolder>/../../node_modules/.cache/api-extractor"

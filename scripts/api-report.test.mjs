@@ -21,10 +21,12 @@ function checkFixture(fixture) {
       'tokens-recipes.api.json',
       'tokens-css-vars.api.txt',
     ]) {
-      writeFileSync(join(folder, 'base', fileName), fixture.base?.[fileName] ?? 'same\n');
+      // The recipes report is compared as JSON, so its stand-in has to parse.
+      const unchanged = fileName.endsWith('.json') ? '{}\n' : 'same\n';
+      writeFileSync(join(folder, 'base', fileName), fixture.base?.[fileName] ?? unchanged);
       writeFileSync(
         join(folder, 'head', fileName),
-        fixture.head?.[fileName] ?? fixture.base?.[fileName] ?? 'same\n',
+        fixture.head?.[fileName] ?? fixture.base?.[fileName] ?? unchanged,
       );
     }
     writeFileSync(
@@ -123,3 +125,41 @@ test('from 1.0 a major changeset acknowledges a removal', () => {
   assert.equal(result.status, 0);
   assert.doesNotMatch(`${result.stdout}${result.stderr}`, /removed API/);
 });
+
+test('a variant value added to the recipes passes without a changeset', () => {
+  const result = checkFixture({
+    base: {
+      'tokens-recipes.api.json': `${JSON.stringify({ button: { size: ['md', 'sm'] } }, null, 2)}\n`,
+    },
+    head: {
+      'tokens-recipes.api.json': `${JSON.stringify({ button: { size: ['md', 'sm', 'xl'] } }, null, 2)}\n`,
+    },
+  });
+  assert.equal(result.status, 0);
+  assert.doesNotMatch(`${result.stdout}${result.stderr}`, /removed API/);
+});
+
+for (const [name, head] of [
+  ['a removed variant value', { button: { size: ['md'], defaultVariants: { size: 'md' } } }],
+  ['a removed variant', { button: { defaultVariants: {} } }],
+  ['a removed recipe', {}],
+  ['a changed default', { button: { size: ['md', 'sm'], defaultVariants: { size: 'sm' } } }],
+]) {
+  test(`${name} in the recipes needs a changeset`, () => {
+    const result = checkFixture({
+      base: {
+        'tokens-recipes.api.json': `${JSON.stringify(
+          { button: { size: ['md', 'sm'], defaultVariants: { size: 'md' } } },
+          null,
+          2,
+        )}\n`,
+      },
+      head: { 'tokens-recipes.api.json': `${JSON.stringify(head, null, 2)}\n` },
+    });
+    assert.equal(result.status, 1);
+    assert.match(
+      result.stderr,
+      /removed API without a minor\/major changeset for @becket-ui\/tokens/,
+    );
+  });
+}

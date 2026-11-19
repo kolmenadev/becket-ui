@@ -75,7 +75,11 @@ if (!classifyDir) {
       ) {
         throw new Error(`API Extractor failed for ${name}.api.md`);
       }
-      const text = readFileSync(join(folder, 'actual', `${name}.api.md`), 'utf8');
+      // Warnings carry a source line and column, which move with comments; the API doesn't.
+      const text = readFileSync(join(folder, 'actual', `${name}.api.md`), 'utf8').replace(
+        /^(\/\/ \S+):\d+:\d+ - /gm,
+        '$1 - ',
+      );
       generated[`${name}.api.md`] = text.endsWith('\n') ? text : `${text}\n`;
     } finally {
       rmSync(folder, { recursive: true, force: true });
@@ -221,11 +225,26 @@ for (const pair of pairs) {
       .replaceAll('+++ b/after', `+++ b/api/${pair.fileName}`);
   }
   if (pair.kind === 'stale' && text) staleTexts.push(text);
-  // A removed `--beckui-*` line gains one more `-`, so it starts with `---` and no space.
-  // The file header is `--- a/api/...`.
+  if (pair.kind !== 'review' || !text) continue;
+  // style-check keep: parsed once, not once per recipe in the check below.
+  const after = pair.fileName.endsWith('.json') ? JSON.parse(pair.after || '{}') : undefined;
   if (
-    pair.kind === 'review' &&
-    text.split('\n').some((line) => line.startsWith('-') && !line.startsWith('--- '))
+    after
+      ? // Raw lines would count "sm" becoming "sm", as a removal, so the recipes are compared parsed.
+        Object.entries(JSON.parse(pair.before || '{}')).some(
+          ([recipeName, recipe]) =>
+            !after[recipeName] ||
+            Object.entries(recipe).some(([variantName, values]) =>
+              variantName === 'defaultVariants'
+                ? Object.entries(values).some(
+                    ([key, value]) => after[recipeName].defaultVariants?.[key] !== value,
+                  )
+                : values.some((value) => !after[recipeName][variantName]?.includes(value)),
+            ),
+        )
+      : // A removed `--beckui-*` line gains one more `-`, so it starts with `---` and no space.
+        // The file header is `--- a/api/...`.
+        text.split('\n').some((line) => line.startsWith('-') && !line.startsWith('--- '))
   ) {
     removed.add(pair.packageName);
     removedDiffs.push(text);
