@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { Box } from './Box';
 import { Button } from './Button';
+import { Icon } from './Icon';
 import { HStack } from './Stack';
 import { Tooltip, type TooltipProps } from './Tooltip';
 
@@ -53,5 +55,26 @@ export const Placements: Story = {
         </Tooltip>
       ))}
     </HStack>
+  ),
+};
+
+export const IconTrigger: Story = {
+  args: {
+    content: 'More information',
+    placement: 'top',
+    delayMs: 200,
+    disabled: false,
+  },
+  render: (args: TooltipProps) => (
+    <Box padding="xl">
+      <Tooltip {...args}>
+        <Icon label="Info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 11v5M12 8h.01" />
+          </svg>
+        </Icon>
+      </Tooltip>
+    </Box>
   ),
 };
