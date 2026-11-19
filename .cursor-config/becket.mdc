@@ -429,7 +429,7 @@ Interactive primitives **do not ship** without automated a11y tests. Manual Stor
 
 **Out:** Playwright, Storybook test-runner, Chromatic, Cypress, Pa11y, Lighthouse-CI, a from-scratch WCAG engine, publishing `@becket-ui/a11y` on npm in 0.1.0.
 
-**Token contrast is enforced in `build`**: `packages/tokens/scripts/check-tokens.mjs` checks every color pair Becket draws, in dark and light, at the end of `pnpm build` and again in `prepack`, so a failing pair can't publish. A known gap needs a MAV issue and an `until` version, and fails the build once the package reaches it. **jsdom cannot prove** painted contrast (what a component actually renders over its real background), 24×24 target size (2.5.8), or painted focus rings. Disable those axe rules in CI. They stay Storybook addon + a recorded keyboard/contrast pass (C3).
+**Token contrast is enforced in `build`**: `packages/tokens/scripts/check-tokens.mjs` checks every pair in `contrastPairs` (theme tokens; recipe pairs come with MAV-76), in dark and light, in `pnpm build` right after the CSS is written and again in `prepack`, so a failing pair can't publish. A known gap needs a MAV issue and an `until` version, and fails the build once the package reaches it. **jsdom cannot prove** painted contrast (what a component actually renders over its real background), 24×24 target size (2.5.8), or painted focus rings. Disable those axe rules in CI. They stay Storybook addon + a recorded keyboard/contrast pass (C3).
 
 Do not take stale `vitest-axe@0.1.0` as the long-term matcher — call `axe.run` from a thin helper we own.
 

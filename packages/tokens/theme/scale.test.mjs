@@ -101,8 +101,9 @@ export function findScaleProblems(css) {
   };
 }
 
-// The tests register only when node --test runs this file, not when check-tokens.mjs imports it.
-// `!== false`: Node 22.12 to 22.17 have no import.meta.main, and the tests must still run there.
+// On Node 22.18+ the tests register only when node --test runs this file, not when
+// check-tokens.mjs imports it. Node 22.12 to 22.17 have no import.meta.main: `!== false` keeps
+// the tests running there, at the cost of them also registering on import.
 if (import.meta.main !== false) {
   const problems = findScaleProblems(
     readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'index.css'), 'utf8'),
