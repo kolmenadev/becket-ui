@@ -53,9 +53,9 @@ export const defaultColors = {
 const text = 4.5;
 const canvases = ['background', 'surface'];
 
-// `known-gap` pairs fail in the default theme too (see their `note`). Each names the issue that
-// fixes it and the fixed-group version it must be fixed by: scripts/check-tokens.mjs fails the
-// build once the package reaches `until`, or once the pair passes and should become `required`.
+// `known-gap` pairs fail in the default theme too (see their `note`). An issue and an `until`
+// keep each one tracked instead of frozen: scripts/check-tokens.mjs fails the build once the
+// package reaches `until`, or once the pair passes and should be `required`.
 export const contrastPairs = [
   ...['text', 'muted', 'link', 'linkHover', 'linkVisited', 'danger', 'accent'].flatMap(
     (foreground) =>
@@ -176,8 +176,7 @@ export function checkBecketThemeContrast(theme = {}, { version } = {}) {
       };
     }),
   );
-  // A failing known gap is tolerated only while it names its MAV issue and `version` is below its
-  // `until`. Without either, or once the package reaches `until`, it fails like a required pair.
+  // A gap without its issue or `until` isn't tracked, so it counts as a failure.
   const knownGaps = results.filter((result) => {
     if (result.passes || result.level !== 'known-gap') return false;
     if (!/^MAV-\d+$/.test(result.issue ?? '') || !/^\d+\.\d+\.\d+$/.test(result.until ?? '')) {
