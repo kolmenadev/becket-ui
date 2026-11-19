@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 
 import {
@@ -24,6 +24,11 @@ function fail(message) {
   console.error(`export-tokens: ${message}`);
   process.exit(1);
 }
+
+// No default paths: each package's build writes the output it owns, so Turbo caches and restores it
+// with that package.
+if (!options.manifest && !options['tokens-json'])
+  fail('name an output: --manifest <path>, --tokens-json <path> or both');
 
 const { becketPreset } = await import(
   options.preset ? pathToFileURL(resolve(options.preset)).href : '@becket-ui/tokens/preset'
@@ -306,16 +311,10 @@ console.log(
     `${advisoryBelow} advisory checks sit below their minimum`,
 );
 for (const [path, contents] of [
-  [
-    options['tokens-json'] ??
-      fileURLToPath(new URL('../../design-system/dist/tokens.json', import.meta.url)),
-    list,
-  ],
-  [
-    options.manifest ?? fileURLToPath(new URL('../figma/manifest.json', import.meta.url)),
-    [...entries.values()],
-  ],
+  [options['tokens-json'], list],
+  [options.manifest, [...entries.values()]],
 ]) {
+  if (!path) continue;
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, `${JSON.stringify(contents, null, 2)}\n`);
   console.log(`wrote ${path}`);

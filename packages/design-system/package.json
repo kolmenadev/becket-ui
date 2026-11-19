@@ -7,6 +7,7 @@
   "license": "MIT",
   "files": [],
   "scripts": {
+    "build": "node node_modules/@becket-ui/tokens/scripts/export-tokens.mjs --tokens-json dist/tokens.json",
     "spike": "node scripts/spike.mjs"
   },
   "devDependencies": {
