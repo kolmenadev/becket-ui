@@ -76,7 +76,8 @@ Numeric `gap` on layout primitives uses the Fibonacci spacing scale: `0, 1, 2, 3
 - `@becket-ui/react` — React components
 - `@becket-ui/tokens` — tokens, recipes, prebuilt CSS
 
-Requirements: **React 19+**.
+Requirements: **React 19+**. Becket UI is tested left-to-right only: RTL layouts are not supported
+yet and are planned for 1.0.
 
 ## Docs
 

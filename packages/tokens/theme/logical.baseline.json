@@ -1,0 +1,68 @@
+[
+  {
+    "file": "select.recipe.ts",
+    "match": "backgroundPosition",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "select.recipe.ts",
+    "match": "paddingRight",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "switch.recipe.ts",
+    "match": "left",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "switch.recipe.ts",
+    "match": "translateX",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "table.slot-recipe.ts",
+    "match": "textAlign",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "table.slot-recipe.ts",
+    "match": "textAlign",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "menu.slot-recipe.ts",
+    "match": "textAlign",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "tooltip.recipe.ts",
+    "match": "textAlign",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "tooltip.recipe.ts",
+    "match": "left",
+    "reason": "Tooltip placement API values; left|right stay as aliases if start|end are added. Re-decide at 0.12 when D12-B makes the lint blocking: exempt variant keys in the test, or rename.",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "tooltip.recipe.ts",
+    "match": "right",
+    "reason": "Tooltip placement API values; left|right stay as aliases if start|end are added. Re-decide at 0.12 when D12-B makes the lint blocking: exempt variant keys in the test, or rename.",
+    "until": "2027-08-20"
+  },
+  {
+    "file": "skip-link.recipe.ts",
+    "match": "left",
+    "reason": "Converted by MAV-218 before rc.1 (D12-B: RTL is in scope for 1.0)",
+    "until": "2027-08-20"
+  }
+]
