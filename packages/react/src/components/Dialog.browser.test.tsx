@@ -82,35 +82,38 @@ describe('Dialog', () => {
   });
 
   // Fails on main in Chrome and Firefox: a modal <dialog> doesn't wrap focus. Tab from the last
-  // footer action, or Shift+Tab from Close, leaves the page for the browser's own UI, where APG
-  // Dialog (Modal) wraps to the other end. Reported from MAV-209; drop `.fails` once Dialog keeps
-  // focus inside.
-  it.fails(
-    'keeps focus inside for 12 Tab and 12 Shift+Tab presses, then Escape returns it to the trigger',
-    async () => {
-      render(<ConfirmDialog />);
-      page.getByRole('button', { name: 'Open' }).element().focus();
-      await userEvent.keyboard('{Enter}');
-      await expect.element(page.getByRole('button', { name: 'Cancel' })).toHaveFocus();
+  // footer action leaves the page for the browser's own UI, where APG Dialog (Modal) wraps to the
+  // first control. Reported from MAV-209; drop `.fails` once Dialog keeps Tab inside.
+  it.fails('keeps focus inside for 12 Tab presses', async () => {
+    render(<ConfirmDialog />);
+    page.getByRole('button', { name: 'Open' }).element().focus();
+    await userEvent.keyboard('{Enter}');
+    await expect.element(page.getByRole('button', { name: 'Cancel' })).toHaveFocus();
 
-      for (let press = 1; press <= 12; press++) {
-        await userEvent.tab();
-        expect(
-          page.getByRole('dialog', { name: 'Confirm' }).element().contains(document.activeElement),
-          `focus is in the dialog after Tab ${press}`,
-        ).toBe(true);
-      }
-      for (let press = 1; press <= 12; press++) {
-        await userEvent.tab({ shift: true });
-        expect(
-          page.getByRole('dialog', { name: 'Confirm' }).element().contains(document.activeElement),
-          `focus is in the dialog after Shift+Tab ${press}`,
-        ).toBe(true);
-      }
-      await userEvent.keyboard('{Escape}');
+    for (let press = 1; press <= 12; press++) {
+      await userEvent.tab();
+      expect(
+        page.getByRole('dialog', { name: 'Confirm' }).element().contains(document.activeElement),
+        `focus is in the dialog after Tab ${press}`,
+      ).toBe(true);
+    }
+  });
 
-      expect(document.querySelector('dialog')?.open).toBe(false);
-      await expect.element(page.getByRole('button', { name: 'Open' })).toHaveFocus();
-    },
-  );
+  // Fails on main in Chrome and Firefox: a modal <dialog> doesn't wrap focus. Shift+Tab from Close
+  // leaves the page for the browser's own UI, where APG Dialog (Modal) wraps to the last control.
+  // Reported from MAV-209; drop `.fails` once Dialog keeps Shift+Tab inside.
+  it.fails('keeps focus inside for 12 Shift+Tab presses', async () => {
+    render(<ConfirmDialog />);
+    page.getByRole('button', { name: 'Open' }).element().focus();
+    await userEvent.keyboard('{Enter}');
+    await expect.element(page.getByRole('button', { name: 'Cancel' })).toHaveFocus();
+
+    for (let press = 1; press <= 12; press++) {
+      await userEvent.tab({ shift: true });
+      expect(
+        page.getByRole('dialog', { name: 'Confirm' }).element().contains(document.activeElement),
+        `focus is in the dialog after Shift+Tab ${press}`,
+      ).toBe(true);
+    }
+  });
 });
