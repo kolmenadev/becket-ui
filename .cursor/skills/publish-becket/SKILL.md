@@ -42,10 +42,12 @@ Commit the changeset only when the user asks to commit, or when it belongs to a 
 Do this only when `.github/workflows/publish.yml` is missing and the user asked to set up releases or to publish.
 
 1. Add the workflow below. Do not add a second registry.
-2. Stop and tell the user to do these two things. They cannot be done from the repo:
-   - On npm, for **each** of `@becket-ui/react`, `@becket-ui/tokens` and `@becket-ui/mcp`: Settings → Trusted Publisher → GitHub Actions. Owner `kolmenadev`, repository `becket-ui`, workflow filename `publish.yml`, environment blank. Turn on **Allow npm publish**. npm warns that this is not recommended because it skips staged publishing. Changesets still runs `npm publish` and does not support `npm stage publish` yet, so leaving it unchecked makes the release workflow fail. Leave **npm dist-tag** off.
+2. Stop and tell the user to do these things, in this order. They cannot be done from the repo:
+   - On GitHub: Settings → Environments → New environment `npm-publish`. Required reviewers: the maintainer. Turn **Prevent self-review** off: with a single maintainer it would block every release. Deployment branches: selected branches, `main` only. No secrets.
+   - Merge the workflow. Its `publish` job names `environment: npm-publish`. A trusted publisher with a blank environment accepts any job, so the workflow goes in before npm names the environment.
+   - On npm, for **each** of `@becket-ui/react`, `@becket-ui/tokens` and `@becket-ui/mcp`: Settings → Trusted Publisher → GitHub Actions. Owner `kolmenadev`, repository `becket-ui`, workflow filename `publish.yml`, environment `npm-publish`. Turn on **Allow npm publish**. npm warns that this is not recommended because it skips staged publishing. Changesets still runs `npm publish` and does not support `npm stage publish` yet, so leaving it unchecked makes the release workflow fail. Leave **npm dist-tag** off.
    - On GitHub: Settings → Actions → General → enable **Allow GitHub Actions to create and approve pull requests**.
-3. Do not merge a Version Packages PR until both are done.
+3. Do not merge a Version Packages PR until all of them are done. If the environment on npm and in the workflow differ, the OIDC claim doesn't match and the release fails.
 
 ## Add a new published package
 
@@ -80,17 +82,17 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - id: select-mode
-        uses: changesets/action/select-mode@v2
+        uses: changesets/action/select-mode@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
 
   version:
     if: needs.select-mode.outputs.mode == 'version'
@@ -100,16 +102,16 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - uses: changesets/action/version@v2
+      - uses: changesets/action/version@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
           script: pnpm exec changeset version
 
@@ -122,40 +124,44 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - id: pack
-        uses: changesets/action/pack@v2
+        uses: changesets/action/pack@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
           publish-plan-artifact-id: ${{ needs.select-mode.outputs.publish-plan-artifact-id }}
 
   publish:
     needs: pack
     runs-on: ubuntu-latest
+    # A required reviewer approves the run before the npm identity below is minted. The name must
+    # match the Environment field of each package's npm trusted publisher.
+    environment: npm-publish
     permissions:
-      contents: write
+      contents: write # tags and GitHub Releases only
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
-          cache: pnpm
+          # No pnpm cache: nothing restored from a cache runs in the job that holds the identity.
       # Trusted publishing needs npm >= 11.5.1. Node 22 does not ship that.
-      - run: npm install -g npm@11.21.0
-      - run: pnpm install --frozen-lockfile
-      - uses: changesets/action/publish@v2
+      - run: npm install -g npm@11.21.0 --ignore-scripts
+      # This job only ships the tarballs `pack` built, so no lifecycle script needs to run here.
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - uses: changesets/action/publish@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
           pack-dir-artifact-id: ${{ needs.pack.outputs.pack-dir-artifact-id }}
 ```
@@ -166,13 +172,13 @@ Use npm trusted publishing. Do not add `NPM_TOKEN` or `NODE_AUTH_TOKEN`. Do not 
 
 ## Cut a release
 
-After the workflow file is on `main` and the two human steps above are done:
+After the workflow file is on `main` and the human steps above are done:
 
 1. The changeset file is on `main`.
 2. The workflow opens or updates a **Version Packages** pull request. It bumps both versions, writes the changelogs, and deletes the changeset file. A person merges that PR.
-3. That merge publishes. Expect `@becket-ui/tokens@<version>`, `@becket-ui/react@<version>` and `@becket-ui/mcp@<version>` on npm and as GitHub Releases.
+3. That merge runs `pack`, and then the `publish` job waits for review. Open the Publish run, click **Review deployments**, tick `npm-publish` and click **Approve and deploy**. Nothing is published before that. Expect `@becket-ui/tokens@<version>`, `@becket-ui/react@<version>` and `@becket-ui/mcp@<version>` on npm and as GitHub Releases.
 4. Confirm with `npm view @becket-ui/react version`, `npm view @becket-ui/tokens version`, `npm view @becket-ui/mcp version`, and `gh release list --repo kolmenadev/becket-ui`.
 
-If publish fails on auth, the trusted publisher is missing or the workflow filename is not `publish.yml`. Fix that. Do not `npm publish` from a laptop, except for a new package's first version (above).
+If publish fails on auth, the trusted publisher is missing, the workflow filename is not `publish.yml`, or its environment does not read `npm-publish`. Fix that. If it fails on OIDC on the first release after the environment was set, clear the environment on npm, re-run, then investigate. Set it back to `npm-publish` on all three packages as soon as the cause is fixed and before the next release: while it is blank, npm accepts a publish from any job of the workflow. Never republish a version number. Do not `npm publish` from a laptop, except for a new package's first version (above).
 
 If publish fails with `409 Conflict ... Cannot publish over previously staged version`, a push landed within minutes of a release and npm hadn't shown the new version yet. Check `npm view <package> versions`. If the version is there, re-run the failed Publish run; it publishes nothing and passes.
