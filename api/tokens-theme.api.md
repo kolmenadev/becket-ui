@@ -39,16 +39,23 @@ export type BecketContrastPair = {
     foreground: BecketColorToken;
     background: BecketColorToken;
     minimum: number;
-    level: 'required' | 'advisory';
     use: string;
     note?: string;
-};
+} & (
+| { level: 'required' }
+| {
+    level: 'known-gap';
+    issue: string;
+    until: string;
+}
+);
 
 // @public (undocumented)
 export type BecketContrastReport = {
     passes: boolean;
     failures: BecketContrastResult[];
-    advisories: BecketContrastResult[];
+    knownGaps: Extract<BecketContrastResult, { level: 'known-gap' }>[];
+    advisories: Extract<BecketContrastResult, { level: 'known-gap' }>[];
     results: BecketContrastResult[];
 };
 
@@ -121,7 +128,10 @@ Record<'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full', string>
 export type BecketThemeSpacing = Partial<Record<'unit' | 'textUnit' | 'xs' | 'sm' | 'md' | 'lg' | 'xl', string>>;
 
 // @public
-export function checkBecketThemeContrast(theme?: BecketTheme): BecketContrastReport;
+export function checkBecketThemeContrast(
+theme?: BecketTheme,
+options?: { version?: string },
+): BecketContrastReport;
 
 // @public
 export function colorDistance(first: Oklch, second: Oklch): number;

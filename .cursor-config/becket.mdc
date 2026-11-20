@@ -407,7 +407,7 @@ Anything written *with* Becket rather than *in* it, like `*.examples.tsx`, compo
 
 ## When adding a new component, do this
 
-1) Add/extend a Panda recipe in `@becket-ui/tokens` if needed, export it, and regenerate Panda artifacts. Every length comes from a scale in "Sizing and spacing" above; run `pnpm -F @becket-ui/tokens test` (contrast + scale) before review.
+1) Add/extend a Panda recipe in `@becket-ui/tokens` if needed, export it, and regenerate Panda artifacts. Every length comes from a scale in "Sizing and spacing" above; `pnpm -F @becket-ui/tokens build` fails on contrast or scale; run `pnpm -F @becket-ui/tokens test` too before review.
 2) Implement the React component in `@becket-ui/react` using the API rules and recipe. Meet WCAG 2.2 AA before review.
 3) Add a Storybook file with controls for all variants and key states. `@storybook/addon-a11y` must be clean on Default (local; not CI).
 4) Add Vitest coverage: axe-core via the private `@becket-ui/a11y` helper plus keyboard tests if the primitive has APG behavior. Do **not** add Playwright or Chromatic for this.
@@ -429,7 +429,7 @@ Interactive primitives **do not ship** without automated a11y tests. Manual Stor
 
 **Out:** Playwright, Storybook test-runner, Chromatic, Cypress, Pa11y, Lighthouse-CI, a from-scratch WCAG engine, publishing `@becket-ui/a11y` on npm in 0.1.0.
 
-**jsdom cannot prove** color-contrast, 24×24 target size (2.5.8), or painted focus rings. Disable those axe rules in CI. They stay Storybook addon + a recorded keyboard/contrast pass (C3).
+**Token contrast is enforced in `build`**: `packages/tokens/scripts/check-tokens.mjs` checks every pair in `contrastPairs` (theme tokens; recipe pairs come with MAV-76), in dark and light, in `pnpm build` right after the CSS is written and again in `prepack`, so a failing pair can't publish. A known gap needs a MAV issue and an `until` version, and fails the build once the package reaches it. **jsdom cannot prove** painted contrast (what a component actually renders over its real background), 24×24 target size (2.5.8), or painted focus rings. Disable those axe rules in CI. They stay Storybook addon + a recorded keyboard/contrast pass (C3).
 
 Do not take stale `vitest-axe@0.1.0` as the long-term matcher — call `axe.run` from a thin helper we own.
 

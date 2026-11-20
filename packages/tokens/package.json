@@ -39,10 +39,10 @@
     "index.d.ts"
   ],
   "scripts": {
-    "build": "panda codegen && panda cssgen && node scripts/bundle-css.mjs && tsup && node scripts/emit-preset-dts.mjs",
+    "build": "panda codegen && panda cssgen && node scripts/bundle-css.mjs && tsup && node scripts/check-tokens.mjs && node scripts/emit-preset-dts.mjs",
     "prepare": "pnpm build",
-    "prepack": "node ../../scripts/assert-built.mjs dist/preset.js styled-system",
-    "test": "node --test theme/index.test.mjs theme/contrast.test.mjs theme/derive.test.mjs theme/scale.test.mjs theme/focus.test.mjs theme/forced-colors.test.mjs",
+    "prepack": "node ../../scripts/assert-built.mjs dist/preset.js styled-system && node scripts/check-tokens.mjs",
+    "test": "node --test theme/index.test.mjs theme/contrast.test.mjs theme/derive.test.mjs theme/scale.test.mjs theme/focus.test.mjs theme/forced-colors.test.mjs scripts/check-tokens.test.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "exports": {
