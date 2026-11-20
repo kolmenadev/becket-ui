@@ -185,7 +185,7 @@ export const FieldHelper = forwardRef<HTMLSpanElement, FieldHelperProps>(
 FieldHelper.displayName = 'FieldHelper';
 
 export const FieldError = forwardRef<HTMLSpanElement, FieldHelperProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, children, dangerouslySetInnerHTML, ...props }, ref) => {
     const { size, errorId, registerDescribedBy } = useFieldInternal();
     const styles = field({ size });
     useLayoutEffect(() => {
@@ -204,8 +204,9 @@ export const FieldError = forwardRef<HTMLSpanElement, FieldHelperProps>(
             every size: the field recipe can't resize it, because Icon's size variant sits in a
             later cascade layer than slot recipes. */}
         <WarningIcon size="sm" />
-        {/* One flex item for the message, so inline markup inside it keeps its spacing. */}
-        <span>{children}</span>
+        {/* One flex item for the message, so inline markup inside it keeps its spacing. Raw HTML
+            goes here too: on the outer span it would replace the glyph, and React throws. */}
+        <span dangerouslySetInnerHTML={dangerouslySetInnerHTML}>{children}</span>
       </span>
     );
   },

@@ -109,4 +109,18 @@ describe('Field error messages', () => {
     expect(alert.textContent).toBe('Enter a valid email address');
     expect(alert.querySelector('[aria-hidden="true"] svg')).not.toBeNull();
   });
+
+  it('renders dangerouslySetInnerHTML as the FieldError message, after the glyph', () => {
+    render(
+      <Field invalid>
+        <FieldLabel>Email</FieldLabel>
+        <FieldControl />
+        <FieldError dangerouslySetInnerHTML={{ __html: 'Enter a <strong>valid</strong> email' }} />
+      </Field>,
+    );
+    const alert = screen.getByRole('alert');
+    expect(alert.textContent).toBe('Enter a valid email');
+    expect(alert.querySelector('strong')?.textContent).toBe('valid');
+    expect(alert.querySelector('[aria-hidden="true"] svg')).not.toBeNull();
+  });
 });
