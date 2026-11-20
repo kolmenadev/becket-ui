@@ -33,19 +33,17 @@ function scan(file, source) {
                 /(?<![\w$.-])['"]?(left|right|marginLeft|marginRight|paddingLeft|paddingRight|borderLeft\w*|borderRight\w*|float)['"]?\s*:/g,
               ),
           ].map(([, property]) => property),
-          // The next line is read only as the key's value: a key on it is found when that line is
-          // scanned, so a match has to start within this line's text.
-          ...[...statement.matchAll(/\btextAlign['"]?\s*:\s*['"`](left|right)['"`]/g)]
-            .filter((found) => found.index < text.length)
-            .map(() => 'textAlign'),
+          // The next non-blank line is read only as the key's value: a key on it is found when that
+          // line is scanned, so a match has to start within this line's text.
           ...[
-            ...statement.matchAll(/\bbackgroundPosition['"]?\s*:\s*['"`][^'"`]*\b(left|right)\b/g),
-          ]
-            .filter((found) => found.index < text.length)
-            .map(() => 'backgroundPosition'),
-          ...[...statement.matchAll(/\btransform['"]?\s*:\s*['"`][^'"`]*?\b(translateX?)\(/g)]
-            .filter((found) => found.index < text.length)
-            .map(([, name]) => name),
+            /\b(textAlign)['"]?\s*:\s*['"`](?:left|right)['"`]/g,
+            /\b(backgroundPosition)['"]?\s*:\s*['"`][^'"`]*\b(?:left|right)\b/g,
+            /\btransform['"]?\s*:\s*['"`][^'"`]*?\b(translateX?)\(/g,
+          ].flatMap((pattern) =>
+            [...statement.matchAll(pattern)]
+              .filter((found) => found.index < text.length)
+              .map(([, name]) => name),
+          ),
         ].map((match) => ({ file, line: index + 1, match }));
       })
   );
