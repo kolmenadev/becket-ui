@@ -66,11 +66,10 @@ function check({ findings, baseline, today }) {
     if (!claimed.has(index)) {
       problems.push(`stale baseline entry: ${file} no longer has ${match}; remove the entry`);
     }
-    const [year, month, day] = String(until).split('-').map(Number);
     if (
       !/^\d{4}-\d{2}-\d{2}$/.test(until) ||
-      // Date.UTC rolls 2027-02-30 over to March, so a real date is one that reads back unchanged.
-      new Date(Date.UTC(year, month - 1, day)).toISOString().slice(0, 10) !== until
+      // A day past the month's end rolls into the next month, and an impossible month reads as NaN.
+      new Date(`${until}T00:00:00Z`).getUTCDate() !== Number(until.slice(8))
     ) {
       problems.push(
         `baseline entry ${file} ${match} needs an until date as a real YYYY-MM-DD date, got ${until}`,
@@ -335,7 +334,7 @@ test('check fails an entry whose site was converted to a logical property', () =
   );
 });
 
-test('check fails an entry past its until date, and one without a valid date', () => {
+test('check fails an entry past its until date, or without a real calendar date', () => {
   const findings = scan('fixture.recipe.ts', "paddingRight: '8',");
   const entry = { file: 'fixture.recipe.ts', match: 'paddingRight', reason: 'x' };
   assert.deepEqual(
@@ -352,15 +351,16 @@ test('check fails an entry past its until date, and one without a valid date', (
       'baseline entry fixture.recipe.ts paddingRight needs an until date as a real YYYY-MM-DD date, got soon',
     ],
   );
-});
-
-test('check fails an until date that is not a real calendar date, but accepts a leap day', () => {
-  const findings = scan('fixture.recipe.ts', "paddingRight: '8',");
-  const entry = { file: 'fixture.recipe.ts', match: 'paddingRight', reason: 'x' };
   assert.deepEqual(
     check({ findings, baseline: [{ ...entry, until: '2027-02-30' }], today: '2027-01-01' }),
     [
       'baseline entry fixture.recipe.ts paddingRight needs an until date as a real YYYY-MM-DD date, got 2027-02-30',
+    ],
+  );
+  assert.deepEqual(
+    check({ findings, baseline: [{ ...entry, until: '2027-13-01' }], today: '2027-01-01' }),
+    [
+      'baseline entry fixture.recipe.ts paddingRight needs an until date as a real YYYY-MM-DD date, got 2027-13-01',
     ],
   );
   assert.deepEqual(
