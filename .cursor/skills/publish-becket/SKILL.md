@@ -39,14 +39,14 @@ Commit the changeset only when the user asks to commit, or when it belongs to a 
 
 ## One-time setup
 
-Do this only when `.github/workflows/publish.yml` is missing and the user asked to set up releases or to publish. If the workflow exists but its `publish` job doesn't name `environment: npm-publish` yet, the repo predates the Environment gate: do the GitHub Environment item of step 2 first, then add `environment: npm-publish` to the existing `publish` job (as in the workflow below) and merge that change. If the workflow has never opened a Version Packages PR, do step 2's Actions item too. Then, just before you merge the next Version Packages PR, do step 2's npm item for each of the three packages: delete its existing trusted publisher (the one with a blank environment) and create a new one with environment `npm-publish`. npm can't edit a trusted publisher, and an old one left next to the new one is still an ungated way to publish.
+Do this only when `.github/workflows/publish.yml` is missing and the user asked to set up releases or to publish. If the workflow exists but its `publish` job doesn't name `environment: npm-publish` yet, the repo predates the Environment gate. Do step 2 in its order, with two differences: instead of adding the workflow, add `environment: npm-publish` to the existing `publish` job (as in the workflow below) and merge that change; and in the npm item, delete each package's existing trusted publisher (the one with a blank environment) before you create the new one. npm can't edit a trusted publisher, and an old one left next to the new one is still an ungated way to publish.
 
 1. Add the workflow below. Do not add a second registry.
 2. Stop and tell the user to do these things, in this order. They cannot be done from the repo:
    - On GitHub: Settings → Environments → New environment `npm-publish`. Required reviewers: the maintainer. Turn **Prevent self-review** off: with a single maintainer it would block every release. Deployment branches: selected branches, `main` only. No secrets.
+   - On GitHub: Settings → Actions → General → enable **Allow GitHub Actions to create and approve pull requests**. The workflow's first run needs it to open the Version Packages PR.
    - Merge the workflow. Its `publish` job names `environment: npm-publish`. A trusted publisher with a blank environment accepts any job, so the workflow goes in before npm names the environment.
-   - On npm, for **each** of `@becket-ui/react`, `@becket-ui/tokens` and `@becket-ui/mcp`: Settings → Trusted Publisher → GitHub Actions. Owner `kolmenadev`, repository `becket-ui`, workflow filename `publish.yml`, environment `npm-publish`. Turn on **Allow npm publish**. npm warns that this is not recommended because it skips staged publishing. Changesets still runs `npm publish` and does not support `npm stage publish` yet, so leaving it unchecked makes the release workflow fail. Leave **npm dist-tag** off. A new trusted publisher expires if it hasn't published within 2 days, so create it shortly before a release; if it expired, delete it, create it again and re-run the failed Publish run.
-   - On GitHub: Settings → Actions → General → enable **Allow GitHub Actions to create and approve pull requests**.
+   - Just before you merge the next Version Packages PR: on npm, for **each** of `@becket-ui/react`, `@becket-ui/tokens` and `@becket-ui/mcp`: Settings → Trusted Publisher → GitHub Actions. Owner `kolmenadev`, repository `becket-ui`, workflow filename `publish.yml`, environment `npm-publish`. Turn on **Allow npm publish**. npm warns that this is not recommended because it skips staged publishing. Changesets still runs `npm publish` and does not support `npm stage publish` yet, so leaving it unchecked makes the release workflow fail. Leave **npm dist-tag** off. The timing matters: a new trusted publisher expires if it hasn't published within 2 days. If it expired, delete it, create it again and re-run the failed Publish run.
 3. Do not merge a Version Packages PR until all of them are done. If the environment on npm and in the workflow differ, the OIDC claim doesn't match and the release fails.
 
 ## Add a new published package
@@ -55,10 +55,10 @@ npm can only set up a trusted publisher on a package that already exists, so a n
 
 1. In the PR that makes it public: remove `"private": true`, add it to `PUBLISHABLE` in `scripts/check-publishable.mjs` and to the `fixed` group in `.changeset/config.json`, and set its `version` to the group's current version (the one exception to "do not edit `version` fields").
 2. Before merging, the npm owner publishes it once from that branch: `pnpm install --frozen-lockfile && pnpm build && pnpm pack:check`, then `cd packages/<name> && pnpm publish --access public --no-git-checks`.
-3. On npm, add its trusted publisher exactly as in "One-time setup".
-4. Merge. The Publish workflow finds that version already on npm and publishes nothing.
+3. Merge. The Publish workflow finds that version already on npm and publishes nothing.
+4. Just before you merge the next Version Packages PR, add its trusted publisher on npm exactly as in "One-time setup".
 
-Merging first makes the Publish workflow try to publish the new package without a trusted publisher, and it fails.
+Merging before the manual publish in step 2 makes the Publish workflow try to publish the new package without a trusted publisher, and it fails.
 
 ```yaml
 name: Publish
@@ -172,7 +172,7 @@ Use npm trusted publishing. Do not add `NPM_TOKEN` or `NODE_AUTH_TOKEN`. Do not 
 
 ## Cut a release
 
-After the workflow file is on `main` and the human steps above are done:
+After the workflow file is on `main` and the human steps above are done (on a first release, the npm item comes just before the merge in step 2):
 
 1. The changeset file is on `main`.
 2. The workflow opens or updates a **Version Packages** pull request. It bumps both versions, writes the changelogs, and deletes the changeset file. A person merges that PR.
