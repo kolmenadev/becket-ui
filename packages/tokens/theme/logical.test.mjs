@@ -18,6 +18,7 @@ function scan(file, source) {
       .flatMap((text, index, lines) => {
         // Prettier moves a long value to the line after its key, and a comment can leave blank
         // lines between them; read the key with the next non-blank line, and report the key's line.
+        // style-check keep: inlined, the join would run again for each of the three patterns below.
         const statement = /:\s*$/.test(text)
           ? `${text} ${lines.slice(index + 1).find((next) => /\S/.test(next)) ?? ''}`
           : text;
