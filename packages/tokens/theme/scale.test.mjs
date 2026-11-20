@@ -40,14 +40,15 @@ export function findScaleProblems(css) {
   return {
     offScaleKeys: [
       ...new Set(
-        [...recipes.matchAll(/var\(--beckui--(spacing|sizes)-([\w-]+)\)/g)]
+        // A fallback (`, 0`) or a space may follow the name.
+        [...recipes.matchAll(/var\(--beckui--(spacing|sizes)-([\w-]+)\s*[,)]/g)]
           .filter(([, scale, key]) => !allowed[scale].has(key))
-          .map(([reference]) => reference),
+          .map(([, scale, key]) => `var(--beckui--${scale}-${key})`),
       ),
     ],
     missingTokens: [
       ...new Set(
-        [...recipes.matchAll(/var\((--beckui--[\w-]+)\)/g)]
+        [...recipes.matchAll(/var\((--beckui--[\w-]+)\s*[,)]/g)]
           .map(([, name]) => name)
           .filter((name) => !defined.has(name)),
       ),
@@ -62,8 +63,9 @@ export function findScaleProblems(css) {
           .filter(
             ([property, value]) => !/^min-(width|height): 24px$/.test(`${property}: ${value}`),
           )
+          // Only a whole 1px or -1px is a hairline; 21px or 0.1px is a raw length.
           .filter(([, value]) =>
-            /(^|[\s(,-])\d*\.?\d+(r?em|px)\b/.test(value.replace(/-?1px/g, '')),
+            /(^|[\s(,-])\d*\.?\d+(r?em|px)\b/.test(value.replace(/(?<![\w.])-?1px\b/g, '')),
           )
           .map(([property, value]) => `${property}: ${value}`),
       ),
@@ -131,5 +133,25 @@ if (import.meta.main !== false) {
 
   test('radii are in rem so they follow the text size', () => {
     assert.deepEqual(problems.nonRemRadii, []);
+  });
+
+  test('recipe checks read fallbacks and spaces in var(), and only whole 1px hairlines pass', () => {
+    const fixture = findScaleProblems(`:root { --beckui--spacing-6: 0; --beckui--sizes-10: 0; }
+@layer recipes {
+  .fixture {
+    padding: var(--beckui--spacing-6, 0);
+    margin: var(--beckui--sizes-10 );
+    color: var(--beckui--nope, red);
+    width: 21px;
+    height: 11px;
+    top: 0.1px;
+    left: 1px;
+    right: calc(100% - -1px);
+  }
+}
+@layer utilities {}`);
+    assert.deepEqual(fixture.offScaleKeys, ['var(--beckui--spacing-6)', 'var(--beckui--sizes-10)']);
+    assert.deepEqual(fixture.missingTokens, ['--beckui--nope']);
+    assert.deepEqual(fixture.rawLengths, ['width: 21px', 'height: 11px', 'top: 0.1px']);
   });
 }
