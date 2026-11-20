@@ -3,16 +3,18 @@
 import { forwardRef, type ReactNode, type TextareaHTMLAttributes } from 'react';
 import {
   Field,
-  FieldError,
-  FieldHelper,
   FieldLabel,
+  FieldMessages,
   FieldTextarea,
   type FieldSize,
 } from './Field';
 
 export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> & {
   label?: ReactNode;
+  /** Hint under the control. When `invalid` and no `errorText`, it is shown as the error. */
   helperText?: ReactNode;
+  /** Error message shown with the warning glyph when `invalid`; `helperText` then stays as the hint. */
+  errorText?: ReactNode;
   size?: FieldSize;
   invalid?: boolean;
   fullWidth?: boolean;
@@ -23,6 +25,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     {
       label,
       helperText,
+      errorText,
       size = 'md',
       invalid = false,
       fullWidth = false,
@@ -37,13 +40,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       <Field id={id} size={size} invalid={invalid} fullWidth={fullWidth}>
         {label != null ? <FieldLabel>{label}</FieldLabel> : null}
         <FieldTextarea ref={ref} rows={rowCount} {...props} />
-        {helperText != null ? (
-          invalid ? (
-            <FieldError>{helperText}</FieldError>
-          ) : (
-            <FieldHelper>{helperText}</FieldHelper>
-          )
-        ) : null}
+        <FieldMessages helperText={helperText} errorText={errorText} />
       </Field>
     );
   },

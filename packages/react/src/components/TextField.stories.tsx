@@ -20,9 +20,22 @@ const meta: Meta<typeof TextField> = {
     fullWidth: { control: { type: 'boolean' } },
     label: { control: { type: 'text' } },
     placeholder: { control: { type: 'text' } },
+    helperText: { control: { type: 'text' } },
+    errorText: { control: { type: 'text' } },
   },
   parameters: {
-    controls: { include: ['size', 'invalid', 'disabled', 'fullWidth', 'label', 'placeholder'] },
+    controls: {
+      include: [
+        'size',
+        'invalid',
+        'disabled',
+        'fullWidth',
+        'label',
+        'placeholder',
+        'helperText',
+        'errorText',
+      ],
+    },
   },
 };
 export default meta;
@@ -45,6 +58,25 @@ export const Invalid: Story = {
     defaultValue: 'not-an-email',
     invalid: true,
     helperText: 'Enter a valid email address',
+  },
+};
+
+export const InvalidWithHelper: Story = {
+  args: {
+    label: 'Email',
+    defaultValue: 'not-an-email',
+    invalid: true,
+    helperText: 'Use your work address',
+    errorText: 'Enter a valid email address',
+  },
+};
+
+// `required` tells assistive tech; the visible "(required)" tells everyone else (WCAG 3.3.2).
+export const Required: Story = {
+  args: {
+    label: 'Email (required)',
+    required: true,
+    helperText: 'We send the receipt here',
   },
 };
 

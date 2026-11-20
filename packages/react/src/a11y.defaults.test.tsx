@@ -28,6 +28,19 @@ describe('Default primitive axe gate', () => {
     await assertNoAxeViolations(container);
   });
 
+  it('TextField invalid with helper and error', async () => {
+    await assertNoAxeViolations(
+      render(
+        <TextField
+          label="Email"
+          invalid
+          helperText="Use your work address"
+          errorText="Enter a valid email address"
+        />,
+      ).container,
+    );
+  });
+
   it('Select', async () => {
     await assertNoAxeViolations(
       render(

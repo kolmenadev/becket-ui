@@ -130,6 +130,10 @@ that holds state or handlers, never on a whole page or barrel file.
 - One `h1` per page. Headings follow the document outline (`Heading as="h2"` for sections).
 - Use `Button` for actions and `Link` for navigation, never a clickable `div`.
 - Don't rely on color alone for status: keep the text ("Active", "Invited").
+- An invalid field says what's wrong in text: `invalid` with `errorText` on `TextField`, `Select`
+  and `Textarea` (`helperText` stays as the hint), or a `FieldError` inside `Field`.
+- Mark a required field with `required` and a visible "(required)" in its label, or say once above
+  the form which fields are required.
 
 ## 9. TypeScript and naming
 
