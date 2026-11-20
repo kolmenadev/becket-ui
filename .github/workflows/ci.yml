@@ -33,7 +33,7 @@ jobs:
       - run: pnpm --filter @becket-ui/tokens typecheck
       - run: pnpm --filter @becket-ui/a11y test
       - run: pnpm --filter @becket-ui/react test
-      - run: pnpm --filter @becket-ui/react test:browser
+      - run: pnpm --filter @becket-ui/react test:browser --exclude src/stories.a11y.browser.test.tsx
       - run: pnpm --filter @becket-ui/tokens test
       - run: pnpm --filter @becket-ui/mcp test
       - run: pnpm test:style-check
@@ -41,3 +41,29 @@ jobs:
       - run: pnpm pack:check
       - run: pnpm example:build
       - run: node scripts/assert-next-example.mjs
+
+  a11y-browser:
+    needs: check
+    runs-on: ubuntu-latest
+    # Non-blocking until the job becomes a required status check at the 0.12 gate (roadmap R9).
+    # check excludes the story test so it runs once, here.
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @becket-ui/react test:browser src/stories.a11y.browser.test.tsx
+      # Uploaded when the run fails too: that is when the report is needed.
+      - if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: axe-results
+          path: packages/react/axe-results/
