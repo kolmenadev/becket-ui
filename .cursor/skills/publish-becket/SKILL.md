@@ -39,7 +39,7 @@ Commit the changeset only when the user asks to commit, or when it belongs to a 
 
 ## One-time setup
 
-Do this only when `.github/workflows/publish.yml` is missing and the user asked to set up releases or to publish.
+Do this only when `.github/workflows/publish.yml` is missing and the user asked to set up releases or to publish. If the workflow exists but its `publish` job doesn't name `environment: npm-publish` yet, the repo predates the Environment gate: do the GitHub Environment item of step 2 first, then add `environment: npm-publish` to the existing `publish` job (as in the workflow below) and merge that change, then do the npm item.
 
 1. Add the workflow below. Do not add a second registry.
 2. Stop and tell the user to do these things, in this order. They cannot be done from the repo:
