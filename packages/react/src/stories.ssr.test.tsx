@@ -9,7 +9,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 // instead of in a Next or Node consumer. renderToString runs no effects, which is why browser-only
 // work in effects (Dialog showModal, Tooltip measuring) stays outside this check.
 describe('story server render', () => {
-  // A failing file must not leave its console.error spy (and its calls) behind for the next one.
+  // Neither the console.error spy nor the stubbed navigator may carry into the next test, even
+  // after a failure.
   afterEach(() => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
@@ -17,7 +18,8 @@ describe('story server render', () => {
 
   // React's `<!--$!-->` marks a Suspense boundary that errored on the server and fell back to client
   // rendering. renderToString swallows that error without logging it, so the marker is the only
-  // trace; this pins it so the story check below can't go blind if React changes it.
+  // trace; this pins it so the story check below can't go blind if React changes it. The same check
+  // also rejects empty output (`^$`): a story must render something.
   it('writes the client-render marker when a Suspense boundary errors', () => {
     expect(
       renderToString(<Suspense fallback={null}>{createElement(() => window.innerWidth)}</Suspense>),
@@ -32,8 +34,8 @@ describe('story server render', () => {
     ),
   )('%s', (path, stories) => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
-    // Node 21+ defines navigator, which a browser-only read in render would use to differ from the
-    // client's value. Undefined (not a throwing proxy) so a `typeof navigator` guard still passes.
+    // Node 21+ defines navigator, so a render-time read would pass here with Node's value instead of
+    // failing. Undefined (not a throwing proxy) so a `typeof navigator` guard still passes.
     vi.stubGlobal('navigator', undefined);
     for (const [name, Story] of Object.entries<ReturnType<typeof composeStory>>(
       composeStories(stories),
