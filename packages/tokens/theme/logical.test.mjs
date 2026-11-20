@@ -5,24 +5,39 @@ import { test } from 'node:test';
 // Recipes are read as text, not from the compiled CSS: a finding keeps the source line that Panda's
 // output hides.
 function scan(file, source) {
-  return source.split('\n').flatMap((text, index, lines) => {
-    if (/^\s*(\/\/|\/\*|\*)/.test(text)) return [];
-    // Prettier moves a long value to the line after its key; read the two as one statement, and
-    // report the key's line.
-    const statement = /:\s*$/.test(text) ? `${text} ${lines[index + 1]}` : text;
-    const matches = [
-      ...text.matchAll(
-        /(?<![\w$.-])['"]?(left|right|marginLeft|marginRight|paddingLeft|paddingRight|borderLeft\w*|borderRight\w*|float)['"]?\s*:/g,
-      ),
-    ].map(([, property]) => property);
-    if (/\btextAlign\s*:\s*['"](left|right)['"]/.test(statement)) matches.push('textAlign');
-    if (/\bbackgroundPosition\s*:\s*['"`][^'"`]*\b(left|right)\b/.test(statement)) {
-      matches.push('backgroundPosition');
-    }
-    const translate = statement.match(/\btransform\s*:\s*['"`][^'"`]*\b(translateX?)\(/);
-    if (translate) matches.push(translate[1]);
-    return matches.map((match) => ({ file, line: index + 1, match }));
-  });
+  return (
+    source
+      .split('\n')
+      // A quoted value can hold // (a URL), so only a // outside quotes starts a comment.
+      .map((text) =>
+        text.replace(
+          /('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)|\/\/.*$/g,
+          (_, quoted) => quoted ?? '',
+        ),
+      )
+      .flatMap((text, index, lines) => {
+        if (/^\s*(\/\*|\*)/.test(text)) return [];
+        // Prettier moves a long value to the line after its key; read the two as one statement,
+        // and report the key's line.
+        const statement = /:\s*$/.test(text) ? `${text} ${lines[index + 1]}` : text;
+        return [
+          ...[
+            ...text.matchAll(
+              /(?<![\w$.-])['"]?(left|right|marginLeft|marginRight|paddingLeft|paddingRight|borderLeft\w*|borderRight\w*|float)['"]?\s*:/g,
+            ),
+          ].map(([, property]) => property),
+          ...[...statement.matchAll(/\btextAlign['"]?\s*:\s*['"](left|right)['"]/g)].map(
+            () => 'textAlign',
+          ),
+          ...[
+            ...statement.matchAll(/\bbackgroundPosition['"]?\s*:\s*['"`][^'"`]*\b(left|right)\b/g),
+          ].map(() => 'backgroundPosition'),
+          ...[...statement.matchAll(/\btransform['"]?\s*:\s*['"`][^'"`]*?\b(translateX?)\(/g)].map(
+            ([, name]) => name,
+          ),
+        ].map((match) => ({ file, line: index + 1, match }));
+      })
+  );
 }
 
 // An entry covers one finding by file and pattern, not by line, so editing a recipe above a
@@ -149,6 +164,67 @@ test('scan passes logical properties, centered values and comments', () => {
       ].join('\n'),
     ),
     [],
+  );
+});
+
+test('scan ignores a trailing comment but not comment-like text inside a quoted value', () => {
+  assert.deepEqual(
+    scan(
+      'fixture.recipe.ts',
+      [
+        "  insetInlineStart: 'md', // replaces left: 'md'",
+        "  backgroundImage: 'url(https://example.com/a.svg)', paddingLeft: '3',",
+      ].join('\n'),
+    ).map(({ line, match }) => `${line} ${match}`),
+    ['2 paddingLeft'],
+  );
+});
+
+test('scan reports every site on a line, so each needs its own entry', () => {
+  const findings = scan(
+    'fixture.recipe.ts',
+    "base: { textAlign: 'left', _hover: { textAlign: 'right' } },",
+  );
+  assert.deepEqual(
+    findings.map(({ line, match }) => `${line} ${match}`),
+    ['1 textAlign', '1 textAlign'],
+  );
+  assert.deepEqual(
+    check({
+      findings,
+      baseline: [
+        { file: 'fixture.recipe.ts', match: 'textAlign', reason: 'x', until: '2027-12-31' },
+      ],
+      today: '2027-01-01',
+    }),
+    ['fixture.recipe.ts:1 uses the physical direction textAlign; use a logical property'],
+  );
+});
+
+test('scan reads quoted keys, on one line and wrapped', () => {
+  assert.deepEqual(
+    scan(
+      'fixture.recipe.ts',
+      [
+        `  "textAlign": 'left',`,
+        "  'backgroundPosition': 'right 1px center',",
+        `  "transform": 'translateX(1px)',`,
+        '  "transform":',
+        "    'translate(2px, 3px)',",
+        '  "backgroundPosition":',
+        "    'left center',",
+        '  "textAlign":',
+        "    'right',",
+      ].join('\n'),
+    ).map(({ line, match }) => `${line} ${match}`),
+    [
+      '1 textAlign',
+      '2 backgroundPosition',
+      '3 translateX',
+      '4 translate',
+      '6 backgroundPosition',
+      '8 textAlign',
+    ],
   );
 });
 
