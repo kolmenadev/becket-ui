@@ -1,5 +1,35 @@
 # @becket-ui/tokens
 
+## 0.9.0
+
+### Minor Changes
+
+- 81aa2a9: Checked, selected and current states stay visible in Windows contrast themes (forced
+  colors). Those themes drop background images and repaint brand colors to one system color, so a
+  state drawn only with color disappeared.
+
+  - Checkbox and Radio draw a check or a dot in `HighlightText` on a `Highlight` fill.
+  - The selected tab is 4px thick; unselected tabs stay 2px.
+  - The current page is underlined, with an inset outline.
+  - The current step's marker border is `Highlight`.
+  - A gradient heading falls back to `CanvasText` instead of disappearing.
+
+  Nothing changes outside forced colors.
+
+### Patch Changes
+
+- 65d1bc4: Activating a menu item closes the menu and returns focus to the trigger. An item that
+  moves focus itself keeps that focus. An item that cancels the event stays open.
+- e2dba1a: Text forwards DOM attributes, handlers, ref, style, and the css prop to the element it
+  renders.
+- 6758d76: A tooltip trigger that isn't a tab stop, such as an Icon, a Tag or a Link without an
+  href, now becomes one, so its hint opens from the keyboard. The trigger keeps its own element,
+  layout and ref. Controls and triggers that set their own tabIndex are left as they are, and a
+  disabled tooltip adds no tab stop. The hint is added to the trigger's own aria-describedby instead
+  of replacing it. A component that drops the props it's given gets a focusable wrapper. In
+  development, an Icon trigger without a label logs a warning. Disabled buttons still need their own
+  wrapper.
+
 ## 0.8.1
 
 ### Patch Changes
