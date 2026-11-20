@@ -838,8 +838,9 @@ export type SpacingStep = (typeof SPACING_SCALE)[number];
 type Span = Columns | 'full';
 
 // @public (undocumented)
-export const Spinner: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "ref"> & {
+export const Spinner: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "ref">, "children"> & {
 size?: SpinnerSize;
+label?: ReactNode;
 } & RefAttributes<HTMLSpanElement>>;
 
 // @public (undocumented)
