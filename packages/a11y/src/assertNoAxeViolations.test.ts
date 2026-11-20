@@ -70,6 +70,31 @@ describe('assertNoAxeViolations', () => {
     ).rejects.toThrow('axe runOnly is fixed by the a11y standard');
   });
 
+  it('rejects an empty runOnly, which would select no rules', async () => {
+    await expect(
+      assertNoAxeViolations(mount('<button></button>'), { runOnly: '' }),
+    ).rejects.toThrow('axe runOnly is fixed by the a11y standard');
+  });
+
+  it('keeps the standard tags when runOnly is passed as undefined', async () => {
+    vi.spyOn(axe, 'run');
+
+    await assertNoAxeViolations(mount('<button>Save</button>'), {
+      environment: 'browser',
+      runOnly: undefined,
+    });
+
+    expect(axe.run).toHaveBeenCalledWith(
+      expect.any(HTMLElement),
+      expect.objectContaining({
+        runOnly: {
+          type: 'tag',
+          values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'],
+        },
+      }),
+    );
+  });
+
   it('rejects once an exception has expired', async () => {
     vi.setSystemTime('2100-01-01');
 

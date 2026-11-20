@@ -15,10 +15,15 @@ function formatViolations(violations: axe.Result[]): string {
 
 export async function assertNoAxeViolations(
   container: Element,
-  { environment = 'jsdom', ...options }: RunOptions & { environment?: 'jsdom' | 'browser' } = {},
+  {
+    environment = 'jsdom',
+    runOnly,
+    ...options
+  }: RunOptions & { environment?: 'jsdom' | 'browser' } = {},
 ): Promise<void> {
   // A narrower runOnly would drop rules without an exception entry, which the standard forbids.
-  if (options.runOnly) {
+  // Taken out of `options` so not even an empty or undefined one reaches the spread below.
+  if (runOnly !== undefined) {
     throw new Error(
       'axe runOnly is fixed by the a11y standard; turn a rule off with an entry in src/exceptions.ts',
     );
