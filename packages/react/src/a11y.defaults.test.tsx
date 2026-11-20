@@ -11,6 +11,7 @@ import { Icon } from './components/Icon';
 import { Menu, MenuItem } from './components/Menu';
 import { Radio, RadioGroup } from './components/Radio';
 import { Select } from './components/Select';
+import { Spinner } from './components/Spinner';
 import { Switch } from './components/Switch';
 import { Tab, TabList, TabPanel, Tabs } from './components/Tabs';
 import { Textarea } from './components/Textarea';
@@ -74,6 +75,11 @@ describe('Default primitive axe gate', () => {
 
   it('Switch', async () => {
     const { container } = render(<Switch label="Notifications" />);
+    await assertNoAxeViolations(container);
+  });
+
+  it('Spinner', async () => {
+    const { container } = render(<Spinner />);
     await assertNoAxeViolations(container);
   });
 

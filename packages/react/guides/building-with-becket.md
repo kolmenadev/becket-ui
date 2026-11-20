@@ -130,6 +130,10 @@ that holds state or handlers, never on a whole page or barrel file.
 - One `h1` per page. Headings follow the document outline (`Heading as="h2"` for sections).
 - Use `Button` for actions and `Link` for navigation, never a clickable `div`.
 - Don't rely on color alone for status: keep the text ("Active", "Invited").
+- Announce loading through a status region that is already in the page, and mount the `Spinner` inside it
+  with `role={undefined}` so the regions don't nest: `<div role="status">{isLoading ? <Spinner role={undefined} /> : null}</div>`.
+  A live region inserted together with its text is not reliably announced. `Spinner` reads "Loading" by
+  default; set `label` to say what is loading ("Saving").
 
 ## 9. TypeScript and naming
 
