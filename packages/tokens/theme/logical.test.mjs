@@ -8,10 +8,10 @@ function scan(file, source) {
   return (
     source
       .split('\n')
-      // A quoted value can hold // (a URL), so only a // outside quotes starts a comment.
+      // A quoted value can hold // or /* (a URL), so only a comment outside quotes is dropped.
       .map((text) =>
         text.replace(
-          /('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)|\/\/.*$/g,
+          /('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)|\/\*.*?\*\/|\/\/.*$/g,
           (_, quoted) => quoted ?? '',
         ),
       )
@@ -22,11 +22,17 @@ function scan(file, source) {
         const statement = /:\s*$/.test(text) ? `${text} ${lines[index + 1]}` : text;
         return [
           ...[
-            ...text.matchAll(
-              /(?<![\w$.-])['"]?(left|right|marginLeft|marginRight|paddingLeft|paddingRight|borderLeft\w*|borderRight\w*|float)['"]?\s*:/g,
-            ),
+            // A string is blanked unless it is a key, so `content: '"left: "'` has no property.
+            ...text
+              .replace(
+                /('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)(\s*:)?/g,
+                (all, _, colon) => (colon ? all : "''"),
+              )
+              .matchAll(
+                /(?<![\w$.-])['"]?(left|right|marginLeft|marginRight|paddingLeft|paddingRight|borderLeft\w*|borderRight\w*|float)['"]?\s*:/g,
+              ),
           ].map(([, property]) => property),
-          ...[...statement.matchAll(/\btextAlign['"]?\s*:\s*['"](left|right)['"]/g)].map(
+          ...[...statement.matchAll(/\btextAlign['"]?\s*:\s*['"`](left|right)['"`]/g)].map(
             () => 'textAlign',
           ),
           ...[
@@ -60,9 +66,14 @@ function check({ findings, baseline, today }) {
     if (!claimed.has(index)) {
       problems.push(`stale baseline entry: ${file} no longer has ${match}; remove the entry`);
     }
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(until)) {
+    const [year, month, day] = String(until).split('-').map(Number);
+    if (
+      !/^\d{4}-\d{2}-\d{2}$/.test(until) ||
+      // Date.UTC rolls 2027-02-30 over to March, so a real date is one that reads back unchanged.
+      new Date(Date.UTC(year, month - 1, day)).toISOString().slice(0, 10) !== until
+    ) {
       problems.push(
-        `baseline entry ${file} ${match} needs an until date as YYYY-MM-DD, got ${until}`,
+        `baseline entry ${file} ${match} needs an until date as a real YYYY-MM-DD date, got ${until}`,
       );
     } else if (until < today) {
       problems.push(`baseline entry ${file} ${match} expired on ${until}; convert the site`);
@@ -228,6 +239,42 @@ test('scan reads quoted keys, on one line and wrapped', () => {
   );
 });
 
+test('scan flags a declaration after a same-line block comment, and skips comment bodies', () => {
+  assert.deepEqual(
+    scan(
+      'fixture.recipe.ts',
+      [
+        "  /* temporary offset */ paddingLeft: '3',",
+        "  /* logical now */ insetInlineStart: 'md',",
+        '  /*',
+        '   * left: 0 is the old way',
+        '   */',
+        "  insetInlineEnd: 'md',",
+      ].join('\n'),
+    ).map(({ line, match }) => `${line} ${match}`),
+    ['1 paddingLeft'],
+  );
+});
+
+test('scan matches property names outside value strings, and quoted keys', () => {
+  assert.deepEqual(
+    scan(
+      'fixture.recipe.ts',
+      [`  content: '"left: "',`, `  "left": 0,`, "  'marginLeft': 1,"].join('\n'),
+    ).map(({ line, match }) => `${line} ${match}`),
+    ['2 left', '3 marginLeft'],
+  );
+});
+
+test('scan reads textAlign in backticks', () => {
+  assert.deepEqual(
+    scan('fixture.recipe.ts', 'textAlign: `left`,\ntextAlign: `right`,').map(
+      ({ line, match }) => `${line} ${match}`,
+    ),
+    ['1 textAlign', '2 textAlign'],
+  );
+});
+
 test('check reports a finding without an entry by file, line and property', () => {
   assert.deepEqual(
     check({
@@ -301,6 +348,23 @@ test('check fails an entry past its until date, and one without a valid date', (
   );
   assert.deepEqual(
     check({ findings, baseline: [{ ...entry, until: 'soon' }], today: '2027-01-01' }),
-    ['baseline entry fixture.recipe.ts paddingRight needs an until date as YYYY-MM-DD, got soon'],
+    [
+      'baseline entry fixture.recipe.ts paddingRight needs an until date as a real YYYY-MM-DD date, got soon',
+    ],
+  );
+});
+
+test('check fails an until date that is not a real calendar date, but accepts a leap day', () => {
+  const findings = scan('fixture.recipe.ts', "paddingRight: '8',");
+  const entry = { file: 'fixture.recipe.ts', match: 'paddingRight', reason: 'x' };
+  assert.deepEqual(
+    check({ findings, baseline: [{ ...entry, until: '2027-02-30' }], today: '2027-01-01' }),
+    [
+      'baseline entry fixture.recipe.ts paddingRight needs an until date as a real YYYY-MM-DD date, got 2027-02-30',
+    ],
+  );
+  assert.deepEqual(
+    check({ findings, baseline: [{ ...entry, until: '2028-02-29' }], today: '2027-01-01' }),
+    [],
   );
 });
