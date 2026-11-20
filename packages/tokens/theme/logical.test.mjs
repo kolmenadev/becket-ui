@@ -33,15 +33,19 @@ function scan(file, source) {
                 /(?<![\w$.-])['"]?(left|right|marginLeft|marginRight|paddingLeft|paddingRight|borderLeft\w*|borderRight\w*|float)['"]?\s*:/g,
               ),
           ].map(([, property]) => property),
-          ...[...statement.matchAll(/\btextAlign['"]?\s*:\s*['"`](left|right)['"`]/g)].map(
-            () => 'textAlign',
-          ),
+          // The next line is read only as the key's value: a key on it is found when that line is
+          // scanned, so a match has to start within this line's text.
+          ...[...statement.matchAll(/\btextAlign['"]?\s*:\s*['"`](left|right)['"`]/g)]
+            .filter((found) => found.index < text.length)
+            .map(() => 'textAlign'),
           ...[
             ...statement.matchAll(/\bbackgroundPosition['"]?\s*:\s*['"`][^'"`]*\b(left|right)\b/g),
-          ].map(() => 'backgroundPosition'),
-          ...[...statement.matchAll(/\btransform['"]?\s*:\s*['"`][^'"`]*?\b(translateX?)\(/g)].map(
-            ([, name]) => name,
-          ),
+          ]
+            .filter((found) => found.index < text.length)
+            .map(() => 'backgroundPosition'),
+          ...[...statement.matchAll(/\btransform['"]?\s*:\s*['"`][^'"`]*?\b(translateX?)\(/g)]
+            .filter((found) => found.index < text.length)
+            .map(([, name]) => name),
         ].map((match) => ({ file, line: index + 1, match }));
       })
   );
@@ -269,6 +273,15 @@ test('scan reads a wrapped value past a comment line', () => {
       ].join('\n'),
     ).map(({ line, match }) => `${line} ${match}`),
     ['1 translateX', '4 textAlign'],
+  );
+});
+
+test('scan reports a declaration once when the line before it ends in a colon', () => {
+  assert.deepEqual(
+    scan('fixture.recipe.ts', ['base:', '  // note', "  { textAlign: 'left' },"].join('\n')).map(
+      ({ line, match }) => `${line} ${match}`,
+    ),
+    ['3 textAlign'],
   );
 });
 
