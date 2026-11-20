@@ -7,19 +7,20 @@ import { test } from 'node:test';
 function scan(file, source) {
   return (
     source
-      .split('\n')
-      // A quoted value can hold // or /* (a URL), so only a comment outside quotes is dropped.
-      .map((text) =>
-        text.replace(
-          /('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)|\/\*.*?\*\/|\/\/.*$/g,
-          (_, quoted) => quoted ?? '',
-        ),
+      // A quoted value can hold // or /* (a URL), so only a comment outside quotes is blanked. Blanking
+      // keeps every newline, so a finding keeps its line, and it hides comment bodies, however many
+      // lines they span, from the checks below.
+      .replace(
+        /('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`)|\/\*[\s\S]*?\*\/|\/\/[^\n]*/g,
+        (all, quoted) => quoted ?? all.replace(/[^\n]/g, ' '),
       )
+      .split('\n')
       .flatMap((text, index, lines) => {
-        if (/^\s*(\/\*|\*)/.test(text)) return [];
-        // Prettier moves a long value to the line after its key; read the two as one statement,
-        // and report the key's line.
-        const statement = /:\s*$/.test(text) ? `${text} ${lines[index + 1]}` : text;
+        // Prettier moves a long value to the line after its key, and a comment can leave blank
+        // lines between them; read the key with the next non-blank line, and report the key's line.
+        const statement = /:\s*$/.test(text)
+          ? `${text} ${lines.slice(index + 1).find((next) => /\S/.test(next)) ?? ''}`
+          : text;
         return [
           ...[
             // A string is blanked unless it is a key, so `content: '"left: "'` has no property.
@@ -252,6 +253,42 @@ test('scan flags a declaration after a same-line block comment, and skips commen
       ].join('\n'),
     ).map(({ line, match }) => `${line} ${match}`),
     ['1 paddingLeft'],
+  );
+});
+
+test('scan reads a wrapped value past a comment line', () => {
+  assert.deepEqual(
+    scan(
+      'fixture.recipe.ts',
+      [
+        '  transform:',
+        '    /* physical offset */',
+        "    'translateX(2px)',",
+        '  textAlign: // start in RTL',
+        "    'left',",
+      ].join('\n'),
+    ).map(({ line, match }) => `${line} ${match}`),
+    ['1 translateX', '4 textAlign'],
+  );
+});
+
+test('scan reads code after a multi-line comment closes, on the right line', () => {
+  assert.deepEqual(
+    scan(
+      'fixture.recipe.ts',
+      ['/*', ' * the old offset', ' */ left: 0,', "insetInlineEnd: 'md',"].join('\n'),
+    ).map(({ line, match }) => `${line} ${match}`),
+    ['3 left'],
+  );
+});
+
+test('scan ignores a multi-line comment body that has no leading star', () => {
+  assert.deepEqual(
+    scan(
+      'fixture.recipe.ts',
+      ['/*', '  left: 0', '  paddingRight: 8', '*/', "insetInlineEnd: 'md',"].join('\n'),
+    ),
+    [],
   );
 });
 
