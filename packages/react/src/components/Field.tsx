@@ -111,8 +111,14 @@ export const Field = forwardRef<HTMLDivElement, FieldProps>(
     // and React runs this effect from the first render, with no slots yet, before re-rendering.
     // style-check keep: syncs with the committed DOM after mount to warn; not derived state.
     useEffect(() => {
-      // Bundlers replace process.env.NODE_ENV, so the check folds away in production.
-      if (process.env.NODE_ENV === 'production' || hasWarnedRef.current || !invalid) return;
+      if (hasWarnedRef.current || !invalid) return;
+      // Read inside try rather than behind typeof process: bundlers replace process.env.NODE_ENV
+      // but don't define process, and unbundled ESM in a browser has no process at all.
+      try {
+        if (process.env.NODE_ENV === 'production') return;
+      } catch {
+        return;
+      }
       if (document.getElementById(errorId) || document.getElementById(helperId)) return;
       hasWarnedRef.current = true;
       console.warn(
@@ -223,15 +229,19 @@ export function FieldMessages({
   errorText?: ReactNode;
 }) {
   const { invalid } = useField();
+  // false, true and '' render nothing (a `condition && 'message'` value), so they count as no
+  // errorText; 0 still renders.
+  const errorMessage =
+    errorText == null || typeof errorText === 'boolean' || errorText === '' ? undefined : errorText;
   return (
     <>
-      {helperText != null && (!invalid || errorText != null) ? (
+      {helperText != null && (!invalid || errorMessage != null) ? (
         <FieldHelper>{helperText}</FieldHelper>
       ) : null}
       {/* An invalid field without errorText shows helperText as the error, so fields written
           before errorText keep working. */}
-      {invalid && (errorText ?? helperText) != null ? (
-        <FieldError>{errorText ?? helperText}</FieldError>
+      {invalid && (errorMessage ?? helperText) != null ? (
+        <FieldError>{errorMessage ?? helperText}</FieldError>
       ) : null}
     </>
   );

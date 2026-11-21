@@ -123,4 +123,22 @@ describe('Field error messages', () => {
     expect(alert.querySelector('strong')?.textContent).toBe('valid');
     expect(alert.querySelector('[aria-hidden="true"] svg')).not.toBeNull();
   });
+
+  it('keeps helperText as the alert when errorText is false', () => {
+    render(<TextField label="Email" invalid helperText="Required" errorText={false} />);
+    expect(screen.getAllByRole('alert')).toHaveLength(1);
+    expect(screen.getByRole('alert').textContent).toBe('Required');
+  });
+
+  it('renders an invalid field without throwing when process is undefined', () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    // Unbundled ESM in a browser has no process; stub it away for this render only.
+    vi.stubGlobal('process', undefined);
+    try {
+      render(<TextField label="Email" invalid />);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+    expect(screen.getByRole('textbox', { name: 'Email' })).toBeTruthy();
+  });
 });
