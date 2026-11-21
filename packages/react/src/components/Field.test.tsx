@@ -141,4 +141,14 @@ describe('Field error messages', () => {
     }
     expect(screen.getByRole('textbox', { name: 'Email' })).toBeTruthy();
   });
+
+  it('treats helperText={false} as no message: no alert, and the dev warning fires', () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    render(<TextField label="Email" invalid helperText={false} />);
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(
+      screen.getByRole('textbox', { name: 'Email' }).getAttribute('aria-describedby'),
+    ).toBeNull();
+    expect(console.warn).toHaveBeenCalledTimes(1);
+  });
 });

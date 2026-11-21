@@ -230,18 +230,19 @@ export function FieldMessages({
 }) {
   const { invalid } = useField();
   // false, true and '' render nothing (a `condition && 'message'` value), so they count as no
-  // errorText; 0 still renders.
-  const errorMessage =
-    errorText == null || typeof errorText === 'boolean' || errorText === '' ? undefined : errorText;
+  // message; 0 still renders. One check maps both texts, so it's written once.
+  const [hint, errorMessage] = [helperText, errorText].map((text) =>
+    text == null || typeof text === 'boolean' || text === '' ? undefined : text,
+  );
   return (
     <>
-      {helperText != null && (!invalid || errorMessage != null) ? (
-        <FieldHelper>{helperText}</FieldHelper>
+      {hint != null && (!invalid || errorMessage != null) ? (
+        <FieldHelper>{hint}</FieldHelper>
       ) : null}
       {/* An invalid field without errorText shows helperText as the error, so fields written
           before errorText keep working. */}
-      {invalid && (errorMessage ?? helperText) != null ? (
-        <FieldError>{errorMessage ?? helperText}</FieldError>
+      {invalid && (errorMessage ?? hint) != null ? (
+        <FieldError>{errorMessage ?? hint}</FieldError>
       ) : null}
     </>
   );
