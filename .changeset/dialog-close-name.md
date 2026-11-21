@@ -1,7 +1,7 @@
 ---
-"@becket-ui/react": patch
-"@becket-ui/tokens": patch
-"@becket-ui/mcp": patch
+"@becket-ui/react": minor
+"@becket-ui/tokens": minor
+"@becket-ui/mcp": minor
 ---
 
 `DialogClose` and `DrawerClose` with visible text, such as `<DialogClose>Cancel</DialogClose>`, are
