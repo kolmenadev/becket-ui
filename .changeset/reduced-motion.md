@@ -1,6 +1,7 @@
 ---
 "@becket-ui/react": minor
 "@becket-ui/tokens": minor
+"@becket-ui/mcp": minor
 ---
 
 Becket respects the OS setting "Reduce motion". Under `prefers-reduced-motion: reduce`, `index.css`
