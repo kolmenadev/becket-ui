@@ -1,6 +1,7 @@
 ---
 "@becket-ui/react": minor
 "@becket-ui/tokens": minor
+"@becket-ui/mcp": minor
 ---
 
 The current step no longer relies on color alone to stand out (WCAG 1.4.1). Its marker has a 3px
