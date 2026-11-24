@@ -104,6 +104,26 @@ test('parseColorAlpha reads % and deg channels the way parseColor always has', (
   assert.deepEqual(parseColorAlpha('oklch(none 0.1 200)').color, { L: 0, C: 0.1, h: 200 });
 });
 
+test('hsl() reads a bare saturation and lightness as percentages in the space syntax only', () => {
+  const red = parseColorAlpha('hsl(0 100% 50%)').color;
+  assert.deepEqual(parseColorAlpha('hsl(0 100 50)').color, red);
+  assert.deepEqual(parseColorAlpha('hsl(0 100% 50)').color, red);
+  assert.deepEqual(parseColorAlpha('hsl(0 100. 50.)').color, red);
+  assert.deepEqual(parseColorAlpha('hsl(0deg 100 50 / 40%)').color, red);
+  assert.deepEqual(parseColorAlpha('hsl(0, 100%, 50%)').color, red);
+  for (const input of ['hsl(0, 100, 50)', 'hsl(0, 100%, 50)', 'hsla(0, 100, 50%, 0.5)']) {
+    assert.equal(parseColorAlpha(input), null, input);
+  }
+});
+
+test('rgb() reads percentages on the 0 to 255 scale', () => {
+  assert.deepEqual(parseColorAlpha('rgb(100% 0% 0%)').color, parseColorAlpha('rgb(255 0 0)').color);
+  assert.deepEqual(
+    parseColorAlpha('rgb(100%, 0%, 0%, 50%)').color,
+    parseColorAlpha('rgb(255, 0, 0)').color,
+  );
+});
+
 test('parseColor drops the alpha parseColorAlpha reads', () => {
   assert.deepEqual(parseColor('#11223380'), parseColorAlpha('#112233').color);
   assert.deepEqual(parseColor('rgb(10 61 145 / 50%)'), parseColor('rgb(10, 61, 145)'));

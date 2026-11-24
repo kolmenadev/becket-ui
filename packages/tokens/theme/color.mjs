@@ -128,9 +128,14 @@ export function parseColorAlpha(input) {
     };
   }
   if (kind.startsWith('hsl')) {
-    const lightness = clamp01(number(parts[2]));
+    // CSS Color 4: the comma form takes percentages only. The space form also takes a bare number,
+    // on the same 0–100 scale; read as 0–1 it would clamp `hsl(0 100 50)` to white.
+    if (isLegacy && !(parts[1].endsWith('%') && parts[2].endsWith('%'))) return null;
+    const lightness = clamp01(number(/%$|^none$/.test(parts[2]) ? parts[2] : `${parts[2]}%`));
     // CSS Color 4 hsl() → sRGB.
-    const chroma = (1 - Math.abs(2 * lightness - 1)) * clamp01(number(parts[1]));
+    const chroma =
+      (1 - Math.abs(2 * lightness - 1)) *
+      clamp01(number(/%$|^none$/.test(parts[1]) ? parts[1] : `${parts[1]}%`));
     // The hue skips number(): it would read a `50%` hue as 0.5, where parseColor has always read 50.
     const sector =
       ((((parts[0] === 'none' ? 0 : Number.parseFloat(parts[0])) % 360) + 360) % 360) / 60;
