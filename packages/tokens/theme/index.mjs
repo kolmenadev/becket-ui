@@ -6,7 +6,6 @@ export {
   formatHex,
   formatOklch,
   parseColor,
-  parseColorAlpha,
   rgbToOklch,
   toGamut,
 } from './color.mjs';
@@ -126,7 +125,7 @@ export function defineBecketTheme(config = {}) {
     assertAllowedKeys(config.colors, [...COLOR_FLAT, ...COLOR_THEMED, 'neutral'], 'colors');
   }
   if (config.density) assertAllowedKeys(config.density, Object.keys(DENSITY_SIZES), 'density');
-  // Read twice below, for :root and the light block; inlined, every color would be parsed twice.
+  // style-check keep: read twice below, for :root and the light block; inlined, every color would be parsed twice.
   const colorsByKey = [...COLOR_FLAT, ...COLOR_THEMED].map((key) => {
     const value = config.colors?.[key];
     const name = cssVar(['colors', key]);

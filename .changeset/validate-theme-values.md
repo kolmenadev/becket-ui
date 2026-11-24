@@ -1,7 +1,7 @@
 ---
-"@becket-ui/react": patch
-"@becket-ui/tokens": patch
-"@becket-ui/mcp": patch
+"@becket-ui/react": minor
+"@becket-ui/tokens": minor
+"@becket-ui/mcp": minor
 ---
 
 defineBecketTheme rejects values that are not lengths, font names or colors; colors are
@@ -13,7 +13,15 @@ re-serialised.
   It's the same color within rounding: at most one step of 255 on a channel.
 - Font names with spaces must be quoted (`'Open Sans', sans-serif`). `var()` and `calc()` values
   aren't accepted; set them in your own CSS.
-- New `parseColorAlpha` in `@becket-ui/tokens/theme` returns the color and its alpha. `parseColor`
-  now returns null for malformed channels (`rgb(1;x 2 3)`, a fourth channel without `/`, an alpha
-  above 1) instead of reading the leading number.
+- `parseColor` now returns null for malformed channels (`rgb(1;x 2 3)`, a fourth channel without
+  `/`, an alpha above 1) instead of reading the leading number.
 - The MCP `set_theme` tool refuses keys over 32 characters and values over 64.
+
+Migration: values that used to pass now throw, each naming its key.
+
+- `fonts.sans: 'Open Sans, sans-serif'` becomes `"'Open Sans', sans-serif"`. Names with characters
+  other than ASCII letters, digits, spaces, `.`, `_` and `-` aren't accepted.
+- `var(--x)` and `calc(...)` in a length, font or color: put the value in your own CSS instead.
+- A length is a number, optionally with `px`, `rem`, `em` or `%`.
+- A color is hex, `rgb()`, `hsl()`, `oklch()` or a basic color name; `color-mix()` and the like
+  throw. Hex now comes out as `oklch(...)`, the same color within rounding.

@@ -164,9 +164,6 @@ export type Oklch = { L: number; C: number; h: number };
 export function parseColor(input: string): Oklch | null;
 
 // @public
-export function parseColorAlpha(input: string): { color: Oklch; alpha: number } | null;
-
-// @public
 export function resolveBecketColors(theme?: BecketTheme): Record<'dark' | 'light', Record<BecketColorToken, Oklch>>;
 
 // @public (undocumented)

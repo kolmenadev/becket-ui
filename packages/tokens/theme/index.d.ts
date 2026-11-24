@@ -71,8 +71,6 @@ export type Oklch = { L: number; C: number; h: number };
 
 /** Parse hex, rgb(), hsl(), oklch() or a basic color name. Alpha is ignored. Null when unsupported. */
 export function parseColor(input: string): Oklch | null;
-/** Like parseColor, plus the alpha (0–1). Null when any channel, the alpha or trailing text is malformed. */
-export function parseColorAlpha(input: string): { color: Oklch; alpha: number } | null;
 /** WCAG 2 contrast ratio, 1–21. Throws on a color it can't read. */
 export function contrastRatio(foreground: string | Oklch, background: string | Oklch): number;
 /** Lower chroma only until the color fits in sRGB; lightness and hue stay. */
