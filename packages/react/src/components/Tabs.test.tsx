@@ -22,7 +22,7 @@ function DemoTabs() {
   );
 }
 
-function AlphaBetaGamma(props: TabsProps) {
+function AlphaBetaGamma(props: TabsProps & { children?: never }) {
   return (
     <Tabs {...props}>
       <TabList>
