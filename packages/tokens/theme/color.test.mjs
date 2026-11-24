@@ -166,6 +166,45 @@ test('an angle unit is valid on a hue only', () => {
   }
 });
 
+test('CSS units, none and the exponent are case-insensitive', () => {
+  const lower = parseColorAlpha('hsl(120deg 100% 50%)');
+  assert.deepEqual(parseColorAlpha('hsl(120DEG 100% 50%)'), lower);
+  assert.deepEqual(parseColorAlpha('hsl(120Deg 100% 50%)'), lower);
+  assert.deepEqual(parseColorAlpha('HSL(120deg 100% 50%)'), lower);
+  assert.deepEqual(parseColorAlpha('hsl(NONE 100% 50%)'), parseColorAlpha('hsl(0 100% 50%)'));
+  assert.deepEqual(parseColorAlpha('rgb(1E2 0 0)'), parseColorAlpha('rgb(100 0 0)'));
+  assert.deepEqual(parseColorAlpha('oklch(0.5 0.1 200DEG)'), parseColorAlpha('oklch(0.5 0.1 200)'));
+  for (const input of ['rgb(1DEG 2 3)', 'hsl(0 100% 50% / 1DEG)', 'hsl(0 100DEG 50%)']) {
+    assert.equal(parseColorAlpha(input), null, input);
+  }
+});
+
+test('a hue in turn, grad or rad is converted to degrees, and those units fit a hue only', () => {
+  for (const hue of ['0.5turn', '0.5TURN', '200grad', '3.141592653589793rad', '180deg', '180']) {
+    assert.equal(
+      formatOklch(parseColorAlpha(`hsl(${hue} 100% 50%)`).color),
+      formatOklch(parseColorAlpha('hsl(180 100% 50%)').color),
+      hue,
+    );
+  }
+  assert.deepEqual(parseColorAlpha('oklch(0.5 0.1 0.25turn)').color, { L: 0.5, C: 0.1, h: 90 });
+  assert.deepEqual(parseColorAlpha('oklch(0.5 0.1 100grad)').color, { L: 0.5, C: 0.1, h: 90 });
+  assert.equal(
+    formatOklch(parseColorAlpha('oklch(0.5 0.1 1.5707963267948966rad)').color),
+    'oklch(0.5 0.1 90)',
+  );
+  for (const input of [
+    'rgb(1turn 2 3)',
+    'rgb(1rad 2 3)',
+    'hsl(0 1turn 50%)',
+    'hsl(0 100% 50% / 1grad)',
+    'oklch(0.5turn 0.1 200)',
+    `hsl(1e308turn 100% 50%)`,
+  ]) {
+    assert.equal(parseColorAlpha(input), null, input);
+  }
+});
+
 test('a channel may use exponent notation', () => {
   assert.deepEqual(parseColorAlpha('rgb(1e2 0 0)'), parseColorAlpha('rgb(100 0 0)'));
   assert.deepEqual(parseColorAlpha('rgb(1E2, 0, 0)'), parseColorAlpha('rgb(100, 0, 0)'));

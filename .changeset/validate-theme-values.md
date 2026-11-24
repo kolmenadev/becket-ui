@@ -17,7 +17,9 @@ re-serialised.
   `/`, an alpha above 1, `hsl(0, 100, 50)` with a bare saturation or lightness in the comma form)
   instead of reading the leading number. `hsl(0 100 50)` now reads a bare saturation and lightness
   as percentages, as CSS Color 4 does, where it used to clamp to white. A `5.` number or an angle
-  unit on anything but a hue (`rgb(1deg 2 3)`) also returns null.
+  unit on anything but a hue (`rgb(1deg 2 3)`) also returns null. A hue in `turn`, `grad` or `rad`
+  is converted to degrees (`hsl(0.5turn 100% 50%)` is `hsl(180 100% 50%)`); it used to be read as
+  that many degrees. Units and `none` are case-insensitive, as in CSS (`120DEG`).
 - The MCP `set_theme` tool refuses keys over 32 characters and values over 64.
 
 Migration: values that used to pass now throw, each naming its key.

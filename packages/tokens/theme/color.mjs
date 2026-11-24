@@ -39,6 +39,10 @@ function number(part, scale = 1) {
   const value = part.trim();
   if (value === 'none') return 0;
   if (value.endsWith('%')) return (Number.parseFloat(value) / 100) * scale;
+  // Angles come out in degrees. `grad` goes before `rad`, which it ends with.
+  if (value.endsWith('turn')) return Number.parseFloat(value) * 360;
+  if (value.endsWith('grad')) return Number.parseFloat(value) * 0.9;
+  if (value.endsWith('rad')) return (Number.parseFloat(value) * 180) / Math.PI;
   return Number.parseFloat(value);
 }
 
@@ -97,7 +101,9 @@ export function parseColorAlpha(input) {
   const [channelText, ...slashParts] = fn[2].split('/');
   const isLegacy = channelText.includes(',');
   const channels = isLegacy ? channelText.split(',') : channelText.trim().split(/\s+/);
-  const parts = [...channels, ...slashParts].map((part) => part.trim());
+  // CSS units, `none` and the exponent are case-insensitive, so `120DEG` and `1E2` are valid. The
+  // regex below stays lowercase and the angle check below reads the same lowercase tokens.
+  const parts = [...channels, ...slashParts].map((part) => part.trim().toLowerCase());
   if (
     parts.length < 3 ||
     parts.length > 4 ||
@@ -111,8 +117,9 @@ export function parseColorAlpha(input) {
         // can't take, so no two digit runs can split the same digits; `\d+\.?\d*` backtracks
         // quadratically on a long run of digits followed by a bad character. A CSS number needs
         // digits after its decimal point, so `5.` is rejected.
-        (/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][+-]?\d+)?(?:%|deg)?$/.test(part) &&
-          Number.isFinite(Number.parseFloat(part))),
+        // The check reads the converted number, so `1e308turn` (Infinity in degrees) is rejected too.
+        (/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?(?:%|deg|g?rad|turn)?$/.test(part) &&
+          Number.isFinite(number(part))),
     )
   )
     return null;
@@ -123,7 +130,8 @@ export function parseColorAlpha(input) {
   if (
     parts.some(
       (part, index) =>
-        part.endsWith('deg') && index !== (kind.startsWith('hsl') ? 0 : kind === 'oklch' ? 2 : -1),
+        /(?:deg|g?rad|turn)$/.test(part) &&
+        index !== (kind.startsWith('hsl') ? 0 : kind === 'oklch' ? 2 : -1),
     )
   )
     return null;
@@ -145,9 +153,11 @@ export function parseColorAlpha(input) {
     const chroma =
       (1 - Math.abs(2 * lightness - 1)) *
       clamp01(number(/%$|^none$/.test(parts[1]) ? parts[1] : `${parts[1]}%`));
-    // The hue skips number(): it would read a `50%` hue as 0.5, where parseColor has always read 50.
+    // A `%` hue skips number(), which would read `50%` as 0.5, where parseColor has always read 50.
     const sector =
-      ((((parts[0] === 'none' ? 0 : Number.parseFloat(parts[0])) % 360) + 360) % 360) / 60;
+      ((((parts[0].endsWith('%') ? Number.parseFloat(parts[0]) : number(parts[0])) % 360) + 360) %
+        360) /
+      60;
     const x = chroma * (1 - Math.abs((sector % 2) - 1));
     const [r, g, b] = [
       [chroma, x, 0],
