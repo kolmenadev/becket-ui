@@ -27,8 +27,9 @@ function fail(message) {
 
 if (!(Number(options['root-px']) > 0))
   fail(`--root-px needs a positive number of pixels, got "${options['root-px']}"`);
-// No default paths: each package's build writes the output it owns, so Turbo caches and restores it
-// with that package.
+// No default paths: each package's build names the output it owns. design-system's dist/tokens.json
+// falls under that package's `dist/**` Turbo output, so a cache hit restores it. figma/manifest.json
+// is not in Turbo's outputs, so a hit leaves the committed file as it is.
 if (!options.manifest && !options['tokens-json'])
   fail('name an output: --manifest <path>, --tokens-json <path> or both');
 
@@ -160,8 +161,10 @@ const delta = {
   C: Math.abs(mixed.C - written.C),
   h: Math.abs(mixed.h - written.h),
 };
-// linkHover.base is primaryHover written to two decimals, so rounding alone can move L and C by
-// 0.005. Written as a negated <= so a NaN delta fails too.
+// linkHover.base is primaryHover written with L and C to two decimals and the hue to a whole degree,
+// so rounding alone can move L and C by up to 0.005 and h by up to 0.5. The hue difference is a plain
+// absolute value with no wrap at 360, which holds because this hue is 78. Written as a negated <= so
+// a NaN delta fails too.
 if (!(delta.L <= 0.005) || !(delta.C <= 0.005) || !(delta.h <= 0.5))
   fail(
     `self-test failed: primaryHover resolves to ${formatOklch(mixed)}, linkHover.base is ${formatOklch(written)}`,
