@@ -106,18 +106,27 @@ export function parseColorAlpha(input) {
     !parts.every(
       (part) =>
         part === 'none' ||
-        // Finite too: a channel of 309 digits reads as Infinity and would write invalid CSS. The
-        // fraction is grouped so no two parts can take the same digits; `\d+\.?\d*` backtracks
-        // quadratically on a long run of digits followed by a bad character.
-        (/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:%|deg)?$/.test(part) &&
+        // Finite too: a channel of 309 digits, or `1e999`, reads as Infinity and would write invalid
+        // CSS. The fraction and the exponent each start with a character the digits before them
+        // can't take, so no two digit runs can split the same digits; `\d+\.?\d*` backtracks
+        // quadratically on a long run of digits followed by a bad character. A CSS number needs
+        // digits after its decimal point, so `5.` is rejected.
+        (/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][+-]?\d+)?(?:%|deg)?$/.test(part) &&
           Number.isFinite(Number.parseFloat(part))),
-    ) ||
-    parts[3]?.endsWith('deg')
+    )
   )
     return null;
   const alpha = parts.length === 4 ? number(parts[3]) : 1;
   if (alpha < 0 || alpha > 1) return null;
   const kind = fn[1].toLowerCase();
+  // An angle unit is valid on a hue only: the first channel of hsl() and the last of oklch().
+  if (
+    parts.some(
+      (part, index) =>
+        part.endsWith('deg') && index !== (kind.startsWith('hsl') ? 0 : kind === 'oklch' ? 2 : -1),
+    )
+  )
+    return null;
 
   if (kind.startsWith('rgb')) {
     return {

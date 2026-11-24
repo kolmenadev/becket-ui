@@ -44,10 +44,37 @@ test('parseColorAlpha needs exactly three channels, and a slash before a modern 
 });
 
 test('parseColorAlpha reads every number spelling the channel grammar allows, and only those', () => {
-  for (const token of ['1', '1.', '1.5', '.5', '15%', '+1deg', '-.5', '01', '1.5%']) {
+  for (const token of [
+    '1',
+    '1.5',
+    '.5',
+    '15%',
+    '+1deg',
+    '-.5',
+    '01',
+    '1.5%',
+    '1e3',
+    '1E-3',
+    '+1.5e+2deg',
+  ]) {
     assert.notEqual(parseColorAlpha(`oklch(0.5 0.1 ${token})`), null, token);
   }
-  for (const token of ['.', '1..2', '1.5.', '.5.5', '+-1', '1e3', '+', '%']) {
+  for (const token of [
+    '.',
+    '1.',
+    '1.%',
+    '1..2',
+    '1.5.',
+    '.5.5',
+    '+-1',
+    '1e',
+    '1e+',
+    'e3',
+    '1e3.5',
+    '1e999',
+    '+',
+    '%',
+  ]) {
     assert.equal(parseColorAlpha(`oklch(0.5 0.1 ${token})`), null, token);
   }
 });
@@ -56,6 +83,8 @@ test('parseColorAlpha rejects a long run of digits or spaces in linear time', ()
   for (const input of [
     `rgb(1 2 ${'1'.repeat(100000)}x)`,
     `oklch(0.5 0.1 ${'1'.repeat(100000)}.5.)`,
+    `rgb(1 2 1.${'1'.repeat(100000)}e${'1'.repeat(100000)}x)`,
+    `rgb(1 2 ${'1'.repeat(100000)}e${'1'.repeat(100000)}x)`,
     `rgb(${' '.repeat(100000)}x`,
   ]) {
     // style-check keep: the timer starts before the parse it measures; inlined, it would start after.
@@ -108,12 +137,40 @@ test('hsl() reads a bare saturation and lightness as percentages in the space sy
   const red = parseColorAlpha('hsl(0 100% 50%)').color;
   assert.deepEqual(parseColorAlpha('hsl(0 100 50)').color, red);
   assert.deepEqual(parseColorAlpha('hsl(0 100% 50)').color, red);
-  assert.deepEqual(parseColorAlpha('hsl(0 100. 50.)').color, red);
+  assert.deepEqual(parseColorAlpha('hsl(0 100.0 50.0)').color, red);
   assert.deepEqual(parseColorAlpha('hsl(0deg 100 50 / 40%)').color, red);
   assert.deepEqual(parseColorAlpha('hsl(0, 100%, 50%)').color, red);
-  for (const input of ['hsl(0, 100, 50)', 'hsl(0, 100%, 50)', 'hsla(0, 100, 50%, 0.5)']) {
+  for (const input of [
+    'hsl(0 100. 50.)',
+    'hsl(0, 100, 50)',
+    'hsl(0, 100%, 50)',
+    'hsla(0, 100, 50%, 0.5)',
+  ]) {
     assert.equal(parseColorAlpha(input), null, input);
   }
+});
+
+test('an angle unit is valid on a hue only', () => {
+  assert.notEqual(parseColorAlpha('hsl(0deg 100% 50%)'), null);
+  assert.notEqual(parseColorAlpha('oklch(0.5 0.1 200deg)'), null);
+  for (const input of [
+    'hsl(0 100deg 50deg)',
+    'hsl(0 100% 50deg)',
+    'hsl(0 100% 50% / 1deg)',
+    'rgb(1deg 2 3)',
+    'oklch(0.5deg 0.1 200)',
+    'oklch(0.5 0.1deg 200)',
+    'oklch(0.5 0.1 200 / 1deg)',
+  ]) {
+    assert.equal(parseColorAlpha(input), null, input);
+  }
+});
+
+test('a channel may use exponent notation', () => {
+  assert.deepEqual(parseColorAlpha('rgb(1e2 0 0)'), parseColorAlpha('rgb(100 0 0)'));
+  assert.deepEqual(parseColorAlpha('rgb(1E2, 0, 0)'), parseColorAlpha('rgb(100, 0, 0)'));
+  assert.deepEqual(parseColorAlpha('rgb(10e-1 0 0 / 5e-1)'), parseColorAlpha('rgb(1 0 0 / 0.5)'));
+  assert.deepEqual(parseColorAlpha('hsl(0 1e2 5e1)'), parseColorAlpha('hsl(0 100% 50%)'));
 });
 
 test('rgb() reads percentages on the 0 to 255 scale', () => {
