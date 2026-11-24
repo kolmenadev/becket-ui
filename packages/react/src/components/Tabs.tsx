@@ -5,6 +5,7 @@ import {
   forwardRef,
   useContext,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -49,10 +50,14 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
     const styles = tabsRecipe();
 
     const onValueChangeRef = useRef(onValueChange);
-    // Assigned during render on purpose: the next event must see this render's callback.
-    onValueChangeRef.current = onValueChange;
     const isControlledRef = useRef(isControlled);
-    isControlledRef.current = isControlled;
+    // Synced at commit, not during render: React can discard a render, and a write from it would
+    // leave the refs on props the committed UI never showed. Layout effects run before the next event.
+    // style-check keep: syncs refs read by event handlers with the committed props; not derived state.
+    useLayoutEffect(() => {
+      onValueChangeRef.current = onValueChange;
+      isControlledRef.current = isControlled;
+    });
 
     return (
       <TabsContext.Provider
