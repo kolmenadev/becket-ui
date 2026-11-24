@@ -82,12 +82,11 @@ export function parseColorAlpha(input) {
   const hex = value.match(/^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i);
   if (hex) {
     // #abcd → #aabbccdd; the pairs are r, g, b and an optional alpha.
-    const [r, g, b, alpha = 255] = (
-      hex[1].length <= 4 ? [...hex[1]].map((digit) => digit + digit).join('') : hex[1]
-    )
+    // style-check keep: read twice (color and alpha); inlining would run the regex and parse again.
+    const pairs = (hex[1].length <= 4 ? [...hex[1]].map((digit) => digit + digit).join('') : hex[1])
       .match(/../g)
       .map((pair) => Number.parseInt(pair, 16));
-    return { color: rgbToOklch([r, g, b]), alpha: alpha / 255 };
+    return { color: rgbToOklch(pairs.slice(0, 3)), alpha: (pairs[3] ?? 255) / 255 };
   }
 
   // No `\s*` after the `(`: next to `[^)]*` it backtracks quadratically on a long run of spaces
@@ -147,8 +146,14 @@ export function parseColorAlpha(input) {
     const offset = lightness - chroma / 2;
     return { color: linearToOklch([r + offset, g + offset, b + offset].map(toLinear)), alpha };
   }
-  const [L, C, h] = [number(parts[0]), number(parts[1], 0.4), number(parts[2])];
-  return { color: { L: clamp01(L), C: Math.max(0, C), h: ((h % 360) + 360) % 360 }, alpha };
+  return {
+    color: {
+      L: clamp01(number(parts[0])),
+      C: Math.max(0, number(parts[1], 0.4)),
+      h: ((number(parts[2]) % 360) + 360) % 360,
+    },
+    alpha,
+  };
 }
 
 /**
