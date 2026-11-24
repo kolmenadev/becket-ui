@@ -22,6 +22,7 @@ const run = spawnSync(
   { encoding: 'utf8' },
 );
 assert.equal(run.status, 0, run.stderr);
+const { becketPreset } = await import('@becket-ui/tokens/preset');
 const manifest = JSON.parse(readFileSync(join(scratch, 'manifest.json'), 'utf8'));
 
 // Fixtures write to their own paths, so a gate that lets one through can't overwrite the files the
@@ -187,4 +188,37 @@ test('a primaryHover that drifts from linkHover.base fails the self-test', () =>
   });
   assert.equal(fixture.status, 1);
   assert.match(fixture.stderr, /self-test failed: primaryHover resolves to/);
+});
+
+test('an artifact name over 64 characters exits 1 and names the token', () => {
+  const key = 'a'.repeat(64);
+  const { tokens } = becketPreset.theme.extend;
+  const fixture = exportFixture({
+    ...becketPreset.theme.extend,
+    tokens: { ...tokens, spacing: { ...tokens.spacing, [key]: { value: '1px' } } },
+  });
+  assert.equal(fixture.status, 1);
+  assert.match(fixture.stderr, new RegExp(`spacing\\.${key}: artifact name "space-${key}" is not`));
+});
+
+test('a color whose value differs by theme keeps both values in the artifact list', () => {
+  const { tokens } = becketPreset.theme.extend;
+  const fixture = exportFixture({
+    ...becketPreset.theme.extend,
+    tokens: {
+      ...tokens,
+      colors: {
+        ...tokens.colors,
+        neutral: {
+          ...tokens.colors.neutral,
+          fade: { value: 'color-mix(in oklch, {colors.background} 88%, white)' },
+        },
+      },
+    },
+  });
+  assert.equal(fixture.status, 0, fixture.stderr);
+  const { value } = JSON.parse(
+    readFileSync(join(scratch, 'fixture-tokens.json'), 'utf8'),
+  ).color.tokens.find((token) => token.name === 'neutral-fade');
+  assert.ok(value.dark && value.light && value.dark !== value.light, JSON.stringify(value));
 });

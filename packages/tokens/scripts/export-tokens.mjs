@@ -126,6 +126,10 @@ for (const [path, leaf] of leaves) {
         breakpoints: 'breakpoint-',
       }[leaf.segments[0]];
   const artifact = prefix === undefined ? null : `${prefix}${leaf.segments.slice(1).join('-')}`;
+  // The artifact accepts names of at most 64 characters from this set; a family prefix can push a
+  // long key over.
+  if (artifact && !/^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/.test(artifact))
+    fail(`${path}: artifact name "${artifact}" is not 1 to 64 letters, digits, "_", "." or "-"`);
   if (artifact && artifactOwners.has(artifact))
     fail(`duplicate artifact name "${artifact}": ${artifactOwners.get(artifact)} and ${path}`);
   if (artifact) artifactOwners.set(artifact, path);
@@ -261,7 +265,9 @@ for (const entry of entries.values()) {
       fail(`${entry.panda} has no usage line for the artifact list; add it to colorUsage`);
     list.color.tokens.push({
       name: entry.artifact,
-      value: typeof entry.source === 'object' ? { dark, light } : dark,
+      // Chosen from the values written, not from how the source spells them: a color-mix of a themed
+      // color differs by theme too. An alias of a themed color maps to the same reference in both.
+      value: dark === light ? dark : { dark, light },
       usage: `CSS: \`var(${entry.css})\`. ${usage}`,
     });
     continue;
