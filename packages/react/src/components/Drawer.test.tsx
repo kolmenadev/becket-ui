@@ -3,7 +3,8 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { assertNoAxeViolations } from '@becket-ui/a11y';
 
 import { Button } from './Button';
-import { Drawer } from './Drawer';
+import { CloseIcon } from './Glyphs';
+import { Drawer, DrawerClose, DrawerHeader, DrawerTitle } from './Drawer';
 
 function FiltersDrawer({
   onOpenChange = () => {},
@@ -51,6 +52,48 @@ describe('Drawer', () => {
     render(<FiltersDrawer role="alertdialog" onOpenChange={onOpenChange} />);
     fireEvent.click(screen.getByRole('alertdialog', { name: 'Filters' }));
     expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it('names the default close button Close', () => {
+    render(
+      <Drawer open aria-label="T">
+        <DrawerClose />
+      </Drawer>,
+    );
+    expect(screen.getByRole('button', { name: 'Close' })).toBeTruthy();
+  });
+
+  it('names a close button from its visible text, not Close', () => {
+    render(
+      <Drawer open>
+        <DrawerHeader>
+          <DrawerTitle>T</DrawerTitle>
+        </DrawerHeader>
+        <DrawerClose>Cancel</DrawerClose>
+      </Drawer>,
+    );
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Close' })).toBeNull();
+  });
+
+  it('names an icon-only close button from an explicit aria-label', () => {
+    render(
+      <Drawer open aria-label="T">
+        <DrawerClose aria-label="Close">
+          <CloseIcon />
+        </DrawerClose>
+      </Drawer>,
+    );
+    expect(screen.getByRole('button', { name: 'Close' })).toBeTruthy();
+  });
+
+  it('lets an explicit aria-label name the close button', () => {
+    render(
+      <Drawer open aria-label="T">
+        <DrawerClose aria-label="Dismiss">x</DrawerClose>
+      </Drawer>,
+    );
+    expect(screen.getByRole('button', { name: 'Dismiss' })).toBeTruthy();
   });
 
   it('has no axe violations when open', async () => {

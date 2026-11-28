@@ -1,8 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Button } from './Button';
+import { CloseIcon } from './Glyphs';
 import { Text } from './Text';
-import { Dialog, type DialogProps } from './Dialog';
+import {
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  type DialogProps,
+} from './Dialog';
 
 const meta: Meta<typeof Dialog> = {
   title: 'Overlays/Dialog',
@@ -116,4 +125,23 @@ export const Open: Story = {
       </>
     );
   },
+};
+
+export const CloseNaming: Story = {
+  render: () => (
+    <Dialog defaultOpen>
+      <DialogHeader>
+        <DialogTitle>Discard draft?</DialogTitle>
+        <DialogClose aria-label="Close">
+          <CloseIcon />
+        </DialogClose>
+      </DialogHeader>
+      <DialogBody>
+        <Text>Visible text names the button. An icon needs an aria-label.</Text>
+      </DialogBody>
+      <DialogFooter>
+        <DialogClose>Cancel</DialogClose>
+      </DialogFooter>
+    </Dialog>
+  ),
 };
