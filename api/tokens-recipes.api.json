@@ -251,6 +251,9 @@
   "figure": {
     "defaultVariants": {}
   },
+  "fileUpload": {
+    "defaultVariants": {}
+  },
   "heading": {
     "defaultVariants": {
       "size": "xl",

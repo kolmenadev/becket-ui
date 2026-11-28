@@ -561,6 +561,59 @@ export type FigureProps = ComponentPropsWithoutRef<'figure'> & {
 };
 
 // @public (undocumented)
+export type FileRejection = {
+    file: File;
+    errors: FileUploadErrorCode[];
+};
+
+// @public
+export const FileUpload: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">, "accept" | "children" | "defaultValue" | "multiple" | "onChange" | "size" | "type" | "value"> & {
+label?: ReactNode;
+helperText?: ReactNode;
+invalid?: boolean;
+fullWidth?: boolean;
+accept?: string;
+maxSize?: number;
+maxFiles?: number;
+multiple?: boolean;
+files?: File[];
+defaultFiles?: File[];
+onFilesChange?: (files: File[]) => void;
+onFilesReject?: (rejections: FileRejection[]) => void;
+buttonLabel?: ReactNode;
+dropLabel?: ReactNode;
+listLabel?: string;
+removeLabel?: (file: File) => string;
+formatError?: (code: FileUploadErrorCode, file: File) => string;
+formatSize?: (bytes: number) => string;
+} & RefAttributes<HTMLInputElement>>;
+
+// @public (undocumented)
+export type FileUploadErrorCode = 'file-too-large' | 'file-invalid-type' | 'too-many-files';
+
+// @public (undocumented)
+export type FileUploadProps = Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'accept' | 'multiple'> & {
+    label?: ReactNode;
+    helperText?: ReactNode;
+    invalid?: boolean;
+    fullWidth?: boolean;
+    accept?: string;
+    maxSize?: number;
+    maxFiles?: number;
+    multiple?: boolean;
+    files?: File[];
+    defaultFiles?: File[];
+    onFilesChange?: (files: File[]) => void;
+    onFilesReject?: (rejections: FileRejection[]) => void;
+    buttonLabel?: ReactNode;
+    dropLabel?: ReactNode;
+    listLabel?: string;
+    removeLabel?: (file: File) => string;
+    formatError?: (code: FileUploadErrorCode, file: File) => string;
+    formatSize?: (bytes: number) => string;
+};
+
+// @public (undocumented)
 export const Flex: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
 direction?: FlexOptions['direction'];
 gap?: GapValue;
@@ -1193,6 +1246,9 @@ export type TooltipProps = {
 
 // @public (undocumented)
 export const Tr: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLTableRowElement>, HTMLTableRowElement>, "ref"> & RefAttributes<HTMLTableRowElement>>;
+
+// @public (undocumented)
+export const UploadIcon: ForwardRefExoticComponent<GlyphProps & RefAttributes<HTMLSpanElement>>;
 
 // @public (undocumented)
 export function useField(): FieldContextValue;

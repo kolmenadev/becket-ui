@@ -2596,6 +2596,170 @@
       color: var(--beckui--colors-muted);
       font-size: var(--beckui--font-sizes-sm);
     }
+    .beckui--fileUpload__dropzone {
+      padding: var(--beckui--spacing-lg);
+      gap: var(--beckui--spacing-sm);
+      border-width: 1px;
+      border-style: dashed;
+      border-color: var(--beckui--colors-neutral-500);
+      border-radius: var(--beckui--radii-md);
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      background-color: var(--beckui--colors-surface);
+      color: var(--beckui--colors-muted);
+      font-family: var(--beckui--fonts-sans);
+      font-size: var(--beckui--font-sizes-sm);
+      text-align: center;
+      width: 100%;
+    }
+    .beckui--fileUpload__dropzone[data-disabled] {
+      opacity: 0.6;
+    }
+    .beckui--fileUpload__dropzone[data-dragging] {
+      border-style: solid;
+      border-color: var(--beckui--colors-primary);
+      background-color: var(--beckui--colors-neutral-700);
+      color: var(--beckui--colors-text);
+    }
+    [data-theme='light'] .beckui--fileUpload__dropzone[data-dragging] {
+      border-color: var(--beckui--colors-primary);
+      background-color: var(--beckui--colors-neutral-100);
+    }
+    .beckui--fileUpload__dropzone[data-invalid], [data-theme='light'] .beckui--fileUpload__dropzone[data-invalid] {
+      border-color: var(--beckui--colors-danger);
+    }
+    [data-theme='light'] .beckui--fileUpload__dropzone {
+      border-color: var(--beckui--colors-neutral-400);
+    }
+    .beckui--fileUpload__input {
+      padding: var(--beckui--spacing-0);
+      margin: -1px;
+      overflow: hidden;
+      border-width: 0;
+      position: absolute;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      width: 1px;
+      height: 1px;
+    }
+    .beckui--fileUpload__trigger {
+      padding-inline: var(--beckui-button-px-sm);
+      padding-block: var(--beckui-button-py-sm);
+      gap: var(--beckui--spacing-xs);
+      border-width: 2px;
+      border-style: solid;
+      border-color: var(--beckui--colors-accent);
+      border-radius: var(--beckui--radii-md);
+      display: inline-flex;
+      align-items: center;
+      color: var(--beckui--colors-accent);
+      font-weight: var(--beckui--font-weights-bold);
+      font-size: var(--beckui--font-sizes-sm);
+      cursor: pointer;
+    }
+    [data-theme='light'] .beckui--fileUpload__trigger:is(:hover, [data-hover]) {
+      background-color: var(--beckui--colors-neutral-100);
+    }
+    input:disabled + .beckui--fileUpload__trigger {
+      cursor: not-allowed;
+    }
+    input:disabled + .beckui--fileUpload__trigger:is(:hover, [data-hover]) {
+      background-color: var(--beckui--colors-transparent);
+    }
+    input:focus-visible + .beckui--fileUpload__trigger {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      box-shadow: var(--beckui--shadows-outline);
+    }
+    .beckui--fileUpload__trigger:is(:hover, [data-hover]) {
+      background-color: var(--beckui--colors-neutral-800);
+    }
+    .beckui--fileUpload__hint {
+      font-size: var(--beckui--font-sizes-xs);
+      color: var(--beckui--colors-muted);
+    }
+    .beckui--fileUpload__files {
+      margin: var(--beckui--spacing-0);
+      padding: var(--beckui--spacing-0);
+      gap: var(--beckui--spacing-xs);
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .beckui--fileUpload__file {
+      padding-inline: var(--beckui--spacing-3);
+      padding-block: var(--beckui--spacing-1);
+      gap: var(--beckui--spacing-sm);
+      border-width: 1px;
+      border-style: solid;
+      border-color: var(--beckui--colors-neutral-700);
+      border-radius: var(--beckui--radii-md);
+      display: flex;
+      align-items: center;
+      background-color: var(--beckui--colors-surface);
+      color: var(--beckui--colors-text);
+      font-family: var(--beckui--fonts-sans);
+      font-size: var(--beckui--font-sizes-sm);
+    }
+    [data-theme='light'] .beckui--fileUpload__file {
+      border-color: var(--beckui--colors-border);
+    }
+    .beckui--fileUpload__fileName {
+      flex: 1 1 0%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: var(--beckui--font-weights-medium);
+      min-width: var(--beckui--sizes-0);
+    }
+    .beckui--fileUpload__fileSize {
+      flex-shrink: 0;
+      font-size: var(--beckui--font-sizes-xs);
+      color: var(--beckui--colors-muted);
+    }
+    .beckui--fileUpload__remove {
+      border: var(--beckui--borders-none);
+      background: var(--beckui--colors-transparent);
+      padding: var(--beckui--spacing-1);
+      border-radius: var(--beckui--radii-sm);
+      -webkit-appearance: none;
+      appearance: none;
+      flex-shrink: 0;
+      color: var(--beckui--colors-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      min-height: 24px;
+    }
+    .beckui--fileUpload__remove:is(:disabled, [disabled], [data-disabled], [aria-disabled=true]) {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .beckui--fileUpload__remove:is(:hover, [data-hover]) {
+      color: var(--beckui--colors-text);
+    }
+    .beckui--fileUpload__remove:is(:focus-visible, [data-focus-visible]) {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      box-shadow: var(--beckui--shadows-outline);
+    }
+    .beckui--fileUpload__errors {
+      margin: var(--beckui--spacing-0);
+      padding: var(--beckui--spacing-0);
+      gap: var(--beckui--spacing-xs);
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--beckui--fonts-sans);
+      font-size: var(--beckui--font-sizes-xs);
+      color: var(--beckui--colors-danger);
+    }
     .beckui--menu__root {
       display: inline-block;
       position: relative;

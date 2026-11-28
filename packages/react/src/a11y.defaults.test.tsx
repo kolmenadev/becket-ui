@@ -8,6 +8,7 @@ import { Checkbox } from './components/Checkbox';
 import { Combobox } from './components/Combobox';
 import { Dialog } from './components/Dialog';
 import { Drawer } from './components/Drawer';
+import { FileUpload } from './components/FileUpload';
 import { Field, FieldControl, FieldHelper, FieldLabel } from './components/Field';
 import { Icon } from './components/Icon';
 import { Menu, MenuItem } from './components/Menu';
@@ -152,6 +153,12 @@ describe('Default primitive axe gate', () => {
           options={[{ value: 'is', label: 'Iceland' }]}
         />,
       ).container,
+    );
+  });
+
+  it('FileUpload', async () => {
+    await assertNoAxeViolations(
+      render(<FileUpload label="Document" helperText="Optional helper text" />).container,
     );
   });
 

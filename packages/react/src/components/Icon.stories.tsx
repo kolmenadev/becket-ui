@@ -14,6 +14,7 @@ import {
   MoonIcon,
   SearchIcon,
   SunIcon,
+  UploadIcon,
   WarningIcon,
 } from './Glyphs';
 import { Icon, type IconProps } from './Icon';
@@ -64,6 +65,7 @@ const GLYPHS = [
   ['InfoIcon', InfoIcon],
   ['WarningIcon', WarningIcon],
   ['ErrorIcon', ErrorIcon],
+  ['UploadIcon', UploadIcon],
 ] as const;
 
 export const Glyphs: Story = {

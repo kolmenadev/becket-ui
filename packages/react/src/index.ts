@@ -27,6 +27,8 @@ export type { RadioProps, RadioGroupProps } from './components/Radio';
 export { Select } from './components/Select';
 export { Combobox } from './components/Combobox';
 export type { ComboboxOption, ComboboxProps } from './components/Combobox';
+export { FileUpload } from './components/FileUpload';
+export type { FileRejection, FileUploadErrorCode, FileUploadProps } from './components/FileUpload';
 export { Textarea } from './components/Textarea';
 export {
   Card,
@@ -101,6 +103,7 @@ export {
   MoonIcon,
   SearchIcon,
   SunIcon,
+  UploadIcon,
   WarningIcon,
 } from './components/Glyphs';
 export type { GlyphProps } from './components/Glyphs';
