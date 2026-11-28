@@ -457,8 +457,6 @@
     --beckui--colors-tertiary: var(--beckui--colors-brand-comb-amber);
     --beckui--colors-primary-hover: color-mix(in oklch, var(--beckui--colors-primary) 88%, white);
     --beckui--colors-border: var(--beckui--colors-neutral-200);
-    --beckui--colors-warning: oklch(0.72 0.16 42);
-    --beckui--colors-success: oklch(0.68 0.14 165);
     --beckui--colors-light-background: var(--beckui--colors-neutral-50);
     --beckui--colors-light-text: var(--beckui--colors-neutral-900);
     --beckui--fonts-sans: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
@@ -690,6 +688,9 @@
     --beckui--colors-muted: var(--beckui--colors-neutral-300);
     --beckui--colors-surface: var(--beckui--colors-neutral-800);
     --beckui--colors-danger: oklch(0.76 0.16 25);
+    --beckui--colors-warning: oklch(0.72 0.16 42);
+    --beckui--colors-success: oklch(0.68 0.14 165);
+    --beckui--colors-info: oklch(0.72 0.12 250);
     --beckui--colors-accent: oklch(0.86 0.12 125);
     --beckui--colors-link: var(--beckui--colors-primary);
     --beckui--colors-link-hover: oklch(0.78 0.13 78);
@@ -701,6 +702,9 @@
     --beckui--colors-muted: oklch(0.53 0.014 62);
     --beckui--colors-surface: var(--beckui--colors-white);
     --beckui--colors-danger: oklch(0.48 0.20 25);
+    --beckui--colors-warning: oklch(0.52 0.14 42);
+    --beckui--colors-success: oklch(0.50 0.12 165);
+    --beckui--colors-info: oklch(0.50 0.13 250);
     --beckui--colors-accent: oklch(0.38 0.14 125);
     --beckui--colors-link: oklch(0.54 0.12 70);
     --beckui--colors-link-hover: oklch(0.46 0.11 70);
@@ -3303,6 +3307,9 @@
   .beckui--grid-c_span_full {
     grid-column: span full;
   }
+  .beckui--td_underline {
+    text-decoration: underline;
+  }
   .beckui--ai_baseline {
     align-items: baseline;
   }
@@ -3340,8 +3347,13 @@
   .beckui--c_neutral\.50 {
     color: var(--beckui--colors-neutral-50);
   }
+  .beckui--content_ {
+  }
   .beckui--content_Hint {
     content: Hint;
+  }
+  .beckui--content_Info {
+    content: Info;
   }
   .beckui--content_Short_glossary_hint\. {
     content: Short glossary hint.;
@@ -3402,6 +3414,9 @@
   }
   .beckui--fs_xs {
     font-size: var(--beckui--font-sizes-xs);
+  }
+  .beckui--fw_bold {
+    font-weight: var(--beckui--font-weights-bold);
   }
   .beckui--grid-tc_repeat\(1\,_minmax\(0\,_1fr\)\) {
     grid-template-columns: repeat(1, minmax(0, 1fr));

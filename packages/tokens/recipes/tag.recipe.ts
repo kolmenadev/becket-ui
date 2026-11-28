@@ -30,6 +30,10 @@ export const tag: ReturnType<typeof defineRecipe> = defineRecipe({
       secondary: {},
       neutral: {},
       outline: {},
+      success: {},
+      warning: {},
+      danger: {},
+      info: {},
     },
     borderRadius: {
       none: { borderRadius: 'none' },

@@ -93,7 +93,7 @@ function parseTheme(css) {
       : multiply(value.replace(/var\((--beckui--[\w-]+)\)/g, (whole, name) => (table[name] ? resolve(table, table[name], depth + 1) : whole)));
 
   const groups = {
-    colors: ['background', 'text', 'muted', 'surface', 'border', 'primary', 'secondary', 'tertiary', 'accent', 'danger', 'warning', 'success', 'link', 'link-hover', 'link-visited'],
+    colors: ['background', 'text', 'muted', 'surface', 'border', 'primary', 'secondary', 'tertiary', 'accent', 'danger', 'warning', 'success', 'info', 'link', 'link-hover', 'link-visited'],
     spacing: ['unit', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '0', '1', '2', '3', '5', '8', '13', '21', '34', 'text-unit', 'text-1', 'text-2', 'text-3', 'text-5', 'text-8', 'text-13'],
     radii: ['none', 'sm', 'md', 'lg', 'xl', 'full'],
     sizes: ['5', '8', '13', '21', '34', '55', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', 'prose', 'field'],

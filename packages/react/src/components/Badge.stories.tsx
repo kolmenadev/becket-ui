@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { HStack, Stack } from './Stack';
+import { Box } from './Box';
+import { HStack, Stack, VStack } from './Stack';
+import { Text } from './Text';
 import { Badge, type BadgeProps } from './Badge';
 import { badge as badgeRecipe } from '@becket-ui/tokens/recipes';
 
@@ -52,6 +54,51 @@ export const Visuals: Story = {
       <Badge visual="secondary">Secondary</Badge>
       <Badge visual="neutral">Neutral</Badge>
       <Badge visual="outline">Outline</Badge>
+      <Badge visual="success">Success</Badge>
+      <Badge visual="warning">Warning</Badge>
+      <Badge visual="danger">Danger</Badge>
+      <Badge visual="info">Info</Badge>
+    </HStack>
+  ),
+};
+
+export const Status: Story = {
+  render: () => (
+    <HStack gap="sm" align="center" style={{ flexWrap: 'wrap' }}>
+      <Badge visual="success">Paid</Badge>
+      <Badge visual="warning">Pending</Badge>
+      <Badge visual="danger">Failed</Badge>
+      <Badge visual="info">Draft</Badge>
+    </HStack>
+  ),
+};
+
+// The second panel sets data-theme="light" on itself, so a dark page shows both themes at once.
+export const StatusBothThemes: Story = {
+  render: () => (
+    <HStack gap="md" align="stretch" style={{ flexWrap: 'wrap' }}>
+      {['Page theme', 'Light theme'].map((name) => (
+        <Box
+          key={name}
+          data-theme={name === 'Light theme' ? 'light' : undefined}
+          background="background"
+          padding="md"
+          radius="md"
+        >
+          <VStack gap="sm">
+            <Text fontSize="xs" color="muted">
+              {name}
+            </Text>
+            <HStack gap="sm" align="center">
+              {badgeRecipe.variantMap.visual.map((visual) => (
+                <Badge key={visual} visual={visual}>
+                  {visual}
+                </Badge>
+              ))}
+            </HStack>
+          </VStack>
+        </Box>
+      ))}
     </HStack>
   ),
 };

@@ -62,8 +62,6 @@ them through a layout component's `as` prop when they also lay things out:
 ticket):
 
 - Font weight on `Text`: no `weight` prop yet (MAV-106). Use `Text as="strong"` for bold.
-- Status colors on `Badge` and `Tag`: no `success` / `warning` / `danger` visuals yet (MAV-107).
-  Don't use a brand visual (`primary`, `secondary`) to mean a status.
 
 ## 3. Prefer props, then tokens. Never classes, never literals
 
@@ -85,7 +83,8 @@ language: `gap`, `align`, `justify`, `visual`, `size`, `invalid`, `columns`.
 - **Avoid** named styled wrappers, CSS files per screen, or style objects defined away from the
   element. A reader shouldn't have to look anything up to see how an element looks.
 - **Colors carry meaning:** `primary` (yellow), `secondary` (sage) and `tertiary` (amber) are brand
-  identity; `danger`, `warning` and `success` are status only.
+  identity; `danger`, `warning`, `success` and `info` are status only. For a status chip use
+  `Badge` or `Tag` with `visual="success|warning|danger|info"`, never a brand visual.
 
 ## 4. Avoid hasty abstraction: inline first, extract on the third copy
 

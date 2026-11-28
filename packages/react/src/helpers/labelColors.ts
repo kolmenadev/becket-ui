@@ -15,7 +15,16 @@ export type LabelCustomColors = {
   gradient?: string;
 };
 
-export type LabelVisual = 'primary' | 'secondary' | 'neutral' | 'outline';
+/** `success`, `warning`, `danger` and `info` are status: they never use a brand color. */
+export type LabelVisual =
+  | 'primary'
+  | 'secondary'
+  | 'neutral'
+  | 'outline'
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'info';
 
 const VISUAL_DEFAULTS: Record<LabelVisual, LabelCustomColors> = {
   primary: {
@@ -38,6 +47,28 @@ const VISUAL_DEFAULTS: Record<LabelVisual, LabelCustomColors> = {
     color: 'var(--beckui--colors-accent)',
     border: 'var(--beckui--colors-accent)',
   },
+  // Status fills flip with the theme, so the ink is the canvas color: the pair is the same one
+  // contrast.test.mjs checks for status text on background (4.5:1 in dark and light).
+  success: {
+    background: 'var(--beckui--colors-success)',
+    color: 'var(--beckui--colors-background)',
+    border: 'transparent',
+  },
+  warning: {
+    background: 'var(--beckui--colors-warning)',
+    color: 'var(--beckui--colors-background)',
+    border: 'transparent',
+  },
+  danger: {
+    background: 'var(--beckui--colors-danger)',
+    color: 'var(--beckui--colors-background)',
+    border: 'transparent',
+  },
+  info: {
+    background: 'var(--beckui--colors-info)',
+    color: 'var(--beckui--colors-background)',
+    border: 'transparent',
+  },
 };
 
 const GRADIENT_DEFAULTS: Record<LabelVisual, string> = {
@@ -45,6 +76,11 @@ const GRADIENT_DEFAULTS: Record<LabelVisual, string> = {
   secondary: 'var(--beckui--gradients-secondary)',
   neutral: 'var(--beckui--gradients-neutral)',
   outline: 'var(--beckui--gradients-primary)',
+  // Brand gradients would read as brand, so a status chip stays one flat status color.
+  success: 'linear-gradient(var(--beckui--colors-success), var(--beckui--colors-success))',
+  warning: 'linear-gradient(var(--beckui--colors-warning), var(--beckui--colors-warning))',
+  danger: 'linear-gradient(var(--beckui--colors-danger), var(--beckui--colors-danger))',
+  info: 'linear-gradient(var(--beckui--colors-info), var(--beckui--colors-info))',
 };
 
 export function resolveLabelColorVars(

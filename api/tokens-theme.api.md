@@ -28,6 +28,7 @@ export type BecketColorToken =
 | 'linkVisited'
 | 'warning'
 | 'success'
+| 'info'
 | 'white'
 | `neutral.${'50' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'}`;
 
@@ -93,8 +94,9 @@ export type BecketThemeColors = {
     linkVisited?: BecketColorValue;
     lightBackground?: string;
     lightText?: string;
-    warning?: string;
-    success?: string;
+    warning?: BecketColorValue;
+    success?: BecketColorValue;
+    info?: BecketColorValue;
     neutral?: Partial<
     Record<'50' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900', string>
     >;

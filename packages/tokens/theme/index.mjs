@@ -11,8 +11,6 @@ const COLOR_FLAT = [
   'primaryHover',
   'lightBackground',
   'lightText',
-  'warning',
-  'success',
 ];
 
 const COLOR_THEMED = [
@@ -21,6 +19,9 @@ const COLOR_THEMED = [
   'muted',
   'border',
   'danger',
+  'warning',
+  'success',
+  'info',
   'accent',
   'surface',
   'link',

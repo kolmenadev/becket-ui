@@ -132,7 +132,7 @@ in the guide, because the guide wins over this summary. Rules marked ⚙ are als
   repeated page background or text color on wrappers.
 - **Must use a Becket component** ⚙ for every row of the guide's table. Raw `form`, `main`, `nav` and
   `section` are fine, through `as` when they also lay things out.
-- **Known gaps** (MAV-106 weight, MAV-107 status visuals). An inline `style` uses tokens and has a
+- **Known gaps** (MAV-106 weight). An inline `style` uses tokens and has a
   `TODO (MAV-…)` ⚙.
 - **Props, then tokens** ⚙.
   - Semantic gaps or Fibonacci steps, never Panda's in-between keys.

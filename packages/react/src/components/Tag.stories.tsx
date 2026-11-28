@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { tag as tagRecipe } from '@becket-ui/tokens/recipes';
 import { defineBecketTheme } from '@becket-ui/tokens/theme';
-import { HStack, Stack } from './Stack';
+import { Box } from './Box';
+import { HStack, Stack, VStack } from './Stack';
+import { Text } from './Text';
 import { Tag, type TagProps } from './Tag';
 
 const tagDensityCss = defineBecketTheme({
@@ -57,6 +59,51 @@ export const Visuals: Story = {
       <Tag visual="secondary">Secondary</Tag>
       <Tag visual="neutral">Neutral</Tag>
       <Tag visual="outline">Outline</Tag>
+      <Tag visual="success">Success</Tag>
+      <Tag visual="warning">Warning</Tag>
+      <Tag visual="danger">Danger</Tag>
+      <Tag visual="info">Info</Tag>
+    </HStack>
+  ),
+};
+
+export const Status: Story = {
+  render: () => (
+    <HStack gap="sm" align="center" style={{ flexWrap: 'wrap' }}>
+      <Tag visual="success">Paid</Tag>
+      <Tag visual="warning">Pending</Tag>
+      <Tag visual="danger">Failed</Tag>
+      <Tag visual="info">Draft</Tag>
+    </HStack>
+  ),
+};
+
+// The second panel sets data-theme="light" on itself, so a dark page shows both themes at once.
+export const StatusBothThemes: Story = {
+  render: () => (
+    <HStack gap="md" align="stretch" style={{ flexWrap: 'wrap' }}>
+      {['Page theme', 'Light theme'].map((name) => (
+        <Box
+          key={name}
+          data-theme={name === 'Light theme' ? 'light' : undefined}
+          background="background"
+          padding="md"
+          radius="md"
+        >
+          <VStack gap="sm">
+            <Text fontSize="xs" color="muted">
+              {name}
+            </Text>
+            <HStack gap="sm" align="center">
+              {tagRecipe.variantMap.visual.map((visual) => (
+                <Tag key={visual} visual={visual}>
+                  {visual}
+                </Tag>
+              ))}
+            </HStack>
+          </VStack>
+        </Box>
+      ))}
     </HStack>
   ),
 };

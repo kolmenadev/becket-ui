@@ -49,10 +49,14 @@
       "sm"
     ],
     "visual": [
+      "danger",
+      "info",
       "neutral",
       "outline",
       "primary",
-      "secondary"
+      "secondary",
+      "success",
+      "warning"
     ],
     "withGradient": [
       "false",
@@ -472,10 +476,14 @@
       "sm"
     ],
     "visual": [
+      "danger",
+      "info",
       "neutral",
       "outline",
       "primary",
-      "secondary"
+      "secondary",
+      "success",
+      "warning"
     ],
     "withGradient": [
       "false",

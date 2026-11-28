@@ -20,8 +20,10 @@ export type BecketThemeColors = {
   lightBackground?: string;
   /** @deprecated Prefer `text: { light }`. Removed in 1.0. */
   lightText?: string;
-  warning?: string;
-  success?: string;
+  warning?: BecketColorValue;
+  success?: BecketColorValue;
+  /** Neutral notices (Alert, Toast, Badge and Tag `info`). */
+  info?: BecketColorValue;
   neutral?: Partial<
     Record<'50' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900', string>
   >;
@@ -98,6 +100,7 @@ export type BecketColorToken =
   | 'linkVisited'
   | 'warning'
   | 'success'
+  | 'info'
   | 'white'
   | `neutral.${'50' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'}`;
 

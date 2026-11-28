@@ -123,6 +123,7 @@
 --beckui--colors-indigo-800
 --beckui--colors-indigo-900
 --beckui--colors-indigo-950
+--beckui--colors-info
 --beckui--colors-light-background
 --beckui--colors-light-text
 --beckui--colors-lime-100

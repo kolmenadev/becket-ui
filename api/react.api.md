@@ -85,6 +85,16 @@ as?: ElementType;
 type BadgeBorderRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
 // @public (undocumented)
+export type BadgeProps = ComponentPropsWithoutRef<'span'> & {
+    size?: BadgeSize;
+    visual?: LabelVisual;
+    borderRadius?: BadgeBorderRadius;
+    withGradient?: boolean;
+    customColors?: LabelCustomColors;
+    as?: ElementType;
+};
+
+// @public (undocumented)
 type BadgeSize = 'sm' | 'md' | 'lg';
 
 // @public
@@ -599,8 +609,8 @@ export type LabelCustomColors = {
     gradient?: string;
 };
 
-// @public (undocumented)
-export type LabelVisual = 'primary' | 'secondary' | 'neutral' | 'outline';
+// @public
+export type LabelVisual = 'primary' | 'secondary' | 'neutral' | 'outline' | 'success' | 'warning' | 'danger' | 'info';
 
 // @public (undocumented)
 export const Link: ForwardRefExoticComponent<Omit<DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>, "ref"> & {
@@ -984,6 +994,16 @@ as?: ElementType;
 
 // @public (undocumented)
 type TagBorderRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+
+// @public (undocumented)
+export type TagProps = ComponentPropsWithoutRef<'span'> & {
+    size?: TagSize;
+    visual?: LabelVisual;
+    borderRadius?: TagBorderRadius;
+    withGradient?: boolean;
+    customColors?: LabelCustomColors;
+    as?: ElementType;
+};
 
 // @public (undocumented)
 type TagSize = 'sm' | 'md' | 'lg';

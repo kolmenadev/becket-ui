@@ -35,6 +35,7 @@ export const defaultColors = {
     linkVisited: 'oklch(0.72 0.12 125)',
     warning: 'oklch(0.72 0.16 42)',
     success: 'oklch(0.68 0.14 165)',
+    info: 'oklch(0.72 0.12 250)',
   },
   /** Only what `[data-theme='light']` changes; the rest is inherited from dark. */
   light: {
@@ -47,6 +48,9 @@ export const defaultColors = {
     link: 'oklch(0.54 0.12 70)',
     linkHover: 'oklch(0.46 0.11 70)',
     linkVisited: 'oklch(0.52 0.09 125)',
+    warning: 'oklch(0.52 0.14 42)',
+    success: 'oklch(0.50 0.12 165)',
+    info: 'oklch(0.50 0.13 250)',
   },
 };
 
@@ -69,6 +73,30 @@ export const contrastPairs = [
         use: `${foreground} text on ${background}`,
       })),
   ),
+  ...['success', 'warning', 'info'].flatMap((status) => [
+    {
+      foreground: status,
+      background: 'background',
+      minimum: text,
+      level: 'required',
+      use: `${status} text and icons on background`,
+    },
+    {
+      foreground: status,
+      background: 'surface',
+      // Non-text: the icon and border of an Alert or Toast (WCAG 1.4.11).
+      minimum: 3,
+      level: 'required',
+      use: `${status} icon and border on surface`,
+    },
+  ]),
+  ...['success', 'warning', 'danger', 'info'].map((status) => ({
+    foreground: 'background',
+    background: status,
+    minimum: text,
+    level: 'required',
+    use: `label on a filled ${status} Badge or Tag`,
+  })),
   ...['primary', 'primaryHover', 'secondary'].map((background) => ({
     foreground: 'neutral.900',
     background,

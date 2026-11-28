@@ -25,10 +25,6 @@ export const colors = {
   black: { value: 'oklch(20% 0 0)' },
   white: { value: 'oklch(99% 0 0)' },
   border: { value: '{colors.neutral.200}' },
-  /** Lighter orange than combAmber, clear of brand gold. */
-  warning: { value: 'oklch(0.72 0.16 42)' },
-  /** Hue 165, clear of hiveSage at 125. */
-  success: { value: 'oklch(0.68 0.14 165)' },
   /** @deprecated Prefer semantic `text` / `background`. Kept as CSS-var aliases. Removed in 1.0. */
   lightBackground: { value: '{colors.neutral.50}' },
   lightText: { value: '{colors.neutral.900}' },
@@ -69,6 +65,32 @@ export const semanticColors = {
     value: {
       base: 'oklch(0.76 0.16 25)',
       _light: 'oklch(0.48 0.20 25)',
+    },
+  },
+  /**
+   * Status colors, like `danger`: text, icons and filled status chips (which put `background` ink
+   * on them). Each passes 4.5:1 on `background` and 3:1 on `surface` in both themes, so dark
+   * uses a lighter shade and light a darker one.
+   * Warning is a lighter orange than combAmber, clear of brand gold.
+   */
+  warning: {
+    value: {
+      base: 'oklch(0.72 0.16 42)',
+      _light: 'oklch(0.52 0.14 42)',
+    },
+  },
+  /** Hue 165, clear of hiveSage at 125. */
+  success: {
+    value: {
+      base: 'oklch(0.68 0.14 165)',
+      _light: 'oklch(0.50 0.12 165)',
+    },
+  },
+  /** Neutral notices. Hue 250, clear of every brand hue and of link yellow. */
+  info: {
+    value: {
+      base: 'oklch(0.72 0.12 250)',
+      _light: 'oklch(0.50 0.13 250)',
     },
   },
   /**
