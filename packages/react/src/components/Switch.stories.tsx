@@ -34,6 +34,19 @@ export const Default: Story = {
 
 export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
 
+export const ReducedMotion: Story = {
+  ...Default,
+  tags: ['no-screenshot'],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Turn on "Reduce motion" in the OS: toggling the switch moves the thumb and recolors the track at once.',
+      },
+    },
+  },
+};
+
 export const Checked: Story = {
   args: {
     size: 'md',

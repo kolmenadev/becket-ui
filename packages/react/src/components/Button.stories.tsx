@@ -58,6 +58,19 @@ export const Default: Story = {};
 
 export const ForcedColors: Story = { ...Default, parameters: { forcedColors: true } };
 
+export const ReducedMotion: Story = {
+  ...Default,
+  tags: ['no-screenshot'],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Turn on "Reduce motion" in the OS: hover, press and focus changes happen at once instead of fading.',
+      },
+    },
+  },
+};
+
 export const WithGradient: Story = {
   args: {
     children: 'Gradient',

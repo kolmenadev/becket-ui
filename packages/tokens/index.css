@@ -1316,6 +1316,11 @@
       width: 1px;
       height: 1px;
     }
+    @media (prefers-reduced-motion: reduce) {
+      .beckui--spinner {
+        animation-name: none;
+      }
+    }
   }
   @layer variants {
     .beckui--aspectRatio--ratio_1\:1 {
@@ -4133,6 +4138,24 @@
     :focus-visible {
       outline: 2px solid Highlight;
       outline-offset: 2px;
+    }
+  }
+
+  /*
+   * People who ask the OS to reduce motion get no rotation, slide or fade. Durations drop to
+   * 0.01ms instead of the properties going to `none`, so transitionend and animationend still
+   * fire for code that waits on them. `!important` because base sits below the tokens, recipes
+   * and utilities layers and unlayered app CSS, whose transition and animation declarations would
+   * otherwise win.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
   }
 }

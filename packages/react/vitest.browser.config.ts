@@ -30,6 +30,18 @@ export default defineConfig({
       enabled: true,
       headless: true,
       viewport: { width: 1024, height: 768 },
+      commands: {
+        // Chrome emulates the media feature per test through CDP. Firefox has no such call in
+        // WebDriver or BiDi, so the firefox-reduced-motion instance below launches with the
+        // preference set.
+        emulateReducedMotion: async ({ browser }, value: 'reduce' | 'no-preference') => {
+          if (browser.capabilities.browserName?.includes('chrome')) {
+            await browser.sendCommandAndGetResult('Emulation.setEmulatedMedia', {
+              features: [{ name: 'prefers-reduced-motion', value }],
+            });
+          }
+        },
+      },
       instances: [
         {
           browser: 'chrome',
@@ -53,9 +65,40 @@ export default defineConfig({
         // a manual pass.
         {
           browser: 'firefox',
+          exclude: [...configDefaults.exclude, 'src/**/reduced-motion.browser.test.tsx'],
           provider: webdriverio({
             capabilities: {
               'moz:firefoxOptions': {
+                // Pinned like Chrome, into the same cache; CI uses the runner's Firefox for the same
+                // reason it uses the runner's Chrome.
+                binary: process.env.CI
+                  ? '/usr/bin/firefox'
+                  : (
+                      await install({
+                        browser: Browser.FIREFOX,
+                        ...chrome,
+                        buildId: 'stable_160.0',
+                      })
+                    ).executablePath,
+              },
+              // The runner image sets GECKOWEBDRIVER to the folder of its geckodriver. Locally
+              // WebdriverIO downloads this version.
+              'wdio:geckodriverOptions': process.env.CI
+                ? { binary: `${process.env.GECKOWEBDRIVER}/geckodriver` }
+                : { geckoDriverVersion: '0.37.1' },
+            },
+          }),
+        },
+        {
+          browser: 'firefox',
+          name: 'firefox-reduced-motion',
+          include: ['src/**/reduced-motion.browser.test.tsx'],
+          provider: webdriverio({
+            capabilities: {
+              'moz:firefoxOptions': {
+                // The preference can't change per test, so only this instance sets it. The test
+                // asserts the feature matches, so a dropped preference fails it.
+                prefs: { 'ui.prefersReducedMotion': 1 },
                 // Pinned like Chrome, into the same cache; CI uses the runner's Firefox for the same
                 // reason it uses the runner's Chrome.
                 binary: process.env.CI

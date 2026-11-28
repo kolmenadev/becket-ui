@@ -44,6 +44,8 @@ describe.each(['dark', 'light'])('%s', (theme) => {
     for (const [name, Story] of Object.entries<ReturnType<typeof composeStory>>(
       composeStories(storyFile),
     )) {
+      // Reduced-motion stories document a preference; the freeze above hides what they show.
+      if (Story.tags.includes('no-screenshot')) continue;
       it(`${component} ${name}`, async () => {
         document.documentElement.setAttribute('data-theme', theme);
         // ForcedColors stories show a focused control in a Windows contrast theme. The parameter is

@@ -20,6 +20,18 @@ type Story = StoryObj<SpinnerProps>;
 
 export const Default: Story = {};
 
+export const ReducedMotion: Story = {
+  ...Default,
+  tags: ['no-screenshot'],
+  parameters: {
+    docs: {
+      description: {
+        story: 'Turn on "Reduce motion" in the OS: the arc stays still instead of rotating.',
+      },
+    },
+  },
+};
+
 export const Sizes: Story = {
   render: () => (
     <HStack gap="md">

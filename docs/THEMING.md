@@ -88,6 +88,12 @@ Or `defineBecketTheme({ spacing: { unit: '0.2rem' }, fontSizes: { base: '0.9375r
 
 Keep units in `rem` (and the text unit in `em`) so browser font-size settings still work (WCAG 1.4.4). Named layout widths (`sizes.xs`–`8xl`, `prose`) and the 24px minimum target size don't scale on purpose.
 
+## Motion
+
+Becket honors the OS setting "Reduce motion" (`prefers-reduced-motion: reduce`) with no setup. `index.css` shortens every animation and transition to 0.01ms, runs animations once, and turns off smooth scrolling. `Spinner` also stops rotating and shows its arc still.
+
+Hover and focus feedback stays for everyone else. Your own CSS in the document is covered too, because the rule applies to every element and uses `!important`. `!important` declarations in inline `style` or in a layer you order before `base`, elements inside a shadow root (the document stylesheet can't reach them, so give the shadow root its own reduced-motion styles), and motion driven by JavaScript still run. Animations that carry meaning of their own need another cue (text, an icon) that works without motion.
+
 ## Instance override
 
 ```tsx

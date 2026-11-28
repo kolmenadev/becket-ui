@@ -17,6 +17,9 @@ export const spinner: ReturnType<typeof defineRecipe> = defineRecipe({
     animationDuration: '0.7s',
     animationTimingFunction: 'linear',
     animationIterationCount: 'infinite',
+    // The global rule still runs the animation once for 0.01ms and fires its events; none removes
+    // that run too. It also keeps the Spinner still when an app uses the preset or styles.css without index.css.
+    _motionReduce: { animationName: 'none' },
     _light: {
       borderColor: 'neutral.300',
       borderTopColor: 'primary',
