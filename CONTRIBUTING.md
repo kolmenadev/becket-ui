@@ -55,6 +55,8 @@ pnpm --filter @becket-ui/tokens test
 pnpm pack:check
 ```
 
+`pnpm --filter @becket-ui/react test` also server-renders every story under Node (`stories.ssr.test.tsx`, no `window` or `document`), so a component that reads the browser while rendering fails there even though jsdom would let it pass.
+
 Packed Next.js consumer (`apps/next-example`, not in the pnpm workspace):
 
 ```bash
