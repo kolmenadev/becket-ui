@@ -19,8 +19,8 @@ describe('set_theme', () => {
       /\| light \| focus ring and checked controls on background \| 2\.01:1 \| 3:1 \| known gap \|/,
     );
     expect(text).toContain("Known gaps aren't enforced yet");
-    expect(text).toContain('(MAV-132, due in 0.9.0)');
-    expect(text).toContain('(MAV-166, due in 0.9.0)');
+    expect(text).toContain('(MAV-132, due in 0.10.0)');
+    expect(text).toContain('(MAV-166, due in 0.10.0)');
     expect(text).not.toMatch(/advisory/i);
   });
 

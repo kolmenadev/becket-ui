@@ -80,7 +80,7 @@ export const contrastPairs = [
     minimum: text,
     level: 'known-gap',
     issue: 'MAV-166',
-    until: '0.9.0',
+    until: '0.10.0',
     use: 'label over the tertiary end of a gradient fill',
     note: 'The default tertiary is 4.13:1; the label mostly sits over the primary half.',
   },
@@ -91,7 +91,7 @@ export const contrastPairs = [
     minimum: 3,
     level: 'known-gap',
     issue: 'MAV-132',
-    until: '0.9.0',
+    until: '0.10.0',
     use: `focus ring and checked controls on ${background}`,
     note: 'A primary light enough for dark labels is usually too light for 3:1 on a near-white canvas; the default is 2.01:1 in light.',
   })),
@@ -182,7 +182,7 @@ export function checkBecketThemeContrast(theme = {}, { version } = {}) {
     if (!/^MAV-\d+$/.test(result.issue ?? '') || !/^\d+\.\d+\.\d+$/.test(result.until ?? '')) {
       return false;
     }
-    // Numeric compare, no dependency: 0.10.0 is past 0.9.0, and 0.9.0-rc.1 has reached 0.9.0.
+    // Numeric compare, no dependency: 0.10.0 is past 0.9.0, and 0.10.0-rc.1 has reached 0.10.0.
     return !version || version.localeCompare(result.until, 'en', { numeric: true }) < 0;
   });
   return {

@@ -56,7 +56,7 @@ test('a known gap without an issue fails the build and names the pair', () => {
 test('a known gap fails the build once the package reaches its until', () => {
   const run = checkTokensWith({
     file: 'theme/contrast.mjs',
-    find: "issue: 'MAV-132',\n    until: '0.9.0',",
+    find: "issue: 'MAV-132',\n    until: '0.10.0',",
     replace: `issue: 'MAV-132',\n    until: '${JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version}',`,
   });
   assert.equal(run.status, 1);

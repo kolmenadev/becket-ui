@@ -106,10 +106,10 @@ test('every known-gap pair names its MAV issue and the version it must be fixed 
 });
 
 test('a known gap fails like a required pair once the version reaches its until', () => {
-  for (const version of ['0.8.1', '0.8.99']) {
+  for (const version of ['0.8.1', '0.9.0', '0.9.99']) {
     assert.equal(checkBecketThemeContrast({}, { version }).passes, true, version);
   }
-  for (const version of ['0.9.0-rc.1', '0.9.0', '0.10.0', '1.0.0']) {
+  for (const version of ['0.10.0-rc.1', '0.10.0', '0.11.0', '1.0.0']) {
     const expired = checkBecketThemeContrast({}, { version });
     assert.equal(expired.passes, false, version);
     assert.deepEqual(expired.knownGaps, [], version);
