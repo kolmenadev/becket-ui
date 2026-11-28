@@ -1,13 +1,6 @@
 import axe, { type RunOptions } from 'axe-core';
 
-/**
- * Rules that need layout or painted styles. jsdom has a DOM, not a renderer.
- * Do not re-enable these here — they belong to Storybook addon-a11y + a manual pass.
- */
-export const JSDOM_DISABLED_AXE_RULES: NonNullable<RunOptions['rules']> = {
-  'color-contrast': { enabled: false },
-  'target-size': { enabled: false },
-};
+import { axeExceptions } from './exceptions';
 
 function formatViolations(violations: axe.Result[]): string {
   return violations
@@ -20,25 +13,62 @@ function formatViolations(violations: axe.Result[]): string {
     .join('\n\n');
 }
 
-/**
- * Run axe-core on a DOM subtree. Throws if any enabled rule reports a violation.
- */
 export async function assertNoAxeViolations(
   container: Element,
-  options: RunOptions = {},
+  {
+    environment = 'jsdom',
+    runOnly,
+    ...options
+  }: RunOptions & { environment?: 'jsdom' | 'browser' } = {},
 ): Promise<void> {
+  // A narrower runOnly would drop rules without an exception entry, which the standard forbids.
+  // Taken out of `options` so not even an empty or undefined one reaches the spread below.
+  if (runOnly !== undefined) {
+    throw new Error(
+      'axe runOnly is fixed by the a11y standard; turn a rule off with an entry in src/exceptions.ts',
+    );
+  }
+
+  const exceptions = axeExceptions.filter(
+    (exception) => exception.scope === environment || exception.scope === 'fragment',
+  );
+
+  for (const [rule, setting] of Object.entries(options.rules ?? {})) {
+    if (!setting.enabled && !exceptions.some((exception) => exception.rule === rule)) {
+      throw new Error(`axe rule ${rule} disabled without an exception entry`);
+    }
+  }
+
+  // style-check keep: read once, not on every pass of the loop below.
+  const today = new Date().toISOString().slice(0, 10);
+  for (const exception of exceptions) {
+    // ISO dates (UTC) compare as strings; an entry still holds through its expiry day.
+    if (exception.expires < today) {
+      throw new Error(`axe exception for ${exception.rule} expired on ${exception.expires}`);
+    }
+  }
+
   const results = await axe.run(container, {
     runOnly: {
       type: 'tag',
-      // WCAG 2.0 A and AA, plus 2.2 AA: the level Becket targets.
-      values: ['wcag2a', 'wcag2aa', 'wcag22aa'],
+      // The tag set the a11y standard (§3) requires: Becket's WCAG 2.2 AA bar plus best practices.
+      values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'],
     },
     ...options,
     rules: {
-      ...JSDOM_DISABLED_AXE_RULES,
+      ...Object.fromEntries(exceptions.map((exception) => [exception.rule, { enabled: false }])),
       ...options.rules,
     },
   });
+
+  // Incomplete means axe could not decide; it needs a person (or browser axe), not a failure.
+  if (results.incomplete.length > 0) {
+    console.warn(
+      `axe incomplete, check by hand:\n${results.incomplete
+        .map((result) => `  ${result.id} (${result.nodes.length} nodes)`)
+        .join('\n')}`,
+    );
+  }
 
   if (results.violations.length === 0) {
     return;
