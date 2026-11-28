@@ -53,11 +53,9 @@ export const defaultColors = {
 const text = 4.5;
 const canvases = ['background', 'surface'];
 
-/**
- * Every pair Becket draws. `required` pairs pass in the default theme and must pass in any
- * theme. `advisory` pairs fail in the default theme too (see their `note`), so they're
- * reported, not enforced, until Becket's recipes change.
- */
+// `known-gap` pairs fail in the default theme too (see their `note`). An issue and an `until`
+// keep each one tracked instead of frozen: scripts/check-tokens.mjs fails the build once the
+// package reaches `until`, or once the pair passes and should be `required`.
 export const contrastPairs = [
   ...['text', 'muted', 'link', 'linkHover', 'linkVisited', 'danger', 'accent'].flatMap(
     (foreground) =>
@@ -80,7 +78,9 @@ export const contrastPairs = [
     foreground: 'neutral.900',
     background: 'tertiary',
     minimum: text,
-    level: 'advisory',
+    level: 'known-gap',
+    issue: 'MAV-166',
+    until: '0.10.0',
     use: 'label over the tertiary end of a gradient fill',
     note: 'The default tertiary is 4.13:1; the label mostly sits over the primary half.',
   },
@@ -89,9 +89,11 @@ export const contrastPairs = [
     background,
     // Non-text UI and state indicators (WCAG 1.4.11).
     minimum: 3,
-    level: 'advisory',
+    level: 'known-gap',
+    issue: 'MAV-132',
+    until: '0.10.0',
     use: `focus ring and checked controls on ${background}`,
-    note: 'A primary light enough for dark labels is usually too light for 3:1 on a near-white canvas; the default is 2.02:1 in light.',
+    note: 'A primary light enough for dark labels is usually too light for 3:1 on a near-white canvas; the default is 2.01:1 in light.',
   })),
 ];
 
@@ -156,9 +158,10 @@ export function resolveBecketColors(theme = {}) {
  * WCAG 2.2 AA contrast for every pair in contrastPairs, in dark and light.
  *
  * @param {import('./index.d.ts').BecketTheme} [theme]
+ * @param {{ version?: string }} [options]
  * @returns {import('./index.d.ts').BecketContrastReport}
  */
-export function checkBecketThemeContrast(theme = {}) {
+export function checkBecketThemeContrast(theme = {}, { version } = {}) {
   const colors = resolveBecketColors(theme);
   const results = ['dark', 'light'].flatMap((mode) =>
     contrastPairs.map((pair) => {
@@ -173,10 +176,21 @@ export function checkBecketThemeContrast(theme = {}) {
       };
     }),
   );
+  // A gap without its issue or `until` isn't tracked, so it counts as a failure.
+  const knownGaps = results.filter((result) => {
+    if (result.passes || result.level !== 'known-gap') return false;
+    if (!/^MAV-\d+$/.test(result.issue ?? '') || !/^\d+\.\d+\.\d+$/.test(result.until ?? '')) {
+      return false;
+    }
+    // Numeric compare, no dependency: 0.10.0 is past 0.9.0, and 0.10.0-rc.1 has reached 0.10.0.
+    return !version || version.localeCompare(result.until, 'en', { numeric: true }) < 0;
+  });
   return {
-    passes: results.every((result) => result.passes || result.level === 'advisory'),
-    failures: results.filter((result) => !result.passes && result.level === 'required'),
-    advisories: results.filter((result) => !result.passes && result.level === 'advisory'),
+    passes: results.every((result) => result.passes || knownGaps.includes(result)),
+    failures: results.filter((result) => !result.passes && !knownGaps.includes(result)),
+    knownGaps,
+    // style-check keep: public alias of knownGaps until 1.0 (CONTRIBUTING "Deprecations").
+    advisories: knownGaps,
     results,
   };
 }

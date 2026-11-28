@@ -82,19 +82,39 @@ for (const result of report.results.filter((each) => each.level === 'required'))
   });
 }
 
-test('advisory pairs are the known default gaps, and only those', () => {
+test('known-gap pairs are the known default gaps, and only those', () => {
   assert.deepEqual(
-    report.advisories
-      .map((result) => `${result.theme}:${result.foreground}/${result.background}`)
+    report.knownGaps
+      .map((result) => `${result.theme}:${result.foreground}/${result.background}:${result.issue}`)
       .toSorted(),
     [
-      'dark:neutral.900/tertiary',
-      'light:neutral.900/tertiary',
-      'light:primary/background',
-      'light:primary/surface',
+      'dark:neutral.900/tertiary:MAV-166',
+      'light:neutral.900/tertiary:MAV-166',
+      'light:primary/background:MAV-132',
+      'light:primary/surface:MAV-132',
     ],
   );
+  assert.deepEqual(report.advisories, report.knownGaps);
   assert.equal(report.passes, true);
+});
+
+test('every known-gap pair names its MAV issue and the version it must be fixed by', () => {
+  for (const pair of contrastPairs.filter((each) => each.level === 'known-gap')) {
+    assert.match(pair.issue, /^MAV-\d+$/, `${pair.foreground}/${pair.background}`);
+    assert.match(pair.until, /^\d+\.\d+\.\d+$/, `${pair.foreground}/${pair.background}`);
+  }
+});
+
+test('a known gap fails like a required pair once the version reaches its until', () => {
+  for (const version of ['0.8.1', '0.9.0', '0.9.99']) {
+    assert.equal(checkBecketThemeContrast({}, { version }).passes, true, version);
+  }
+  for (const version of ['0.10.0-rc.1', '0.10.0', '0.11.0', '1.0.0']) {
+    const expired = checkBecketThemeContrast({}, { version });
+    assert.equal(expired.passes, false, version);
+    assert.deepEqual(expired.knownGaps, [], version);
+    assert.equal(expired.failures.length, 4, version);
+  }
 });
 
 test('every pair names tokens the resolver knows', () => {

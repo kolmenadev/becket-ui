@@ -13,6 +13,17 @@ describe('set_theme', () => {
     expect(text).toMatch(/- link: Brand color 1 used as is in light/);
   });
 
+  it("reports the default theme's known gaps with the issue that fixes them", () => {
+    const text = setTheme({ colors: { secondary: '#8fb339' } });
+    expect(text).toMatch(
+      /\| light \| focus ring and checked controls on background \| 2\.01:1 \| 3:1 \| known gap \|/,
+    );
+    expect(text).toContain("Known gaps aren't enforced yet");
+    expect(text).toContain('(MAV-132, due in 0.10.0)');
+    expect(text).toContain('(MAV-166, due in 0.10.0)');
+    expect(text).not.toMatch(/advisory/i);
+  });
+
   it('keeps exact tokens and reports the pairs they fail, without calling it shippable', () => {
     const text = setTheme({ colors: { primary: '#0a3d91' } });
     expect(text).toContain('--beckui--colors-primary: #0a3d91;');

@@ -106,11 +106,19 @@ export type BecketContrastPair = {
   background: BecketColorToken;
   /** 4.5 for text, 3 for non-text (WCAG 2.2 1.4.3 / 1.4.11). */
   minimum: number;
-  /** `required` pairs pass in the default theme and must pass in yours. `advisory` ones fail in the default too. */
-  level: 'required' | 'advisory';
   use: string;
   note?: string;
-};
+} & (
+  | { level: 'required' }
+  | {
+      /** Fails in the default theme too. Tolerated until `until`, then it fails like a required pair. */
+      level: 'known-gap';
+      /** The MAV issue that fixes it, such as `MAV-132`. */
+      issue: string;
+      /** The fixed-group version the gap must be closed by. */
+      until: string;
+    }
+);
 
 export type BecketContrastResult = BecketContrastPair & {
   theme: 'dark' | 'light';
@@ -121,18 +129,24 @@ export type BecketContrastResult = BecketContrastPair & {
 };
 
 export type BecketContrastReport = {
-  /** True when every required pair passes in both themes. */
+  /** True when every pair passes in both themes, except known gaps that haven't reached `until`. */
   passes: boolean;
   failures: BecketContrastResult[];
-  advisories: BecketContrastResult[];
+  /** Failing known-gap pairs that are still tolerated. */
+  knownGaps: Extract<BecketContrastResult, { level: 'known-gap' }>[];
+  /** @deprecated Use `knownGaps`. Removed in 1.0. */
+  advisories: Extract<BecketContrastResult, { level: 'known-gap' }>[];
   results: BecketContrastResult[];
 };
 
 export const contrastPairs: readonly BecketContrastPair[];
 /** Final colors in dark and light for a theme, the way the browser resolves defineBecketTheme's CSS. */
 export function resolveBecketColors(theme?: BecketTheme): Record<'dark' | 'light', Record<BecketColorToken, Oklch>>;
-/** WCAG 2.2 AA check of every pair Becket draws, in both themes. */
-export function checkBecketThemeContrast(theme?: BecketTheme): BecketContrastReport;
+/** WCAG 2.2 AA check of every pair Becket draws, in both themes. Pass `version` to expire known gaps. */
+export function checkBecketThemeContrast(
+  theme?: BecketTheme,
+  options?: { version?: string },
+): BecketContrastReport;
 
 export type DeriveBecketThemeInput = {
   /** One to three brand colors, most important first: hex, rgb(), hsl() or oklch(). */
