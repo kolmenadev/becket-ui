@@ -16,6 +16,7 @@ reason.
 - [Coding](#coding)
   - [Avoid hasty abstraction](#avoid-hasty-abstraction)
   - [Prefer inline logic and styling over abstraction](#prefer-inline-logic-and-styling-over-abstraction)
+  - [Logical properties](#logical-properties)
   - [Prefer inversion of control](#prefer-inversion-of-control)
   - [Prefer to reduce nesting](#prefer-to-reduce-nesting)
   - [Prefer code colocation](#prefer-code-colocation)
@@ -169,6 +170,16 @@ function UserList({ users }: { users: User[] }) {
 Inline does not mean literal. Values come from the design system's tokens (`gap="lg"`,
 `color="muted"`), never raw pixels or hex codes. If the design system can't express something yet,
 an inline `style` with token variables is fine. Add a comment that names the gap.
+
+## Logical properties
+
+Recipes in `packages/tokens/recipes` take no new physical directions (`left`, `paddingRight`,
+`textAlign: 'left'`): use logical properties (`insetInlineStart`, `paddingInlineEnd`,
+`textAlign: 'start'`) so layouts mirror under `dir="rtl"`.
+`packages/tokens/theme/logical.test.mjs` enforces it against a dated baseline; see "Logical
+properties" in [`.cursor-config/becket.mdc`](../.cursor-config/becket.mdc). Viewport coordinates
+from layout APIs (`getBoundingClientRect`) are physical by nature, so code that positions from them
+is not covered.
 
 ## Prefer inversion of control
 
