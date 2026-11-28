@@ -42,23 +42,23 @@ function ConfirmDialog({
 }
 
 describe('Dialog', () => {
-  it.each<ComponentProps<typeof Dialog>['role']>(['dialog', 'alertdialog'])(
-    'focuses the first footer action when it opens as %s',
-    async (role) => {
-      render(<ConfirmDialog role={role} />);
+  // MAV-209 asks for footer-first focus on alertdialog only; a plain dialog's first stop is undecided.
+  it('focuses the first footer action when it opens as alertdialog', async () => {
+    render(<ConfirmDialog role="alertdialog" />);
 
-      page.getByRole('button', { name: 'Open' }).element().focus();
-      await userEvent.keyboard('{Enter}');
+    page.getByRole('button', { name: 'Open' }).element().focus();
+    await userEvent.keyboard('{Enter}');
 
-      await expect.element(page.getByRole('button', { name: 'Cancel' })).toHaveFocus();
-    },
-  );
+    await expect.element(page.getByRole('button', { name: 'Cancel' })).toHaveFocus();
+  });
 
   it('closes on Escape and returns focus to the trigger', async () => {
     render(<ConfirmDialog />);
     page.getByRole('button', { name: 'Open' }).element().focus();
     await userEvent.keyboard('{Enter}');
-    await expect.element(page.getByRole('button', { name: 'Cancel' })).toHaveFocus();
+    await expect
+      .poll(() => document.querySelector('dialog')?.contains(document.activeElement))
+      .toBe(true);
 
     await userEvent.keyboard('{Escape}');
 
@@ -71,7 +71,13 @@ describe('Dialog', () => {
     render(<ConfirmDialog onBehindFocus={onBehindFocus} />);
     page.getByRole('button', { name: 'Open' }).element().focus();
     await userEvent.keyboard('{Enter}');
-    await expect.element(page.getByRole('button', { name: 'Cancel' })).toHaveFocus();
+    await expect
+      .poll(() => document.querySelector('dialog')?.contains(document.activeElement))
+      .toBe(true);
+    // The dialog sets its own initial focus two frames after it opens; wait for that, then start
+    // every walk from the same control without asserting a plain dialog's first stop.
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    page.getByRole('button', { name: 'Cancel' }).element().focus();
 
     // Shift+Tab first: the first press that leaves the page hands Firefox's keys to its own UI, so
     // the page behind has to be one step back from Close to be reached at all.
@@ -88,7 +94,13 @@ describe('Dialog', () => {
     render(<ConfirmDialog />);
     page.getByRole('button', { name: 'Open' }).element().focus();
     await userEvent.keyboard('{Enter}');
-    await expect.element(page.getByRole('button', { name: 'Cancel' })).toHaveFocus();
+    await expect
+      .poll(() => document.querySelector('dialog')?.contains(document.activeElement))
+      .toBe(true);
+    // The dialog sets its own initial focus two frames after it opens; wait for that, then start
+    // every walk from the same control without asserting a plain dialog's first stop.
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    page.getByRole('button', { name: 'Cancel' }).element().focus();
 
     for (let press = 1; press <= 12; press++) {
       await userEvent.tab();
@@ -106,7 +118,13 @@ describe('Dialog', () => {
     render(<ConfirmDialog />);
     page.getByRole('button', { name: 'Open' }).element().focus();
     await userEvent.keyboard('{Enter}');
-    await expect.element(page.getByRole('button', { name: 'Cancel' })).toHaveFocus();
+    await expect
+      .poll(() => document.querySelector('dialog')?.contains(document.activeElement))
+      .toBe(true);
+    // The dialog sets its own initial focus two frames after it opens; wait for that, then start
+    // every walk from the same control without asserting a plain dialog's first stop.
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    page.getByRole('button', { name: 'Cancel' }).element().focus();
 
     for (let press = 1; press <= 12; press++) {
       await userEvent.tab({ shift: true });
