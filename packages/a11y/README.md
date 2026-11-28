@@ -24,14 +24,26 @@ A rule is off only when [`src/exceptions.ts`](./src/exceptions.ts) has an entry 
 
 Results axe can't decide (`incomplete`) don't fail the test. The helper prints each rule id and its node count with `console.warn`, so check them by hand.
 
+## Impacts and reports
+
+By default every violation fails. `failOn` lists the impacts that fail; the helper prints the other violations with `console.warn` and resolves. `onResults` receives axe's full results before the helper decides, so a caller can keep a report that holds the failures too.
+
+```ts
+await assertNoAxeViolations(container, {
+  environment: 'browser',
+  failOn: ['critical', 'serious'],
+  onResults: (results) => report.push(results),
+});
+```
+
 ## jsdom limits
 
-jsdom does not lay out or paint. These rules have `jsdom` exceptions until browser axe runs in CI:
+jsdom does not lay out or paint. These rules have `jsdom` exceptions:
 
 - `color-contrast`
 - `target-size` (WCAG 2.2 2.5.8)
 
-Check those in Storybook `@storybook/addon-a11y` and a recorded keyboard/contrast pass. Do not add Playwright or Chromatic to “fix” this.
+Browser axe checks them on every story, dark and light (`packages/react/src/stories.a11y.browser.test.tsx`, run by `test:browser`). The Storybook `@storybook/addon-a11y` panel and the recorded keyboard/contrast pass still apply. Do not add Playwright or Chromatic to “fix” this.
 
 jsdom has no `document.elementFromPoint`, so axe errors on a native open `<dialog>` and reports its rules as `incomplete` rather than passing or failing them.
 

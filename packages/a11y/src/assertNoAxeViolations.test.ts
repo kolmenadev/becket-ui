@@ -120,4 +120,35 @@ describe('assertNoAxeViolations', () => {
     ).resolves.toBeUndefined();
     expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('video-caption'));
   });
+
+  it('fails only the impacts in failOn and prints the rest', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    // heading-order is moderate and button-name is critical.
+    await expect(
+      assertNoAxeViolations(mount('<h1>Title</h1><h3>Skipped a level</h3>'), {
+        failOn: ['critical', 'serious'],
+      }),
+    ).resolves.toBeUndefined();
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining('heading-order (moderate, 1 nodes)'),
+    );
+    await expect(
+      assertNoAxeViolations(mount('<button></button>'), { failOn: ['critical', 'serious'] }),
+    ).rejects.toThrow(/button-name/);
+  });
+
+  it('hands the results to onResults, the failing ones too', async () => {
+    const onResults = vi.fn();
+
+    await expect(assertNoAxeViolations(mount('<button></button>'), { onResults })).rejects.toThrow(
+      /button-name/,
+    );
+    expect(onResults).toHaveBeenCalledWith(
+      expect.objectContaining({
+        violations: [expect.objectContaining({ id: 'button-name' })],
+        incomplete: expect.any(Array),
+      }),
+    );
+  });
 });

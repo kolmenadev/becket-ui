@@ -69,18 +69,18 @@ export const CustomColors: Story = {
     <HStack gap="sm">
       <Badge
         customColors={{
-          background: 'color-mix(in srgb, #22c55e 22%, transparent)',
-          color: '#86efac',
-          border: 'color-mix(in srgb, #22c55e 35%, transparent)',
+          background: '#14532d',
+          color: '#dcfce7',
+          border: '#22c55e',
         }}
       >
         New
       </Badge>
       <Badge
         customColors={{
-          background: 'color-mix(in srgb, #ef4444 22%, transparent)',
-          color: '#fca5a5',
-          border: 'color-mix(in srgb, #ef4444 35%, transparent)',
+          background: '#7f1d1d',
+          color: '#fee2e2',
+          border: '#ef4444',
         }}
       >
         Alert

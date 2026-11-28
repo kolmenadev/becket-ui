@@ -18,8 +18,14 @@ export async function assertNoAxeViolations(
   {
     environment = 'jsdom',
     runOnly,
+    failOn,
+    onResults,
     ...options
-  }: RunOptions & { environment?: 'jsdom' | 'browser' } = {},
+  }: RunOptions & {
+    environment?: 'jsdom' | 'browser';
+    failOn?: NonNullable<axe.ImpactValue>[];
+    onResults?: (results: axe.AxeResults) => void;
+  } = {},
 ): Promise<void> {
   // A narrower runOnly would drop rules without an exception entry, which the standard forbids.
   // Taken out of `options` so not even an empty or undefined one reaches the spread below.
@@ -61,6 +67,9 @@ export async function assertNoAxeViolations(
     },
   });
 
+  // Before any throw, so a caller's report also holds the results that fail.
+  onResults?.(results);
+
   // Incomplete means axe could not decide; it needs a person (or browser axe), not a failure.
   if (results.incomplete.length > 0) {
     console.warn(
@@ -70,9 +79,26 @@ export async function assertNoAxeViolations(
     );
   }
 
-  if (results.violations.length === 0) {
+  const failing = results.violations.filter(
+    // An impact axe didn't set fails, so a violation is never dropped for lack of one.
+    (violation) => !failOn || !violation.impact || failOn.includes(violation.impact),
+  );
+  if (failing.length < results.violations.length) {
+    // One line per rule, as for incomplete; onResults gets the nodes.
+    console.warn(
+      `axe violations below the failing impacts, reported only:\n${results.violations
+        .filter((violation) => !failing.includes(violation))
+        .map(
+          (violation) =>
+            `  ${violation.id} (${violation.impact}, ${violation.nodes.length} nodes): ${violation.help}`,
+        )
+        .join('\n')}`,
+    );
+  }
+
+  if (failing.length === 0) {
     return;
   }
 
-  throw new Error(`axe violations:\n${formatViolations(results.violations)}`);
+  throw new Error(`axe violations:\n${formatViolations(failing)}`);
 }

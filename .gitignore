@@ -108,3 +108,6 @@ DESIGN-SYNC-HANDOFF.md
 packages/react/.visual-browsers/
 packages/react/.visual-references/
 packages/react/.vitest-attachments/
+
+# Browser axe reports (MAV-10): one JSON per theme and browser, uploaded by CI as an artifact
+packages/react/axe-results/
