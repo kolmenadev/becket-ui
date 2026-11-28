@@ -2,6 +2,7 @@ import { describe, it } from 'vitest';
 import { render } from '@testing-library/react';
 import { assertNoAxeViolations } from '@becket-ui/a11y';
 
+import { Alert } from './components/Alert';
 import { Button } from './components/Button';
 import { Checkbox } from './components/Checkbox';
 import { Dialog } from './components/Dialog';
@@ -14,6 +15,7 @@ import { Select } from './components/Select';
 import { Switch } from './components/Switch';
 import { Tab, TabList, TabPanel, Tabs } from './components/Tabs';
 import { Textarea } from './components/Textarea';
+import { ToastProvider } from './components/Toast';
 import { TextField } from './components/TextField';
 import { Tooltip } from './components/Tooltip';
 
@@ -138,5 +140,19 @@ describe('Default primitive axe gate', () => {
       </Tabs>,
     );
     await assertNoAxeViolations(container);
+  });
+
+  it('Alert', async () => {
+    await assertNoAxeViolations(
+      render(
+        <Alert title="Saved" onDismiss={() => {}}>
+          Your changes are live.
+        </Alert>,
+      ).container,
+    );
+  });
+
+  it('ToastProvider', async () => {
+    await assertNoAxeViolations(render(<ToastProvider>App</ToastProvider>).container);
   });
 });

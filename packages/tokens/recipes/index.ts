@@ -39,3 +39,5 @@ export * from './visually-hidden.recipe';
 export * from './skip-link.recipe';
 export * from './center.recipe';
 export * from './aspect-ratio.recipe';
+export * from './alert.slot-recipe';
+export * from './toast.slot-recipe';

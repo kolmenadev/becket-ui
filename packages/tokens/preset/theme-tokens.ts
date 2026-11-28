@@ -263,6 +263,10 @@ export const keyframes = {
     from: { transform: 'rotate(0deg)' },
     to: { transform: 'rotate(360deg)' },
   },
+  toastIn: {
+    from: { opacity: '0', transform: 'translateY(var(--beckui--spacing-3))' },
+    to: { opacity: '1', transform: 'none' },
+  },
 };
 
 export const breakpoints = {

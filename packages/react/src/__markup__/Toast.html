@@ -1,0 +1,92 @@
+<div>
+<div style="flex-wrap: wrap;" class="beckui--d_flex beckui--flex-d_row beckui--gap_sm">
+<button type="button" class="beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_false beckui--button--size_sm beckui--button--visual_outline beckui--button--withGradient_false">Success</button>
+<button type="button" class="beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_false beckui--button--size_sm beckui--button--visual_outline beckui--button--withGradient_false">Info</button>
+<button type="button" class="beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_false beckui--button--size_sm beckui--button--visual_outline beckui--button--withGradient_false">Warning with action</button>
+<button type="button" class="beckui--button beckui--button--borderRadius_md beckui--button--fullWidth_false beckui--button--size_sm beckui--button--visual_outline beckui--button--withGradient_false">Danger (stays)</button>
+</div>
+<section aria-label="Notifications" class="beckui--toast__region">
+<ol aria-live="assertive" class="beckui--toast__list">
+</ol>
+<ol aria-live="polite" class="beckui--toast__list">
+</ol>
+</section>
+</div>
+
+<div>
+<section aria-label="Notifications" class="beckui--toast__region">
+<ol aria-live="assertive" class="beckui--toast__list">
+<li class="beckui--toast__item">
+<div role="none" data-status="danger" class="beckui--alert__root beckui--alert__root--status_danger">
+<span role="img" aria-label="Error" class="beckui--alert__icon beckui--alert__icon--status_danger beckui--icon beckui--icon--size_md">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<circle cx="12" cy="12" r="9">
+</circle>
+<path d="M15 9l-6 6M9 9l6 6">
+</path>
+</svg>
+</span>
+<div class="beckui--alert__content beckui--alert__content--status_danger">
+<div class="beckui--alert__title beckui--alert__title--status_danger">Upload failed</div>
+<div class="beckui--alert__description beckui--alert__description--status_danger">Try again.</div>
+</div>
+<button type="button" aria-label="Dismiss notification" class="beckui--alert__dismiss beckui--alert__dismiss--status_danger">
+<span aria-hidden="true" class="beckui--icon beckui--icon--size_sm">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M6 6l12 12M18 6L6 18">
+</path>
+</svg>
+</span>
+</button>
+</div>
+</li>
+</ol>
+<ol aria-live="polite" class="beckui--toast__list">
+<li class="beckui--toast__item">
+<div role="none" data-status="success" class="beckui--alert__root beckui--alert__root--status_success">
+<span role="img" aria-label="Success" class="beckui--alert__icon beckui--alert__icon--status_success beckui--icon beckui--icon--size_md">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M5 12.5l4.5 4.5L19 7">
+</path>
+</svg>
+</span>
+<div class="beckui--alert__content beckui--alert__content--status_success">
+<div class="beckui--alert__title beckui--alert__title--status_success">Saved</div>
+</div>
+<button type="button" aria-label="Dismiss notification" class="beckui--alert__dismiss beckui--alert__dismiss--status_success">
+<span aria-hidden="true" class="beckui--icon beckui--icon--size_sm">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M6 6l12 12M18 6L6 18">
+</path>
+</svg>
+</span>
+</button>
+</div>
+</li>
+<li class="beckui--toast__item">
+<div role="none" data-status="info" class="beckui--alert__root beckui--alert__root--status_info">
+<span role="img" aria-label="Info" class="beckui--alert__icon beckui--alert__icon--status_info beckui--icon beckui--icon--size_md">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<circle cx="12" cy="12" r="9">
+</circle>
+<path d="M12 11v5M12 8h.01">
+</path>
+</svg>
+</span>
+<div class="beckui--alert__content beckui--alert__content--status_info">
+<div class="beckui--alert__title beckui--alert__title--status_info">Sync paused</div>
+<div class="beckui--alert__description beckui--alert__description--status_info">You are offline. Changes sync when you reconnect.</div>
+</div>
+<button type="button" aria-label="Dismiss notification" class="beckui--alert__dismiss beckui--alert__dismiss--status_info">
+<span aria-hidden="true" class="beckui--icon beckui--icon--size_sm">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+<path d="M6 6l12 12M18 6L6 18">
+</path>
+</svg>
+</span>
+</button>
+</div>
+</li>
+</ol>
+</section>
+</div>

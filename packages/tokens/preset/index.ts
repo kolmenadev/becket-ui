@@ -1,5 +1,6 @@
 import { definePreset, type Preset } from '@pandacss/dev';
 import {
+  alert,
   aspectRatio,
   avatar,
   blockquote,
@@ -40,6 +41,7 @@ import {
   tag,
   textareaRecipe,
   textFieldRecipe,
+  toast,
   tooltip,
 } from '../recipes';
 import {
@@ -134,6 +136,8 @@ export const becketPreset: Preset = definePreset({
         pagination,
         breadcrumb,
         steps,
+        alert,
+        toast,
       },
     },
   },

@@ -85,3 +85,11 @@ export const WarningIcon = /* @__PURE__ */ createGlyph(
   'WarningIcon',
   <path d="M12 3.5L21.5 20h-19L12 3.5zM12 10v4M12 17h.01" />,
 );
+
+export const ErrorIcon = /* @__PURE__ */ createGlyph(
+  'ErrorIcon',
+  <>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M15 9l-6 6M9 9l6 6" />
+  </>,
+);

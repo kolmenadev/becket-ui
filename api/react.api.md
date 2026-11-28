@@ -21,6 +21,7 @@ import { grid } from '@becket-ui/tokens/patterns';
 import { HTMLAttributes } from 'react';
 import { ImgHTMLAttributes } from 'react';
 import { InputHTMLAttributes } from 'react';
+import { JSX } from 'react';
 import { JsxStyleProps } from '@becket-ui/tokens';
 import { LabelHTMLAttributes } from 'react';
 import { LiHTMLAttributes } from 'react';
@@ -34,6 +35,33 @@ import { TableHTMLAttributes } from 'react';
 import { TdHTMLAttributes } from 'react';
 import { TextareaHTMLAttributes } from 'react';
 import { ThHTMLAttributes } from 'react';
+
+// @public
+export const Alert: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "role" | "title"> & {
+status?: AlertStatus;
+title?: ReactNode;
+actions?: ReactNode;
+onDismiss?: () => void;
+dismissLabel?: string;
+statusLabel?: string;
+role?: 'status' | 'alert' | 'none';
+as?: ElementType;
+} & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+export type AlertProps = Omit<ComponentPropsWithoutRef<'div'>, 'title' | 'role'> & {
+    status?: AlertStatus;
+    title?: ReactNode;
+    actions?: ReactNode;
+    onDismiss?: () => void;
+    dismissLabel?: string;
+    statusLabel?: string;
+    role?: 'status' | 'alert' | 'none';
+    as?: ElementType;
+};
+
+// @public (undocumented)
+export type AlertStatus = 'info' | 'success' | 'warning' | 'danger';
 
 // @public (undocumented)
 type AlignVariant = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
@@ -390,6 +418,9 @@ type DrawerRole = 'dialog' | 'alertdialog';
 export const DrawerTitle: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>, "ref"> & {
 as?: ElementType;
 } & RefAttributes<HTMLHeadingElement>>;
+
+// @public (undocumented)
+export const ErrorIcon: ForwardRefExoticComponent<GlyphProps & RefAttributes<HTMLSpanElement>>;
 
 // @public (undocumented)
 export const ExternalLinkIcon: ForwardRefExoticComponent<GlyphProps & RefAttributes<HTMLSpanElement>>;
@@ -1052,6 +1083,33 @@ export const Th: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ThHTMLAttribut
 // @public (undocumented)
 export const Thead: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>, "ref"> & RefAttributes<HTMLTableSectionElement>>;
 
+// @public (undocumented)
+export type ToastAPI = {
+    show: (toast: ToastOptions) => string;
+    dismiss: (id: string) => void;
+};
+
+// @public (undocumented)
+export type ToastOptions = {
+    status?: AlertStatus;
+    title?: ReactNode;
+    description?: ReactNode;
+    action?: ReactNode;
+    duration?: number | null;
+    id?: string;
+};
+
+// @public
+export function ToastProvider(input: ToastProviderProps): JSX.Element;
+
+// @public (undocumented)
+export type ToastProviderProps = {
+    children?: ReactNode;
+    label?: string;
+    duration?: number;
+    dismissLabel?: string;
+};
+
 // @public
 export const Tooltip: ForwardRefExoticComponent<TooltipProps & RefAttributes<HTMLElement>>;
 
@@ -1072,6 +1130,9 @@ export const Tr: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes
 
 // @public (undocumented)
 export function useField(): FieldContextValue;
+
+// @public
+export function useToast(): ToastAPI;
 
 // @public
 export const VisuallyHidden: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "ref"> & {

@@ -6,6 +6,7 @@ import {
   ChevronRightIcon,
   CloseIcon,
   CopyIcon,
+  ErrorIcon,
   ExternalLinkIcon,
   InfoIcon,
   LinkIcon,
@@ -62,6 +63,7 @@ const GLYPHS = [
   ['MoonIcon', MoonIcon],
   ['InfoIcon', InfoIcon],
   ['WarningIcon', WarningIcon],
+  ['ErrorIcon', ErrorIcon],
 ] as const;
 
 export const Glyphs: Story = {

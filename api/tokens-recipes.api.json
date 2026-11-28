@@ -1,4 +1,15 @@
 {
+  "alert": {
+    "defaultVariants": {
+      "status": "info"
+    },
+    "status": [
+      "danger",
+      "info",
+      "success",
+      "warning"
+    ]
+  },
   "aspectRatio": {
     "defaultVariants": {
       "ratio": "1:1"
@@ -519,6 +530,9 @@
       "md",
       "sm"
     ]
+  },
+  "toast": {
+    "defaultVariants": {}
   },
   "tooltip": {
     "defaultVariants": {

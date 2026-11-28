@@ -78,6 +78,10 @@ export {
   Td,
 } from './components/Table';
 export { Spinner } from './components/Spinner';
+export { Alert } from './components/Alert';
+export type { AlertProps, AlertStatus } from './components/Alert';
+export { ToastProvider, useToast } from './components/Toast';
+export type { ToastAPI, ToastOptions, ToastProviderProps } from './components/Toast';
 export { Icon } from './components/Icon';
 export type { IconProps } from './components/Icon';
 export {
@@ -87,6 +91,7 @@ export {
   ChevronRightIcon,
   CloseIcon,
   CopyIcon,
+  ErrorIcon,
   ExternalLinkIcon,
   InfoIcon,
   LinkIcon,
