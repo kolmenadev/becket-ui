@@ -40,9 +40,13 @@ export const steps: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
       fontVariantNumeric: 'tabular-nums',
       // The step's number, unless a glyph (the completed check) fills the marker.
       '&:empty::before': { content: 'counter(becket-step)' },
-      // TODO (MAV-213): give the current step a shape difference from an upcoming one. Until then
-      // the border is Highlight so forced colors don't paint it like the others.
+      // A thicker ring and bold number tell the current step apart without color (WCAG 1.4.1); the
+      // 3px is the widest border the scale allows. The marker is border-box and fixed-size, so the
+      // wider ring doesn't move the layout. The border is Highlight so forced colors don't paint it
+      // like the others.
       '[data-status="current"] > &': {
+        borderWidth: '3px',
+        fontWeight: 'bold',
         borderColor: 'primary',
         _highContrast: { borderColor: 'Highlight' },
         _light: { borderColor: 'primary', _highContrast: { borderColor: 'Highlight' } },
@@ -56,7 +60,7 @@ export const steps: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
       },
     },
     content: { display: 'flex', flexDirection: 'column', gap: '1', minWidth: 0 },
-    title: { fontWeight: 'medium' },
+    title: { fontWeight: 'medium', '[data-status="current"] &': { fontWeight: 'bold' } },
     // Relative to the list's size: a Step has no context to read Steps' `size` from.
     description: { color: 'muted', fontSize: 'text-sm' },
   },

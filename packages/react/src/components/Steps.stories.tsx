@@ -72,3 +72,23 @@ export const Sizes: Story = {
     </Stack>
   ),
 };
+
+export const Grayscale: Story = {
+  render: (args) => (
+    // A one-off wrapper for the visual baseline: Becket has no `filter` prop and this isn't app UI.
+    <Stack gap="lg" style={{ filter: 'grayscale(1)' }}>
+      {stepsRecipe.variantMap.orientation.map((orientation) => (
+        <Steps
+          key={orientation}
+          {...args}
+          orientation={orientation}
+          aria-label={`Sign-up progress, ${orientation}`}
+        >
+          <Step status="complete" title="Account" />
+          <Step status="current" title="Profile" />
+          <Step status="upcoming" title="Done" />
+        </Steps>
+      ))}
+    </Stack>
+  ),
+};
