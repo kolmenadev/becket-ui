@@ -35,10 +35,14 @@ Raw elements with inline styles are the most common mistake. Use this table:
 | `button`                                             | `Button visual="primary\|secondary\|neutral\|outline"`                                                                     |
 | `input` + `label`                                    | `Field` + `FieldLabel` + `FieldControl`, or `TextField label`                                                              |
 | `select` / `textarea`                                | `Select` / `Textarea` (or `FieldSelect` / `FieldTextarea` inside `Field`)                                                  |
+| searchable `input` + dropdown list (autocomplete)    | `Combobox label options` (`onSearch` for server results, `suggestions` for a group above them)                           |
+| `input type="file"` or a drag-and-drop area          | `FileUpload label accept maxSize` (`multiple`, `maxFiles`)                                                                 |
 | checkbox / radio / toggle `input`                    | `Checkbox`, `RadioGroup` + `Radio`, `Switch`                                                                               |
 | `table`, `tr`, `td`                                  | `Table`, `Thead`, `Tbody`, `Tr`, `Th`, `Td`                                                                                |
 | panel `div` with border and padding                  | `Card` + `CardHeader` / `CardBody` / `CardFooter`                                                                          |
 | pill `span`                                          | `Tag` (label) or `Badge` (count or status)                                                                                 |
+| colored notice `div` (info, success, warning, error) | `Alert status title` (`actions`, `onDismiss`)                                                                              |
+| toast / snackbar, custom notification stack          | `ToastProvider` once at the app root, then `useToast().show({ status, title })`                                             |
 | inline `svg` icon                                    | `Icon` around your SVG, or a built-in glyph (`SearchIcon`, `ChevronDownIcon`, …); add `label` only when it carries meaning |
 | `a`                                                  | `Link`                                                                                                                     |
 | `a` styled as a button (call to action)              | `Button as="a" href="…"` (anchor props are typed)                                                                          |
@@ -129,6 +133,9 @@ that holds state or handlers, never on a whole page or barrel file.
 - One `h1` per page. Headings follow the document outline (`Heading as="h2"` for sections).
 - Use `Button` for actions and `Link` for navigation, never a clickable `div`.
 - Don't rely on color alone for status: keep the text ("Active", "Invited").
+- `Alert` is `role="status"` by default. Pass `role="alert"` only for urgent errors the user must
+  act on now; it interrupts the screen reader. Toasts never take focus, so anything the user must
+  act on also belongs on the page, not only in a toast.
 
 ## 9. TypeScript and naming
 
