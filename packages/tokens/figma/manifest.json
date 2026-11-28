@@ -1,0 +1,1159 @@
+[
+  {
+    "panda": "colors.brand.becketYellow",
+    "css": "--beckui--colors-brand-becket-yellow",
+    "figma": "colors/brand/becketYellow",
+    "artifact": "brand-becketYellow",
+    "type": "color",
+    "dark": "oklch(0.75 0.15 78)",
+    "light": "oklch(0.75 0.15 78)",
+    "source": "oklch(0.75 0.15 78)"
+  },
+  {
+    "panda": "colors.brand.hiveSage",
+    "css": "--beckui--colors-brand-hive-sage",
+    "figma": "colors/brand/hiveSage",
+    "artifact": "brand-hiveSage",
+    "type": "color",
+    "dark": "oklch(0.7 0.13 125)",
+    "light": "oklch(0.7 0.13 125)",
+    "source": "oklch(0.70 0.13 125)"
+  },
+  {
+    "panda": "colors.brand.combAmber",
+    "css": "--beckui--colors-brand-comb-amber",
+    "figma": "colors/brand/combAmber",
+    "artifact": "brand-combAmber",
+    "type": "color",
+    "dark": "oklch(0.6 0.16 48)",
+    "light": "oklch(0.6 0.16 48)",
+    "source": "oklch(0.60 0.16 48)"
+  },
+  {
+    "panda": "colors.primary",
+    "css": "--beckui--colors-primary",
+    "figma": "colors/primary",
+    "artifact": "primary",
+    "type": "color",
+    "dark": "oklch(0.75 0.15 78)",
+    "light": "oklch(0.75 0.15 78)",
+    "source": "{colors.brand.becketYellow}"
+  },
+  {
+    "panda": "colors.secondary",
+    "css": "--beckui--colors-secondary",
+    "figma": "colors/secondary",
+    "artifact": "secondary",
+    "type": "color",
+    "dark": "oklch(0.7 0.13 125)",
+    "light": "oklch(0.7 0.13 125)",
+    "source": "{colors.brand.hiveSage}"
+  },
+  {
+    "panda": "colors.tertiary",
+    "css": "--beckui--colors-tertiary",
+    "figma": "colors/tertiary",
+    "artifact": "tertiary",
+    "type": "color",
+    "dark": "oklch(0.6 0.16 48)",
+    "light": "oklch(0.6 0.16 48)",
+    "source": "{colors.brand.combAmber}"
+  },
+  {
+    "panda": "colors.primaryHover",
+    "css": "--beckui--colors-primary-hover",
+    "figma": "colors/primaryHover",
+    "artifact": "primaryHover",
+    "type": "color",
+    "dark": "oklch(0.78 0.132 78)",
+    "light": "oklch(0.78 0.132 78)",
+    "source": "color-mix(in oklch, {colors.primary} 88%, white)"
+  },
+  {
+    "panda": "colors.neutral.50",
+    "css": "--beckui--colors-neutral-50",
+    "figma": "colors/neutral/50",
+    "artifact": "neutral-50",
+    "type": "color",
+    "dark": "oklch(0.96 0.012 78)",
+    "light": "oklch(0.96 0.012 78)",
+    "source": "oklch(0.96 0.012 78)"
+  },
+  {
+    "panda": "colors.neutral.100",
+    "css": "--beckui--colors-neutral-100",
+    "figma": "colors/neutral/100",
+    "artifact": "neutral-100",
+    "type": "color",
+    "dark": "oklch(0.94 0.012 78)",
+    "light": "oklch(0.94 0.012 78)",
+    "source": "oklch(0.94 0.012 78)"
+  },
+  {
+    "panda": "colors.neutral.200",
+    "css": "--beckui--colors-neutral-200",
+    "figma": "colors/neutral/200",
+    "artifact": "neutral-200",
+    "type": "color",
+    "dark": "oklch(0.89 0.012 75)",
+    "light": "oklch(0.89 0.012 75)",
+    "source": "oklch(0.89 0.012 75)"
+  },
+  {
+    "panda": "colors.neutral.300",
+    "css": "--beckui--colors-neutral-300",
+    "figma": "colors/neutral/300",
+    "artifact": "neutral-300",
+    "type": "color",
+    "dark": "oklch(0.84 0.012 72)",
+    "light": "oklch(0.84 0.012 72)",
+    "source": "oklch(0.84 0.012 72)"
+  },
+  {
+    "panda": "colors.neutral.400",
+    "css": "--beckui--colors-neutral-400",
+    "figma": "colors/neutral/400",
+    "artifact": "neutral-400",
+    "type": "color",
+    "dark": "oklch(0.75 0.012 70)",
+    "light": "oklch(0.75 0.012 70)",
+    "source": "oklch(0.75 0.012 70)"
+  },
+  {
+    "panda": "colors.neutral.500",
+    "css": "--beckui--colors-neutral-500",
+    "figma": "colors/neutral/500",
+    "artifact": "neutral-500",
+    "type": "color",
+    "dark": "oklch(0.65 0.012 65)",
+    "light": "oklch(0.65 0.012 65)",
+    "source": "oklch(0.65 0.012 65)"
+  },
+  {
+    "panda": "colors.neutral.600",
+    "css": "--beckui--colors-neutral-600",
+    "figma": "colors/neutral/600",
+    "artifact": "neutral-600",
+    "type": "color",
+    "dark": "oklch(0.55 0.014 62)",
+    "light": "oklch(0.55 0.014 62)",
+    "source": "oklch(0.55 0.014 62)"
+  },
+  {
+    "panda": "colors.neutral.700",
+    "css": "--beckui--colors-neutral-700",
+    "figma": "colors/neutral/700",
+    "artifact": "neutral-700",
+    "type": "color",
+    "dark": "oklch(0.45 0.014 60)",
+    "light": "oklch(0.45 0.014 60)",
+    "source": "oklch(0.45 0.014 60)"
+  },
+  {
+    "panda": "colors.neutral.800",
+    "css": "--beckui--colors-neutral-800",
+    "figma": "colors/neutral/800",
+    "artifact": "neutral-800",
+    "type": "color",
+    "dark": "oklch(0.35 0.015 60)",
+    "light": "oklch(0.35 0.015 60)",
+    "source": "oklch(0.35 0.015 60)"
+  },
+  {
+    "panda": "colors.neutral.900",
+    "css": "--beckui--colors-neutral-900",
+    "figma": "colors/neutral/900",
+    "artifact": "neutral-900",
+    "type": "color",
+    "dark": "oklch(0.22 0.015 60)",
+    "light": "oklch(0.22 0.015 60)",
+    "source": "oklch(0.22 0.015 60)"
+  },
+  {
+    "panda": "colors.black",
+    "css": "--beckui--colors-black",
+    "figma": "colors/black",
+    "artifact": "black",
+    "type": "color",
+    "dark": "oklch(0.2 0 0)",
+    "light": "oklch(0.2 0 0)",
+    "source": "oklch(20% 0 0)"
+  },
+  {
+    "panda": "colors.white",
+    "css": "--beckui--colors-white",
+    "figma": "colors/white",
+    "artifact": "white",
+    "type": "color",
+    "dark": "oklch(0.99 0 0)",
+    "light": "oklch(0.99 0 0)",
+    "source": "oklch(99% 0 0)"
+  },
+  {
+    "panda": "colors.border",
+    "css": "--beckui--colors-border",
+    "figma": "colors/border",
+    "artifact": "border",
+    "type": "color",
+    "dark": "oklch(0.89 0.012 75)",
+    "light": "oklch(0.89 0.012 75)",
+    "source": "{colors.neutral.200}"
+  },
+  {
+    "panda": "colors.warning",
+    "css": "--beckui--colors-warning",
+    "figma": "colors/warning",
+    "artifact": "warning",
+    "type": "color",
+    "dark": "oklch(0.72 0.16 42)",
+    "light": "oklch(0.72 0.16 42)",
+    "source": "oklch(0.72 0.16 42)"
+  },
+  {
+    "panda": "colors.success",
+    "css": "--beckui--colors-success",
+    "figma": "colors/success",
+    "artifact": "success",
+    "type": "color",
+    "dark": "oklch(0.68 0.14 165)",
+    "light": "oklch(0.68 0.14 165)",
+    "source": "oklch(0.68 0.14 165)"
+  },
+  {
+    "panda": "colors.lightBackground",
+    "css": "--beckui--colors-light-background",
+    "figma": null,
+    "artifact": null,
+    "type": "color",
+    "dark": "oklch(0.96 0.012 78)",
+    "light": "oklch(0.96 0.012 78)",
+    "source": "{colors.neutral.50}"
+  },
+  {
+    "panda": "colors.lightText",
+    "css": "--beckui--colors-light-text",
+    "figma": null,
+    "artifact": null,
+    "type": "color",
+    "dark": "oklch(0.22 0.015 60)",
+    "light": "oklch(0.22 0.015 60)",
+    "source": "{colors.neutral.900}"
+  },
+  {
+    "panda": "gradients.primary",
+    "css": "--beckui--gradients-primary",
+    "figma": "gradients/primary",
+    "artifact": null,
+    "type": "gradient",
+    "dark": "linear-gradient(to right, oklch(0.75 0.15 78), oklch(0.6 0.16 48))",
+    "light": "linear-gradient(to right, oklch(0.75 0.15 78), oklch(0.6 0.16 48))",
+    "source": "linear-gradient(to right, {colors.primary}, {colors.tertiary})"
+  },
+  {
+    "panda": "gradients.primaryHover",
+    "css": "--beckui--gradients-primary-hover",
+    "figma": "gradients/primaryHover",
+    "artifact": null,
+    "type": "gradient",
+    "dark": "linear-gradient(to right, oklch(0.78 0.132 78), oklch(0.6 0.16 48))",
+    "light": "linear-gradient(to right, oklch(0.78 0.132 78), oklch(0.6 0.16 48))",
+    "source": "linear-gradient(to right, {colors.primaryHover}, {colors.tertiary})"
+  },
+  {
+    "panda": "gradients.secondary",
+    "css": "--beckui--gradients-secondary",
+    "figma": "gradients/secondary",
+    "artifact": null,
+    "type": "gradient",
+    "dark": "linear-gradient(to right, oklch(0.75 0.15 78), oklch(0.7 0.13 125))",
+    "light": "linear-gradient(to right, oklch(0.75 0.15 78), oklch(0.7 0.13 125))",
+    "source": "linear-gradient(to right, {colors.primary}, {colors.secondary})"
+  },
+  {
+    "panda": "gradients.neutral",
+    "css": "--beckui--gradients-neutral",
+    "figma": "gradients/neutral",
+    "artifact": null,
+    "type": "gradient",
+    "dark": "linear-gradient(to right, oklch(0.94 0.012 78), oklch(0.89 0.012 75))",
+    "light": "linear-gradient(to right, oklch(0.94 0.012 78), oklch(0.89 0.012 75))",
+    "source": "linear-gradient(to right, {colors.neutral.100}, {colors.neutral.200})"
+  },
+  {
+    "panda": "spacing.0",
+    "css": "--beckui--spacing-0",
+    "figma": "spacing/0",
+    "artifact": "space-0",
+    "type": "dimension",
+    "dark": "0rem",
+    "light": "0rem",
+    "source": "0rem"
+  },
+  {
+    "panda": "spacing.1",
+    "css": "--beckui--spacing-1",
+    "figma": "spacing/1",
+    "artifact": "space-1",
+    "type": "dimension",
+    "dark": "0.25rem",
+    "light": "0.25rem",
+    "source": "calc({spacing.unit} * 1)"
+  },
+  {
+    "panda": "spacing.2",
+    "css": "--beckui--spacing-2",
+    "figma": "spacing/2",
+    "artifact": "space-2",
+    "type": "dimension",
+    "dark": "0.5rem",
+    "light": "0.5rem",
+    "source": "calc({spacing.unit} * 2)"
+  },
+  {
+    "panda": "spacing.3",
+    "css": "--beckui--spacing-3",
+    "figma": "spacing/3",
+    "artifact": "space-3",
+    "type": "dimension",
+    "dark": "0.75rem",
+    "light": "0.75rem",
+    "source": "calc({spacing.unit} * 3)"
+  },
+  {
+    "panda": "spacing.5",
+    "css": "--beckui--spacing-5",
+    "figma": "spacing/5",
+    "artifact": "space-5",
+    "type": "dimension",
+    "dark": "1.25rem",
+    "light": "1.25rem",
+    "source": "calc({spacing.unit} * 5)"
+  },
+  {
+    "panda": "spacing.8",
+    "css": "--beckui--spacing-8",
+    "figma": "spacing/8",
+    "artifact": "space-8",
+    "type": "dimension",
+    "dark": "2rem",
+    "light": "2rem",
+    "source": "calc({spacing.unit} * 8)"
+  },
+  {
+    "panda": "spacing.13",
+    "css": "--beckui--spacing-13",
+    "figma": "spacing/13",
+    "artifact": "space-13",
+    "type": "dimension",
+    "dark": "3.25rem",
+    "light": "3.25rem",
+    "source": "calc({spacing.unit} * 13)"
+  },
+  {
+    "panda": "spacing.21",
+    "css": "--beckui--spacing-21",
+    "figma": "spacing/21",
+    "artifact": "space-21",
+    "type": "dimension",
+    "dark": "5.25rem",
+    "light": "5.25rem",
+    "source": "calc({spacing.unit} * 21)"
+  },
+  {
+    "panda": "spacing.34",
+    "css": "--beckui--spacing-34",
+    "figma": "spacing/34",
+    "artifact": "space-34",
+    "type": "dimension",
+    "dark": "8.5rem",
+    "light": "8.5rem",
+    "source": "calc({spacing.unit} * 34)"
+  },
+  {
+    "panda": "spacing.unit",
+    "css": "--beckui--spacing-unit",
+    "figma": "spacing/unit",
+    "artifact": "space-unit",
+    "type": "dimension",
+    "dark": "0.25rem",
+    "light": "0.25rem",
+    "source": "0.25rem"
+  },
+  {
+    "panda": "spacing.xs",
+    "css": "--beckui--spacing-xs",
+    "figma": "spacing/xs",
+    "artifact": "space-xs",
+    "type": "dimension",
+    "dark": "0.25rem",
+    "light": "0.25rem",
+    "source": "{spacing.1}"
+  },
+  {
+    "panda": "spacing.sm",
+    "css": "--beckui--spacing-sm",
+    "figma": "spacing/sm",
+    "artifact": "space-sm",
+    "type": "dimension",
+    "dark": "0.5rem",
+    "light": "0.5rem",
+    "source": "{spacing.2}"
+  },
+  {
+    "panda": "spacing.md",
+    "css": "--beckui--spacing-md",
+    "figma": "spacing/md",
+    "artifact": "space-md",
+    "type": "dimension",
+    "dark": "0.75rem",
+    "light": "0.75rem",
+    "source": "{spacing.3}"
+  },
+  {
+    "panda": "spacing.lg",
+    "css": "--beckui--spacing-lg",
+    "figma": "spacing/lg",
+    "artifact": "space-lg",
+    "type": "dimension",
+    "dark": "1.25rem",
+    "light": "1.25rem",
+    "source": "{spacing.5}"
+  },
+  {
+    "panda": "spacing.xl",
+    "css": "--beckui--spacing-xl",
+    "figma": "spacing/xl",
+    "artifact": "space-xl",
+    "type": "dimension",
+    "dark": "2rem",
+    "light": "2rem",
+    "source": "{spacing.8}"
+  },
+  {
+    "panda": "spacing.2xl",
+    "css": "--beckui--spacing-2xl",
+    "figma": "spacing/2xl",
+    "artifact": "space-2xl",
+    "type": "dimension",
+    "dark": "3.25rem",
+    "light": "3.25rem",
+    "source": "{spacing.13}"
+  },
+  {
+    "panda": "spacing.text-unit",
+    "css": "--beckui--spacing-text-unit",
+    "figma": null,
+    "artifact": "space-text-unit",
+    "type": "dimension",
+    "dark": "0.25em",
+    "light": "0.25em",
+    "source": "0.25em"
+  },
+  {
+    "panda": "spacing.text-1",
+    "css": "--beckui--spacing-text-1",
+    "figma": null,
+    "artifact": "space-text-1",
+    "type": "dimension",
+    "dark": "0.25em",
+    "light": "0.25em",
+    "source": "calc({spacing.text-unit} * 1)"
+  },
+  {
+    "panda": "spacing.text-2",
+    "css": "--beckui--spacing-text-2",
+    "figma": null,
+    "artifact": "space-text-2",
+    "type": "dimension",
+    "dark": "0.5em",
+    "light": "0.5em",
+    "source": "calc({spacing.text-unit} * 2)"
+  },
+  {
+    "panda": "spacing.text-3",
+    "css": "--beckui--spacing-text-3",
+    "figma": null,
+    "artifact": "space-text-3",
+    "type": "dimension",
+    "dark": "0.75em",
+    "light": "0.75em",
+    "source": "calc({spacing.text-unit} * 3)"
+  },
+  {
+    "panda": "spacing.text-5",
+    "css": "--beckui--spacing-text-5",
+    "figma": null,
+    "artifact": "space-text-5",
+    "type": "dimension",
+    "dark": "1.25em",
+    "light": "1.25em",
+    "source": "calc({spacing.text-unit} * 5)"
+  },
+  {
+    "panda": "spacing.text-8",
+    "css": "--beckui--spacing-text-8",
+    "figma": null,
+    "artifact": "space-text-8",
+    "type": "dimension",
+    "dark": "2em",
+    "light": "2em",
+    "source": "calc({spacing.text-unit} * 8)"
+  },
+  {
+    "panda": "spacing.text-13",
+    "css": "--beckui--spacing-text-13",
+    "figma": null,
+    "artifact": "space-text-13",
+    "type": "dimension",
+    "dark": "3.25em",
+    "light": "3.25em",
+    "source": "calc({spacing.text-unit} * 13)"
+  },
+  {
+    "panda": "sizes.0",
+    "css": "--beckui--sizes-0",
+    "figma": "sizes/0",
+    "artifact": "size-0",
+    "type": "dimension",
+    "dark": "0rem",
+    "light": "0rem",
+    "source": "0rem"
+  },
+  {
+    "panda": "sizes.1",
+    "css": "--beckui--sizes-1",
+    "figma": "sizes/1",
+    "artifact": "size-1",
+    "type": "dimension",
+    "dark": "0.25rem",
+    "light": "0.25rem",
+    "source": "calc({spacing.unit} * 1)"
+  },
+  {
+    "panda": "sizes.2",
+    "css": "--beckui--sizes-2",
+    "figma": "sizes/2",
+    "artifact": "size-2",
+    "type": "dimension",
+    "dark": "0.5rem",
+    "light": "0.5rem",
+    "source": "calc({spacing.unit} * 2)"
+  },
+  {
+    "panda": "sizes.3",
+    "css": "--beckui--sizes-3",
+    "figma": "sizes/3",
+    "artifact": "size-3",
+    "type": "dimension",
+    "dark": "0.75rem",
+    "light": "0.75rem",
+    "source": "calc({spacing.unit} * 3)"
+  },
+  {
+    "panda": "sizes.5",
+    "css": "--beckui--sizes-5",
+    "figma": "sizes/5",
+    "artifact": "size-5",
+    "type": "dimension",
+    "dark": "1.25rem",
+    "light": "1.25rem",
+    "source": "calc({spacing.unit} * 5)"
+  },
+  {
+    "panda": "sizes.8",
+    "css": "--beckui--sizes-8",
+    "figma": "sizes/8",
+    "artifact": "size-8",
+    "type": "dimension",
+    "dark": "2rem",
+    "light": "2rem",
+    "source": "calc({spacing.unit} * 8)"
+  },
+  {
+    "panda": "sizes.13",
+    "css": "--beckui--sizes-13",
+    "figma": "sizes/13",
+    "artifact": "size-13",
+    "type": "dimension",
+    "dark": "3.25rem",
+    "light": "3.25rem",
+    "source": "calc({spacing.unit} * 13)"
+  },
+  {
+    "panda": "sizes.21",
+    "css": "--beckui--sizes-21",
+    "figma": "sizes/21",
+    "artifact": "size-21",
+    "type": "dimension",
+    "dark": "5.25rem",
+    "light": "5.25rem",
+    "source": "calc({spacing.unit} * 21)"
+  },
+  {
+    "panda": "sizes.34",
+    "css": "--beckui--sizes-34",
+    "figma": "sizes/34",
+    "artifact": "size-34",
+    "type": "dimension",
+    "dark": "8.5rem",
+    "light": "8.5rem",
+    "source": "calc({spacing.unit} * 34)"
+  },
+  {
+    "panda": "sizes.55",
+    "css": "--beckui--sizes-55",
+    "figma": "sizes/55",
+    "artifact": "size-55",
+    "type": "dimension",
+    "dark": "13.75rem",
+    "light": "13.75rem",
+    "source": "calc({spacing.unit} * 55)"
+  },
+  {
+    "panda": "sizes.field",
+    "css": "--beckui--sizes-field",
+    "figma": "sizes/field",
+    "artifact": "size-field",
+    "type": "dimension",
+    "dark": "12.5rem",
+    "light": "12.5rem",
+    "source": "12.5rem"
+  },
+  {
+    "panda": "sizes.prose",
+    "css": "--beckui--sizes-prose",
+    "figma": null,
+    "artifact": "size-prose",
+    "type": "dimension",
+    "dark": "65ch",
+    "light": "65ch",
+    "source": "65ch"
+  },
+  {
+    "panda": "radii.none",
+    "css": "--beckui--radii-none",
+    "figma": "radii/none",
+    "artifact": "radius-none",
+    "type": "dimension",
+    "dark": "0rem",
+    "light": "0rem",
+    "source": "0rem"
+  },
+  {
+    "panda": "radii.sm",
+    "css": "--beckui--radii-sm",
+    "figma": "radii/sm",
+    "artifact": "radius-sm",
+    "type": "dimension",
+    "dark": "0.25rem",
+    "light": "0.25rem",
+    "source": "0.25rem"
+  },
+  {
+    "panda": "radii.md",
+    "css": "--beckui--radii-md",
+    "figma": "radii/md",
+    "artifact": "radius-md",
+    "type": "dimension",
+    "dark": "0.5rem",
+    "light": "0.5rem",
+    "source": "0.5rem"
+  },
+  {
+    "panda": "radii.lg",
+    "css": "--beckui--radii-lg",
+    "figma": "radii/lg",
+    "artifact": "radius-lg",
+    "type": "dimension",
+    "dark": "0.75rem",
+    "light": "0.75rem",
+    "source": "0.75rem"
+  },
+  {
+    "panda": "radii.xl",
+    "css": "--beckui--radii-xl",
+    "figma": "radii/xl",
+    "artifact": "radius-xl",
+    "type": "dimension",
+    "dark": "1.25rem",
+    "light": "1.25rem",
+    "source": "1.25rem"
+  },
+  {
+    "panda": "radii.full",
+    "css": "--beckui--radii-full",
+    "figma": "radii/full",
+    "artifact": "radius-full",
+    "type": "dimension",
+    "dark": "9999px",
+    "light": "9999px",
+    "source": "9999px"
+  },
+  {
+    "panda": "fonts.sans",
+    "css": "--beckui--fonts-sans",
+    "figma": "fonts/sans",
+    "artifact": null,
+    "type": "fontFamily",
+    "dark": "'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
+    "light": "'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
+    "source": "'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif"
+  },
+  {
+    "panda": "fonts.mono",
+    "css": "--beckui--fonts-mono",
+    "figma": "fonts/mono",
+    "artifact": null,
+    "type": "fontFamily",
+    "dark": "'JetBrains Mono', 'Menlo', 'Consolas', 'monospace'",
+    "light": "'JetBrains Mono', 'Menlo', 'Consolas', 'monospace'",
+    "source": "'JetBrains Mono', 'Menlo', 'Consolas', 'monospace'"
+  },
+  {
+    "panda": "fontSizes.base",
+    "css": "--beckui--font-sizes-base",
+    "figma": "fontSizes/base",
+    "artifact": null,
+    "type": "dimension",
+    "dark": "1rem",
+    "light": "1rem",
+    "source": "1rem"
+  },
+  {
+    "panda": "fontSizes.xs",
+    "css": "--beckui--font-sizes-xs",
+    "figma": "fontSizes/xs",
+    "artifact": null,
+    "type": "dimension",
+    "dark": "0.75rem",
+    "light": "0.75rem",
+    "source": "calc({fontSizes.base} * 0.75)"
+  },
+  {
+    "panda": "fontSizes.sm",
+    "css": "--beckui--font-sizes-sm",
+    "figma": "fontSizes/sm",
+    "artifact": null,
+    "type": "dimension",
+    "dark": "0.875rem",
+    "light": "0.875rem",
+    "source": "calc({fontSizes.base} * 0.875)"
+  },
+  {
+    "panda": "fontSizes.md",
+    "css": "--beckui--font-sizes-md",
+    "figma": "fontSizes/md",
+    "artifact": null,
+    "type": "dimension",
+    "dark": "1rem",
+    "light": "1rem",
+    "source": "calc({fontSizes.base} * 1)"
+  },
+  {
+    "panda": "fontSizes.lg",
+    "css": "--beckui--font-sizes-lg",
+    "figma": "fontSizes/lg",
+    "artifact": null,
+    "type": "dimension",
+    "dark": "1.25rem",
+    "light": "1.25rem",
+    "source": "calc({fontSizes.base} * 1.25)"
+  },
+  {
+    "panda": "fontSizes.xl",
+    "css": "--beckui--font-sizes-xl",
+    "figma": "fontSizes/xl",
+    "artifact": null,
+    "type": "dimension",
+    "dark": "1.5rem",
+    "light": "1.5rem",
+    "source": "calc({fontSizes.base} * 1.5)"
+  },
+  {
+    "panda": "fontSizes.2xl",
+    "css": "--beckui--font-sizes-2xl",
+    "figma": "fontSizes/2xl",
+    "artifact": null,
+    "type": "dimension",
+    "dark": "2rem",
+    "light": "2rem",
+    "source": "calc({fontSizes.base} * 2)"
+  },
+  {
+    "panda": "fontSizes.3xl",
+    "css": "--beckui--font-sizes-3xl",
+    "figma": "fontSizes/3xl",
+    "artifact": null,
+    "type": "dimension",
+    "dark": "3rem",
+    "light": "3rem",
+    "source": "calc({fontSizes.base} * 3)"
+  },
+  {
+    "panda": "fontSizes.4xl",
+    "css": "--beckui--font-sizes-4xl",
+    "figma": "fontSizes/4xl",
+    "artifact": null,
+    "type": "dimension",
+    "dark": "3.75rem",
+    "light": "3.75rem",
+    "source": "calc({fontSizes.base} * 3.75)"
+  },
+  {
+    "panda": "fontSizes.5xl",
+    "css": "--beckui--font-sizes-5xl",
+    "figma": "fontSizes/5xl",
+    "artifact": null,
+    "type": "dimension",
+    "dark": "4.5rem",
+    "light": "4.5rem",
+    "source": "calc({fontSizes.base} * 4.5)"
+  },
+  {
+    "panda": "fontSizes.6xl",
+    "css": "--beckui--font-sizes-6xl",
+    "figma": "fontSizes/6xl",
+    "artifact": null,
+    "type": "dimension",
+    "dark": "6rem",
+    "light": "6rem",
+    "source": "calc({fontSizes.base} * 6)"
+  },
+  {
+    "panda": "fontSizes.text-xs",
+    "css": "--beckui--font-sizes-text-xs",
+    "figma": null,
+    "artifact": null,
+    "type": "dimension",
+    "dark": "0.75em",
+    "light": "0.75em",
+    "source": "0.75em"
+  },
+  {
+    "panda": "fontSizes.text-sm",
+    "css": "--beckui--font-sizes-text-sm",
+    "figma": null,
+    "artifact": null,
+    "type": "dimension",
+    "dark": "0.875em",
+    "light": "0.875em",
+    "source": "0.875em"
+  },
+  {
+    "panda": "fontSizes.text-md",
+    "css": "--beckui--font-sizes-text-md",
+    "figma": null,
+    "artifact": null,
+    "type": "dimension",
+    "dark": "1em",
+    "light": "1em",
+    "source": "1em"
+  },
+  {
+    "panda": "fontSizes.text-lg",
+    "css": "--beckui--font-sizes-text-lg",
+    "figma": null,
+    "artifact": null,
+    "type": "dimension",
+    "dark": "1.25em",
+    "light": "1.25em",
+    "source": "1.25em"
+  },
+  {
+    "panda": "fontSizes.text-xl",
+    "css": "--beckui--font-sizes-text-xl",
+    "figma": null,
+    "artifact": null,
+    "type": "dimension",
+    "dark": "1.5em",
+    "light": "1.5em",
+    "source": "1.5em"
+  },
+  {
+    "panda": "fontSizes.text-2xl",
+    "css": "--beckui--font-sizes-text-2xl",
+    "figma": null,
+    "artifact": null,
+    "type": "dimension",
+    "dark": "2em",
+    "light": "2em",
+    "source": "2em"
+  },
+  {
+    "panda": "fontWeights.normal",
+    "css": "--beckui--font-weights-normal",
+    "figma": "fontWeights/normal",
+    "artifact": null,
+    "type": "fontWeight",
+    "dark": "400",
+    "light": "400",
+    "source": "400"
+  },
+  {
+    "panda": "fontWeights.medium",
+    "css": "--beckui--font-weights-medium",
+    "figma": "fontWeights/medium",
+    "artifact": null,
+    "type": "fontWeight",
+    "dark": "500",
+    "light": "500",
+    "source": "500"
+  },
+  {
+    "panda": "fontWeights.bold",
+    "css": "--beckui--font-weights-bold",
+    "figma": "fontWeights/bold",
+    "artifact": null,
+    "type": "fontWeight",
+    "dark": "700",
+    "light": "700",
+    "source": "700"
+  },
+  {
+    "panda": "lineHeights.normal",
+    "css": "--beckui--line-heights-normal",
+    "figma": "lineHeights/normal",
+    "artifact": null,
+    "type": "number",
+    "dark": "1.5",
+    "light": "1.5",
+    "source": "1.5"
+  },
+  {
+    "panda": "lineHeights.tight",
+    "css": "--beckui--line-heights-tight",
+    "figma": "lineHeights/tight",
+    "artifact": null,
+    "type": "number",
+    "dark": "1.25",
+    "light": "1.25",
+    "source": "1.25"
+  },
+  {
+    "panda": "lineHeights.loose",
+    "css": "--beckui--line-heights-loose",
+    "figma": "lineHeights/loose",
+    "artifact": null,
+    "type": "number",
+    "dark": "1.75",
+    "light": "1.75",
+    "source": "1.75"
+  },
+  {
+    "panda": "shadows.sm",
+    "css": "--beckui--shadows-sm",
+    "figma": "shadows/sm",
+    "artifact": "shadow-sm",
+    "type": "shadow",
+    "dark": "0 1px 3px 0 oklch(0% 0 0 / 0.08)",
+    "light": "0 1px 3px 0 oklch(0% 0 0 / 0.08)",
+    "source": "0 1px 3px 0 oklch(0% 0 0 / 0.08)"
+  },
+  {
+    "panda": "shadows.md",
+    "css": "--beckui--shadows-md",
+    "figma": "shadows/md",
+    "artifact": "shadow-md",
+    "type": "shadow",
+    "dark": "0 3px 6px 0 oklch(0% 0 0 / 0.12)",
+    "light": "0 3px 6px 0 oklch(0% 0 0 / 0.12)",
+    "source": "0 3px 6px 0 oklch(0% 0 0 / 0.12)"
+  },
+  {
+    "panda": "shadows.lg",
+    "css": "--beckui--shadows-lg",
+    "figma": "shadows/lg",
+    "artifact": "shadow-lg",
+    "type": "shadow",
+    "dark": "0 8px 16px 0 oklch(0% 0 0 / 0.16)",
+    "light": "0 8px 16px 0 oklch(0% 0 0 / 0.16)",
+    "source": "0 8px 16px 0 oklch(0% 0 0 / 0.16)"
+  },
+  {
+    "panda": "shadows.elevated",
+    "css": "--beckui--shadows-elevated",
+    "figma": "shadows/elevated",
+    "artifact": "shadow-elevated",
+    "type": "shadow",
+    "dark": "0 12px 32px oklch(0% 0 0 / 0.55), 0 0 0 1px oklch(100% 0 0 / 0.08)",
+    "light": "0 12px 32px oklch(0% 0 0 / 0.55), 0 0 0 1px oklch(100% 0 0 / 0.08)",
+    "source": "0 12px 32px oklch(0% 0 0 / 0.55), 0 0 0 1px oklch(100% 0 0 / 0.08)"
+  },
+  {
+    "panda": "shadows.outline",
+    "css": "--beckui--shadows-outline",
+    "figma": null,
+    "artifact": null,
+    "type": "shadow",
+    "dark": "0 0 0 2px var(--beckui--colors-background), 0 0 0 4px oklch(0.75 0.15 78)",
+    "light": "0 0 0 2px var(--beckui--colors-background), 0 0 0 4px oklch(0.75 0.15 78)",
+    "source": "0 0 0 2px var(--beckui--colors-background), 0 0 0 4px {colors.primary}"
+  },
+  {
+    "panda": "colors.background",
+    "css": "--beckui--colors-background",
+    "figma": "colors/background",
+    "artifact": "background",
+    "type": "color",
+    "dark": "oklch(0.22 0.015 60)",
+    "light": "oklch(0.96 0.012 78)",
+    "source": {
+      "base": "{colors.neutral.900}",
+      "_light": "{colors.neutral.50}"
+    }
+  },
+  {
+    "panda": "colors.text",
+    "css": "--beckui--colors-text",
+    "figma": "colors/text",
+    "artifact": "text",
+    "type": "color",
+    "dark": "oklch(0.96 0.012 78)",
+    "light": "oklch(0.22 0.015 60)",
+    "source": {
+      "base": "{colors.neutral.50}",
+      "_light": "{colors.neutral.900}"
+    }
+  },
+  {
+    "panda": "colors.muted",
+    "css": "--beckui--colors-muted",
+    "figma": "colors/muted",
+    "artifact": "muted",
+    "type": "color",
+    "dark": "oklch(0.84 0.012 72)",
+    "light": "oklch(0.53 0.014 62)",
+    "source": {
+      "base": "{colors.neutral.300}",
+      "_light": "oklch(0.53 0.014 62)"
+    }
+  },
+  {
+    "panda": "colors.surface",
+    "css": "--beckui--colors-surface",
+    "figma": "colors/surface",
+    "artifact": "surface",
+    "type": "color",
+    "dark": "oklch(0.35 0.015 60)",
+    "light": "oklch(0.99 0 0)",
+    "source": {
+      "base": "{colors.neutral.800}",
+      "_light": "{colors.white}"
+    }
+  },
+  {
+    "panda": "colors.danger",
+    "css": "--beckui--colors-danger",
+    "figma": "colors/danger",
+    "artifact": "danger",
+    "type": "color",
+    "dark": "oklch(0.76 0.16 25)",
+    "light": "oklch(0.48 0.2 25)",
+    "source": {
+      "base": "oklch(0.76 0.16 25)",
+      "_light": "oklch(0.48 0.20 25)"
+    }
+  },
+  {
+    "panda": "colors.accent",
+    "css": "--beckui--colors-accent",
+    "figma": "colors/accent",
+    "artifact": "accent",
+    "type": "color",
+    "dark": "oklch(0.86 0.12 125)",
+    "light": "oklch(0.38 0.14 125)",
+    "source": {
+      "base": "oklch(0.86 0.12 125)",
+      "_light": "oklch(0.38 0.14 125)"
+    }
+  },
+  {
+    "panda": "colors.link",
+    "css": "--beckui--colors-link",
+    "figma": "colors/link",
+    "artifact": "link",
+    "type": "color",
+    "dark": "oklch(0.75 0.15 78)",
+    "light": "oklch(0.54 0.12 70)",
+    "source": {
+      "base": "{colors.primary}",
+      "_light": "oklch(0.54 0.12 70)"
+    }
+  },
+  {
+    "panda": "colors.linkHover",
+    "css": "--beckui--colors-link-hover",
+    "figma": "colors/linkHover",
+    "artifact": "linkHover",
+    "type": "color",
+    "dark": "oklch(0.78 0.13 78)",
+    "light": "oklch(0.46 0.11 70)",
+    "source": {
+      "base": "oklch(0.78 0.13 78)",
+      "_light": "oklch(0.46 0.11 70)"
+    }
+  },
+  {
+    "panda": "colors.linkVisited",
+    "css": "--beckui--colors-link-visited",
+    "figma": "colors/linkVisited",
+    "artifact": "linkVisited",
+    "type": "color",
+    "dark": "oklch(0.72 0.12 125)",
+    "light": "oklch(0.52 0.09 125)",
+    "source": {
+      "base": "oklch(0.72 0.12 125)",
+      "_light": "oklch(0.52 0.09 125)"
+    }
+  },
+  {
+    "panda": "breakpoints.sm",
+    "css": "--beckui--breakpoints-sm",
+    "figma": "breakpoints/sm",
+    "artifact": "breakpoint-sm",
+    "type": "dimension",
+    "dark": "30rem",
+    "light": "30rem",
+    "source": "30rem"
+  },
+  {
+    "panda": "breakpoints.md",
+    "css": "--beckui--breakpoints-md",
+    "figma": "breakpoints/md",
+    "artifact": "breakpoint-md",
+    "type": "dimension",
+    "dark": "48rem",
+    "light": "48rem",
+    "source": "48rem"
+  },
+  {
+    "panda": "breakpoints.lg",
+    "css": "--beckui--breakpoints-lg",
+    "figma": "breakpoints/lg",
+    "artifact": "breakpoint-lg",
+    "type": "dimension",
+    "dark": "62rem",
+    "light": "62rem",
+    "source": "62rem"
+  },
+  {
+    "panda": "breakpoints.xl",
+    "css": "--beckui--breakpoints-xl",
+    "figma": "breakpoints/xl",
+    "artifact": "breakpoint-xl",
+    "type": "dimension",
+    "dark": "80rem",
+    "light": "80rem",
+    "source": "80rem"
+  },
+  {
+    "panda": "breakpoints.2xl",
+    "css": "--beckui--breakpoints-2xl",
+    "figma": "breakpoints/2xl",
+    "artifact": "breakpoint-2xl",
+    "type": "dimension",
+    "dark": "96rem",
+    "light": "96rem",
+    "source": "96rem"
+  }
+]
