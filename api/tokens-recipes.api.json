@@ -197,6 +197,9 @@
   "code": {
     "defaultVariants": {}
   },
+  "combobox": {
+    "defaultVariants": {}
+  },
   "container": {
     "defaultVariants": {
       "padding": "md",

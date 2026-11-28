@@ -25,6 +25,8 @@ export { Checkbox } from './components/Checkbox';
 export { Radio, RadioGroup } from './components/Radio';
 export type { RadioProps, RadioGroupProps } from './components/Radio';
 export { Select } from './components/Select';
+export { Combobox } from './components/Combobox';
+export type { ComboboxOption, ComboboxProps } from './components/Combobox';
 export { Textarea } from './components/Textarea';
 export {
   Card,

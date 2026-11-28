@@ -5,6 +5,7 @@ import { assertNoAxeViolations } from '@becket-ui/a11y';
 import { Alert } from './components/Alert';
 import { Button } from './components/Button';
 import { Checkbox } from './components/Checkbox';
+import { Combobox } from './components/Combobox';
 import { Dialog } from './components/Dialog';
 import { Drawer } from './components/Drawer';
 import { Field, FieldControl, FieldHelper, FieldLabel } from './components/Field';
@@ -140,6 +141,18 @@ describe('Default primitive axe gate', () => {
       </Tabs>,
     );
     await assertNoAxeViolations(container);
+  });
+
+  it('Combobox', async () => {
+    await assertNoAxeViolations(
+      render(
+        <Combobox
+          label="Country"
+          helperText="Optional helper text"
+          options={[{ value: 'is', label: 'Iceland' }]}
+        />,
+      ).container,
+    );
   });
 
   it('Alert', async () => {

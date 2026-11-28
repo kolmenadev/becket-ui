@@ -1,0 +1,143 @@
+import { defineSlotRecipe } from '@pandacss/dev';
+
+// The input itself is a TextField input (textFieldRecipe); these slots add the toggle and popup.
+export const combobox: ReturnType<typeof defineSlotRecipe> = defineSlotRecipe({
+  className: 'combobox',
+  description: 'Editable combobox: text input, toggle button and a listbox popup',
+  slots: [
+    'control',
+    'toggle',
+    'popup',
+    'listbox',
+    'group',
+    'groupLabel',
+    'option',
+    'optionText',
+    'optionLabel',
+    'optionDescription',
+    'optionCheck',
+    'message',
+  ],
+  base: {
+    control: {
+      position: 'relative',
+      width: '100%',
+      // Beats the field's own inline padding so typed text never runs under the toggle.
+      '& input': { paddingInlineEnd: '8' },
+    },
+    toggle: {
+      position: 'absolute',
+      insetBlock: '0',
+      insetInlineEnd: '1',
+      marginBlock: 'auto',
+      appearance: 'none',
+      border: 'none',
+      background: 'transparent',
+      color: 'muted',
+      cursor: 'pointer',
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      // WCAG 2.5.8 minimum target size, the one fixed pixel size allowed off the scale.
+      minW: '24px',
+      minH: '24px',
+      height: 'fit-content',
+      p: '0',
+      borderRadius: 'sm',
+      _hover: { color: 'text' },
+      _disabled: { opacity: 0.6, cursor: 'not-allowed' },
+      '&[aria-expanded=true] > *': { transform: 'rotate(180deg)' },
+    },
+    popup: {
+      position: 'absolute',
+      insetInline: '0',
+      top: '100%',
+      zIndex: 20,
+      mt: '1',
+      maxHeight: '55',
+      overflowY: 'auto',
+      p: '1',
+      borderWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: 'neutral.700',
+      borderRadius: 'md',
+      backgroundColor: 'surface',
+      boxShadow: 'elevated',
+      _light: {
+        borderColor: 'border',
+        boxShadow: 'md',
+      },
+    },
+    listbox: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '1',
+      outline: 'none',
+    },
+    group: {
+      display: 'flex',
+      flexDirection: 'column',
+      '& + &': { mt: '1' },
+    },
+    groupLabel: {
+      px: '3',
+      pt: '2',
+      pb: '1',
+      fontFamily: 'sans',
+      fontSize: 'xs',
+      fontWeight: 'bold',
+      color: 'muted',
+    },
+    option: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'sm',
+      px: '3',
+      py: '2',
+      borderRadius: 'sm',
+      color: 'text',
+      fontFamily: 'sans',
+      fontSize: 'sm',
+      cursor: 'pointer',
+      userSelect: 'none',
+      _hover: { backgroundColor: 'neutral.700' },
+      // The active option. Forced colors drop the fill and repaint the transparent outline, so it
+      // still shows there.
+      _selected: {
+        backgroundColor: 'neutral.700',
+        outline: '2px solid transparent',
+        outlineOffset: '-2px',
+      },
+      _light: {
+        _hover: { backgroundColor: 'neutral.100' },
+        _selected: { backgroundColor: 'neutral.100' },
+      },
+      _disabled: { opacity: 0.6, cursor: 'not-allowed' },
+    },
+    optionText: {
+      display: 'flex',
+      flexDirection: 'column',
+      flex: '1',
+      minWidth: 0,
+    },
+    optionLabel: {
+      fontWeight: 'medium',
+    },
+    optionDescription: {
+      fontSize: 'xs',
+      color: 'muted',
+      // `muted` falls under 4.5:1 on the active option's fill in light; the text color doesn't.
+      '[aria-selected=true] &': { color: 'inherit' },
+    },
+    optionCheck: {
+      color: 'accent',
+    },
+    message: {
+      px: '3',
+      py: '2',
+      fontFamily: 'sans',
+      fontSize: 'sm',
+      color: 'muted',
+    },
+  },
+});

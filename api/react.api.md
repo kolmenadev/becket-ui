@@ -330,6 +330,72 @@ export const Code: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttribut
 // @public (undocumented)
 type Columns = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
+// @public
+export const Combobox: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">, "children" | "defaultValue" | "onChange" | "role" | "size" | "type" | "value"> & {
+label?: ReactNode;
+helperText?: ReactNode;
+size?: FieldSize;
+invalid?: boolean;
+fullWidth?: boolean;
+options?: ComboboxOption[];
+suggestions?: ComboboxOption[];
+suggestionsLabel?: string;
+resultsLabel?: string;
+value?: ComboboxOption | null;
+defaultValue?: ComboboxOption | null;
+onValueChange?: (option: ComboboxOption | null) => void;
+onInputChange?: (query: string) => void;
+onSearch?: (query: string, options: {
+signal: AbortSignal;
+}) => Promise<ComboboxOption[]>;
+searchDelay?: number;
+minQueryLength?: number;
+filter?: false | ((option: ComboboxOption, query: string) => boolean);
+loading?: boolean;
+loadingMessage?: string;
+emptyMessage?: string;
+errorMessage?: string;
+countMessage?: (count: number) => string;
+toggleLabel?: string;
+} & RefAttributes<HTMLInputElement>>;
+
+// @public (undocumented)
+export type ComboboxOption = {
+    value: string;
+    label: string;
+    description?: string;
+    disabled?: boolean;
+};
+
+// @public (undocumented)
+export type ComboboxProps = Omit<ComponentPropsWithoutRef<'input'>, 'size' | 'value' | 'defaultValue' | 'onChange' | 'type' | 'role' | 'children'> & {
+    label?: ReactNode;
+    helperText?: ReactNode;
+    size?: FieldSize;
+    invalid?: boolean;
+    fullWidth?: boolean;
+    options?: ComboboxOption[];
+    suggestions?: ComboboxOption[];
+    suggestionsLabel?: string;
+    resultsLabel?: string;
+    value?: ComboboxOption | null;
+    defaultValue?: ComboboxOption | null;
+    onValueChange?: (option: ComboboxOption | null) => void;
+    onInputChange?: (query: string) => void;
+    onSearch?: (query: string, options: {
+        signal: AbortSignal;
+    }) => Promise<ComboboxOption[]>;
+    searchDelay?: number;
+    minQueryLength?: number;
+    filter?: false | ((option: ComboboxOption, query: string) => boolean);
+    loading?: boolean;
+    loadingMessage?: string;
+    emptyMessage?: string;
+    errorMessage?: string;
+    countMessage?: (count: number) => string;
+    toggleLabel?: string;
+};
+
 // @public (undocumented)
 export const Container: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
 size?: ContainerSize;

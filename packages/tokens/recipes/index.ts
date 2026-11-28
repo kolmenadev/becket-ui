@@ -41,3 +41,4 @@ export * from './center.recipe';
 export * from './aspect-ratio.recipe';
 export * from './alert.slot-recipe';
 export * from './toast.slot-recipe';
+export * from './combobox.slot-recipe';
