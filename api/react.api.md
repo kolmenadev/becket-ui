@@ -964,13 +964,22 @@ export const TabPanel: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttr
 value: string;
 } & RefAttributes<HTMLDivElement>>;
 
+// Warning: (ae-forgotten-export) The symbol "TabsProps" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export const Tabs: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & {
-value?: string;
-defaultValue: string;
-onValueChange?: (value: string) => void;
-children?: ReactNode;
-} & RefAttributes<HTMLDivElement>>;
+export const Tabs: ForwardRefExoticComponent<TabsProps & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+type TabsProps = ComponentPropsWithoutRef<'div'> & {
+    onValueChange?: (value: string) => void;
+    children?: ReactNode;
+} & ({
+    value: string;
+    defaultValue?: string;
+} | {
+    value?: undefined;
+    defaultValue: string;
+});
 
 // @public (undocumented)
 export const Tag: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "ref"> & {

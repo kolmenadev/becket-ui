@@ -5,7 +5,9 @@ import {
   forwardRef,
   useContext,
   useId,
+  useLayoutEffect,
   useMemo,
+  useRef,
   useState,
   type ButtonHTMLAttributes,
   type ComponentPropsWithoutRef,
@@ -35,32 +37,44 @@ function mergeClassName(...classes: (string | undefined)[]): string {
 }
 
 export type TabsProps = ComponentPropsWithoutRef<'div'> & {
-  value?: string;
-  defaultValue: string;
   onValueChange?: (value: string) => void;
   children?: ReactNode;
-};
+} & ({ value: string; defaultValue?: string } | { value?: undefined; defaultValue: string });
 
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
   ({ value, defaultValue, onValueChange, className, children, ...props }, ref) => {
     const isControlled = value !== undefined;
-    const [uncontrolled, setUncontrolled] = useState(defaultValue);
+    const [uncontrolled, setUncontrolled] = useState(defaultValue ?? '');
     const selected = isControlled ? value : uncontrolled;
     const baseId = useId();
     const styles = tabsRecipe();
 
-    const setValue = (next: string) => {
-      if (!isControlled) setUncontrolled(next);
-      onValueChange?.(next);
-    };
-
-    const ctx = useMemo(
-      () => ({ value: selected, setValue, baseId }),
-      [baseId, selected],
-    );
+    const onValueChangeRef = useRef(onValueChange);
+    const isControlledRef = useRef(isControlled);
+    // Synced at commit, not during render: React can discard a render, and a write from it would
+    // leave the refs on props the committed UI never showed. Layout effects run before the next event.
+    // style-check keep: syncs refs read by event handlers with the committed props; not derived state.
+    useLayoutEffect(() => {
+      onValueChangeRef.current = onValueChange;
+      isControlledRef.current = isControlled;
+    });
 
     return (
-      <TabsContext.Provider value={ctx}>
+      <TabsContext.Provider
+        // Memoized on baseId and selected so unrelated parent renders don't re-render every Tab;
+        // setValue stays correct because it reads the latest props through the refs.
+        value={useMemo(
+          () => ({
+            value: selected,
+            setValue: (next: string) => {
+              if (!isControlledRef.current) setUncontrolled(next);
+              onValueChangeRef.current?.(next);
+            },
+            baseId,
+          }),
+          [baseId, selected],
+        )}
+      >
         <div ref={ref} {...props} className={mergeClassName(styles.root, className)}>
           {children}
         </div>
