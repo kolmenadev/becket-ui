@@ -1,5 +1,21 @@
 # @becket-ui/mcp
 
+## 0.9.0
+
+### Patch Changes
+
+- 65d1bc4: Activating a menu item closes the menu and returns focus to the trigger. An item that
+  moves focus itself keeps that focus. An item that cancels the event stays open.
+- e2dba1a: Text forwards DOM attributes, handlers, ref, style, and the css prop to the element it
+  renders.
+- 6758d76: A tooltip trigger that isn't a tab stop, such as an Icon, a Tag or a Link without an
+  href, now becomes one, so its hint opens from the keyboard. The trigger keeps its own element,
+  layout and ref. Controls and triggers that set their own tabIndex are left as they are, and a
+  disabled tooltip adds no tab stop. The hint is added to the trigger's own aria-describedby instead
+  of replacing it. A component that drops the props it's given gets a focusable wrapper. In
+  development, an Icon trigger without a label logs a warning. Disabled buttons still need their own
+  wrapper.
+
 ## 0.8.1
 
 No changes in this release.
