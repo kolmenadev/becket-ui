@@ -10,6 +10,7 @@ import {
   type FieldProps,
 } from './Field';
 import { Stack } from './Stack';
+import { Text } from './Text';
 
 const fieldDensityCss = defineBecketTheme({
   density: { field: { md: { px: '0.35rem', py: '0.1rem' } } },
@@ -54,6 +55,36 @@ export const Invalid: Story = {
       <FieldControl defaultValue="not-an-email" />
       <FieldError>Enter a valid email address</FieldError>
     </Field>
+  ),
+};
+
+export const InvalidWithHelper: Story = {
+  args: { invalid: true },
+  render: (args: FieldProps) => (
+    <Field {...args}>
+      <FieldLabel>Email</FieldLabel>
+      <FieldControl defaultValue="not-an-email" />
+      <FieldHelper>Use your work address</FieldHelper>
+      <FieldError>Enter a valid email address</FieldError>
+    </Field>
+  ),
+};
+
+export const Required: Story = {
+  render: (args: FieldProps) => (
+    <Stack gap="md" align="start">
+      <Text fontSize="sm" color="muted">
+        Fields marked (required) must be filled in.
+      </Text>
+      <Field {...args}>
+        <FieldLabel>Name (required)</FieldLabel>
+        <FieldControl required autoComplete="name" />
+      </Field>
+      <Field {...args}>
+        <FieldLabel>Company</FieldLabel>
+        <FieldControl autoComplete="organization" />
+      </Field>
+    </Stack>
   ),
 };
 

@@ -89,4 +89,16 @@ describe('Select', () => {
     }
     expect(new FormData(form).get('plan')).toBe('pro');
   });
+
+  it('shows the hint and the error together, error first in aria-describedby', () => {
+    render(
+      <Select label="Plan" invalid helperText="Billed monthly" errorText="Pick a plan">
+        <option>Free</option>
+      </Select>,
+    );
+    expect(screen.getByRole('alert').textContent).toBe('Pick a plan');
+    expect(screen.getByRole('combobox', { name: 'Plan' }).getAttribute('aria-describedby')).toBe(
+      `${screen.getByRole('alert').id} ${screen.getByText('Billed monthly').id}`,
+    );
+  });
 });

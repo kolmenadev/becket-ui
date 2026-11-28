@@ -5,8 +5,10 @@ import {
   forwardRef,
   useCallback,
   useContext,
+  useEffect,
   useId,
   useLayoutEffect,
+  useRef,
   useState,
   type ComponentPropsWithoutRef,
   type InputHTMLAttributes,
@@ -14,6 +16,12 @@ import {
   type ReactNode,
 } from 'react';
 import { field, selectRecipe, textFieldRecipe, textareaRecipe } from '@becket-ui/tokens/recipes';
+
+import { WarningIcon } from './Glyphs';
+
+// The component tsconfig does not load @types/node, and tsc fails on a bare process name
+// (seen on MAV-190).
+declare const process: { env: { NODE_ENV?: string } };
 
 export type FieldSize = 'sm' | 'md' | 'lg';
 
@@ -96,13 +104,44 @@ export const Field = forwardRef<HTMLDivElement, FieldProps>(
     const registerDescribedBy = useCallback((slot: DescribedBySlot, present: boolean) => {
       setSlots((prev) => (prev[slot] === present ? prev : { ...prev, [slot]: present }));
     }, []);
-    const describedBy =
-      invalid && slots.error ? errorId : slots.helper ? helperId : undefined;
+    const hasWarnedRef = useRef(false);
     const styles = field({ size, fullWidth });
+
+    // Reads the committed DOM, not `slots`: FieldHelper and FieldError register in layout effects,
+    // and React runs this effect from the first render, with no slots yet, before re-rendering.
+    // style-check keep: syncs with the committed DOM after mount to warn; not derived state.
+    useEffect(() => {
+      if (hasWarnedRef.current || !invalid) return;
+      // Read inside try rather than behind typeof process: bundlers replace process.env.NODE_ENV
+      // but don't define process, and unbundled ESM in a browser has no process at all.
+      try {
+        if (process.env.NODE_ENV === 'production') return;
+      } catch {
+        return;
+      }
+      if (document.getElementById(errorId) || document.getElementById(helperId)) return;
+      hasWarnedRef.current = true;
+      console.warn(
+        'Becket UI: invalid field has no error message. Pass `errorText` (or `helperText`), or ' +
+          'render a FieldError, so the error is not shown by color alone.',
+      );
+    }, [invalid, errorId, helperId]);
 
     return (
       <FieldContext.Provider
-        value={{ id, invalid, size, helperId, errorId, describedBy, registerDescribedBy }}
+        value={{
+          id,
+          invalid,
+          size,
+          helperId,
+          errorId,
+          // Error first: a screen reader reads what to fix before the hint.
+          describedBy:
+            [invalid && slots.error && errorId, slots.helper && helperId]
+              .filter(Boolean)
+              .join(' ') || undefined,
+          registerDescribedBy,
+        }}
       >
         <div ref={ref} {...props} className={mergeClassName(styles.root, className)}>
           {children}
@@ -152,7 +191,7 @@ export const FieldHelper = forwardRef<HTMLSpanElement, FieldHelperProps>(
 FieldHelper.displayName = 'FieldHelper';
 
 export const FieldError = forwardRef<HTMLSpanElement, FieldHelperProps>(
-  ({ className, ...props }, ref) => {
+  ({ className, children, dangerouslySetInnerHTML, ...props }, ref) => {
     const { size, errorId, registerDescribedBy } = useFieldInternal();
     const styles = field({ size });
     useLayoutEffect(() => {
@@ -166,12 +205,48 @@ export const FieldError = forwardRef<HTMLSpanElement, FieldHelperProps>(
         role="alert"
         {...props}
         className={mergeClassName(styles.error, className)}
-      />
+      >
+        {/* The shape marks the error without color (WCAG 1.4.1). Icon's smallest step is used at
+            every size: the field recipe can't resize it, because Icon's size variant sits in a
+            later cascade layer than slot recipes. */}
+        <WarningIcon size="sm" />
+        {/* One flex item for the message, so inline markup inside it keeps its spacing. Raw HTML
+            goes here too: on the outer span it would replace the glyph, and React throws. */}
+        <span dangerouslySetInnerHTML={dangerouslySetInnerHTML}>{children}</span>
+      </span>
     );
   },
 );
 
 FieldError.displayName = 'FieldError';
+
+// Internal: TextField, Select and Textarea share it; the package index doesn't export it.
+export function FieldMessages({
+  helperText,
+  errorText,
+}: {
+  helperText?: ReactNode;
+  errorText?: ReactNode;
+}) {
+  const { invalid } = useField();
+  // false, true and '' render nothing (a `condition && 'message'` value), so they count as no
+  // message; 0 still renders. One check maps both texts, so it's written once.
+  const [hint, errorMessage] = [helperText, errorText].map((text) =>
+    text == null || typeof text === 'boolean' || text === '' ? undefined : text,
+  );
+  return (
+    <>
+      {hint != null && (!invalid || errorMessage != null) ? (
+        <FieldHelper>{hint}</FieldHelper>
+      ) : null}
+      {/* An invalid field without errorText shows helperText as the error, so fields written
+          before errorText keep working. */}
+      {invalid && (errorMessage ?? hint) != null ? (
+        <FieldError>{errorMessage ?? hint}</FieldError>
+      ) : null}
+    </>
+  );
+}
 
 type FieldControlProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>;
 

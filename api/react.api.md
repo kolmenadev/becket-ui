@@ -781,6 +781,7 @@ export const SearchIcon: ForwardRefExoticComponent<GlyphProps & RefAttributes<HT
 export const Select: ForwardRefExoticComponent<Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> & {
 label?: ReactNode;
 helperText?: ReactNode;
+errorText?: ReactNode;
 size?: FieldSize;
 invalid?: boolean;
 fullWidth?: boolean;
@@ -1004,6 +1005,7 @@ export { Text_2 as Text }
 export const Textarea: ForwardRefExoticComponent<Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> & {
 label?: ReactNode;
 helperText?: ReactNode;
+errorText?: ReactNode;
 size?: FieldSize;
 invalid?: boolean;
 fullWidth?: boolean;
@@ -1013,6 +1015,7 @@ fullWidth?: boolean;
 export const TextField: ForwardRefExoticComponent<Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & {
 label?: ReactNode;
 helperText?: ReactNode;
+errorText?: ReactNode;
 size?: FieldSize;
 invalid?: boolean;
 fullWidth?: boolean;

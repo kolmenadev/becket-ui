@@ -3,16 +3,18 @@
 import { forwardRef, type ReactNode, type SelectHTMLAttributes } from 'react';
 import {
   Field,
-  FieldError,
-  FieldHelper,
   FieldLabel,
+  FieldMessages,
   FieldSelect,
   type FieldSize,
 } from './Field';
 
 export type SelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> & {
   label?: ReactNode;
+  /** Hint under the control. When `invalid` and no `errorText`, it is shown as the error. */
   helperText?: ReactNode;
+  /** Error message shown with the warning glyph when `invalid`; `helperText` then stays as the hint. */
+  errorText?: ReactNode;
   size?: FieldSize;
   invalid?: boolean;
   fullWidth?: boolean;
@@ -23,6 +25,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     {
       label,
       helperText,
+      errorText,
       size = 'md',
       invalid = false,
       fullWidth = false,
@@ -38,13 +41,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         <FieldSelect ref={ref} {...props}>
           {children}
         </FieldSelect>
-        {helperText != null ? (
-          invalid ? (
-            <FieldError>{helperText}</FieldError>
-          ) : (
-            <FieldHelper>{helperText}</FieldHelper>
-          )
-        ) : null}
+        <FieldMessages helperText={helperText} errorText={errorText} />
       </Field>
     );
   },
