@@ -39,6 +39,10 @@ function number(part, scale = 1) {
   const value = part.trim();
   if (value === 'none') return 0;
   if (value.endsWith('%')) return (Number.parseFloat(value) / 100) * scale;
+  // Angles come out in degrees. `grad` goes before `rad`, which it ends with.
+  if (value.endsWith('turn')) return Number.parseFloat(value) * 360;
+  if (value.endsWith('grad')) return Number.parseFloat(value) * 0.9;
+  if (value.endsWith('rad')) return (Number.parseFloat(value) * 180) / Math.PI;
   return Number.parseFloat(value);
 }
 
@@ -50,6 +54,10 @@ function number(part, scale = 1) {
  * @returns {{ L: number, C: number, h: number } | null} null when the format isn't supported
  */
 export function parseColor(input) {
+  return parseColorAlpha(input)?.color ?? null;
+}
+
+export function parseColorAlpha(input) {
   if (typeof input !== 'string') return null;
   // CSS's basic color names, the ones logos and SVGs use. Rarer names aren't guessed.
   const value = (
@@ -77,38 +85,79 @@ export function parseColor(input) {
 
   const hex = value.match(/^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i);
   if (hex) {
-    return linearToOklch(
-      // #abc → #aabbcc; the first three pairs are r, g, b (alpha is dropped).
-      (hex[1].length <= 4 ? [...hex[1]].map((digit) => digit + digit).join('') : hex[1])
-        .match(/../g)
-        .slice(0, 3)
-        .map((pair) => toLinear(Number.parseInt(pair, 16) / 255)),
-    );
+    // #abcd → #aabbccdd; the pairs are r, g, b and an optional alpha.
+    // style-check keep: read twice (color and alpha); inlining would run the regex and parse again.
+    const pairs = (hex[1].length <= 4 ? [...hex[1]].map((digit) => digit + digit).join('') : hex[1])
+      .match(/../g)
+      .map((pair) => Number.parseInt(pair, 16));
+    return { color: rgbToOklch(pairs.slice(0, 3)), alpha: (pairs[3] ?? 255) / 255 };
   }
 
-  const fn = value.match(/^(rgba?|hsla?|oklch)\(\s*([^)]*)\)$/i);
+  // No `\s*` after the `(`: next to `[^)]*` it backtracks quadratically on a long run of spaces
+  // without a `)`. The channels are trimmed below instead.
+  const fn = value.match(/^(rgba?|hsla?|oklch)\(([^)]*)\)$/i);
   if (!fn) return null;
+  // Modern `1 2 3 / 0.5` puts alpha after one slash; legacy `1, 2, 3, 0.5` in a fourth part.
+  const [channelText, ...slashParts] = fn[2].split('/');
+  const isLegacy = channelText.includes(',');
+  const channels = isLegacy ? channelText.split(',') : channelText.trim().split(/\s+/);
+  // CSS units, `none` and the exponent are case-insensitive, so `120DEG` and `1E2` are valid. The
+  // regex below stays lowercase and the angle check below reads the same lowercase tokens.
+  const parts = [...channels, ...slashParts].map((part) => part.trim().toLowerCase());
+  if (
+    parts.length < 3 ||
+    parts.length > 4 ||
+    (isLegacy ? slashParts.length > 0 : channels.length !== 3) ||
+    // Anchored, so `1;x` or `200x` is rejected instead of read as a number the way parseFloat would.
+    !parts.every(
+      (part) =>
+        part === 'none' ||
+        // Finite too: a channel of 309 digits, or `1e999`, reads as Infinity and would write invalid
+        // CSS. The fraction and the exponent each start with a character the digits before them
+        // can't take, so no two digit runs can split the same digits; `\d+\.?\d*` backtracks
+        // quadratically on a long run of digits followed by a bad character. A CSS number needs
+        // digits after its decimal point, so `5.` is rejected.
+        // The check reads the converted number, so `1e308turn` (Infinity in degrees) is rejected too.
+        (/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?(?:%|deg|g?rad|turn)?$/.test(part) &&
+          Number.isFinite(number(part))),
+    )
+  )
+    return null;
+  const alpha = parts.length === 4 ? number(parts[3]) : 1;
+  if (alpha < 0 || alpha > 1) return null;
   const kind = fn[1].toLowerCase();
-  // `1 2 3 / 0.5` or `1, 2, 3, 0.5`: three channels, alpha dropped.
-  const withoutAlpha = fn[2].split('/')[0];
-  const parts = (
-    withoutAlpha.includes(',') ? withoutAlpha.split(',') : withoutAlpha.trim().split(/\s+/)
-  ).slice(0, 3);
-  if (parts.length !== 3) return null;
+  // An angle unit is valid on a hue only: the first channel of hsl() and the last of oklch().
+  if (
+    parts.some(
+      (part, index) =>
+        /(?:deg|g?rad|turn)$/.test(part) &&
+        index !== (kind.startsWith('hsl') ? 0 : kind === 'oklch' ? 2 : -1),
+    )
+  )
+    return null;
 
   if (kind.startsWith('rgb')) {
-    const rgb = parts.map((part) => clamp01(number(part, 255) / 255));
-    if (rgb.some(Number.isNaN)) return null;
-    return linearToOklch(rgb.map(toLinear));
+    return {
+      color: linearToOklch(
+        parts.slice(0, 3).map((part) => toLinear(clamp01(number(part, 255) / 255))),
+      ),
+      alpha,
+    };
   }
   if (kind.startsWith('hsl')) {
-    const hue = Number.parseFloat(parts[0]);
-    const saturation = clamp01(number(parts[1]));
-    const lightness = clamp01(number(parts[2]));
-    if ([hue, saturation, lightness].some(Number.isNaN)) return null;
+    // CSS Color 4: the comma form takes percentages only. The space form also takes a bare number,
+    // on the same 0–100 scale; read as 0–1 it would clamp `hsl(0 100 50)` to white.
+    if (isLegacy && !(parts[1].endsWith('%') && parts[2].endsWith('%'))) return null;
+    const lightness = clamp01(number(/%$|^none$/.test(parts[2]) ? parts[2] : `${parts[2]}%`));
     // CSS Color 4 hsl() → sRGB.
-    const chroma = (1 - Math.abs(2 * lightness - 1)) * saturation;
-    const sector = (((hue % 360) + 360) % 360) / 60;
+    const chroma =
+      (1 - Math.abs(2 * lightness - 1)) *
+      clamp01(number(/%$|^none$/.test(parts[1]) ? parts[1] : `${parts[1]}%`));
+    // A `%` hue skips number(), which would read `50%` as 0.5, where parseColor has always read 50.
+    const sector =
+      ((((parts[0].endsWith('%') ? Number.parseFloat(parts[0]) : number(parts[0])) % 360) + 360) %
+        360) /
+      60;
     const x = chroma * (1 - Math.abs((sector % 2) - 1));
     const [r, g, b] = [
       [chroma, x, 0],
@@ -119,11 +168,16 @@ export function parseColor(input) {
       [chroma, 0, x],
     ][Math.min(5, Math.floor(sector))];
     const offset = lightness - chroma / 2;
-    return linearToOklch([r + offset, g + offset, b + offset].map(toLinear));
+    return { color: linearToOklch([r + offset, g + offset, b + offset].map(toLinear)), alpha };
   }
-  const [L, C, h] = [number(parts[0]), number(parts[1], 0.4), number(parts[2])];
-  if ([L, C, h].some(Number.isNaN)) return null;
-  return { L: clamp01(L), C: Math.max(0, C), h: ((h % 360) + 360) % 360 };
+  return {
+    color: {
+      L: clamp01(number(parts[0])),
+      C: Math.max(0, number(parts[1], 0.4)),
+      h: ((number(parts[2]) % 360) + 360) % 360,
+    },
+    alpha,
+  };
 }
 
 /**

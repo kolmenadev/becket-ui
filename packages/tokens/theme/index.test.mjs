@@ -41,7 +41,8 @@ test('defineBecketTheme maps danger { dark, light } onto one semantic var', () =
   assert.match(css, /:root \{[\s\S]*--beckui--colors-danger: oklch\(0\.76 0\.16 25\);/);
   assert.match(
     css,
-    /html\[data-theme='light'\] \{[\s\S]*--beckui--colors-danger: oklch\(0\.48 0\.20 25\);/,
+    // Colors are re-serialised, so `0.20` comes back as `0.2`.
+    /html\[data-theme='light'\] \{[\s\S]*--beckui--colors-danger: oklch\(0\.48 0\.2 25\);/,
   );
 });
 
@@ -146,4 +147,124 @@ test('defineBecketTheme maps surface and link colors so a rebrand reaches light 
   assert.match(css, /html\[data-theme='light'\] \{[\s\S]*--beckui--colors-link: oklch\(0\.45 0\.15 255\);/);
   assert.match(css, /html\[data-theme='light'\] \{[\s\S]*--beckui--colors-link-visited: oklch\(0\.45 0\.12 300\);/);
   assert.match(css, /html\[data-theme='light'\] \{[\s\S]*--beckui--colors-surface: oklch\(1 0 0\);/);
+});
+
+test('defineBecketTheme accepts lengths and rejects anything else, naming the path', () => {
+  for (const [path, config, declaration] of [
+    ['radii.md', { radii: { md: '4px' } }, '--beckui--radii-md: 4px;'],
+    ['fontSizes.base', { fontSizes: { base: '1.0625rem' } }, '--beckui--font-sizes-base: 1.0625rem;'],
+    ['spacing.textUnit', { spacing: { textUnit: '.3em' } }, '--beckui--spacing-text-unit: .3em;'],
+    ['sizes.field', { sizes: { field: '50%' } }, '--beckui--sizes-field: 50%;'],
+    ['density.tag.lg.py', { density: { tag: { lg: { py: '-1px' } } } }, '--beckui-tag-py-lg: -1px;'],
+  ]) {
+    assert.ok(defineBecketTheme(config).includes(declaration), path);
+  }
+  for (const [path, config] of [
+    ['radii.md', { radii: { md: '4px; x:y' } }],
+    ['fontSizes.base', { fontSizes: { base: '1rem}</style><script>' } }],
+    ['spacing.unit', { spacing: { unit: 'url(//x)' } }],
+    ['sizes.field', { sizes: { field: 'calc(1rem + 2px)' } }],
+    ['density.button.md.px', { density: { button: { md: { px: '1rem;color:red' } } } }],
+    ['density.field.sm.py', { density: { field: { sm: { py: '4 px' } } } }],
+  ]) {
+    assert.throws(() => defineBecketTheme(config), new RegExp(`^Error: Not a CSS length at ${path}: `), path);
+  }
+});
+
+test('defineBecketTheme accepts font family lists and rejects anything else, naming the path', () => {
+  const css = defineBecketTheme({
+    fonts: {
+      sans: "'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+      mono: '"JetBrains Mono",monospace',
+    },
+  });
+  assert.match(css, /--beckui--fonts-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;/);
+  assert.match(css, /--beckui--fonts-mono: "JetBrains Mono",monospace;/);
+  for (const [path, config] of [
+    ['fonts.sans', { fonts: { sans: 'Inter}</style><script>' } }],
+    ['fonts.sans', { fonts: { sans: 'Inter; color: red' } }],
+    ['fonts.mono', { fonts: { mono: "'Mono' url(//x)" } }],
+    ['fonts.mono', { fonts: { mono: "'Unclosed, monospace" } }],
+    ['fonts.sans', { fonts: { sans: 'Open Sans' } }],
+  ]) {
+    assert.throws(() => defineBecketTheme(config), new RegExp(`^Error: Not a CSS font family at ${path}: `), path);
+  }
+});
+
+test('defineBecketTheme writes every color from the parsed value, alpha included', () => {
+  assert.equal(
+    defineBecketTheme({
+      colors: {
+        primary: 'oklch(0.5 0.1 200 / 0.4)',
+        secondary: '#11223380',
+        tertiary: 'rgb(1 2 3 / 40%)',
+        background: { dark: '#000', light: 'white' },
+        neutral: { 900: 'hsl(0 0% 100%)' },
+      },
+    }),
+    [
+      ':root {',
+      '  --beckui--colors-primary: oklch(0.5 0.1 200 / 0.4);',
+      '  --beckui--colors-secondary: oklch(0.2462 0.0398 249.73 / 0.502);',
+      '  --beckui--colors-tertiary: oklch(0.0823 0.008 240.75 / 0.4);',
+      '  --beckui--colors-background: oklch(0 0 0);',
+      '  --beckui--colors-neutral-900: oklch(1 0 0);',
+      '}',
+      "html[data-theme='light'] {",
+      '  --beckui--colors-background: oklch(1 0 0);',
+      '}',
+      '',
+    ].join('\n'),
+  );
+});
+
+test('defineBecketTheme rejects a value that is not a color, naming the path', () => {
+  for (const [path, config] of [
+    ['colors.primary', { colors: { primary: 'red; background: url(//x)' } }],
+    ['colors.text.light', { colors: { text: { light: 'oklch(0.5 0.1 200);} body{x:y' } } }],
+    ['colors.background', { colors: { background: '#fff</style>' } }],
+    ['colors.neutral.50', { colors: { neutral: { 50: 'var(--x)' } } }],
+    ['colors.link.dark', { colors: { link: { dark: 'rgb(1 2 3 4)' } } }],
+  ]) {
+    assert.throws(() => defineBecketTheme(config), new RegExp(`^Error: Not a CSS color at ${path}: `), path);
+  }
+});
+
+test('a rejected value of any kind is quoted only up to its first 40 characters', () => {
+  const long = `x; background: url(//x/${'a'.repeat(200)})`;
+  for (const config of [{ radii: { md: long } }, { fonts: { sans: long } }, { colors: { primary: long } }]) {
+    assert.throws(
+      () => defineBecketTheme(config),
+      (error) => error.message.includes(`${JSON.stringify(long.slice(0, 40))}.`) && !error.message.includes('a'.repeat(41)),
+    );
+  }
+});
+
+test('defineBecketTheme checks and writes the same string, even when toString changes between reads', () => {
+  for (const [group, key, first] of [
+    ['radii', 'md', '4px'],
+    ['fonts', 'sans', 'Inter'],
+  ]) {
+    // style-check keep: counts reads across toString calls; it can't live inside the callback.
+    let reads = 0;
+    assert.doesNotMatch(
+      defineBecketTheme({
+        [group]: { [key]: { toString: () => (reads++ === 0 ? first : `${first}; background: url(//x)`) } },
+      }),
+      /url/,
+      group,
+    );
+  }
+});
+
+test('defineBecketTheme skips empty values of every kind', () => {
+  assert.doesNotMatch(
+    defineBecketTheme({
+      colors: { primary: '', background: { dark: '', light: '' } },
+      radii: { md: '' },
+      fonts: { sans: '' },
+      density: { button: { md: { px: '' } } },
+    }),
+    /:root/,
+  );
 });

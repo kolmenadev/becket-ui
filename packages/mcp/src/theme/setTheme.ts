@@ -188,7 +188,7 @@ export function setTheme(input: SetThemeInput): string {
     '## Theme CSS',
     `Write this to a file such as \`src/becket-theme.css\` and import it right after \`@becket-ui/tokens/index.css\`. It's unlayered, so it wins over Becket's defaults. Keep \`data-theme\` on <html>.\n\n\`\`\`css\n${defineBecketTheme(theme)}\`\`\``,
     '## Same theme in code',
-    `\`\`\`ts\nimport { defineBecketTheme } from '@becket-ui/tokens/theme';\n\nexport const becketTheme = defineBecketTheme(${JSON.stringify(theme, null, 2)});\n\`\`\`\nInject \`becketTheme\` in a <style> tag after index.css, or keep the CSS file above. Use one, not both.`,
+    `\`\`\`ts\nimport { defineBecketTheme } from '@becket-ui/tokens/theme';\n\nexport const becketTheme = defineBecketTheme(${JSON.stringify(theme, null, 2)});\n\`\`\`\nPrefer the CSS file above; injecting \`becketTheme\` in a <style> tag after index.css works too. Use one, not both.`,
     notes.length
       ? `## Why each value\n${notes.map((note) => `- ${note.token}: ${note.reason}`).join('\n')}`
       : null,

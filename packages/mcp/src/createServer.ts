@@ -96,7 +96,11 @@ export function createServer(data: Data = loadData()): McpServer {
     async ({ code }) => text(formatReview(reviewUsage(code, data))),
   );
 
-  const tokens = z.record(z.string(), z.string());
+  // Caps with room above real tokens (the longest key, lightBackground, is 15 characters), so the
+  // SDK refuses an oversized string before it reaches the theme code.
+  const key = z.string().max(32);
+  const css = z.string().max(64);
+  const tokens = z.record(key, css);
   server.registerTool(
     'set_theme',
     {
@@ -104,9 +108,9 @@ export function createServer(data: Data = loadData()): McpServer {
       description:
         'Turn brand tokens into Becket theme CSS that passes WCAG 2.2 AA in dark and light. Give one to three brand colors (Becket derives every color token) and/or exact tokens. Returns the CSS to write, the same theme as defineBecketTheme() code, why each value was chosen, and a contrast report. Writes nothing; you write the file. For a logo, image URL or brand manual, call suggest_theme first.',
       inputSchema: {
-        brand: z.array(z.string()).min(1).max(3).optional().describe('Brand colors, most important first: hex, rgb(), hsl() or oklch()'),
+        brand: z.array(css).min(1).max(3).optional().describe('Brand colors, most important first: hex, rgb(), hsl() or oklch()'),
         colors: z
-          .record(z.string(), z.union([z.string(), z.record(z.string(), z.string())]))
+          .record(key, z.union([css, z.record(key, css)]))
           .optional()
           .describe('Exact color tokens to keep, e.g. { "background": { "dark": "#101820", "light": "#ffffff" } }. With brand, these are pinned and the rest is derived.'),
         fonts: tokens.optional().describe('{ "sans": "Inter", "mono": "JetBrains Mono" }'),
@@ -115,7 +119,7 @@ export function createServer(data: Data = loadData()): McpServer {
         spacing: tokens.optional().describe('{ "unit": "0.25rem" } resizes all spacing; textUnit (em) spacing inside text'),
         sizes: tokens.optional().describe('{ "field": "16rem" }'),
         density: z
-          .record(z.string(), z.record(z.string(), z.object({ px: z.string().optional(), py: z.string().optional() })))
+          .record(key, z.record(key, z.object({ px: css.optional(), py: css.optional() })))
           .optional()
           .describe('Component padding, e.g. { "button": { "md": { "px": "0.75rem" } } }'),
       },

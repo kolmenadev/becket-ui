@@ -43,6 +43,17 @@ describe('stdio server', () => {
     expect(textOf(result)).toContain('--beckui--fonts-sans: Inter, system-ui');
   });
 
+  it('refuses an oversized set_theme value or key and stays up', async () => {
+    for (const fonts of [{ sans: 'a'.repeat(65) }, { ['a'.repeat(33)]: 'Inter' }]) {
+      const result = await client.callTool({ name: 'set_theme', arguments: { fonts } });
+      expect(result.isError).toBe(true);
+      expect(textOf(result)).toContain('Input validation error');
+    }
+    expect(textOf(await client.callTool({ name: 'set_theme', arguments: { brand: ['#0a3d91'] } }))).toContain(
+      'required pairs pass WCAG 2.2 AA',
+    );
+  });
+
   it('answers get_component_props for Button and Field', async () => {
     expect(textOf(await client.callTool({ name: 'get_component_props', arguments: { name: 'Button' } }))).toContain(
       'export type ButtonProps',
